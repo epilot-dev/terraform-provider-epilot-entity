@@ -7932,24 +7932,18 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	slug := data.Slug.ValueString()
-	pathParams := operations.PutSchemaPathParams{
-		Slug: slug,
-	}
+	entitySchema := data.ToSDKType()
 	draft := new(bool)
 	if !data.Draft.IsUnknown() && !data.Draft.IsNull() {
 		*draft = data.Draft.ValueBool()
 	} else {
 		draft = nil
 	}
-	queryParams := operations.PutSchemaQueryParams{
-		Draft: draft,
-	}
-	request1 := data.ToSDKType()
+	slug := data.Slug.ValueString()
 	request := operations.PutSchemaRequest{
-		PathParams:  pathParams,
-		QueryParams: queryParams,
-		Request:     request1,
+		EntitySchema: entitySchema,
+		Draft:        draft,
+		Slug:         slug,
 	}
 	res, err := r.client.Schemas.PutSchema(ctx, request)
 	if err != nil {
@@ -7964,7 +7958,7 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.RawResponse == nil {
+	if res.PutSchema200ApplicationJSONObject.Results == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
@@ -7992,22 +7986,16 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	slug := data.Slug.ValueString()
-	pathParams := operations.GetSchemaPathParams{
-		Slug: slug,
-	}
 	id := new(string)
 	if !data.ID.IsUnknown() && !data.ID.IsNull() {
 		*id = data.ID.ValueString()
 	} else {
 		id = nil
 	}
-	queryParams := operations.GetSchemaQueryParams{
-		ID: id,
-	}
+	slug := data.Slug.ValueString()
 	request := operations.GetSchemaRequest{
-		PathParams:  pathParams,
-		QueryParams: queryParams,
+		ID:   id,
+		Slug: slug,
 	}
 	res, err := r.client.Schemas.GetSchema(ctx, request)
 	if err != nil {
@@ -8050,24 +8038,18 @@ func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	slug := data.Slug.ValueString()
-	pathParams := operations.PutSchemaPathParams{
-		Slug: slug,
-	}
+	entitySchema := data.ToSDKType()
 	draft := new(bool)
 	if !data.Draft.IsUnknown() && !data.Draft.IsNull() {
 		*draft = data.Draft.ValueBool()
 	} else {
 		draft = nil
 	}
-	queryParams := operations.PutSchemaQueryParams{
-		Draft: draft,
-	}
-	request1 := data.ToSDKType()
+	slug := data.Slug.ValueString()
 	request := operations.PutSchemaRequest{
-		PathParams:  pathParams,
-		QueryParams: queryParams,
-		Request:     request1,
+		EntitySchema: entitySchema,
+		Draft:        draft,
+		Slug:         slug,
 	}
 	res, err := r.client.Schemas.PutSchema(ctx, request)
 	if err != nil {
@@ -8082,7 +8064,7 @@ func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.RawResponse == nil {
+	if res.PutSchema200ApplicationJSONObject.Results == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
@@ -8111,11 +8093,8 @@ func (r *SchemaResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 
 	slug := data.Slug.ValueString()
-	pathParams := operations.DeleteSchemaPathParams{
-		Slug: slug,
-	}
 	request := operations.DeleteSchemaRequest{
-		PathParams: pathParams,
+		Slug: slug,
 	}
 	res, err := r.client.Schemas.DeleteSchema(ctx, request)
 	if err != nil {
@@ -8128,10 +8107,6 @@ func (r *SchemaResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 	if fmt.Sprintf("%v", res.StatusCode)[0] != '2' {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if res.RawResponse == nil {
-		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
 

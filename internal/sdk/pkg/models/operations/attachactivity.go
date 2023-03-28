@@ -7,19 +7,11 @@ import (
 	"net/http"
 )
 
-type AttachActivityPathParams struct {
-	// Activity Id
-	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-type AttachActivityQueryParams struct {
+type AttachActivityRequest struct {
 	// Comma-separated list of entities which the activity primarily concerns
 	Entities []string `queryParam:"style=form,explode=false,name=entities"`
-}
-
-type AttachActivityRequest struct {
-	PathParams  AttachActivityPathParams
-	QueryParams AttachActivityQueryParams
+	// Activity Id
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 type AttachActivityResponse struct {

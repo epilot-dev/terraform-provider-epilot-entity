@@ -35,7 +35,7 @@ func newSavedViews(defaultClient, securityClient HTTPClient, serverURL, language
 
 // CreateSavedView - createSavedView
 // Creates a new saved view
-func (s *savedViews) CreateSavedView(ctx context.Context, request operations.CreateSavedViewRequest) (*operations.CreateSavedViewResponse, error) {
+func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedView) (*operations.CreateSavedViewResponse, error) {
 	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/view"
 
@@ -89,7 +89,7 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request operations.Cre
 // Deletes a saved view
 func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.DeleteSavedViewRequest) (*operations.DeleteSavedViewResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
 	if err != nil {
@@ -125,7 +125,7 @@ func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.Del
 // Gets Saved View configuration by id.
 func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSavedViewRequest) (*operations.GetSavedViewResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -215,9 +215,9 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 // Updates a saved view
 func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.UpdateSavedViewRequest) (*operations.UpdateSavedViewResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "SavedView", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}

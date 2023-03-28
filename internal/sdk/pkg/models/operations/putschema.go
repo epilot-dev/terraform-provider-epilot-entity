@@ -7,18 +7,10 @@ import (
 	"net/http"
 )
 
-type PutSchemaPathParams struct {
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type PutSchemaQueryParams struct {
-	Draft *bool `queryParam:"style=form,explode=true,name=draft"`
-}
-
 type PutSchemaRequest struct {
-	PathParams  PutSchemaPathParams
-	QueryParams PutSchemaQueryParams
-	Request     *shared.EntitySchema `request:"mediaType=application/json"`
+	EntitySchema *shared.EntitySchema `request:"mediaType=application/json"`
+	Draft        *bool                `queryParam:"style=form,explode=true,name=draft"`
+	Slug         string               `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 // PutSchema200ApplicationJSON - Success

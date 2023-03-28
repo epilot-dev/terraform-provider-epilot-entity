@@ -7,13 +7,9 @@ import (
 	"net/http"
 )
 
-type ListSchemasQueryParams struct {
+type ListSchemasRequest struct {
 	// Return unpublished draft schemas
 	Unpublished *bool `queryParam:"style=form,explode=true,name=unpublished"`
-}
-
-type ListSchemasRequest struct {
-	QueryParams ListSchemasQueryParams
 }
 
 // ListSchemas200ApplicationJSON - Success

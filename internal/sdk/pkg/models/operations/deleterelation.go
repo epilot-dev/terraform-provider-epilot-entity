@@ -6,7 +6,9 @@ import (
 	"net/http"
 )
 
-type DeleteRelationPathParams struct {
+type DeleteRelationRequest struct {
+	// Don't wait for updated entity to become available in Search API. Useful for large migrations
+	Async *bool `queryParam:"style=form,explode=true,name=async"`
 	// The attribute that express meaning
 	Attribute string `pathParam:"style=simple,explode=false,name=attribute"`
 	// The attribute that express meaning
@@ -15,16 +17,6 @@ type DeleteRelationPathParams struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type DeleteRelationQueryParams struct {
-	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
-}
-
-type DeleteRelationRequest struct {
-	PathParams  DeleteRelationPathParams
-	QueryParams DeleteRelationQueryParams
 }
 
 type DeleteRelationResponse struct {

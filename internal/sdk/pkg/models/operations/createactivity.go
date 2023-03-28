@@ -7,14 +7,10 @@ import (
 	"net/http"
 )
 
-type CreateActivityQueryParams struct {
+type CreateActivityRequest struct {
+	Activity *shared.Activity `request:"mediaType=application/json"`
 	// Comma-separated list of entities which the activity primarily concerns
 	Entities []string `queryParam:"style=form,explode=false,name=entities"`
-}
-
-type CreateActivityRequest struct {
-	QueryParams CreateActivityQueryParams
-	Request     *shared.Activity `request:"mediaType=application/json"`
 }
 
 type CreateActivityResponse struct {

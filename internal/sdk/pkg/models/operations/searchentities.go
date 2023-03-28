@@ -7,10 +7,6 @@ import (
 	"net/http"
 )
 
-type SearchEntitiesRequest struct {
-	Request *shared.EntitySearchParams `request:"mediaType=application/json"`
-}
-
 type SearchEntitiesResponse struct {
 	ContentType string
 	// Success

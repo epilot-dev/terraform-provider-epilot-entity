@@ -7,23 +7,15 @@ import (
 	"net/http"
 )
 
-type GetActivityPathParams struct {
+type GetActivityRequest struct {
 	// Activity Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-type GetActivityQueryParams struct {
 	// Pagination offset for operations
 	//
 	OperationsFrom *int64 `queryParam:"style=form,explode=true,name=operations_from"`
 	// Maximum number of operations to include in response (default: 10)
 	//
 	OperationsSize *int64 `queryParam:"style=form,explode=true,name=operations_size"`
-}
-
-type GetActivityRequest struct {
-	PathParams  GetActivityPathParams
-	QueryParams GetActivityQueryParams
 }
 
 type GetActivityResponse struct {

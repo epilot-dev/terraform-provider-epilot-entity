@@ -7,18 +7,14 @@ import (
 	"net/http"
 )
 
-type ExportEntitiesQueryParams struct {
+type ExportEntitiesRequest struct {
+	EntitySearchParams *shared.EntitySearchParams `request:"mediaType=application/json"`
 	// Pass 'true' to generate import template
 	IsTemplate *bool `queryParam:"style=form,explode=true,name=is_template"`
 	// Export Job Id to get the result
 	JobID *string `queryParam:"style=form,explode=true,name=job_id"`
 	// Export headers translation language
 	Language *string `queryParam:"style=form,explode=true,name=language"`
-}
-
-type ExportEntitiesRequest struct {
-	QueryParams ExportEntitiesQueryParams
-	Request     *shared.EntitySearchParams `request:"mediaType=application/json"`
 }
 
 type ExportEntitiesResponse struct {

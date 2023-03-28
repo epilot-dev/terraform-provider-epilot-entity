@@ -7,13 +7,9 @@ import (
 	"net/http"
 )
 
-type GetTaxonomyPathParams struct {
+type GetTaxonomyRequest struct {
 	// Taxonomy slug to return taxonomy for
 	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
-}
-
-type GetTaxonomyRequest struct {
-	PathParams GetTaxonomyPathParams
 }
 
 type GetTaxonomyResponse struct {

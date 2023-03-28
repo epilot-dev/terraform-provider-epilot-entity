@@ -6,23 +6,15 @@ import (
 	"net/http"
 )
 
-type GetRelationsPathParams struct {
-	// Entity id
-	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Entity Type
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type GetRelationsQueryParams struct {
+type GetRelationsRequest struct {
 	// When true, expand relation items with full blown entities.
 	Hydrate *bool `queryParam:"style=form,explode=true,name=hydrate"`
+	// Entity id
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// When true, includes reverse relations in response (other entities pointing to this entity)
 	IncludeReverse *bool `queryParam:"style=form,explode=true,name=include_reverse"`
-}
-
-type GetRelationsRequest struct {
-	PathParams  GetRelationsPathParams
-	QueryParams GetRelationsQueryParams
+	// Entity Type
+	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 type GetRelationsResponse struct {

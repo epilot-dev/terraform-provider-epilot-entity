@@ -6,22 +6,14 @@ import (
 	"net/http"
 )
 
-type CreateEntityPathParams struct {
-	// Entity Schema
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type CreateEntityQueryParams struct {
+type CreateEntityRequest struct {
+	RequestBody map[string]interface{} `request:"mediaType=application/json"`
 	// Activity to include in event feed
 	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
 	// Don't wait for updated entity to become available in Search API. Useful for large migrations
 	Async *bool `queryParam:"style=form,explode=true,name=async"`
-}
-
-type CreateEntityRequest struct {
-	PathParams  CreateEntityPathParams
-	QueryParams CreateEntityQueryParams
-	Request     map[string]interface{} `request:"mediaType=application/json"`
+	// Entity Schema
+	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 type CreateEntityResponse struct {

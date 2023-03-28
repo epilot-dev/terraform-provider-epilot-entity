@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type AutocompleteQueryParams struct {
+type AutocompleteRequest struct {
 	// Autocomplete attribute
 	Attribute string `queryParam:"style=form,explode=true,name=attribute"`
 	// Input to autocomplete
@@ -15,10 +15,6 @@ type AutocompleteQueryParams struct {
 	Size *int64 `queryParam:"style=form,explode=true,name=size"`
 	// Limit results to entity schema
 	Slug *string `queryParam:"style=form,explode=true,name=slug"`
-}
-
-type AutocompleteRequest struct {
-	QueryParams AutocompleteQueryParams
 }
 
 // Autocomplete200ApplicationJSON - Success

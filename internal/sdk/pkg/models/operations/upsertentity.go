@@ -6,29 +6,21 @@ import (
 	"net/http"
 )
 
-type UpsertEntityPathParams struct {
-	// Entity Schema
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type UpsertEntityQueryParams struct {
-	// Activity to include in event feed
-	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
-	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
-	// Dry Run mode = return matched entities but don't update them.
-	DryRun *bool `queryParam:"style=form,explode=true,name=dry_run"`
-}
-
 type UpsertEntityRequestBody struct {
 	Entity    map[string]interface{} `json:"entity"`
 	UniqueKey []string               `json:"unique_key"`
 }
 
 type UpsertEntityRequest struct {
-	PathParams  UpsertEntityPathParams
-	QueryParams UpsertEntityQueryParams
-	Request     *UpsertEntityRequestBody `request:"mediaType=application/json"`
+	RequestBody *UpsertEntityRequestBody `request:"mediaType=application/json"`
+	// Activity to include in event feed
+	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
+	// Don't wait for updated entity to become available in Search API. Useful for large migrations
+	Async *bool `queryParam:"style=form,explode=true,name=async"`
+	// Dry Run mode = return matched entities but don't update them.
+	DryRun *bool `queryParam:"style=form,explode=true,name=dry_run"`
+	// Entity Schema
+	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 type UpsertEntityResponse struct {

@@ -7,10 +7,6 @@ import (
 	"net/http"
 )
 
-type CreateSavedViewRequest struct {
-	Request *shared.SavedView `request:"mediaType=application/json"`
-}
-
 type CreateSavedViewResponse struct {
 	ContentType string
 	// Success

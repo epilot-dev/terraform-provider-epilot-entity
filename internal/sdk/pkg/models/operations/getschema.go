@@ -7,17 +7,9 @@ import (
 	"net/http"
 )
 
-type GetSchemaPathParams struct {
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type GetSchemaQueryParams struct {
-	ID *string `queryParam:"style=form,explode=true,name=id"`
-}
-
 type GetSchemaRequest struct {
-	PathParams  GetSchemaPathParams
-	QueryParams GetSchemaQueryParams
+	ID   *string `queryParam:"style=form,explode=true,name=id"`
+	Slug string  `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 type GetSchemaResponse struct {

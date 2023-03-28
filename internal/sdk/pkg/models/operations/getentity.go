@@ -6,21 +6,13 @@ import (
 	"net/http"
 )
 
-type GetEntityPathParams struct {
+type GetEntityRequest struct {
+	// When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
+	Hydrate *bool `queryParam:"style=form,explode=true,name=hydrate"`
 	// Entity id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type GetEntityQueryParams struct {
-	// When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
-	Hydrate *bool `queryParam:"style=form,explode=true,name=hydrate"`
-}
-
-type GetEntityRequest struct {
-	PathParams  GetEntityPathParams
-	QueryParams GetEntityQueryParams
 }
 
 // GetEntity200ApplicationJSON - Success

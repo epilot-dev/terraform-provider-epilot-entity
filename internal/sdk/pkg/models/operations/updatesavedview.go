@@ -7,14 +7,10 @@ import (
 	"net/http"
 )
 
-type UpdateSavedViewPathParams struct {
+type UpdateSavedViewRequest struct {
+	SavedView *shared.SavedView `request:"mediaType=application/json"`
 	// View id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-type UpdateSavedViewRequest struct {
-	PathParams UpdateSavedViewPathParams
-	Request    *shared.SavedView `request:"mediaType=application/json"`
 }
 
 type UpdateSavedViewResponse struct {

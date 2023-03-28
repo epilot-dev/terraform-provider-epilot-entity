@@ -7,14 +7,10 @@ import (
 	"net/http"
 )
 
-type UpdateClassificationsForTaxonomyPathParams struct {
+type UpdateClassificationsForTaxonomyRequest struct {
+	ClassificationsUpdate *shared.ClassificationsUpdate `request:"mediaType=application/json"`
 	// Taxonomy slug
 	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
-}
-
-type UpdateClassificationsForTaxonomyRequest struct {
-	PathParams UpdateClassificationsForTaxonomyPathParams
-	Request    *shared.ClassificationsUpdate `request:"mediaType=application/json"`
 }
 
 // UpdateClassificationsForTaxonomy200ApplicationJSON - Taxonomies classifications

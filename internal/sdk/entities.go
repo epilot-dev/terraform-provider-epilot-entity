@@ -45,7 +45,7 @@ func (s *entities) Autocomplete(ctx context.Context, request operations.Autocomp
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -113,9 +113,9 @@ func (s *entities) Autocomplete(ctx context.Context, request operations.Autocomp
 // - `_tags` - Tags or labels for the relation (optional)
 func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEntityRequest) (*operations.CreateEntityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}", request, nil)
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
@@ -127,7 +127,7 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -173,14 +173,14 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 // If no `activity_id` query parameter is provided, implicitly creates Activity of type `EntityDeleted`
 func (s *entities) DeleteEntity(ctx context.Context, request operations.DeleteEntityRequest) (*operations.DeleteEntityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -279,14 +279,14 @@ func (s *entities) DeleteEntity(ctx context.Context, request operations.DeleteEn
 // ```
 func (s *entities) GetEntity(ctx context.Context, request operations.GetEntityRequest) (*operations.GetEntityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -356,9 +356,9 @@ func (s *entities) GetEntity(ctx context.Context, request operations.GetEntityRe
 // - `_tags` - Tags or labels for the relation (optional)
 func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEntityRequest) (*operations.PatchEntityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request, nil)
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
@@ -370,7 +370,7 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -479,7 +479,7 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 //	}
 //
 // ```
-func (s *entities) SearchEntities(ctx context.Context, request operations.SearchEntitiesRequest) (*operations.SearchEntitiesResponse, error) {
+func (s *entities) SearchEntities(ctx context.Context, request shared.EntitySearchParams) (*operations.SearchEntitiesResponse, error) {
 	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity:search"
 
@@ -567,9 +567,9 @@ func (s *entities) SearchEntities(ctx context.Context, request operations.Search
 // - `_tags` - Tags or labels for the relation (optional)
 func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEntityRequest) (*operations.UpdateEntityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}", request, nil)
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
@@ -581,7 +581,7 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -631,9 +631,9 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 // If no `activity_id` query parameter is provided, implicitly creates Activity of type `EntityCreated` or `EntityUpdated`
 func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEntityRequest) (*operations.UpsertEntityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}:upsert", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}:upsert", request, nil)
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
@@ -645,7 +645,7 @@ func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEn
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 

@@ -7,18 +7,14 @@ import (
 	"net/http"
 )
 
-type TaxonomiesClassificationsSearchQueryParams struct {
-	// Taxonomy slug
-	TaxonomySlug string `queryParam:"style=form,explode=true,name=taxonomySlug"`
-}
-
 type TaxonomiesClassificationsSearchRequestBody struct {
 	ClassificationIds []string `json:"classificationIds,omitempty"`
 }
 
 type TaxonomiesClassificationsSearchRequest struct {
-	QueryParams TaxonomiesClassificationsSearchQueryParams
-	Request     *TaxonomiesClassificationsSearchRequestBody `request:"mediaType=application/json"`
+	RequestBody *TaxonomiesClassificationsSearchRequestBody `request:"mediaType=application/json"`
+	// Taxonomy slug
+	TaxonomySlug string `queryParam:"style=form,explode=true,name=taxonomySlug"`
 }
 
 // TaxonomiesClassificationsSearch200ApplicationJSON - Returns list of taxonomy classifications

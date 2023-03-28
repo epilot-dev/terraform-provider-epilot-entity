@@ -2,15 +2,7 @@
 
 package shared
 
-type SchemeEpilotAuth struct {
-	Authorization string `security:"name=Authorization"`
-}
-
-type SchemeEpilotOrg struct {
-	APIKey string `security:"name=x-epilot-org-id"`
-}
-
 type Security struct {
-	EpilotAuth *SchemeEpilotAuth `security:"scheme,type=http,subtype=bearer"`
-	EpilotOrg  *SchemeEpilotOrg  `security:"scheme,type=apiKey,subtype=header"`
+	EpilotAuth *string `security:"scheme,type=http,subtype=bearer,name=Authorization"`
+	EpilotOrg  *string `security:"scheme,type=apiKey,subtype=header,name=x-epilot-org-id"`
 }

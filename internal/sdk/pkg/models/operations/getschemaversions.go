@@ -7,12 +7,8 @@ import (
 	"net/http"
 )
 
-type GetSchemaVersionsPathParams struct {
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
 type GetSchemaVersionsRequest struct {
-	PathParams GetSchemaVersionsPathParams
+	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 // GetSchemaVersions200ApplicationJSON - Success

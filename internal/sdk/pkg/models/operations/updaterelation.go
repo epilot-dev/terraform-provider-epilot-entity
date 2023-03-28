@@ -7,7 +7,14 @@ import (
 	"net/http"
 )
 
-type UpdateRelationPathParams struct {
+type UpdateRelationRequestBody struct {
+	Tags []string `json:"_tags,omitempty"`
+}
+
+type UpdateRelationRequest struct {
+	RequestBody *UpdateRelationRequestBody `request:"mediaType=application/json"`
+	// Don't wait for updated entity to become available in Search API. Useful for large migrations
+	Async *bool `queryParam:"style=form,explode=true,name=async"`
 	// The attribute that express meaning
 	Attribute string `pathParam:"style=simple,explode=false,name=attribute"`
 	// The attribute that express meaning
@@ -16,21 +23,6 @@ type UpdateRelationPathParams struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type UpdateRelationQueryParams struct {
-	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
-}
-
-type UpdateRelationRequestBody struct {
-	Tags []string `json:"_tags,omitempty"`
-}
-
-type UpdateRelationRequest struct {
-	PathParams  UpdateRelationPathParams
-	QueryParams UpdateRelationQueryParams
-	Request     *UpdateRelationRequestBody `request:"mediaType=application/json"`
 }
 
 type UpdateRelationResponse struct {

@@ -7,19 +7,11 @@ import (
 	"net/http"
 )
 
-type ListTaxonomyClassificationsForSchemaPathParams struct {
-	Slug         string `pathParam:"style=simple,explode=false,name=slug"`
-	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
-}
-
-type ListTaxonomyClassificationsForSchemaQueryParams struct {
-	Query *string  `queryParam:"style=form,explode=true,name=query"`
-	Size  *float64 `queryParam:"style=form,explode=true,name=size"`
-}
-
 type ListTaxonomyClassificationsForSchemaRequest struct {
-	PathParams  ListTaxonomyClassificationsForSchemaPathParams
-	QueryParams ListTaxonomyClassificationsForSchemaQueryParams
+	Query        *string  `queryParam:"style=form,explode=true,name=query"`
+	Size         *float64 `queryParam:"style=form,explode=true,name=size"`
+	Slug         string   `pathParam:"style=simple,explode=false,name=slug"`
+	TaxonomySlug string   `pathParam:"style=simple,explode=false,name=taxonomySlug"`
 }
 
 // ListTaxonomyClassificationsForSchema200ApplicationJSON - List of taxonomy classifications

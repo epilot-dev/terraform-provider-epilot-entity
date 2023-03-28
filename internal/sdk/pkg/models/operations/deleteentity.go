@@ -6,20 +6,12 @@ import (
 	"net/http"
 )
 
-type DeleteEntityPathParams struct {
-	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Entity Type
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
-type DeleteEntityQueryParams struct {
+type DeleteEntityRequest struct {
 	// Activity to include in event feed
 	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
-}
-
-type DeleteEntityRequest struct {
-	PathParams  DeleteEntityPathParams
-	QueryParams DeleteEntityQueryParams
+	ID         string  `pathParam:"style=simple,explode=false,name=id"`
+	// Entity Type
+	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 type DeleteEntityResponse struct {

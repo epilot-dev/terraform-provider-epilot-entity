@@ -6,12 +6,8 @@ import (
 	"net/http"
 )
 
-type DeleteSchemaPathParams struct {
-	Slug string `pathParam:"style=simple,explode=false,name=slug"`
-}
-
 type DeleteSchemaRequest struct {
-	PathParams DeleteSchemaPathParams
+	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
 type DeleteSchemaResponse struct {

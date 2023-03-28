@@ -7,13 +7,9 @@ import (
 	"net/http"
 )
 
-type GetSavedViewPathParams struct {
+type GetSavedViewRequest struct {
 	// View id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-}
-
-type GetSavedViewRequest struct {
-	PathParams GetSavedViewPathParams
 }
 
 // GetSavedView200ApplicationJSON - Success

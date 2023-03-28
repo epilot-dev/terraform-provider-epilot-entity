@@ -7,14 +7,10 @@ import (
 	"net/http"
 )
 
-type ImportEntitiesQueryParams struct {
+type ImportEntitiesRequest struct {
+	EntityImportParams *shared.EntityImportParams `request:"mediaType=application/json"`
 	// Import Job Id to get the result
 	JobID *string `queryParam:"style=form,explode=true,name=job_id"`
-}
-
-type ImportEntitiesRequest struct {
-	QueryParams ImportEntitiesQueryParams
-	Request     *shared.EntityImportParams `request:"mediaType=application/json"`
 }
 
 type ImportEntitiesResponse struct {

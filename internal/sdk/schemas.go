@@ -37,7 +37,7 @@ func newSchemas(defaultClient, securityClient HTTPClient, serverURL, language, s
 // Delete a schema, or a specific version of a schema
 func (s *schemas) DeleteSchema(ctx context.Context, request operations.DeleteSchemaRequest) (*operations.DeleteSchemaResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
 	if err != nil {
@@ -73,14 +73,14 @@ func (s *schemas) DeleteSchema(ctx context.Context, request operations.DeleteSch
 // By default gets the latest version of the Schema and to get the specific version of schema pass the id.
 func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaRequest) (*operations.GetSchemaResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -122,7 +122,7 @@ func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 // Get all versions of this schema ordered by the latest versions including drafts.
 func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetSchemaVersionsRequest) (*operations.GetSchemaVersionsResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}/versions", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}/versions", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -219,7 +219,7 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -261,14 +261,14 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 // List taxonomy classifications for a given schema
 func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, request operations.ListTaxonomyClassificationsForSchemaRequest) (*operations.ListTaxonomyClassificationsForSchemaResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}/taxonomy/{taxonomySlug}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}/taxonomy/{taxonomySlug}", request, nil)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -310,9 +310,9 @@ func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, requ
 // Create or update a schema with a new version
 func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaRequest) (*operations.PutSchemaResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request.PathParams, nil)
+	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request, nil)
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "EntitySchema", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
@@ -324,7 +324,7 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 

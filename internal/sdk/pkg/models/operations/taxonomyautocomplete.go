@@ -7,21 +7,13 @@ import (
 	"net/http"
 )
 
-type TaxonomyAutocompletePathParams struct {
-	// Limit results to slug
-	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
-}
-
-type TaxonomyAutocompleteQueryParams struct {
+type TaxonomyAutocompleteRequest struct {
 	// Input to autocomplete
 	Query *string `queryParam:"style=form,explode=true,name=query"`
 	// Minimum number of results to return
 	Size *float64 `queryParam:"style=form,explode=true,name=size"`
-}
-
-type TaxonomyAutocompleteRequest struct {
-	PathParams  TaxonomyAutocompletePathParams
-	QueryParams TaxonomyAutocompleteQueryParams
+	// Limit results to slug
+	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
 }
 
 // TaxonomyAutocomplete200ApplicationJSON - Taxonomy classifications
