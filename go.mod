@@ -1,4 +1,4 @@
-module epilotentity
+module epilot-entity
 
 go 1.18
 

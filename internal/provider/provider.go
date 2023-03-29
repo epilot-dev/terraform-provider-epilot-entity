@@ -4,8 +4,8 @@ package provider
 
 import (
 	"context"
-	"epilotentity/internal/sdk"
-	"epilotentity/internal/sdk/pkg/models/shared"
+	"epilot-entity/internal/sdk"
+	"epilot-entity/internal/sdk/pkg/models/shared"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -14,28 +14,28 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-var _ provider.Provider = &EpilotentityProvider{}
+var _ provider.Provider = &EpilotEntityProvider{}
 
-type EpilotentityProvider struct {
+type EpilotEntityProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// EpilotentityProviderModel describes the provider data model.
-type EpilotentityProviderModel struct {
+// EpilotEntityProviderModel describes the provider data model.
+type EpilotEntityProviderModel struct {
 	ServerURL  types.String `tfsdk:"server_url"`
 	EpilotAuth types.String `tfsdk:"epilot_auth"`
 	EpilotOrg  types.String `tfsdk:"epilot_org"`
 }
 
-func (p *EpilotentityProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "epilotentity"
+func (p *EpilotEntityProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "epilot-entity"
 	resp.Version = p.version
 }
 
-func (p *EpilotentityProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *EpilotEntityProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"server_url": schema.StringAttribute{
@@ -54,8 +54,8 @@ func (p *EpilotentityProvider) Schema(ctx context.Context, req provider.SchemaRe
 	}
 }
 
-func (p *EpilotentityProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-	var data EpilotentityProviderModel
+func (p *EpilotEntityProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	var data EpilotEntityProviderModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -96,19 +96,19 @@ func (p *EpilotentityProvider) Configure(ctx context.Context, req provider.Confi
 	resp.ResourceData = client
 }
 
-func (p *EpilotentityProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (p *EpilotEntityProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewSchemaResource,
 	}
 }
 
-func (p *EpilotentityProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+func (p *EpilotEntityProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{}
 }
 
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
-		return &EpilotentityProvider{
+		return &EpilotEntityProvider{
 			version: version,
 		}
 	}

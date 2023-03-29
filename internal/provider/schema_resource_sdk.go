@@ -4,7 +4,7 @@ package provider
 
 import (
 	"encoding/json"
-	"epilotentity/internal/sdk/pkg/models/shared"
+	"epilot-entity/internal/sdk/pkg/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
 )

@@ -4,9 +4,9 @@ package sdk
 
 import (
 	"context"
-	"epilotentity/internal/sdk/pkg/models/operations"
-	"epilotentity/internal/sdk/pkg/models/shared"
-	"epilotentity/internal/sdk/pkg/utils"
+	"epilot-entity/internal/sdk/pkg/models/operations"
+	"epilot-entity/internal/sdk/pkg/models/shared"
+	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
 	"net/http"
 )
@@ -63,7 +63,6 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -112,7 +111,6 @@ func (s *relations) DeleteRelation(ctx context.Context, request operations.Delet
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -156,7 +154,6 @@ func (s *relations) GetRelations(ctx context.Context, request operations.GetRela
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -209,7 +206,6 @@ func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRe
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -265,7 +261,6 @@ func (s *relations) UpdateRelation(ctx context.Context, request operations.Updat
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

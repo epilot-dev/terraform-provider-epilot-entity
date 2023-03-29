@@ -4,9 +4,9 @@ package sdk
 
 import (
 	"context"
-	"epilotentity/internal/sdk/pkg/models/operations"
-	"epilotentity/internal/sdk/pkg/models/shared"
-	"epilotentity/internal/sdk/pkg/utils"
+	"epilot-entity/internal/sdk/pkg/models/operations"
+	"epilot-entity/internal/sdk/pkg/models/shared"
+	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
 	"net/http"
 	"strings"
@@ -53,7 +53,6 @@ func (s *taxonomy) GetTaxonomy(ctx context.Context, request operations.GetTaxono
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -98,7 +97,6 @@ func (s *taxonomy) ListTaxonomies(ctx context.Context) (*operations.ListTaxonomi
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -154,7 +152,6 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -203,7 +200,6 @@ func (s *taxonomy) TaxonomyAutocomplete(ctx context.Context, request operations.
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -255,7 +251,6 @@ func (s *taxonomy) UpdateClassificationsForTaxonomy(ctx context.Context, request
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

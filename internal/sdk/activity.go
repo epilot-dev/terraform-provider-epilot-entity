@@ -4,9 +4,9 @@ package sdk
 
 import (
 	"context"
-	"epilotentity/internal/sdk/pkg/models/operations"
-	"epilotentity/internal/sdk/pkg/models/shared"
-	"epilotentity/internal/sdk/pkg/utils"
+	"epilot-entity/internal/sdk/pkg/models/operations"
+	"epilot-entity/internal/sdk/pkg/models/shared"
+	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
 	"net/http"
 	"strings"
@@ -57,7 +57,6 @@ func (s *activity) AttachActivity(ctx context.Context, request operations.Attach
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -116,7 +115,6 @@ func (s *activity) CreateActivity(ctx context.Context, request operations.Create
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -165,7 +163,6 @@ func (s *activity) GetActivity(ctx context.Context, request operations.GetActivi
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -214,7 +211,6 @@ func (s *activity) GetEntityActivityFeed(ctx context.Context, request operations
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

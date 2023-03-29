@@ -4,9 +4,9 @@ package sdk
 
 import (
 	"context"
-	"epilotentity/internal/sdk/pkg/models/operations"
-	"epilotentity/internal/sdk/pkg/models/shared"
-	"epilotentity/internal/sdk/pkg/utils"
+	"epilot-entity/internal/sdk/pkg/models/operations"
+	"epilot-entity/internal/sdk/pkg/models/shared"
+	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
 	"io"
 	"net/http"
@@ -58,7 +58,6 @@ func (s *entities) Autocomplete(ctx context.Context, request operations.Autocomp
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -140,7 +139,6 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -193,7 +191,6 @@ func (s *entities) DeleteEntity(ctx context.Context, request operations.DeleteEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -299,7 +296,6 @@ func (s *entities) GetEntity(ctx context.Context, request operations.GetEntityRe
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -383,7 +379,6 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -504,7 +499,6 @@ func (s *entities) SearchEntities(ctx context.Context, request shared.EntitySear
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -594,7 +588,6 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -658,7 +651,6 @@ func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
-	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

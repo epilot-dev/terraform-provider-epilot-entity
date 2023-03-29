@@ -7,7 +7,7 @@ import (
 	"flag"
 	"log"
 
-	"epilotentity/internal/provider"
+	"epilot-entity/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
@@ -34,7 +34,7 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/epilot/epilotentity",
+		Address: "registry.terraform.io/epilot-dev/epilot-entity",
 		Debug:   debug,
 	}
 
