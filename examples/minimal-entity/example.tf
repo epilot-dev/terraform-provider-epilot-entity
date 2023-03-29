@@ -16,15 +16,36 @@ variable "epilot_api_key" {
 }
 
 resource "epilot-entity_schema" "test" {
-  slug   = "test_contact"
+  slug   = "contact"
   name   = "contact"
   plural = "contacts"
   attributes = [
     {
       text_attribute = {
-        label = "foo"
-        name  = "bar"
+        label = "test"
+        name  = "test"
       }
+    }
+  ]
+  capabilities = [
+    {
+      name = "customer_messaging"
+      title = "Messaging"
+      attributes = [
+        {
+          text_attribute = {
+            name             = "example"
+            label            = "example"
+            placeholder      = "example placeholder"
+              show_in_table    = true
+          }
+        }
+      ]
+      ui_hooks = [
+        {
+          hook             = "EntityDetailsV2:Tab"
+        }
+      ]
     }
   ]
 }
