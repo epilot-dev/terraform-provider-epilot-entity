@@ -53,6 +53,7 @@ func (s *schemas) DeleteSchema(ctx context.Context, request operations.DeleteSch
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -92,6 +93,7 @@ func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -136,6 +138,7 @@ func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetS
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -180,6 +183,7 @@ func (s *schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSch
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -228,6 +232,7 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -276,6 +281,7 @@ func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, requ
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -331,6 +337,7 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

@@ -63,6 +63,7 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -111,6 +112,7 @@ func (s *relations) DeleteRelation(ctx context.Context, request operations.Delet
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -154,6 +156,7 @@ func (s *relations) GetRelations(ctx context.Context, request operations.GetRela
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -206,6 +209,7 @@ func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRe
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -261,6 +265,7 @@ func (s *relations) UpdateRelation(ctx context.Context, request operations.Updat
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

@@ -60,6 +60,7 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -104,6 +105,7 @@ func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.Del
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -139,6 +141,7 @@ func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSav
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -183,6 +186,7 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -234,6 +238,7 @@ func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.Upd
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

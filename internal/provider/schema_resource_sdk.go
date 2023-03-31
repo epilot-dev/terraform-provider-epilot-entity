@@ -9738,9 +9738,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 	}
 	explicitSearchMappings := make(map[string]shared.SearchMappings)
 	for explicitSearchMappingsKey, explicitSearchMappingsValue := range r.ExplicitSearchMappings {
-		var fields *interface{}
-		if !explicitSearchMappingsValue.Fields.IsUnknown() && !explicitSearchMappingsValue.Fields.IsNull() {
-			_ = json.Unmarshal([]byte(explicitSearchMappingsValue.Fields.ValueString()), &fields)
+		fields := make(map[string]interface{})
+		for fieldsKey, fieldsValue := range explicitSearchMappingsValue.Fields {
+			var fieldsInst interface{}
+			_ = json.Unmarshal([]byte(fieldsValue.ValueString()), &fieldsInst)
+			fields[fieldsKey] = fieldsInst
 		}
 		index := new(bool)
 		if !explicitSearchMappingsValue.Index.IsUnknown() && !explicitSearchMappingsValue.Index.IsNull() {
@@ -17406,11 +17408,10 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	r.ExplicitSearchMappings = make(map[string]SearchMappings)
 	for searchMappingsKey, searchMappingsValue := range resp.ExplicitSearchMappings {
 		var searchMappingsResult SearchMappings
-		if searchMappingsValue.Fields == nil {
-			searchMappingsResult.Fields = types.StringNull()
-		} else {
-			fieldsResult, _ := json.Marshal(searchMappingsValue.Fields)
-			searchMappingsResult.Fields = types.StringValue(string(fieldsResult))
+		searchMappingsResult.Fields = make(map[string]types.String)
+		for key59, value65 := range searchMappingsValue.Fields {
+			result57, _ := json.Marshal(value65)
+			searchMappingsResult.Fields[key59] = types.StringValue(string(result57))
 		}
 		if searchMappingsValue.Index != nil {
 			searchMappingsResult.Index = types.BoolValue(*searchMappingsValue.Index)
@@ -17491,9 +17492,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 		r.ID = types.StringNull()
 	}
 	r.LayoutSettings = make(map[string]types.String)
-	for key60, value65 := range resp.LayoutSettings {
-		result57, _ := json.Marshal(value65)
-		r.LayoutSettings[key60] = types.StringValue(string(result57))
+	for key61, value66 := range resp.LayoutSettings {
+		result58, _ := json.Marshal(value66)
+		r.LayoutSettings[key61] = types.StringValue(string(result58))
 	}
 	r.Name = types.StringValue(resp.Name)
 	r.Plural = types.StringValue(resp.Plural)
@@ -17534,8 +17535,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			if resp.UIConfig.CreateView.EntityDefaultCreate != nil {
 				r.UIConfig.CreateView.EntityDefaultCreate = &EntityDefaultCreate{}
 				r.UIConfig.CreateView.EntityDefaultCreate.SearchParams = make(map[string]types.String)
-				for key61, value66 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
-					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key61] = types.StringValue(value66)
+				for key62, value67 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
+					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key62] = types.StringValue(value67)
 				}
 				if resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions == nil {
 					r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions = nil
@@ -17587,8 +17588,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			if resp.UIConfig.EditView.EntityDefaultEdit != nil {
 				r.UIConfig.EditView.EntityDefaultEdit = &EntityDefaultCreate{}
 				r.UIConfig.EditView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-				for key62, value67 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
-					r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key62] = types.StringValue(value67)
+				for key63, value68 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
+					r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key63] = types.StringValue(value68)
 				}
 				if resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions = nil
@@ -17697,8 +17698,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			if resp.UIConfig.SingleView.EntityDefaultEdit != nil {
 				r.UIConfig.SingleView.EntityDefaultEdit = &EntityDefaultCreate{}
 				r.UIConfig.SingleView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-				for key63, value69 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
-					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key63] = types.StringValue(value69)
+				for key64, value70 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
+					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key64] = types.StringValue(value70)
 				}
 				if resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions = nil
@@ -17823,9 +17824,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 						var options15 EntityDefaultTableNavbarActionsOptions
 						options15.Label = types.StringValue(optionsItem6.Label)
 						options15.Params = make(map[string]types.String)
-						for key64, value70 := range optionsItem6.Params {
-							result58, _ := json.Marshal(value70)
-							options15.Params[key64] = types.StringValue(string(result58))
+						for key65, value71 := range optionsItem6.Params {
+							result59, _ := json.Marshal(value71)
+							options15.Params[key65] = types.StringValue(string(result59))
 						}
 						navbarActions1.Options = append(navbarActions1.Options, options15)
 					}

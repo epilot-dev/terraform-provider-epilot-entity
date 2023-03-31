@@ -63,6 +63,7 @@ func (s *export) ExportEntities(ctx context.Context, request operations.ExportEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -109,6 +110,7 @@ func (s *export) ImportEntities(ctx context.Context, request operations.ImportEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

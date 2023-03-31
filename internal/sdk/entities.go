@@ -58,6 +58,7 @@ func (s *entities) Autocomplete(ctx context.Context, request operations.Autocomp
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -139,6 +140,7 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -191,6 +193,7 @@ func (s *entities) DeleteEntity(ctx context.Context, request operations.DeleteEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -296,6 +299,7 @@ func (s *entities) GetEntity(ctx context.Context, request operations.GetEntityRe
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -379,6 +383,7 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -499,6 +504,7 @@ func (s *entities) SearchEntities(ctx context.Context, request shared.EntitySear
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -588,6 +594,7 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
@@ -651,6 +658,7 @@ func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEn
 	if httpRes == nil {
 		return nil, fmt.Errorf("error sending request: no response")
 	}
+	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 

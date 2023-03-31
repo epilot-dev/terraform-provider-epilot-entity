@@ -7266,13 +7266,13 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"fields": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
+						"fields": schema.MapAttribute{
+							Computed:    true,
+							Optional:    true,
+							ElementType: types.StringType,
+							Validators: []validator.Map{
+								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 							},
-							Description: `Parsed as JSON.`,
 						},
 						"index": schema.BoolAttribute{
 							Computed: true,
