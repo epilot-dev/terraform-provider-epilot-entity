@@ -2346,7 +2346,7 @@ Optional:
 
 Optional:
 
-- `fields` (String) Parsed as JSON.
+- `fields` (Map of String)
 - `index` (Boolean)
 - `type` (String)
 
