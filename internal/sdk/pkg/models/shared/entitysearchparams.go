@@ -3,6 +3,8 @@
 package shared
 
 type EntitySearchParams struct {
+	// Aggregation supported by ElasticSearch allows summarizing data as metrics, statistics, or other analytics.
+	Aggs map[string]interface{} `json:"aggs,omitempty"`
 	// List of entity fields to include in search results
 	Fields []string `json:"fields,omitempty"`
 	From   *int64   `json:"from,omitempty"`

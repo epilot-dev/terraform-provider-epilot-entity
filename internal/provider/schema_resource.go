@@ -42,6 +42,7 @@ type SchemaResourceModel struct {
 	Capabilities           []EntityCapability          `tfsdk:"capabilities"`
 	Comment                types.String                `tfsdk:"comment"`
 	CreatedAt              types.String                `tfsdk:"created_at"`
+	DialogConfig           map[string]types.String     `tfsdk:"dialog_config"`
 	Draft                  types.Bool                  `tfsdk:"draft"`
 	EnableSetting          []types.String              `tfsdk:"enable_setting"`
 	ExplicitSearchMappings map[string]SearchMappings   `tfsdk:"explicit_search_mappings"`
@@ -83,6 +84,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -195,6 +204,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -301,6 +318,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -410,6 +435,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -516,6 +549,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -627,6 +668,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								"allow_any": schema.BoolAttribute{
 									Computed: true,
 									Optional: true,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -772,6 +821,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed: true,
 									Optional: true,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -912,6 +969,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -1046,6 +1111,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -1256,6 +1329,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -1459,6 +1540,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -1569,6 +1658,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -1681,6 +1778,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -1791,6 +1896,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"currency": schema.ListNestedAttribute{
 									Required: true,
@@ -1932,6 +2045,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -2069,6 +2190,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -2186,6 +2315,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -2296,6 +2433,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -2411,6 +2556,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -2517,6 +2670,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -2629,6 +2790,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_access_control": schema.StringAttribute{
 									Computed: true,
@@ -2759,6 +2928,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -2865,6 +3042,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -2973,6 +3158,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -3079,6 +3272,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -3187,6 +3388,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -3293,6 +3502,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
+								},
+								"constraints": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"created_at": schema.StringAttribute{
 									Computed: true,
@@ -3449,6 +3666,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -3560,6 +3785,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -3666,6 +3899,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -3775,6 +4016,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -3881,6 +4130,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -3992,6 +4249,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"allow_any": schema.BoolAttribute{
 												Computed: true,
 												Optional: true,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -4137,6 +4402,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 												Optional: true,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4277,6 +4550,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4411,6 +4692,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -4621,6 +4910,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4824,6 +5121,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4934,6 +5239,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -5046,6 +5359,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -5156,6 +5477,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"currency": schema.ListNestedAttribute{
 												Required: true,
@@ -5297,6 +5626,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -5434,6 +5771,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -5551,6 +5896,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -5661,6 +6014,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -5776,6 +6137,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -5882,6 +6251,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -5994,6 +6371,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_access_control": schema.StringAttribute{
 												Computed: true,
@@ -6124,6 +6509,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -6230,6 +6623,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -6338,6 +6739,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -6444,6 +6853,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -6552,6 +6969,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -6658,6 +7083,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
+											},
+											"constraints": schema.MapAttribute{
+												Computed:    true,
+												Optional:    true,
+												ElementType: types.StringType,
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
 											},
 											"created_at": schema.StringAttribute{
 												Computed: true,
@@ -6879,6 +7312,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"created_at": schema.StringAttribute{
 				Computed: true,
 			},
+			"dialog_config": schema.MapAttribute{
+				Computed:    true,
+				Optional:    true,
+				ElementType: types.StringType,
+				Validators: []validator.Map{
+					mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+				},
+			},
 			"draft": schema.BoolAttribute{
 				Computed: true,
 				Optional: true,
@@ -6893,6 +7334,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"fields": schema.MapAttribute{
+							Computed:    true,
+							Optional:    true,
+							ElementType: types.StringType,
+							Validators: []validator.Map{
+								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+							},
+						},
 						"index": schema.BoolAttribute{
 							Computed: true,
 							Optional: true,
@@ -7444,6 +7893,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Attributes: map[string]schema.Attribute{
 															"label": schema.StringAttribute{
 																Required: true,
+															},
+															"params": schema.MapAttribute{
+																Computed:    true,
+																Optional:    true,
+																ElementType: types.StringType,
+																Validators: []validator.Map{
+																	mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+																},
 															},
 														},
 													},

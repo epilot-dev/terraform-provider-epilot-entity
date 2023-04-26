@@ -315,10 +315,14 @@ type RelationAttribute struct {
 	Purpose []string                   `json:"_purpose,omitempty"`
 	Actions []RelationAttributeActions `json:"actions,omitempty"`
 	// Optional label for the add button. The translated value for add_button_lable is used, if found else the string is used as is.
-	AddButtonLabel *string     `json:"add_button_label,omitempty"`
-	AllowedSchemas []string    `json:"allowedSchemas,omitempty"`
-	DefaultValue   interface{} `json:"default_value,omitempty"`
-	Deprecated     *bool       `json:"deprecated,omitempty"`
+	AddButtonLabel *string  `json:"add_button_label,omitempty"`
+	AllowedSchemas []string `json:"allowedSchemas,omitempty"`
+	// A set of constraints applicable to the attribute.
+	// These constraints should and will be enforced by the attribute renderer.
+	//
+	Constraints  map[string]interface{} `json:"constraints,omitempty"`
+	DefaultValue interface{}            `json:"default_value,omitempty"`
+	Deprecated   *bool                  `json:"deprecated,omitempty"`
 	// Enables the preview, edition, and creation of relation items on a Master-Details view mode.
 	DetailsViewModeEnabled *bool                            `json:"details_view_mode_enabled,omitempty"`
 	DrawerSize             *RelationAttributeDrawerSizeEnum `json:"drawer_size,omitempty"`

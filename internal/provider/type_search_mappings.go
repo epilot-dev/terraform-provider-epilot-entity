@@ -5,6 +5,7 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type SearchMappings struct {
-	Index types.Bool   `tfsdk:"index"`
-	Type  types.String `tfsdk:"type"`
+	Fields map[string]types.String `tfsdk:"fields"`
+	Index  types.Bool              `tfsdk:"index"`
+	Type   types.String            `tfsdk:"type"`
 }

@@ -111,9 +111,13 @@ type MultiSelectAttribute struct {
 	// Allow arbitrary input values in addition to provided options
 	AllowAny *bool `json:"allow_any,omitempty"`
 	// controls if the 360 ui will allow the user to enter a value which is not defined by the options
-	AllowExtraOptions *bool       `json:"allow_extra_options,omitempty"`
-	DefaultValue      interface{} `json:"default_value,omitempty"`
-	Deprecated        *bool       `json:"deprecated,omitempty"`
+	AllowExtraOptions *bool `json:"allow_extra_options,omitempty"`
+	// A set of constraints applicable to the attribute.
+	// These constraints should and will be enforced by the attribute renderer.
+	//
+	Constraints  map[string]interface{} `json:"constraints,omitempty"`
+	DefaultValue interface{}            `json:"default_value,omitempty"`
+	Deprecated   *bool                  `json:"deprecated,omitempty"`
 	// controls if the matching of values against the options is case sensitive or not
 	DisableCaseSensitive *bool `json:"disable_case_sensitive,omitempty"`
 	// Setting to `true` disables editing the attribute on the entity builder UI

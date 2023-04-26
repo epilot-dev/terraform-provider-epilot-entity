@@ -138,7 +138,8 @@ func (u EntityDefaultTableDropdownItems) MarshalJSON() ([]byte, error) {
 }
 
 type EntityDefaultTableNavbarActionsOptions struct {
-	Label string `json:"label"`
+	Label  string                 `json:"label"`
+	Params map[string]interface{} `json:"params,omitempty"`
 }
 
 type EntityDefaultTableNavbarActions struct {

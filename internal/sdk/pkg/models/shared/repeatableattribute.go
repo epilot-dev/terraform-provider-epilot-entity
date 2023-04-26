@@ -74,9 +74,13 @@ func (e *RepeatableAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 
 // RepeatableAttribute - Repeatable (add N number of fields)
 type RepeatableAttribute struct {
-	Purpose      []string    `json:"_purpose,omitempty"`
-	DefaultValue interface{} `json:"default_value,omitempty"`
-	Deprecated   *bool       `json:"deprecated,omitempty"`
+	Purpose []string `json:"_purpose,omitempty"`
+	// A set of constraints applicable to the attribute.
+	// These constraints should and will be enforced by the attribute renderer.
+	//
+	Constraints  map[string]interface{} `json:"constraints,omitempty"`
+	DefaultValue interface{}            `json:"default_value,omitempty"`
+	Deprecated   *bool                  `json:"deprecated,omitempty"`
 	// when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.
 	EnableRelationPicker *bool `json:"enable_relation_picker,omitempty"`
 	// Setting to `true` disables editing the attribute on the entity builder UI

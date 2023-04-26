@@ -99,6 +99,7 @@ type SavedViewItem struct {
 	// boolean property for if a view is shared with organisation
 	Shared *bool `json:"shared,omitempty"`
 	// list of schemas a view can belong to
-	Slug      []string `json:"slug"`
-	UpdatedAt *string  `json:"updated_at,omitempty"`
+	Slug      []string               `json:"slug"`
+	UIConfig  map[string]interface{} `json:"ui_config"`
+	UpdatedAt *string                `json:"updated_at,omitempty"`
 }

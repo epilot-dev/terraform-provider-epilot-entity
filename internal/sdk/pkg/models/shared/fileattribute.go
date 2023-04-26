@@ -57,7 +57,11 @@ func (e *FileAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 type FileAttribute struct {
 	Purpose []string `json:"_purpose,omitempty"`
 	// List of file extensions (without the dot suffix)
-	AllowedExtensions    []string                               `json:"allowed_extensions,omitempty"`
+	AllowedExtensions []string `json:"allowed_extensions,omitempty"`
+	// A set of constraints applicable to the attribute.
+	// These constraints should and will be enforced by the attribute renderer.
+	//
+	Constraints          map[string]interface{}                 `json:"constraints,omitempty"`
 	DefaultAccessControl *FileAttributeDefaultAccessControlEnum `json:"default_access_control,omitempty"`
 	DefaultValue         interface{}                            `json:"default_value,omitempty"`
 	Deprecated           *bool                                  `json:"deprecated,omitempty"`

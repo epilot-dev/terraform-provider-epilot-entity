@@ -5,5 +5,6 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type EntityDefaultTableNavbarActionsOptions struct {
-	Label types.String `tfsdk:"label"`
+	Label  types.String            `tfsdk:"label"`
+	Params map[string]types.String `tfsdk:"params"`
 }

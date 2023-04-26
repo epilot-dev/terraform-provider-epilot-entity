@@ -109,9 +109,13 @@ func (e *SelectAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 type SelectAttribute struct {
 	Purpose []string `json:"_purpose,omitempty"`
 	// Allow arbitrary input values in addition to provided options
-	AllowAny     *bool       `json:"allow_any,omitempty"`
-	DefaultValue interface{} `json:"default_value,omitempty"`
-	Deprecated   *bool       `json:"deprecated,omitempty"`
+	AllowAny *bool `json:"allow_any,omitempty"`
+	// A set of constraints applicable to the attribute.
+	// These constraints should and will be enforced by the attribute renderer.
+	//
+	Constraints  map[string]interface{} `json:"constraints,omitempty"`
+	DefaultValue interface{}            `json:"default_value,omitempty"`
+	Deprecated   *bool                  `json:"deprecated,omitempty"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
 	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
 	// This attribute should only be active when the feature flag is enabled

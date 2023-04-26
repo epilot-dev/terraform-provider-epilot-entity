@@ -544,9 +544,10 @@ type EntitySchema struct {
 	// An ordered list of attributes the entity contains
 	Attributes []Attribute `json:"attributes,omitempty"`
 	// Reference to blueprint
-	Blueprint    *string            `json:"blueprint,omitempty"`
-	Capabilities []EntityCapability `json:"capabilities,omitempty"`
-	Draft        *bool              `json:"draft,omitempty"`
+	Blueprint    *string                `json:"blueprint,omitempty"`
+	Capabilities []EntityCapability     `json:"capabilities,omitempty"`
+	DialogConfig map[string]interface{} `json:"dialog_config,omitempty"`
+	Draft        *bool                  `json:"draft,omitempty"`
 	// This schema should only be active when one of the organization settings is enabled
 	EnableSetting []string `json:"enable_setting,omitempty"`
 	// Advanced: explicit Elasticsearch index mapping definitions for entity data

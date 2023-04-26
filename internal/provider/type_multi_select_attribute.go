@@ -8,6 +8,7 @@ type MultiSelectAttribute struct {
 	Purpose                  []types.String                `tfsdk:"purpose"`
 	AllowAny                 types.Bool                    `tfsdk:"allow_any"`
 	AllowExtraOptions        types.Bool                    `tfsdk:"allow_extra_options"`
+	Constraints              map[string]types.String       `tfsdk:"constraints"`
 	DefaultValue             types.String                  `tfsdk:"default_value"`
 	Deprecated               types.Bool                    `tfsdk:"deprecated"`
 	DisableCaseSensitive     types.Bool                    `tfsdk:"disable_case_sensitive"`

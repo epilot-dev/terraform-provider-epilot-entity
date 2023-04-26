@@ -17,6 +17,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			for _, purposeItem := range attributesItem.TextAttribute.Purpose {
 				purpose = append(purpose, purposeItem.ValueString())
 			}
+			constraints := make(map[string]interface{})
+			for constraintsKey, constraintsValue := range attributesItem.TextAttribute.Constraints {
+				var constraintsInst interface{}
+				_ = json.Unmarshal([]byte(constraintsValue.ValueString()), &constraintsInst)
+				constraints[constraintsKey] = constraintsInst
+			}
 			var defaultValue *interface{}
 			if !attributesItem.TextAttribute.DefaultValue.IsUnknown() && !attributesItem.TextAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.TextAttribute.DefaultValue.ValueString()), &defaultValue)
@@ -145,6 +151,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			textAttribute := shared.TextAttribute{
 				Purpose:                  purpose,
+				Constraints:              constraints,
 				DefaultValue:             defaultValue,
 				Deprecated:               deprecated,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit,
@@ -177,6 +184,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose1 := make([]string, 0)
 			for _, purposeItem1 := range attributesItem.LinkAttribute.Purpose {
 				purpose1 = append(purpose1, purposeItem1.ValueString())
+			}
+			constraints1 := make(map[string]interface{})
+			for constraintsKey1, constraintsValue1 := range attributesItem.LinkAttribute.Constraints {
+				var constraintsInst1 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue1.ValueString()), &constraintsInst1)
+				constraints1[constraintsKey1] = constraintsInst1
 			}
 			var defaultValue1 *interface{}
 			if !attributesItem.LinkAttribute.DefaultValue.IsUnknown() && !attributesItem.LinkAttribute.DefaultValue.IsNull() {
@@ -300,6 +313,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			linkAttribute := shared.LinkAttribute{
 				Purpose:                  purpose1,
+				Constraints:              constraints1,
 				DefaultValue:             defaultValue1,
 				Deprecated:               deprecated1,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit1,
@@ -331,6 +345,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose2 := make([]string, 0)
 			for _, purposeItem2 := range attributesItem.DateAttribute.Purpose {
 				purpose2 = append(purpose2, purposeItem2.ValueString())
+			}
+			constraints2 := make(map[string]interface{})
+			for constraintsKey2, constraintsValue2 := range attributesItem.DateAttribute.Constraints {
+				var constraintsInst2 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue2.ValueString()), &constraintsInst2)
+				constraints2[constraintsKey2] = constraintsInst2
 			}
 			var defaultValue2 *interface{}
 			if !attributesItem.DateAttribute.DefaultValue.IsUnknown() && !attributesItem.DateAttribute.DefaultValue.IsNull() {
@@ -454,6 +474,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			dateAttribute := shared.DateAttribute{
 				Purpose:                  purpose2,
+				Constraints:              constraints2,
 				DefaultValue:             defaultValue2,
 				Deprecated:               deprecated2,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit2,
@@ -485,6 +506,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose3 := make([]string, 0)
 			for _, purposeItem3 := range attributesItem.CountryAttribute.Purpose {
 				purpose3 = append(purpose3, purposeItem3.ValueString())
+			}
+			constraints3 := make(map[string]interface{})
+			for constraintsKey3, constraintsValue3 := range attributesItem.CountryAttribute.Constraints {
+				var constraintsInst3 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue3.ValueString()), &constraintsInst3)
+				constraints3[constraintsKey3] = constraintsInst3
 			}
 			var defaultValue3 *interface{}
 			if !attributesItem.CountryAttribute.DefaultValue.IsUnknown() && !attributesItem.CountryAttribute.DefaultValue.IsNull() {
@@ -608,6 +635,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			countryAttribute := shared.CountryAttribute{
 				Purpose:                  purpose3,
+				Constraints:              constraints3,
 				DefaultValue:             defaultValue3,
 				Deprecated:               deprecated3,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit3,
@@ -639,6 +667,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose4 := make([]string, 0)
 			for _, purposeItem4 := range attributesItem.BooleanAttribute.Purpose {
 				purpose4 = append(purpose4, purposeItem4.ValueString())
+			}
+			constraints4 := make(map[string]interface{})
+			for constraintsKey4, constraintsValue4 := range attributesItem.BooleanAttribute.Constraints {
+				var constraintsInst4 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue4.ValueString()), &constraintsInst4)
+				constraints4[constraintsKey4] = constraintsInst4
 			}
 			var defaultValue4 *interface{}
 			if !attributesItem.BooleanAttribute.DefaultValue.IsUnknown() && !attributesItem.BooleanAttribute.DefaultValue.IsNull() {
@@ -762,6 +796,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			booleanAttribute := shared.BooleanAttribute{
 				Purpose:                  purpose4,
+				Constraints:              constraints4,
 				DefaultValue:             defaultValue4,
 				Deprecated:               deprecated4,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit4,
@@ -799,6 +834,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				*allowAny = attributesItem.SelectAttribute.AllowAny.ValueBool()
 			} else {
 				allowAny = nil
+			}
+			constraints5 := make(map[string]interface{})
+			for constraintsKey5, constraintsValue5 := range attributesItem.SelectAttribute.Constraints {
+				var constraintsInst5 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue5.ValueString()), &constraintsInst5)
+				constraints5[constraintsKey5] = constraintsInst5
 			}
 			var defaultValue5 *interface{}
 			if !attributesItem.SelectAttribute.DefaultValue.IsUnknown() && !attributesItem.SelectAttribute.DefaultValue.IsNull() {
@@ -948,6 +989,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			selectAttribute := shared.SelectAttribute{
 				Purpose:                  purpose5,
 				AllowAny:                 allowAny,
+				Constraints:              constraints5,
 				DefaultValue:             defaultValue5,
 				Deprecated:               deprecated5,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit5,
@@ -992,6 +1034,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				*allowExtraOptions = attributesItem.MultiSelectAttribute.AllowExtraOptions.ValueBool()
 			} else {
 				allowExtraOptions = nil
+			}
+			constraints6 := make(map[string]interface{})
+			for constraintsKey6, constraintsValue6 := range attributesItem.MultiSelectAttribute.Constraints {
+				var constraintsInst6 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue6.ValueString()), &constraintsInst6)
+				constraints6[constraintsKey6] = constraintsInst6
 			}
 			var defaultValue6 *interface{}
 			if !attributesItem.MultiSelectAttribute.DefaultValue.IsUnknown() && !attributesItem.MultiSelectAttribute.DefaultValue.IsNull() {
@@ -1148,6 +1196,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				Purpose:                  purpose6,
 				AllowAny:                 allowAny1,
 				AllowExtraOptions:        allowExtraOptions,
+				Constraints:              constraints6,
 				DefaultValue:             defaultValue6,
 				Deprecated:               deprecated6,
 				DisableCaseSensitive:     disableCaseSensitive,
@@ -1181,6 +1230,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose7 := make([]string, 0)
 			for _, purposeItem7 := range attributesItem.StatusAttribute.Purpose {
 				purpose7 = append(purpose7, purposeItem7.ValueString())
+			}
+			constraints7 := make(map[string]interface{})
+			for constraintsKey7, constraintsValue7 := range attributesItem.StatusAttribute.Constraints {
+				var constraintsInst7 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue7.ValueString()), &constraintsInst7)
+				constraints7[constraintsKey7] = constraintsInst7
 			}
 			var defaultValue7 *interface{}
 			if !attributesItem.StatusAttribute.DefaultValue.IsUnknown() && !attributesItem.StatusAttribute.DefaultValue.IsNull() {
@@ -1329,6 +1384,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			statusAttribute := shared.StatusAttribute{
 				Purpose:                  purpose7,
+				Constraints:              constraints7,
 				DefaultValue:             defaultValue7,
 				Deprecated:               deprecated7,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit7,
@@ -1361,6 +1417,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose8 := make([]string, 0)
 			for _, purposeItem8 := range attributesItem.SequenceAttribute.Purpose {
 				purpose8 = append(purpose8, purposeItem8.ValueString())
+			}
+			constraints8 := make(map[string]interface{})
+			for constraintsKey8, constraintsValue8 := range attributesItem.SequenceAttribute.Constraints {
+				var constraintsInst8 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue8.ValueString()), &constraintsInst8)
+				constraints8[constraintsKey8] = constraintsInst8
 			}
 			var defaultValue8 *interface{}
 			if !attributesItem.SequenceAttribute.DefaultValue.IsUnknown() && !attributesItem.SequenceAttribute.DefaultValue.IsNull() {
@@ -1496,6 +1558,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			sequenceAttribute := shared.SequenceAttribute{
 				Purpose:                  purpose8,
+				Constraints:              constraints8,
 				DefaultValue:             defaultValue8,
 				Deprecated:               deprecated8,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit8,
@@ -1609,6 +1672,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			allowedSchemas := make([]string, 0)
 			for _, allowedSchemasItem := range attributesItem.RelationAttribute.AllowedSchemas {
 				allowedSchemas = append(allowedSchemas, allowedSchemasItem.ValueString())
+			}
+			constraints9 := make(map[string]interface{})
+			for constraintsKey9, constraintsValue9 := range attributesItem.RelationAttribute.Constraints {
+				var constraintsInst9 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue9.ValueString()), &constraintsInst9)
+				constraints9[constraintsKey9] = constraintsInst9
 			}
 			var defaultValue9 *interface{}
 			if !attributesItem.RelationAttribute.DefaultValue.IsUnknown() && !attributesItem.RelationAttribute.DefaultValue.IsNull() {
@@ -1824,6 +1893,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				Actions:                  actions,
 				AddButtonLabel:           addButtonLabel,
 				AllowedSchemas:           allowedSchemas,
+				Constraints:              constraints9,
 				DefaultValue:             defaultValue9,
 				Deprecated:               deprecated9,
 				DetailsViewModeEnabled:   detailsViewModeEnabled,
@@ -1866,6 +1936,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose10 := make([]string, 0)
 			for _, purposeItem10 := range attributesItem.UserRelationAttribute.Purpose {
 				purpose10 = append(purpose10, purposeItem10.ValueString())
+			}
+			constraints10 := make(map[string]interface{})
+			for constraintsKey10, constraintsValue10 := range attributesItem.UserRelationAttribute.Constraints {
+				var constraintsInst10 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue10.ValueString()), &constraintsInst10)
+				constraints10[constraintsKey10] = constraintsInst10
 			}
 			var defaultValue10 *interface{}
 			if !attributesItem.UserRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.UserRelationAttribute.DefaultValue.IsNull() {
@@ -1995,6 +2071,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			userRelationAttribute := shared.UserRelationAttribute{
 				Purpose:                  purpose10,
+				Constraints:              constraints10,
 				DefaultValue:             defaultValue10,
 				Deprecated:               deprecated10,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit10,
@@ -2027,6 +2104,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose11 := make([]string, 0)
 			for _, purposeItem11 := range attributesItem.AddressRelationAttribute.Purpose {
 				purpose11 = append(purpose11, purposeItem11.ValueString())
+			}
+			constraints11 := make(map[string]interface{})
+			for constraintsKey11, constraintsValue11 := range attributesItem.AddressRelationAttribute.Constraints {
+				var constraintsInst11 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue11.ValueString()), &constraintsInst11)
+				constraints11[constraintsKey11] = constraintsInst11
 			}
 			var defaultValue11 *interface{}
 			if !attributesItem.AddressRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.AddressRelationAttribute.DefaultValue.IsNull() {
@@ -2156,6 +2239,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			addressRelationAttribute := shared.AddressRelationAttribute{
 				Purpose:                  purpose11,
+				Constraints:              constraints11,
 				DefaultValue:             defaultValue11,
 				Deprecated:               deprecated11,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit11,
@@ -2188,6 +2272,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose12 := make([]string, 0)
 			for _, purposeItem12 := range attributesItem.PaymentMethodRelationAttribute.Purpose {
 				purpose12 = append(purpose12, purposeItem12.ValueString())
+			}
+			constraints12 := make(map[string]interface{})
+			for constraintsKey12, constraintsValue12 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
+				var constraintsInst12 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue12.ValueString()), &constraintsInst12)
+				constraints12[constraintsKey12] = constraintsInst12
 			}
 			var defaultValue12 *interface{}
 			if !attributesItem.PaymentMethodRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.PaymentMethodRelationAttribute.DefaultValue.IsNull() {
@@ -2317,6 +2407,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			paymentMethodRelationAttribute := shared.PaymentMethodRelationAttribute{
 				Purpose:                  purpose12,
+				Constraints:              constraints12,
 				DefaultValue:             defaultValue12,
 				Deprecated:               deprecated12,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit12,
@@ -2349,6 +2440,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose13 := make([]string, 0)
 			for _, purposeItem13 := range attributesItem.CurrencyAttribute.Purpose {
 				purpose13 = append(purpose13, purposeItem13.ValueString())
+			}
+			constraints13 := make(map[string]interface{})
+			for constraintsKey13, constraintsValue13 := range attributesItem.CurrencyAttribute.Constraints {
+				var constraintsInst13 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue13.ValueString()), &constraintsInst13)
+				constraints13[constraintsKey13] = constraintsInst13
 			}
 			currency := make([]shared.CurrencyAttributeCurrency, 0)
 			for _, currencyItem := range attributesItem.CurrencyAttribute.Currency {
@@ -2496,6 +2593,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			currencyAttribute := shared.CurrencyAttribute{
 				Purpose:                  purpose13,
+				Constraints:              constraints13,
 				Currency:                 currency,
 				CurrencySelectorOnly:     currencySelectorOnly,
 				DefaultValue:             defaultValue13,
@@ -2529,6 +2627,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose14 := make([]string, 0)
 			for _, purposeItem14 := range attributesItem.RepeatableAttribute.Purpose {
 				purpose14 = append(purpose14, purposeItem14.ValueString())
+			}
+			constraints14 := make(map[string]interface{})
+			for constraintsKey14, constraintsValue14 := range attributesItem.RepeatableAttribute.Constraints {
+				var constraintsInst14 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue14.ValueString()), &constraintsInst14)
+				constraints14[constraintsKey14] = constraintsInst14
 			}
 			var defaultValue14 *interface{}
 			if !attributesItem.RepeatableAttribute.DefaultValue.IsUnknown() && !attributesItem.RepeatableAttribute.DefaultValue.IsNull() {
@@ -2676,6 +2780,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			repeatableAttribute := shared.RepeatableAttribute{
 				Purpose:                  purpose14,
+				Constraints:              constraints14,
 				DefaultValue:             defaultValue14,
 				Deprecated:               deprecated14,
 				EnableRelationPicker:     enableRelationPicker1,
@@ -2711,6 +2816,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose15 := make([]string, 0)
 			for _, purposeItem15 := range attributesItem.TagsAttribute.Purpose {
 				purpose15 = append(purpose15, purposeItem15.ValueString())
+			}
+			constraints15 := make(map[string]interface{})
+			for constraintsKey15, constraintsValue15 := range attributesItem.TagsAttribute.Constraints {
+				var constraintsInst15 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue15.ValueString()), &constraintsInst15)
+				constraints15[constraintsKey15] = constraintsInst15
 			}
 			var defaultValue15 *interface{}
 			if !attributesItem.TagsAttribute.DefaultValue.IsUnknown() && !attributesItem.TagsAttribute.DefaultValue.IsNull() {
@@ -2842,6 +2953,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			tagsAttribute := shared.TagsAttribute{
 				Purpose:                  purpose15,
+				Constraints:              constraints15,
 				DefaultValue:             defaultValue15,
 				Deprecated:               deprecated15,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit15,
@@ -2875,6 +2987,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose16 := make([]string, 0)
 			for _, purposeItem16 := range attributesItem.NumberAttribute.Purpose {
 				purpose16 = append(purpose16, purposeItem16.ValueString())
+			}
+			constraints16 := make(map[string]interface{})
+			for constraintsKey16, constraintsValue16 := range attributesItem.NumberAttribute.Constraints {
+				var constraintsInst16 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue16.ValueString()), &constraintsInst16)
+				constraints16[constraintsKey16] = constraintsInst16
 			}
 			var defaultValue16 *interface{}
 			if !attributesItem.NumberAttribute.DefaultValue.IsUnknown() && !attributesItem.NumberAttribute.DefaultValue.IsNull() {
@@ -3004,6 +3122,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			numberAttribute := shared.NumberAttribute{
 				Purpose:                  purpose16,
+				Constraints:              constraints16,
 				DefaultValue:             defaultValue16,
 				Deprecated:               deprecated16,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit16,
@@ -3036,6 +3155,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose17 := make([]string, 0)
 			for _, purposeItem17 := range attributesItem.ConsentAttribute.Purpose {
 				purpose17 = append(purpose17, purposeItem17.ValueString())
+			}
+			constraints17 := make(map[string]interface{})
+			for constraintsKey17, constraintsValue17 := range attributesItem.ConsentAttribute.Constraints {
+				var constraintsInst17 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue17.ValueString()), &constraintsInst17)
+				constraints17[constraintsKey17] = constraintsInst17
 			}
 			var defaultValue17 *interface{}
 			if !attributesItem.ConsentAttribute.DefaultValue.IsUnknown() && !attributesItem.ConsentAttribute.DefaultValue.IsNull() {
@@ -3159,6 +3284,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			consentAttribute := shared.ConsentAttribute{
 				Purpose:                  purpose17,
+				Constraints:              constraints17,
 				DefaultValue:             defaultValue17,
 				Deprecated:               deprecated17,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit17,
@@ -3192,6 +3318,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose18 := make([]string, 0)
 			for _, purposeItem18 := range attributesItem.InternalAttribute.Purpose {
 				purpose18 = append(purpose18, purposeItem18.ValueString())
+			}
+			constraints18 := make(map[string]interface{})
+			for constraintsKey18, constraintsValue18 := range attributesItem.InternalAttribute.Constraints {
+				var constraintsInst18 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue18.ValueString()), &constraintsInst18)
+				constraints18[constraintsKey18] = constraintsInst18
 			}
 			var defaultValue18 *interface{}
 			if !attributesItem.InternalAttribute.DefaultValue.IsUnknown() && !attributesItem.InternalAttribute.DefaultValue.IsNull() {
@@ -3315,6 +3447,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			internalAttribute := shared.InternalAttribute{
 				Purpose:                  purpose18,
+				Constraints:              constraints18,
 				DefaultValue:             defaultValue18,
 				Deprecated:               deprecated18,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit18,
@@ -3346,6 +3479,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose19 := make([]string, 0)
 			for _, purposeItem19 := range attributesItem.OrderedListAttribute.Purpose {
 				purpose19 = append(purpose19, purposeItem19.ValueString())
+			}
+			constraints19 := make(map[string]interface{})
+			for constraintsKey19, constraintsValue19 := range attributesItem.OrderedListAttribute.Constraints {
+				var constraintsInst19 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue19.ValueString()), &constraintsInst19)
+				constraints19[constraintsKey19] = constraintsInst19
 			}
 			var defaultValue19 *interface{}
 			if !attributesItem.OrderedListAttribute.DefaultValue.IsUnknown() && !attributesItem.OrderedListAttribute.DefaultValue.IsNull() {
@@ -3469,6 +3608,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			orderedListAttribute := shared.OrderedListAttribute{
 				Purpose:                  purpose19,
+				Constraints:              constraints19,
 				DefaultValue:             defaultValue19,
 				Deprecated:               deprecated19,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit19,
@@ -3504,6 +3644,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			allowedExtensions := make([]string, 0)
 			for _, allowedExtensionsItem := range attributesItem.FileAttribute.AllowedExtensions {
 				allowedExtensions = append(allowedExtensions, allowedExtensionsItem.ValueString())
+			}
+			constraints20 := make(map[string]interface{})
+			for constraintsKey20, constraintsValue20 := range attributesItem.FileAttribute.Constraints {
+				var constraintsInst20 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue20.ValueString()), &constraintsInst20)
+				constraints20[constraintsKey20] = constraintsInst20
 			}
 			defaultAccessControl := new(shared.FileAttributeDefaultAccessControlEnum)
 			if !attributesItem.FileAttribute.DefaultAccessControl.IsUnknown() && !attributesItem.FileAttribute.DefaultAccessControl.IsNull() {
@@ -3647,6 +3793,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			fileAttribute := shared.FileAttribute{
 				Purpose:                  purpose20,
 				AllowedExtensions:        allowedExtensions,
+				Constraints:              constraints20,
 				DefaultAccessControl:     defaultAccessControl,
 				DefaultValue:             defaultValue20,
 				Deprecated:               deprecated20,
@@ -3682,6 +3829,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose21 := make([]string, 0)
 			for _, purposeItem21 := range attributesItem.ComputedAttribute.Purpose {
 				purpose21 = append(purpose21, purposeItem21.ValueString())
+			}
+			constraints21 := make(map[string]interface{})
+			for constraintsKey21, constraintsValue21 := range attributesItem.ComputedAttribute.Constraints {
+				var constraintsInst21 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue21.ValueString()), &constraintsInst21)
+				constraints21[constraintsKey21] = constraintsInst21
 			}
 			var defaultValue21 *interface{}
 			if !attributesItem.ComputedAttribute.DefaultValue.IsUnknown() && !attributesItem.ComputedAttribute.DefaultValue.IsNull() {
@@ -3805,6 +3958,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			computedAttribute := shared.ComputedAttribute{
 				Purpose:                  purpose21,
+				Constraints:              constraints21,
 				DefaultValue:             defaultValue21,
 				Deprecated:               deprecated21,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit21,
@@ -3836,6 +3990,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose22 := make([]string, 0)
 			for _, purposeItem22 := range attributesItem.PartnerStatusAttribute.Purpose {
 				purpose22 = append(purpose22, purposeItem22.ValueString())
+			}
+			constraints22 := make(map[string]interface{})
+			for constraintsKey22, constraintsValue22 := range attributesItem.PartnerStatusAttribute.Constraints {
+				var constraintsInst22 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue22.ValueString()), &constraintsInst22)
+				constraints22[constraintsKey22] = constraintsInst22
 			}
 			var defaultValue22 *interface{}
 			if !attributesItem.PartnerStatusAttribute.DefaultValue.IsUnknown() && !attributesItem.PartnerStatusAttribute.DefaultValue.IsNull() {
@@ -3959,6 +4119,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			partnerStatusAttribute := shared.PartnerStatusAttribute{
 				Purpose:                  purpose22,
+				Constraints:              constraints22,
 				DefaultValue:             defaultValue22,
 				Deprecated:               deprecated22,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit22,
@@ -3990,6 +4151,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose23 := make([]string, 0)
 			for _, purposeItem23 := range attributesItem.InvitationEmailAttribute.Purpose {
 				purpose23 = append(purpose23, purposeItem23.ValueString())
+			}
+			constraints23 := make(map[string]interface{})
+			for constraintsKey23, constraintsValue23 := range attributesItem.InvitationEmailAttribute.Constraints {
+				var constraintsInst23 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue23.ValueString()), &constraintsInst23)
+				constraints23[constraintsKey23] = constraintsInst23
 			}
 			var defaultValue23 *interface{}
 			if !attributesItem.InvitationEmailAttribute.DefaultValue.IsUnknown() && !attributesItem.InvitationEmailAttribute.DefaultValue.IsNull() {
@@ -4113,6 +4280,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			invitationEmailAttribute := shared.InvitationEmailAttribute{
 				Purpose:                  purpose23,
+				Constraints:              constraints23,
 				DefaultValue:             defaultValue23,
 				Deprecated:               deprecated23,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit23,
@@ -4144,6 +4312,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose24 := make([]string, 0)
 			for _, purposeItem24 := range attributesItem.AutomationAttribute.Purpose {
 				purpose24 = append(purpose24, purposeItem24.ValueString())
+			}
+			constraints24 := make(map[string]interface{})
+			for constraintsKey24, constraintsValue24 := range attributesItem.AutomationAttribute.Constraints {
+				var constraintsInst24 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue24.ValueString()), &constraintsInst24)
+				constraints24[constraintsKey24] = constraintsInst24
 			}
 			var defaultValue24 *interface{}
 			if !attributesItem.AutomationAttribute.DefaultValue.IsUnknown() && !attributesItem.AutomationAttribute.DefaultValue.IsNull() {
@@ -4267,6 +4441,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			automationAttribute := shared.AutomationAttribute{
 				Purpose:                  purpose24,
+				Constraints:              constraints24,
 				DefaultValue:             defaultValue24,
 				Deprecated:               deprecated24,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit24,
@@ -4298,6 +4473,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose25 := make([]string, 0)
 			for _, purposeItem25 := range attributesItem.InternalUserAttribute.Purpose {
 				purpose25 = append(purpose25, purposeItem25.ValueString())
+			}
+			constraints25 := make(map[string]interface{})
+			for constraintsKey25, constraintsValue25 := range attributesItem.InternalUserAttribute.Constraints {
+				var constraintsInst25 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue25.ValueString()), &constraintsInst25)
+				constraints25[constraintsKey25] = constraintsInst25
 			}
 			var defaultValue25 *interface{}
 			if !attributesItem.InternalUserAttribute.DefaultValue.IsUnknown() && !attributesItem.InternalUserAttribute.DefaultValue.IsNull() {
@@ -4421,6 +4602,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			internalUserAttribute := shared.InternalUserAttribute{
 				Purpose:                  purpose25,
+				Constraints:              constraints25,
 				DefaultValue:             defaultValue25,
 				Deprecated:               deprecated25,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit25,
@@ -4452,6 +4634,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purpose26 := make([]string, 0)
 			for _, purposeItem26 := range attributesItem.PurposeAttribute.Purpose {
 				purpose26 = append(purpose26, purposeItem26.ValueString())
+			}
+			constraints26 := make(map[string]interface{})
+			for constraintsKey26, constraintsValue26 := range attributesItem.PurposeAttribute.Constraints {
+				var constraintsInst26 interface{}
+				_ = json.Unmarshal([]byte(constraintsValue26.ValueString()), &constraintsInst26)
+				constraints26[constraintsKey26] = constraintsInst26
 			}
 			createdAt1 := new(time.Time)
 			if !attributesItem.PurposeAttribute.CreatedAt.IsUnknown() && !attributesItem.PurposeAttribute.CreatedAt.IsNull() {
@@ -4597,6 +4785,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			purposeAttribute := shared.PurposeAttribute{
 				Purpose:                  purpose26,
+				Constraints:              constraints26,
 				CreatedAt:                createdAt1,
 				DefaultValue:             defaultValue26,
 				Deprecated:               deprecated26,
@@ -4647,6 +4836,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose28 := make([]string, 0)
 				for _, purposeItem28 := range attributesItem1.TextAttribute.Purpose {
 					purpose28 = append(purpose28, purposeItem28.ValueString())
+				}
+				constraints27 := make(map[string]interface{})
+				for constraintsKey27, constraintsValue27 := range attributesItem1.TextAttribute.Constraints {
+					var constraintsInst27 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue27.ValueString()), &constraintsInst27)
+					constraints27[constraintsKey27] = constraintsInst27
 				}
 				var defaultValue27 *interface{}
 				if !attributesItem1.TextAttribute.DefaultValue.IsUnknown() && !attributesItem1.TextAttribute.DefaultValue.IsNull() {
@@ -4776,6 +4971,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				textAttribute1 := shared.TextAttribute{
 					Purpose:                  purpose28,
+					Constraints:              constraints27,
 					DefaultValue:             defaultValue27,
 					Deprecated:               deprecated27,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit27,
@@ -4808,6 +5004,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose29 := make([]string, 0)
 				for _, purposeItem29 := range attributesItem1.LinkAttribute.Purpose {
 					purpose29 = append(purpose29, purposeItem29.ValueString())
+				}
+				constraints28 := make(map[string]interface{})
+				for constraintsKey28, constraintsValue28 := range attributesItem1.LinkAttribute.Constraints {
+					var constraintsInst28 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue28.ValueString()), &constraintsInst28)
+					constraints28[constraintsKey28] = constraintsInst28
 				}
 				var defaultValue28 *interface{}
 				if !attributesItem1.LinkAttribute.DefaultValue.IsUnknown() && !attributesItem1.LinkAttribute.DefaultValue.IsNull() {
@@ -4931,6 +5133,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				linkAttribute1 := shared.LinkAttribute{
 					Purpose:                  purpose29,
+					Constraints:              constraints28,
 					DefaultValue:             defaultValue28,
 					Deprecated:               deprecated28,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit28,
@@ -4962,6 +5165,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose30 := make([]string, 0)
 				for _, purposeItem30 := range attributesItem1.DateAttribute.Purpose {
 					purpose30 = append(purpose30, purposeItem30.ValueString())
+				}
+				constraints29 := make(map[string]interface{})
+				for constraintsKey29, constraintsValue29 := range attributesItem1.DateAttribute.Constraints {
+					var constraintsInst29 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue29.ValueString()), &constraintsInst29)
+					constraints29[constraintsKey29] = constraintsInst29
 				}
 				var defaultValue29 *interface{}
 				if !attributesItem1.DateAttribute.DefaultValue.IsUnknown() && !attributesItem1.DateAttribute.DefaultValue.IsNull() {
@@ -5085,6 +5294,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				dateAttribute1 := shared.DateAttribute{
 					Purpose:                  purpose30,
+					Constraints:              constraints29,
 					DefaultValue:             defaultValue29,
 					Deprecated:               deprecated29,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit29,
@@ -5116,6 +5326,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose31 := make([]string, 0)
 				for _, purposeItem31 := range attributesItem1.CountryAttribute.Purpose {
 					purpose31 = append(purpose31, purposeItem31.ValueString())
+				}
+				constraints30 := make(map[string]interface{})
+				for constraintsKey30, constraintsValue30 := range attributesItem1.CountryAttribute.Constraints {
+					var constraintsInst30 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue30.ValueString()), &constraintsInst30)
+					constraints30[constraintsKey30] = constraintsInst30
 				}
 				var defaultValue30 *interface{}
 				if !attributesItem1.CountryAttribute.DefaultValue.IsUnknown() && !attributesItem1.CountryAttribute.DefaultValue.IsNull() {
@@ -5239,6 +5455,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				countryAttribute1 := shared.CountryAttribute{
 					Purpose:                  purpose31,
+					Constraints:              constraints30,
 					DefaultValue:             defaultValue30,
 					Deprecated:               deprecated30,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit30,
@@ -5270,6 +5487,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose32 := make([]string, 0)
 				for _, purposeItem32 := range attributesItem1.BooleanAttribute.Purpose {
 					purpose32 = append(purpose32, purposeItem32.ValueString())
+				}
+				constraints31 := make(map[string]interface{})
+				for constraintsKey31, constraintsValue31 := range attributesItem1.BooleanAttribute.Constraints {
+					var constraintsInst31 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue31.ValueString()), &constraintsInst31)
+					constraints31[constraintsKey31] = constraintsInst31
 				}
 				var defaultValue31 *interface{}
 				if !attributesItem1.BooleanAttribute.DefaultValue.IsUnknown() && !attributesItem1.BooleanAttribute.DefaultValue.IsNull() {
@@ -5393,6 +5616,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				booleanAttribute1 := shared.BooleanAttribute{
 					Purpose:                  purpose32,
+					Constraints:              constraints31,
 					DefaultValue:             defaultValue31,
 					Deprecated:               deprecated31,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit31,
@@ -5430,6 +5654,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					*allowAny2 = attributesItem1.SelectAttribute.AllowAny.ValueBool()
 				} else {
 					allowAny2 = nil
+				}
+				constraints32 := make(map[string]interface{})
+				for constraintsKey32, constraintsValue32 := range attributesItem1.SelectAttribute.Constraints {
+					var constraintsInst32 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue32.ValueString()), &constraintsInst32)
+					constraints32[constraintsKey32] = constraintsInst32
 				}
 				var defaultValue32 *interface{}
 				if !attributesItem1.SelectAttribute.DefaultValue.IsUnknown() && !attributesItem1.SelectAttribute.DefaultValue.IsNull() {
@@ -5579,6 +5809,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				selectAttribute1 := shared.SelectAttribute{
 					Purpose:                  purpose33,
 					AllowAny:                 allowAny2,
+					Constraints:              constraints32,
 					DefaultValue:             defaultValue32,
 					Deprecated:               deprecated32,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit32,
@@ -5623,6 +5854,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					*allowExtraOptions1 = attributesItem1.MultiSelectAttribute.AllowExtraOptions.ValueBool()
 				} else {
 					allowExtraOptions1 = nil
+				}
+				constraints33 := make(map[string]interface{})
+				for constraintsKey33, constraintsValue33 := range attributesItem1.MultiSelectAttribute.Constraints {
+					var constraintsInst33 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue33.ValueString()), &constraintsInst33)
+					constraints33[constraintsKey33] = constraintsInst33
 				}
 				var defaultValue33 *interface{}
 				if !attributesItem1.MultiSelectAttribute.DefaultValue.IsUnknown() && !attributesItem1.MultiSelectAttribute.DefaultValue.IsNull() {
@@ -5779,6 +6016,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					Purpose:                  purpose34,
 					AllowAny:                 allowAny3,
 					AllowExtraOptions:        allowExtraOptions1,
+					Constraints:              constraints33,
 					DefaultValue:             defaultValue33,
 					Deprecated:               deprecated33,
 					DisableCaseSensitive:     disableCaseSensitive1,
@@ -5812,6 +6050,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose35 := make([]string, 0)
 				for _, purposeItem35 := range attributesItem1.StatusAttribute.Purpose {
 					purpose35 = append(purpose35, purposeItem35.ValueString())
+				}
+				constraints34 := make(map[string]interface{})
+				for constraintsKey34, constraintsValue34 := range attributesItem1.StatusAttribute.Constraints {
+					var constraintsInst34 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue34.ValueString()), &constraintsInst34)
+					constraints34[constraintsKey34] = constraintsInst34
 				}
 				var defaultValue34 *interface{}
 				if !attributesItem1.StatusAttribute.DefaultValue.IsUnknown() && !attributesItem1.StatusAttribute.DefaultValue.IsNull() {
@@ -5960,6 +6204,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				statusAttribute1 := shared.StatusAttribute{
 					Purpose:                  purpose35,
+					Constraints:              constraints34,
 					DefaultValue:             defaultValue34,
 					Deprecated:               deprecated34,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit34,
@@ -5992,6 +6237,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose36 := make([]string, 0)
 				for _, purposeItem36 := range attributesItem1.SequenceAttribute.Purpose {
 					purpose36 = append(purpose36, purposeItem36.ValueString())
+				}
+				constraints35 := make(map[string]interface{})
+				for constraintsKey35, constraintsValue35 := range attributesItem1.SequenceAttribute.Constraints {
+					var constraintsInst35 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue35.ValueString()), &constraintsInst35)
+					constraints35[constraintsKey35] = constraintsInst35
 				}
 				var defaultValue35 *interface{}
 				if !attributesItem1.SequenceAttribute.DefaultValue.IsUnknown() && !attributesItem1.SequenceAttribute.DefaultValue.IsNull() {
@@ -6127,6 +6378,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				sequenceAttribute1 := shared.SequenceAttribute{
 					Purpose:                  purpose36,
+					Constraints:              constraints35,
 					DefaultValue:             defaultValue35,
 					Deprecated:               deprecated35,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit35,
@@ -6240,6 +6492,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				allowedSchemas1 := make([]string, 0)
 				for _, allowedSchemasItem1 := range attributesItem1.RelationAttribute.AllowedSchemas {
 					allowedSchemas1 = append(allowedSchemas1, allowedSchemasItem1.ValueString())
+				}
+				constraints36 := make(map[string]interface{})
+				for constraintsKey36, constraintsValue36 := range attributesItem1.RelationAttribute.Constraints {
+					var constraintsInst36 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue36.ValueString()), &constraintsInst36)
+					constraints36[constraintsKey36] = constraintsInst36
 				}
 				var defaultValue36 *interface{}
 				if !attributesItem1.RelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.RelationAttribute.DefaultValue.IsNull() {
@@ -6455,6 +6713,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					Actions:                  actions1,
 					AddButtonLabel:           addButtonLabel1,
 					AllowedSchemas:           allowedSchemas1,
+					Constraints:              constraints36,
 					DefaultValue:             defaultValue36,
 					Deprecated:               deprecated36,
 					DetailsViewModeEnabled:   detailsViewModeEnabled1,
@@ -6497,6 +6756,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose38 := make([]string, 0)
 				for _, purposeItem38 := range attributesItem1.UserRelationAttribute.Purpose {
 					purpose38 = append(purpose38, purposeItem38.ValueString())
+				}
+				constraints37 := make(map[string]interface{})
+				for constraintsKey37, constraintsValue37 := range attributesItem1.UserRelationAttribute.Constraints {
+					var constraintsInst37 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue37.ValueString()), &constraintsInst37)
+					constraints37[constraintsKey37] = constraintsInst37
 				}
 				var defaultValue37 *interface{}
 				if !attributesItem1.UserRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.UserRelationAttribute.DefaultValue.IsNull() {
@@ -6626,6 +6891,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				userRelationAttribute1 := shared.UserRelationAttribute{
 					Purpose:                  purpose38,
+					Constraints:              constraints37,
 					DefaultValue:             defaultValue37,
 					Deprecated:               deprecated37,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit37,
@@ -6658,6 +6924,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose39 := make([]string, 0)
 				for _, purposeItem39 := range attributesItem1.AddressRelationAttribute.Purpose {
 					purpose39 = append(purpose39, purposeItem39.ValueString())
+				}
+				constraints38 := make(map[string]interface{})
+				for constraintsKey38, constraintsValue38 := range attributesItem1.AddressRelationAttribute.Constraints {
+					var constraintsInst38 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue38.ValueString()), &constraintsInst38)
+					constraints38[constraintsKey38] = constraintsInst38
 				}
 				var defaultValue38 *interface{}
 				if !attributesItem1.AddressRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.AddressRelationAttribute.DefaultValue.IsNull() {
@@ -6787,6 +7059,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				addressRelationAttribute1 := shared.AddressRelationAttribute{
 					Purpose:                  purpose39,
+					Constraints:              constraints38,
 					DefaultValue:             defaultValue38,
 					Deprecated:               deprecated38,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit38,
@@ -6819,6 +7092,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose40 := make([]string, 0)
 				for _, purposeItem40 := range attributesItem1.PaymentMethodRelationAttribute.Purpose {
 					purpose40 = append(purpose40, purposeItem40.ValueString())
+				}
+				constraints39 := make(map[string]interface{})
+				for constraintsKey39, constraintsValue39 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
+					var constraintsInst39 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue39.ValueString()), &constraintsInst39)
+					constraints39[constraintsKey39] = constraintsInst39
 				}
 				var defaultValue39 *interface{}
 				if !attributesItem1.PaymentMethodRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.PaymentMethodRelationAttribute.DefaultValue.IsNull() {
@@ -6948,6 +7227,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				paymentMethodRelationAttribute1 := shared.PaymentMethodRelationAttribute{
 					Purpose:                  purpose40,
+					Constraints:              constraints39,
 					DefaultValue:             defaultValue39,
 					Deprecated:               deprecated39,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit39,
@@ -6980,6 +7260,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose41 := make([]string, 0)
 				for _, purposeItem41 := range attributesItem1.CurrencyAttribute.Purpose {
 					purpose41 = append(purpose41, purposeItem41.ValueString())
+				}
+				constraints40 := make(map[string]interface{})
+				for constraintsKey40, constraintsValue40 := range attributesItem1.CurrencyAttribute.Constraints {
+					var constraintsInst40 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue40.ValueString()), &constraintsInst40)
+					constraints40[constraintsKey40] = constraintsInst40
 				}
 				currency1 := make([]shared.CurrencyAttributeCurrency, 0)
 				for _, currencyItem1 := range attributesItem1.CurrencyAttribute.Currency {
@@ -7127,6 +7413,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				currencyAttribute1 := shared.CurrencyAttribute{
 					Purpose:                  purpose41,
+					Constraints:              constraints40,
 					Currency:                 currency1,
 					CurrencySelectorOnly:     currencySelectorOnly1,
 					DefaultValue:             defaultValue40,
@@ -7160,6 +7447,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose42 := make([]string, 0)
 				for _, purposeItem42 := range attributesItem1.RepeatableAttribute.Purpose {
 					purpose42 = append(purpose42, purposeItem42.ValueString())
+				}
+				constraints41 := make(map[string]interface{})
+				for constraintsKey41, constraintsValue41 := range attributesItem1.RepeatableAttribute.Constraints {
+					var constraintsInst41 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue41.ValueString()), &constraintsInst41)
+					constraints41[constraintsKey41] = constraintsInst41
 				}
 				var defaultValue41 *interface{}
 				if !attributesItem1.RepeatableAttribute.DefaultValue.IsUnknown() && !attributesItem1.RepeatableAttribute.DefaultValue.IsNull() {
@@ -7307,6 +7600,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				repeatableAttribute1 := shared.RepeatableAttribute{
 					Purpose:                  purpose42,
+					Constraints:              constraints41,
 					DefaultValue:             defaultValue41,
 					Deprecated:               deprecated41,
 					EnableRelationPicker:     enableRelationPicker3,
@@ -7342,6 +7636,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose43 := make([]string, 0)
 				for _, purposeItem43 := range attributesItem1.TagsAttribute.Purpose {
 					purpose43 = append(purpose43, purposeItem43.ValueString())
+				}
+				constraints42 := make(map[string]interface{})
+				for constraintsKey42, constraintsValue42 := range attributesItem1.TagsAttribute.Constraints {
+					var constraintsInst42 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue42.ValueString()), &constraintsInst42)
+					constraints42[constraintsKey42] = constraintsInst42
 				}
 				var defaultValue42 *interface{}
 				if !attributesItem1.TagsAttribute.DefaultValue.IsUnknown() && !attributesItem1.TagsAttribute.DefaultValue.IsNull() {
@@ -7473,6 +7773,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				tagsAttribute1 := shared.TagsAttribute{
 					Purpose:                  purpose43,
+					Constraints:              constraints42,
 					DefaultValue:             defaultValue42,
 					Deprecated:               deprecated42,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit42,
@@ -7506,6 +7807,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose44 := make([]string, 0)
 				for _, purposeItem44 := range attributesItem1.NumberAttribute.Purpose {
 					purpose44 = append(purpose44, purposeItem44.ValueString())
+				}
+				constraints43 := make(map[string]interface{})
+				for constraintsKey43, constraintsValue43 := range attributesItem1.NumberAttribute.Constraints {
+					var constraintsInst43 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue43.ValueString()), &constraintsInst43)
+					constraints43[constraintsKey43] = constraintsInst43
 				}
 				var defaultValue43 *interface{}
 				if !attributesItem1.NumberAttribute.DefaultValue.IsUnknown() && !attributesItem1.NumberAttribute.DefaultValue.IsNull() {
@@ -7635,6 +7942,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				numberAttribute1 := shared.NumberAttribute{
 					Purpose:                  purpose44,
+					Constraints:              constraints43,
 					DefaultValue:             defaultValue43,
 					Deprecated:               deprecated43,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit43,
@@ -7667,6 +7975,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose45 := make([]string, 0)
 				for _, purposeItem45 := range attributesItem1.ConsentAttribute.Purpose {
 					purpose45 = append(purpose45, purposeItem45.ValueString())
+				}
+				constraints44 := make(map[string]interface{})
+				for constraintsKey44, constraintsValue44 := range attributesItem1.ConsentAttribute.Constraints {
+					var constraintsInst44 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue44.ValueString()), &constraintsInst44)
+					constraints44[constraintsKey44] = constraintsInst44
 				}
 				var defaultValue44 *interface{}
 				if !attributesItem1.ConsentAttribute.DefaultValue.IsUnknown() && !attributesItem1.ConsentAttribute.DefaultValue.IsNull() {
@@ -7790,6 +8104,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				consentAttribute1 := shared.ConsentAttribute{
 					Purpose:                  purpose45,
+					Constraints:              constraints44,
 					DefaultValue:             defaultValue44,
 					Deprecated:               deprecated44,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit44,
@@ -7823,6 +8138,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose46 := make([]string, 0)
 				for _, purposeItem46 := range attributesItem1.InternalAttribute.Purpose {
 					purpose46 = append(purpose46, purposeItem46.ValueString())
+				}
+				constraints45 := make(map[string]interface{})
+				for constraintsKey45, constraintsValue45 := range attributesItem1.InternalAttribute.Constraints {
+					var constraintsInst45 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue45.ValueString()), &constraintsInst45)
+					constraints45[constraintsKey45] = constraintsInst45
 				}
 				var defaultValue45 *interface{}
 				if !attributesItem1.InternalAttribute.DefaultValue.IsUnknown() && !attributesItem1.InternalAttribute.DefaultValue.IsNull() {
@@ -7946,6 +8267,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				internalAttribute1 := shared.InternalAttribute{
 					Purpose:                  purpose46,
+					Constraints:              constraints45,
 					DefaultValue:             defaultValue45,
 					Deprecated:               deprecated45,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit45,
@@ -7977,6 +8299,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose47 := make([]string, 0)
 				for _, purposeItem47 := range attributesItem1.OrderedListAttribute.Purpose {
 					purpose47 = append(purpose47, purposeItem47.ValueString())
+				}
+				constraints46 := make(map[string]interface{})
+				for constraintsKey46, constraintsValue46 := range attributesItem1.OrderedListAttribute.Constraints {
+					var constraintsInst46 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue46.ValueString()), &constraintsInst46)
+					constraints46[constraintsKey46] = constraintsInst46
 				}
 				var defaultValue46 *interface{}
 				if !attributesItem1.OrderedListAttribute.DefaultValue.IsUnknown() && !attributesItem1.OrderedListAttribute.DefaultValue.IsNull() {
@@ -8100,6 +8428,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				orderedListAttribute1 := shared.OrderedListAttribute{
 					Purpose:                  purpose47,
+					Constraints:              constraints46,
 					DefaultValue:             defaultValue46,
 					Deprecated:               deprecated46,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit46,
@@ -8135,6 +8464,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				allowedExtensions1 := make([]string, 0)
 				for _, allowedExtensionsItem1 := range attributesItem1.FileAttribute.AllowedExtensions {
 					allowedExtensions1 = append(allowedExtensions1, allowedExtensionsItem1.ValueString())
+				}
+				constraints47 := make(map[string]interface{})
+				for constraintsKey47, constraintsValue47 := range attributesItem1.FileAttribute.Constraints {
+					var constraintsInst47 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue47.ValueString()), &constraintsInst47)
+					constraints47[constraintsKey47] = constraintsInst47
 				}
 				defaultAccessControl1 := new(shared.FileAttributeDefaultAccessControlEnum)
 				if !attributesItem1.FileAttribute.DefaultAccessControl.IsUnknown() && !attributesItem1.FileAttribute.DefaultAccessControl.IsNull() {
@@ -8278,6 +8613,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				fileAttribute1 := shared.FileAttribute{
 					Purpose:                  purpose48,
 					AllowedExtensions:        allowedExtensions1,
+					Constraints:              constraints47,
 					DefaultAccessControl:     defaultAccessControl1,
 					DefaultValue:             defaultValue47,
 					Deprecated:               deprecated47,
@@ -8313,6 +8649,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose49 := make([]string, 0)
 				for _, purposeItem49 := range attributesItem1.ComputedAttribute.Purpose {
 					purpose49 = append(purpose49, purposeItem49.ValueString())
+				}
+				constraints48 := make(map[string]interface{})
+				for constraintsKey48, constraintsValue48 := range attributesItem1.ComputedAttribute.Constraints {
+					var constraintsInst48 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue48.ValueString()), &constraintsInst48)
+					constraints48[constraintsKey48] = constraintsInst48
 				}
 				var defaultValue48 *interface{}
 				if !attributesItem1.ComputedAttribute.DefaultValue.IsUnknown() && !attributesItem1.ComputedAttribute.DefaultValue.IsNull() {
@@ -8436,6 +8778,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				computedAttribute1 := shared.ComputedAttribute{
 					Purpose:                  purpose49,
+					Constraints:              constraints48,
 					DefaultValue:             defaultValue48,
 					Deprecated:               deprecated48,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit48,
@@ -8467,6 +8810,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose50 := make([]string, 0)
 				for _, purposeItem50 := range attributesItem1.PartnerStatusAttribute.Purpose {
 					purpose50 = append(purpose50, purposeItem50.ValueString())
+				}
+				constraints49 := make(map[string]interface{})
+				for constraintsKey49, constraintsValue49 := range attributesItem1.PartnerStatusAttribute.Constraints {
+					var constraintsInst49 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue49.ValueString()), &constraintsInst49)
+					constraints49[constraintsKey49] = constraintsInst49
 				}
 				var defaultValue49 *interface{}
 				if !attributesItem1.PartnerStatusAttribute.DefaultValue.IsUnknown() && !attributesItem1.PartnerStatusAttribute.DefaultValue.IsNull() {
@@ -8590,6 +8939,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				partnerStatusAttribute1 := shared.PartnerStatusAttribute{
 					Purpose:                  purpose50,
+					Constraints:              constraints49,
 					DefaultValue:             defaultValue49,
 					Deprecated:               deprecated49,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit49,
@@ -8621,6 +8971,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose51 := make([]string, 0)
 				for _, purposeItem51 := range attributesItem1.InvitationEmailAttribute.Purpose {
 					purpose51 = append(purpose51, purposeItem51.ValueString())
+				}
+				constraints50 := make(map[string]interface{})
+				for constraintsKey50, constraintsValue50 := range attributesItem1.InvitationEmailAttribute.Constraints {
+					var constraintsInst50 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue50.ValueString()), &constraintsInst50)
+					constraints50[constraintsKey50] = constraintsInst50
 				}
 				var defaultValue50 *interface{}
 				if !attributesItem1.InvitationEmailAttribute.DefaultValue.IsUnknown() && !attributesItem1.InvitationEmailAttribute.DefaultValue.IsNull() {
@@ -8744,6 +9100,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				invitationEmailAttribute1 := shared.InvitationEmailAttribute{
 					Purpose:                  purpose51,
+					Constraints:              constraints50,
 					DefaultValue:             defaultValue50,
 					Deprecated:               deprecated50,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit50,
@@ -8775,6 +9132,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose52 := make([]string, 0)
 				for _, purposeItem52 := range attributesItem1.AutomationAttribute.Purpose {
 					purpose52 = append(purpose52, purposeItem52.ValueString())
+				}
+				constraints51 := make(map[string]interface{})
+				for constraintsKey51, constraintsValue51 := range attributesItem1.AutomationAttribute.Constraints {
+					var constraintsInst51 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue51.ValueString()), &constraintsInst51)
+					constraints51[constraintsKey51] = constraintsInst51
 				}
 				var defaultValue51 *interface{}
 				if !attributesItem1.AutomationAttribute.DefaultValue.IsUnknown() && !attributesItem1.AutomationAttribute.DefaultValue.IsNull() {
@@ -8898,6 +9261,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				automationAttribute1 := shared.AutomationAttribute{
 					Purpose:                  purpose52,
+					Constraints:              constraints51,
 					DefaultValue:             defaultValue51,
 					Deprecated:               deprecated51,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit51,
@@ -8929,6 +9293,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose53 := make([]string, 0)
 				for _, purposeItem53 := range attributesItem1.InternalUserAttribute.Purpose {
 					purpose53 = append(purpose53, purposeItem53.ValueString())
+				}
+				constraints52 := make(map[string]interface{})
+				for constraintsKey52, constraintsValue52 := range attributesItem1.InternalUserAttribute.Constraints {
+					var constraintsInst52 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue52.ValueString()), &constraintsInst52)
+					constraints52[constraintsKey52] = constraintsInst52
 				}
 				var defaultValue52 *interface{}
 				if !attributesItem1.InternalUserAttribute.DefaultValue.IsUnknown() && !attributesItem1.InternalUserAttribute.DefaultValue.IsNull() {
@@ -9052,6 +9422,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				internalUserAttribute1 := shared.InternalUserAttribute{
 					Purpose:                  purpose53,
+					Constraints:              constraints52,
 					DefaultValue:             defaultValue52,
 					Deprecated:               deprecated52,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit52,
@@ -9083,6 +9454,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purpose54 := make([]string, 0)
 				for _, purposeItem54 := range attributesItem1.PurposeAttribute.Purpose {
 					purpose54 = append(purpose54, purposeItem54.ValueString())
+				}
+				constraints53 := make(map[string]interface{})
+				for constraintsKey53, constraintsValue53 := range attributesItem1.PurposeAttribute.Constraints {
+					var constraintsInst53 interface{}
+					_ = json.Unmarshal([]byte(constraintsValue53.ValueString()), &constraintsInst53)
+					constraints53[constraintsKey53] = constraintsInst53
 				}
 				createdAt3 := new(time.Time)
 				if !attributesItem1.PurposeAttribute.CreatedAt.IsUnknown() && !attributesItem1.PurposeAttribute.CreatedAt.IsNull() {
@@ -9228,6 +9605,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				purposeAttribute1 := shared.PurposeAttribute{
 					Purpose:                  purpose54,
+					Constraints:              constraints53,
 					CreatedAt:                createdAt3,
 					DefaultValue:             defaultValue53,
 					Deprecated:               deprecated53,
@@ -9388,6 +9766,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			UIHooks:     uiHooks,
 		})
 	}
+	dialogConfig := make(map[string]interface{})
+	for dialogConfigKey, dialogConfigValue := range r.DialogConfig {
+		var dialogConfigInst interface{}
+		_ = json.Unmarshal([]byte(dialogConfigValue.ValueString()), &dialogConfigInst)
+		dialogConfig[dialogConfigKey] = dialogConfigInst
+	}
 	draft := new(bool)
 	if !r.Draft.IsUnknown() && !r.Draft.IsNull() {
 		*draft = r.Draft.ValueBool()
@@ -9400,6 +9784,12 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 	}
 	explicitSearchMappings := make(map[string]shared.SearchMappings)
 	for explicitSearchMappingsKey, explicitSearchMappingsValue := range r.ExplicitSearchMappings {
+		fields := make(map[string]interface{})
+		for fieldsKey, fieldsValue := range explicitSearchMappingsValue.Fields {
+			var fieldsInst interface{}
+			_ = json.Unmarshal([]byte(fieldsValue.ValueString()), &fieldsInst)
+			fields[fieldsKey] = fieldsInst
+		}
 		index := new(bool)
 		if !explicitSearchMappingsValue.Index.IsUnknown() && !explicitSearchMappingsValue.Index.IsNull() {
 			*index = explicitSearchMappingsValue.Index.ValueBool()
@@ -9413,8 +9803,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			type55 = nil
 		}
 		explicitSearchMappingsInst := shared.SearchMappings{
-			Index: index,
-			Type:  type55,
+			Fields: fields,
+			Index:  index,
+			Type:   type55,
 		}
 		explicitSearchMappings[explicitSearchMappingsKey] = explicitSearchMappingsInst
 	}
@@ -9970,8 +10361,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				options8 := make([]shared.EntityDefaultTableNavbarActionsOptions, 0)
 				for _, optionsItem8 := range navbarActionsItem.Options {
 					label61 := optionsItem8.Label.ValueString()
+					params := make(map[string]interface{})
+					for paramsKey, paramsValue := range optionsItem8.Params {
+						var paramsInst interface{}
+						_ = json.Unmarshal([]byte(paramsValue.ValueString()), &paramsInst)
+						params[paramsKey] = paramsInst
+					}
 					options8 = append(options8, shared.EntityDefaultTableNavbarActionsOptions{
-						Label: label61,
+						Label:  label61,
+						Params: params,
 					})
 				}
 				type58 := navbarActionsItem.Type.ValueString()
@@ -10064,6 +10462,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		Attributes:             attributes,
 		Blueprint:              blueprint,
 		Capabilities:           capabilities,
+		DialogConfig:           dialogConfig,
 		Draft:                  draft,
 		EnableSetting:          enableSetting,
 		ExplicitSearchMappings: explicitSearchMappings,
@@ -10092,6 +10491,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.TextAttribute.Purpose = nil
 			for _, v := range attributesItem.TextAttribute.Purpose {
 				attributes1.TextAttribute.Purpose = append(attributes1.TextAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.TextAttribute.Constraints = make(map[string]types.String)
+			for key, value := range attributesItem.TextAttribute.Constraints {
+				result, _ := json.Marshal(value)
+				attributes1.TextAttribute.Constraints[key] = types.StringValue(string(result))
 			}
 			if attributesItem.TextAttribute.DefaultValue == nil {
 				attributes1.TextAttribute.DefaultValue = types.StringNull()
@@ -10208,6 +10612,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.LinkAttribute.Purpose {
 				attributes1.LinkAttribute.Purpose = append(attributes1.LinkAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.LinkAttribute.Constraints = make(map[string]types.String)
+			for key1, value1 := range attributesItem.LinkAttribute.Constraints {
+				result1, _ := json.Marshal(value1)
+				attributes1.LinkAttribute.Constraints[key1] = types.StringValue(string(result1))
+			}
 			if attributesItem.LinkAttribute.DefaultValue == nil {
 				attributes1.LinkAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -10317,6 +10726,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.DateAttribute.Purpose = nil
 			for _, v := range attributesItem.DateAttribute.Purpose {
 				attributes1.DateAttribute.Purpose = append(attributes1.DateAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.DateAttribute.Constraints = make(map[string]types.String)
+			for key2, value2 := range attributesItem.DateAttribute.Constraints {
+				result2, _ := json.Marshal(value2)
+				attributes1.DateAttribute.Constraints[key2] = types.StringValue(string(result2))
 			}
 			if attributesItem.DateAttribute.DefaultValue == nil {
 				attributes1.DateAttribute.DefaultValue = types.StringNull()
@@ -10428,6 +10842,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.CountryAttribute.Purpose {
 				attributes1.CountryAttribute.Purpose = append(attributes1.CountryAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.CountryAttribute.Constraints = make(map[string]types.String)
+			for key3, value3 := range attributesItem.CountryAttribute.Constraints {
+				result3, _ := json.Marshal(value3)
+				attributes1.CountryAttribute.Constraints[key3] = types.StringValue(string(result3))
+			}
 			if attributesItem.CountryAttribute.DefaultValue == nil {
 				attributes1.CountryAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -10537,6 +10956,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.BooleanAttribute.Purpose = nil
 			for _, v := range attributesItem.BooleanAttribute.Purpose {
 				attributes1.BooleanAttribute.Purpose = append(attributes1.BooleanAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.BooleanAttribute.Constraints = make(map[string]types.String)
+			for key4, value4 := range attributesItem.BooleanAttribute.Constraints {
+				result4, _ := json.Marshal(value4)
+				attributes1.BooleanAttribute.Constraints[key4] = types.StringValue(string(result4))
 			}
 			if attributesItem.BooleanAttribute.DefaultValue == nil {
 				attributes1.BooleanAttribute.DefaultValue = types.StringNull()
@@ -10652,6 +11076,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes1.SelectAttribute.AllowAny = types.BoolValue(*attributesItem.SelectAttribute.AllowAny)
 			} else {
 				attributes1.SelectAttribute.AllowAny = types.BoolNull()
+			}
+			attributes1.SelectAttribute.Constraints = make(map[string]types.String)
+			for key5, value5 := range attributesItem.SelectAttribute.Constraints {
+				result5, _ := json.Marshal(value5)
+				attributes1.SelectAttribute.Constraints[key5] = types.StringValue(string(result5))
 			}
 			if attributesItem.SelectAttribute.DefaultValue == nil {
 				attributes1.SelectAttribute.DefaultValue = types.StringNull()
@@ -10794,6 +11223,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			} else {
 				attributes1.MultiSelectAttribute.AllowExtraOptions = types.BoolNull()
 			}
+			attributes1.MultiSelectAttribute.Constraints = make(map[string]types.String)
+			for key6, value7 := range attributesItem.MultiSelectAttribute.Constraints {
+				result6, _ := json.Marshal(value7)
+				attributes1.MultiSelectAttribute.Constraints[key6] = types.StringValue(string(result6))
+			}
 			if attributesItem.MultiSelectAttribute.DefaultValue == nil {
 				attributes1.MultiSelectAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -10930,6 +11364,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.StatusAttribute.Purpose {
 				attributes1.StatusAttribute.Purpose = append(attributes1.StatusAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.StatusAttribute.Constraints = make(map[string]types.String)
+			for key7, value9 := range attributesItem.StatusAttribute.Constraints {
+				result7, _ := json.Marshal(value9)
+				attributes1.StatusAttribute.Constraints[key7] = types.StringValue(string(result7))
+			}
 			if attributesItem.StatusAttribute.DefaultValue == nil {
 				attributes1.StatusAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -11060,6 +11499,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.SequenceAttribute.Purpose = nil
 			for _, v := range attributesItem.SequenceAttribute.Purpose {
 				attributes1.SequenceAttribute.Purpose = append(attributes1.SequenceAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.SequenceAttribute.Constraints = make(map[string]types.String)
+			for key8, value11 := range attributesItem.SequenceAttribute.Constraints {
+				result8, _ := json.Marshal(value11)
+				attributes1.SequenceAttribute.Constraints[key8] = types.StringValue(string(result8))
 			}
 			if attributesItem.SequenceAttribute.DefaultValue == nil {
 				attributes1.SequenceAttribute.DefaultValue = types.StringNull()
@@ -11219,9 +11663,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					actions1.NewEntityItem.Title = types.StringValue(actionsItem.NewEntityItem.Title)
 					actions1.NewEntityItem.UpdatedAt = types.StringValue(actionsItem.NewEntityItem.UpdatedAt.Format(time.RFC3339))
 					actions1.NewEntityItem.AdditionalProperties = make(map[string]types.String)
-					for key, value3 := range actionsItem.NewEntityItem.AdditionalProperties {
-						result, _ := json.Marshal(value3)
-						actions1.NewEntityItem.AdditionalProperties[key] = types.StringValue(string(result))
+					for key9, value12 := range actionsItem.NewEntityItem.AdditionalProperties {
+						result9, _ := json.Marshal(value12)
+						actions1.NewEntityItem.AdditionalProperties[key9] = types.StringValue(string(result9))
 					}
 				}
 				if actionsItem.SettingFlag != nil {
@@ -11239,6 +11683,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.RelationAttribute.AllowedSchemas = nil
 			for _, v := range attributesItem.RelationAttribute.AllowedSchemas {
 				attributes1.RelationAttribute.AllowedSchemas = append(attributes1.RelationAttribute.AllowedSchemas, types.StringValue(v))
+			}
+			attributes1.RelationAttribute.Constraints = make(map[string]types.String)
+			for key10, value13 := range attributesItem.RelationAttribute.Constraints {
+				result10, _ := json.Marshal(value13)
+				attributes1.RelationAttribute.Constraints[key10] = types.StringValue(string(result10))
 			}
 			if attributesItem.RelationAttribute.DefaultValue == nil {
 				attributes1.RelationAttribute.DefaultValue = types.StringNull()
@@ -11364,8 +11813,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes1.RelationAttribute.Required = types.BoolNull()
 			}
 			attributes1.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-			for key1, value4 := range attributesItem.RelationAttribute.ReverseAttributes {
-				attributes1.RelationAttribute.ReverseAttributes[key1] = types.StringValue(value4)
+			for key11, value14 := range attributesItem.RelationAttribute.ReverseAttributes {
+				attributes1.RelationAttribute.ReverseAttributes[key11] = types.StringValue(value14)
 			}
 			if attributesItem.RelationAttribute.SearchPlaceholder != nil {
 				attributes1.RelationAttribute.SearchPlaceholder = types.StringValue(*attributesItem.RelationAttribute.SearchPlaceholder)
@@ -11423,6 +11872,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.UserRelationAttribute.Purpose = nil
 			for _, v := range attributesItem.UserRelationAttribute.Purpose {
 				attributes1.UserRelationAttribute.Purpose = append(attributes1.UserRelationAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.UserRelationAttribute.Constraints = make(map[string]types.String)
+			for key12, value15 := range attributesItem.UserRelationAttribute.Constraints {
+				result11, _ := json.Marshal(value15)
+				attributes1.UserRelationAttribute.Constraints[key12] = types.StringValue(string(result11))
 			}
 			if attributesItem.UserRelationAttribute.DefaultValue == nil {
 				attributes1.UserRelationAttribute.DefaultValue = types.StringNull()
@@ -11539,6 +11993,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.AddressRelationAttribute.Purpose {
 				attributes1.AddressRelationAttribute.Purpose = append(attributes1.AddressRelationAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.AddressRelationAttribute.Constraints = make(map[string]types.String)
+			for key13, value16 := range attributesItem.AddressRelationAttribute.Constraints {
+				result12, _ := json.Marshal(value16)
+				attributes1.AddressRelationAttribute.Constraints[key13] = types.StringValue(string(result12))
+			}
 			if attributesItem.AddressRelationAttribute.DefaultValue == nil {
 				attributes1.AddressRelationAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -11654,6 +12113,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.PaymentMethodRelationAttribute.Purpose {
 				attributes1.PaymentMethodRelationAttribute.Purpose = append(attributes1.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
+			for key14, value17 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
+				result13, _ := json.Marshal(value17)
+				attributes1.PaymentMethodRelationAttribute.Constraints[key14] = types.StringValue(string(result13))
+			}
 			if attributesItem.PaymentMethodRelationAttribute.DefaultValue == nil {
 				attributes1.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -11768,6 +12232,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.CurrencyAttribute.Purpose = nil
 			for _, v := range attributesItem.CurrencyAttribute.Purpose {
 				attributes1.CurrencyAttribute.Purpose = append(attributes1.CurrencyAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.CurrencyAttribute.Constraints = make(map[string]types.String)
+			for key15, value18 := range attributesItem.CurrencyAttribute.Constraints {
+				result14, _ := json.Marshal(value18)
+				attributes1.CurrencyAttribute.Constraints[key15] = types.StringValue(string(result14))
 			}
 			attributes1.CurrencyAttribute.Currency = nil
 			for _, currencyItem := range attributesItem.CurrencyAttribute.Currency {
@@ -11895,6 +12364,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.RepeatableAttribute.Purpose = nil
 			for _, v := range attributesItem.RepeatableAttribute.Purpose {
 				attributes1.RepeatableAttribute.Purpose = append(attributes1.RepeatableAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.RepeatableAttribute.Constraints = make(map[string]types.String)
+			for key16, value19 := range attributesItem.RepeatableAttribute.Constraints {
+				result15, _ := json.Marshal(value19)
+				attributes1.RepeatableAttribute.Constraints[key16] = types.StringValue(string(result15))
 			}
 			if attributesItem.RepeatableAttribute.DefaultValue == nil {
 				attributes1.RepeatableAttribute.DefaultValue = types.StringNull()
@@ -12026,6 +12500,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.TagsAttribute.Purpose {
 				attributes1.TagsAttribute.Purpose = append(attributes1.TagsAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.TagsAttribute.Constraints = make(map[string]types.String)
+			for key17, value20 := range attributesItem.TagsAttribute.Constraints {
+				result16, _ := json.Marshal(value20)
+				attributes1.TagsAttribute.Constraints[key17] = types.StringValue(string(result16))
+			}
 			if attributesItem.TagsAttribute.DefaultValue == nil {
 				attributes1.TagsAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -12144,6 +12623,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.NumberAttribute.Purpose {
 				attributes1.NumberAttribute.Purpose = append(attributes1.NumberAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.NumberAttribute.Constraints = make(map[string]types.String)
+			for key18, value21 := range attributesItem.NumberAttribute.Constraints {
+				result17, _ := json.Marshal(value21)
+				attributes1.NumberAttribute.Constraints[key18] = types.StringValue(string(result17))
+			}
 			if attributesItem.NumberAttribute.DefaultValue == nil {
 				attributes1.NumberAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -12259,6 +12743,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.ConsentAttribute.Purpose {
 				attributes1.ConsentAttribute.Purpose = append(attributes1.ConsentAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.ConsentAttribute.Constraints = make(map[string]types.String)
+			for key19, value22 := range attributesItem.ConsentAttribute.Constraints {
+				result18, _ := json.Marshal(value22)
+				attributes1.ConsentAttribute.Constraints[key19] = types.StringValue(string(result18))
+			}
 			if attributesItem.ConsentAttribute.DefaultValue == nil {
 				attributes1.ConsentAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -12370,6 +12859,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.InternalAttribute.Purpose {
 				attributes1.InternalAttribute.Purpose = append(attributes1.InternalAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.InternalAttribute.Constraints = make(map[string]types.String)
+			for key20, value23 := range attributesItem.InternalAttribute.Constraints {
+				result19, _ := json.Marshal(value23)
+				attributes1.InternalAttribute.Constraints[key20] = types.StringValue(string(result19))
+			}
 			if attributesItem.InternalAttribute.DefaultValue == nil {
 				attributes1.InternalAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -12479,6 +12973,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.OrderedListAttribute.Purpose = nil
 			for _, v := range attributesItem.OrderedListAttribute.Purpose {
 				attributes1.OrderedListAttribute.Purpose = append(attributes1.OrderedListAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.OrderedListAttribute.Constraints = make(map[string]types.String)
+			for key21, value24 := range attributesItem.OrderedListAttribute.Constraints {
+				result20, _ := json.Marshal(value24)
+				attributes1.OrderedListAttribute.Constraints[key21] = types.StringValue(string(result20))
 			}
 			if attributesItem.OrderedListAttribute.DefaultValue == nil {
 				attributes1.OrderedListAttribute.DefaultValue = types.StringNull()
@@ -12593,6 +13092,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.FileAttribute.AllowedExtensions = nil
 			for _, v := range attributesItem.FileAttribute.AllowedExtensions {
 				attributes1.FileAttribute.AllowedExtensions = append(attributes1.FileAttribute.AllowedExtensions, types.StringValue(v))
+			}
+			attributes1.FileAttribute.Constraints = make(map[string]types.String)
+			for key22, value25 := range attributesItem.FileAttribute.Constraints {
+				result21, _ := json.Marshal(value25)
+				attributes1.FileAttribute.Constraints[key22] = types.StringValue(string(result21))
 			}
 			if attributesItem.FileAttribute.DefaultAccessControl != nil {
 				attributes1.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem.FileAttribute.DefaultAccessControl))
@@ -12720,6 +13224,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.ComputedAttribute.Purpose {
 				attributes1.ComputedAttribute.Purpose = append(attributes1.ComputedAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.ComputedAttribute.Constraints = make(map[string]types.String)
+			for key23, value26 := range attributesItem.ComputedAttribute.Constraints {
+				result22, _ := json.Marshal(value26)
+				attributes1.ComputedAttribute.Constraints[key23] = types.StringValue(string(result22))
+			}
 			if attributesItem.ComputedAttribute.DefaultValue == nil {
 				attributes1.ComputedAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -12829,6 +13338,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.PartnerStatusAttribute.Purpose = nil
 			for _, v := range attributesItem.PartnerStatusAttribute.Purpose {
 				attributes1.PartnerStatusAttribute.Purpose = append(attributes1.PartnerStatusAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.PartnerStatusAttribute.Constraints = make(map[string]types.String)
+			for key24, value27 := range attributesItem.PartnerStatusAttribute.Constraints {
+				result23, _ := json.Marshal(value27)
+				attributes1.PartnerStatusAttribute.Constraints[key24] = types.StringValue(string(result23))
 			}
 			if attributesItem.PartnerStatusAttribute.DefaultValue == nil {
 				attributes1.PartnerStatusAttribute.DefaultValue = types.StringNull()
@@ -12940,6 +13454,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.InvitationEmailAttribute.Purpose {
 				attributes1.InvitationEmailAttribute.Purpose = append(attributes1.InvitationEmailAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.InvitationEmailAttribute.Constraints = make(map[string]types.String)
+			for key25, value28 := range attributesItem.InvitationEmailAttribute.Constraints {
+				result24, _ := json.Marshal(value28)
+				attributes1.InvitationEmailAttribute.Constraints[key25] = types.StringValue(string(result24))
+			}
 			if attributesItem.InvitationEmailAttribute.DefaultValue == nil {
 				attributes1.InvitationEmailAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -13049,6 +13568,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.AutomationAttribute.Purpose = nil
 			for _, v := range attributesItem.AutomationAttribute.Purpose {
 				attributes1.AutomationAttribute.Purpose = append(attributes1.AutomationAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.AutomationAttribute.Constraints = make(map[string]types.String)
+			for key26, value29 := range attributesItem.AutomationAttribute.Constraints {
+				result25, _ := json.Marshal(value29)
+				attributes1.AutomationAttribute.Constraints[key26] = types.StringValue(string(result25))
 			}
 			if attributesItem.AutomationAttribute.DefaultValue == nil {
 				attributes1.AutomationAttribute.DefaultValue = types.StringNull()
@@ -13160,6 +13684,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.InternalUserAttribute.Purpose {
 				attributes1.InternalUserAttribute.Purpose = append(attributes1.InternalUserAttribute.Purpose, types.StringValue(v))
 			}
+			attributes1.InternalUserAttribute.Constraints = make(map[string]types.String)
+			for key27, value30 := range attributesItem.InternalUserAttribute.Constraints {
+				result26, _ := json.Marshal(value30)
+				attributes1.InternalUserAttribute.Constraints[key27] = types.StringValue(string(result26))
+			}
 			if attributesItem.InternalUserAttribute.DefaultValue == nil {
 				attributes1.InternalUserAttribute.DefaultValue = types.StringNull()
 			} else {
@@ -13269,6 +13798,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			attributes1.PurposeAttribute.Purpose = nil
 			for _, v := range attributesItem.PurposeAttribute.Purpose {
 				attributes1.PurposeAttribute.Purpose = append(attributes1.PurposeAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.PurposeAttribute.Constraints = make(map[string]types.String)
+			for key28, value31 := range attributesItem.PurposeAttribute.Constraints {
+				result27, _ := json.Marshal(value31)
+				attributes1.PurposeAttribute.Constraints[key28] = types.StringValue(string(result27))
 			}
 			if attributesItem.PurposeAttribute.CreatedAt != nil {
 				attributes1.PurposeAttribute.CreatedAt = types.StringValue(attributesItem.PurposeAttribute.CreatedAt.Format(time.RFC3339))
@@ -13416,6 +13950,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.TextAttribute.Purpose {
 					attributes3.TextAttribute.Purpose = append(attributes3.TextAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.TextAttribute.Constraints = make(map[string]types.String)
+				for key29, value32 := range attributesItem1.TextAttribute.Constraints {
+					result28, _ := json.Marshal(value32)
+					attributes3.TextAttribute.Constraints[key29] = types.StringValue(string(result28))
+				}
 				if attributesItem1.TextAttribute.DefaultValue == nil {
 					attributes3.TextAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -13531,6 +14070,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.LinkAttribute.Purpose {
 					attributes3.LinkAttribute.Purpose = append(attributes3.LinkAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.LinkAttribute.Constraints = make(map[string]types.String)
+				for key30, value33 := range attributesItem1.LinkAttribute.Constraints {
+					result29, _ := json.Marshal(value33)
+					attributes3.LinkAttribute.Constraints[key30] = types.StringValue(string(result29))
+				}
 				if attributesItem1.LinkAttribute.DefaultValue == nil {
 					attributes3.LinkAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -13640,6 +14184,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.DateAttribute.Purpose = nil
 				for _, v := range attributesItem1.DateAttribute.Purpose {
 					attributes3.DateAttribute.Purpose = append(attributes3.DateAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.DateAttribute.Constraints = make(map[string]types.String)
+				for key31, value34 := range attributesItem1.DateAttribute.Constraints {
+					result30, _ := json.Marshal(value34)
+					attributes3.DateAttribute.Constraints[key31] = types.StringValue(string(result30))
 				}
 				if attributesItem1.DateAttribute.DefaultValue == nil {
 					attributes3.DateAttribute.DefaultValue = types.StringNull()
@@ -13751,6 +14300,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.CountryAttribute.Purpose {
 					attributes3.CountryAttribute.Purpose = append(attributes3.CountryAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.CountryAttribute.Constraints = make(map[string]types.String)
+				for key32, value35 := range attributesItem1.CountryAttribute.Constraints {
+					result31, _ := json.Marshal(value35)
+					attributes3.CountryAttribute.Constraints[key32] = types.StringValue(string(result31))
+				}
 				if attributesItem1.CountryAttribute.DefaultValue == nil {
 					attributes3.CountryAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -13860,6 +14414,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.BooleanAttribute.Purpose = nil
 				for _, v := range attributesItem1.BooleanAttribute.Purpose {
 					attributes3.BooleanAttribute.Purpose = append(attributes3.BooleanAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.BooleanAttribute.Constraints = make(map[string]types.String)
+				for key33, value36 := range attributesItem1.BooleanAttribute.Constraints {
+					result32, _ := json.Marshal(value36)
+					attributes3.BooleanAttribute.Constraints[key33] = types.StringValue(string(result32))
 				}
 				if attributesItem1.BooleanAttribute.DefaultValue == nil {
 					attributes3.BooleanAttribute.DefaultValue = types.StringNull()
@@ -13975,6 +14534,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					attributes3.SelectAttribute.AllowAny = types.BoolValue(*attributesItem1.SelectAttribute.AllowAny)
 				} else {
 					attributes3.SelectAttribute.AllowAny = types.BoolNull()
+				}
+				attributes3.SelectAttribute.Constraints = make(map[string]types.String)
+				for key34, value37 := range attributesItem1.SelectAttribute.Constraints {
+					result33, _ := json.Marshal(value37)
+					attributes3.SelectAttribute.Constraints[key34] = types.StringValue(string(result33))
 				}
 				if attributesItem1.SelectAttribute.DefaultValue == nil {
 					attributes3.SelectAttribute.DefaultValue = types.StringNull()
@@ -14117,6 +14681,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				} else {
 					attributes3.MultiSelectAttribute.AllowExtraOptions = types.BoolNull()
 				}
+				attributes3.MultiSelectAttribute.Constraints = make(map[string]types.String)
+				for key35, value39 := range attributesItem1.MultiSelectAttribute.Constraints {
+					result34, _ := json.Marshal(value39)
+					attributes3.MultiSelectAttribute.Constraints[key35] = types.StringValue(string(result34))
+				}
 				if attributesItem1.MultiSelectAttribute.DefaultValue == nil {
 					attributes3.MultiSelectAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -14253,6 +14822,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.StatusAttribute.Purpose {
 					attributes3.StatusAttribute.Purpose = append(attributes3.StatusAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.StatusAttribute.Constraints = make(map[string]types.String)
+				for key36, value41 := range attributesItem1.StatusAttribute.Constraints {
+					result35, _ := json.Marshal(value41)
+					attributes3.StatusAttribute.Constraints[key36] = types.StringValue(string(result35))
+				}
 				if attributesItem1.StatusAttribute.DefaultValue == nil {
 					attributes3.StatusAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -14383,6 +14957,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.SequenceAttribute.Purpose = nil
 				for _, v := range attributesItem1.SequenceAttribute.Purpose {
 					attributes3.SequenceAttribute.Purpose = append(attributes3.SequenceAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.SequenceAttribute.Constraints = make(map[string]types.String)
+				for key37, value43 := range attributesItem1.SequenceAttribute.Constraints {
+					result36, _ := json.Marshal(value43)
+					attributes3.SequenceAttribute.Constraints[key37] = types.StringValue(string(result36))
 				}
 				if attributesItem1.SequenceAttribute.DefaultValue == nil {
 					attributes3.SequenceAttribute.DefaultValue = types.StringNull()
@@ -14542,9 +15121,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 						actions3.NewEntityItem.Title = types.StringValue(actionsItem1.NewEntityItem.Title)
 						actions3.NewEntityItem.UpdatedAt = types.StringValue(actionsItem1.NewEntityItem.UpdatedAt.Format(time.RFC3339))
 						actions3.NewEntityItem.AdditionalProperties = make(map[string]types.String)
-						for key2, value8 := range actionsItem1.NewEntityItem.AdditionalProperties {
-							result1, _ := json.Marshal(value8)
-							actions3.NewEntityItem.AdditionalProperties[key2] = types.StringValue(string(result1))
+						for key38, value44 := range actionsItem1.NewEntityItem.AdditionalProperties {
+							result37, _ := json.Marshal(value44)
+							actions3.NewEntityItem.AdditionalProperties[key38] = types.StringValue(string(result37))
 						}
 					}
 					if actionsItem1.SettingFlag != nil {
@@ -14562,6 +15141,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.RelationAttribute.AllowedSchemas = nil
 				for _, v := range attributesItem1.RelationAttribute.AllowedSchemas {
 					attributes3.RelationAttribute.AllowedSchemas = append(attributes3.RelationAttribute.AllowedSchemas, types.StringValue(v))
+				}
+				attributes3.RelationAttribute.Constraints = make(map[string]types.String)
+				for key39, value45 := range attributesItem1.RelationAttribute.Constraints {
+					result38, _ := json.Marshal(value45)
+					attributes3.RelationAttribute.Constraints[key39] = types.StringValue(string(result38))
 				}
 				if attributesItem1.RelationAttribute.DefaultValue == nil {
 					attributes3.RelationAttribute.DefaultValue = types.StringNull()
@@ -14687,8 +15271,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					attributes3.RelationAttribute.Required = types.BoolNull()
 				}
 				attributes3.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-				for key3, value9 := range attributesItem1.RelationAttribute.ReverseAttributes {
-					attributes3.RelationAttribute.ReverseAttributes[key3] = types.StringValue(value9)
+				for key40, value46 := range attributesItem1.RelationAttribute.ReverseAttributes {
+					attributes3.RelationAttribute.ReverseAttributes[key40] = types.StringValue(value46)
 				}
 				if attributesItem1.RelationAttribute.SearchPlaceholder != nil {
 					attributes3.RelationAttribute.SearchPlaceholder = types.StringValue(*attributesItem1.RelationAttribute.SearchPlaceholder)
@@ -14746,6 +15330,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.UserRelationAttribute.Purpose = nil
 				for _, v := range attributesItem1.UserRelationAttribute.Purpose {
 					attributes3.UserRelationAttribute.Purpose = append(attributes3.UserRelationAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.UserRelationAttribute.Constraints = make(map[string]types.String)
+				for key41, value47 := range attributesItem1.UserRelationAttribute.Constraints {
+					result39, _ := json.Marshal(value47)
+					attributes3.UserRelationAttribute.Constraints[key41] = types.StringValue(string(result39))
 				}
 				if attributesItem1.UserRelationAttribute.DefaultValue == nil {
 					attributes3.UserRelationAttribute.DefaultValue = types.StringNull()
@@ -14862,6 +15451,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.AddressRelationAttribute.Purpose {
 					attributes3.AddressRelationAttribute.Purpose = append(attributes3.AddressRelationAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.AddressRelationAttribute.Constraints = make(map[string]types.String)
+				for key42, value48 := range attributesItem1.AddressRelationAttribute.Constraints {
+					result40, _ := json.Marshal(value48)
+					attributes3.AddressRelationAttribute.Constraints[key42] = types.StringValue(string(result40))
+				}
 				if attributesItem1.AddressRelationAttribute.DefaultValue == nil {
 					attributes3.AddressRelationAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -14977,6 +15571,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.PaymentMethodRelationAttribute.Purpose {
 					attributes3.PaymentMethodRelationAttribute.Purpose = append(attributes3.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
+				for key43, value49 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
+					result41, _ := json.Marshal(value49)
+					attributes3.PaymentMethodRelationAttribute.Constraints[key43] = types.StringValue(string(result41))
+				}
 				if attributesItem1.PaymentMethodRelationAttribute.DefaultValue == nil {
 					attributes3.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -15091,6 +15690,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.CurrencyAttribute.Purpose = nil
 				for _, v := range attributesItem1.CurrencyAttribute.Purpose {
 					attributes3.CurrencyAttribute.Purpose = append(attributes3.CurrencyAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.CurrencyAttribute.Constraints = make(map[string]types.String)
+				for key44, value50 := range attributesItem1.CurrencyAttribute.Constraints {
+					result42, _ := json.Marshal(value50)
+					attributes3.CurrencyAttribute.Constraints[key44] = types.StringValue(string(result42))
 				}
 				attributes3.CurrencyAttribute.Currency = nil
 				for _, currencyItem1 := range attributesItem1.CurrencyAttribute.Currency {
@@ -15218,6 +15822,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.RepeatableAttribute.Purpose = nil
 				for _, v := range attributesItem1.RepeatableAttribute.Purpose {
 					attributes3.RepeatableAttribute.Purpose = append(attributes3.RepeatableAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.RepeatableAttribute.Constraints = make(map[string]types.String)
+				for key45, value51 := range attributesItem1.RepeatableAttribute.Constraints {
+					result43, _ := json.Marshal(value51)
+					attributes3.RepeatableAttribute.Constraints[key45] = types.StringValue(string(result43))
 				}
 				if attributesItem1.RepeatableAttribute.DefaultValue == nil {
 					attributes3.RepeatableAttribute.DefaultValue = types.StringNull()
@@ -15349,6 +15958,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.TagsAttribute.Purpose {
 					attributes3.TagsAttribute.Purpose = append(attributes3.TagsAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.TagsAttribute.Constraints = make(map[string]types.String)
+				for key46, value52 := range attributesItem1.TagsAttribute.Constraints {
+					result44, _ := json.Marshal(value52)
+					attributes3.TagsAttribute.Constraints[key46] = types.StringValue(string(result44))
+				}
 				if attributesItem1.TagsAttribute.DefaultValue == nil {
 					attributes3.TagsAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -15467,6 +16081,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.NumberAttribute.Purpose {
 					attributes3.NumberAttribute.Purpose = append(attributes3.NumberAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.NumberAttribute.Constraints = make(map[string]types.String)
+				for key47, value53 := range attributesItem1.NumberAttribute.Constraints {
+					result45, _ := json.Marshal(value53)
+					attributes3.NumberAttribute.Constraints[key47] = types.StringValue(string(result45))
+				}
 				if attributesItem1.NumberAttribute.DefaultValue == nil {
 					attributes3.NumberAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -15582,6 +16201,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.ConsentAttribute.Purpose {
 					attributes3.ConsentAttribute.Purpose = append(attributes3.ConsentAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.ConsentAttribute.Constraints = make(map[string]types.String)
+				for key48, value54 := range attributesItem1.ConsentAttribute.Constraints {
+					result46, _ := json.Marshal(value54)
+					attributes3.ConsentAttribute.Constraints[key48] = types.StringValue(string(result46))
+				}
 				if attributesItem1.ConsentAttribute.DefaultValue == nil {
 					attributes3.ConsentAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -15693,6 +16317,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.InternalAttribute.Purpose {
 					attributes3.InternalAttribute.Purpose = append(attributes3.InternalAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.InternalAttribute.Constraints = make(map[string]types.String)
+				for key49, value55 := range attributesItem1.InternalAttribute.Constraints {
+					result47, _ := json.Marshal(value55)
+					attributes3.InternalAttribute.Constraints[key49] = types.StringValue(string(result47))
+				}
 				if attributesItem1.InternalAttribute.DefaultValue == nil {
 					attributes3.InternalAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -15802,6 +16431,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.OrderedListAttribute.Purpose = nil
 				for _, v := range attributesItem1.OrderedListAttribute.Purpose {
 					attributes3.OrderedListAttribute.Purpose = append(attributes3.OrderedListAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.OrderedListAttribute.Constraints = make(map[string]types.String)
+				for key50, value56 := range attributesItem1.OrderedListAttribute.Constraints {
+					result48, _ := json.Marshal(value56)
+					attributes3.OrderedListAttribute.Constraints[key50] = types.StringValue(string(result48))
 				}
 				if attributesItem1.OrderedListAttribute.DefaultValue == nil {
 					attributes3.OrderedListAttribute.DefaultValue = types.StringNull()
@@ -15916,6 +16550,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.FileAttribute.AllowedExtensions = nil
 				for _, v := range attributesItem1.FileAttribute.AllowedExtensions {
 					attributes3.FileAttribute.AllowedExtensions = append(attributes3.FileAttribute.AllowedExtensions, types.StringValue(v))
+				}
+				attributes3.FileAttribute.Constraints = make(map[string]types.String)
+				for key51, value57 := range attributesItem1.FileAttribute.Constraints {
+					result49, _ := json.Marshal(value57)
+					attributes3.FileAttribute.Constraints[key51] = types.StringValue(string(result49))
 				}
 				if attributesItem1.FileAttribute.DefaultAccessControl != nil {
 					attributes3.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem1.FileAttribute.DefaultAccessControl))
@@ -16043,6 +16682,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.ComputedAttribute.Purpose {
 					attributes3.ComputedAttribute.Purpose = append(attributes3.ComputedAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.ComputedAttribute.Constraints = make(map[string]types.String)
+				for key52, value58 := range attributesItem1.ComputedAttribute.Constraints {
+					result50, _ := json.Marshal(value58)
+					attributes3.ComputedAttribute.Constraints[key52] = types.StringValue(string(result50))
+				}
 				if attributesItem1.ComputedAttribute.DefaultValue == nil {
 					attributes3.ComputedAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -16152,6 +16796,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.PartnerStatusAttribute.Purpose = nil
 				for _, v := range attributesItem1.PartnerStatusAttribute.Purpose {
 					attributes3.PartnerStatusAttribute.Purpose = append(attributes3.PartnerStatusAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.PartnerStatusAttribute.Constraints = make(map[string]types.String)
+				for key53, value59 := range attributesItem1.PartnerStatusAttribute.Constraints {
+					result51, _ := json.Marshal(value59)
+					attributes3.PartnerStatusAttribute.Constraints[key53] = types.StringValue(string(result51))
 				}
 				if attributesItem1.PartnerStatusAttribute.DefaultValue == nil {
 					attributes3.PartnerStatusAttribute.DefaultValue = types.StringNull()
@@ -16263,6 +16912,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.InvitationEmailAttribute.Purpose {
 					attributes3.InvitationEmailAttribute.Purpose = append(attributes3.InvitationEmailAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.InvitationEmailAttribute.Constraints = make(map[string]types.String)
+				for key54, value60 := range attributesItem1.InvitationEmailAttribute.Constraints {
+					result52, _ := json.Marshal(value60)
+					attributes3.InvitationEmailAttribute.Constraints[key54] = types.StringValue(string(result52))
+				}
 				if attributesItem1.InvitationEmailAttribute.DefaultValue == nil {
 					attributes3.InvitationEmailAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -16372,6 +17026,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.AutomationAttribute.Purpose = nil
 				for _, v := range attributesItem1.AutomationAttribute.Purpose {
 					attributes3.AutomationAttribute.Purpose = append(attributes3.AutomationAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.AutomationAttribute.Constraints = make(map[string]types.String)
+				for key55, value61 := range attributesItem1.AutomationAttribute.Constraints {
+					result53, _ := json.Marshal(value61)
+					attributes3.AutomationAttribute.Constraints[key55] = types.StringValue(string(result53))
 				}
 				if attributesItem1.AutomationAttribute.DefaultValue == nil {
 					attributes3.AutomationAttribute.DefaultValue = types.StringNull()
@@ -16483,6 +17142,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.InternalUserAttribute.Purpose {
 					attributes3.InternalUserAttribute.Purpose = append(attributes3.InternalUserAttribute.Purpose, types.StringValue(v))
 				}
+				attributes3.InternalUserAttribute.Constraints = make(map[string]types.String)
+				for key56, value62 := range attributesItem1.InternalUserAttribute.Constraints {
+					result54, _ := json.Marshal(value62)
+					attributes3.InternalUserAttribute.Constraints[key56] = types.StringValue(string(result54))
+				}
 				if attributesItem1.InternalUserAttribute.DefaultValue == nil {
 					attributes3.InternalUserAttribute.DefaultValue = types.StringNull()
 				} else {
@@ -16592,6 +17256,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				attributes3.PurposeAttribute.Purpose = nil
 				for _, v := range attributesItem1.PurposeAttribute.Purpose {
 					attributes3.PurposeAttribute.Purpose = append(attributes3.PurposeAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.PurposeAttribute.Constraints = make(map[string]types.String)
+				for key57, value63 := range attributesItem1.PurposeAttribute.Constraints {
+					result55, _ := json.Marshal(value63)
+					attributes3.PurposeAttribute.Constraints[key57] = types.StringValue(string(result55))
 				}
 				if attributesItem1.PurposeAttribute.CreatedAt != nil {
 					attributes3.PurposeAttribute.CreatedAt = types.StringValue(attributesItem1.PurposeAttribute.CreatedAt.Format(time.RFC3339))
@@ -16818,6 +17487,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	} else {
 		r.CreatedAt = types.StringNull()
 	}
+	r.DialogConfig = make(map[string]types.String)
+	for key58, value64 := range resp.DialogConfig {
+		result56, _ := json.Marshal(value64)
+		r.DialogConfig[key58] = types.StringValue(string(result56))
+	}
 	if resp.Draft != nil {
 		r.Draft = types.BoolValue(*resp.Draft)
 	} else {
@@ -16830,6 +17504,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	r.ExplicitSearchMappings = make(map[string]SearchMappings)
 	for searchMappingsKey, searchMappingsValue := range resp.ExplicitSearchMappings {
 		var searchMappingsResult SearchMappings
+		searchMappingsResult.Fields = make(map[string]types.String)
+		for key59, value65 := range searchMappingsValue.Fields {
+			result57, _ := json.Marshal(value65)
+			searchMappingsResult.Fields[key59] = types.StringValue(string(result57))
+		}
 		if searchMappingsValue.Index != nil {
 			searchMappingsResult.Index = types.BoolValue(*searchMappingsValue.Index)
 		} else {
@@ -16923,9 +17602,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			r.LayoutSettings.GridTemplateColumns = types.StringNull()
 		}
 		r.LayoutSettings.AdditionalProperties = make(map[string]types.String)
-		for key5, value10 := range resp.LayoutSettings.AdditionalProperties {
-			result2, _ := json.Marshal(value10)
-			r.LayoutSettings.AdditionalProperties[key5] = types.StringValue(string(result2))
+		for key61, value66 := range resp.LayoutSettings.AdditionalProperties {
+			result58, _ := json.Marshal(value66)
+			r.LayoutSettings.AdditionalProperties[key61] = types.StringValue(string(result58))
 		}
 	}
 	r.Name = types.StringValue(resp.Name)
@@ -16967,8 +17646,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			if resp.UIConfig.CreateView.EntityDefaultCreate != nil {
 				r.UIConfig.CreateView.EntityDefaultCreate = &EntityDefaultCreate{}
 				r.UIConfig.CreateView.EntityDefaultCreate.SearchParams = make(map[string]types.String)
-				for key6, value11 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
-					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key6] = types.StringValue(value11)
+				for key62, value67 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
+					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key62] = types.StringValue(value67)
 				}
 				if resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions == nil {
 					r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions = nil
@@ -17020,8 +17699,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			if resp.UIConfig.EditView.EntityDefaultEdit != nil {
 				r.UIConfig.EditView.EntityDefaultEdit = &EntityDefaultCreate{}
 				r.UIConfig.EditView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-				for key7, value12 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
-					r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key7] = types.StringValue(value12)
+				for key63, value68 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
+					r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key63] = types.StringValue(value68)
 				}
 				if resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions = nil
@@ -17130,8 +17809,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			if resp.UIConfig.SingleView.EntityDefaultEdit != nil {
 				r.UIConfig.SingleView.EntityDefaultEdit = &EntityDefaultCreate{}
 				r.UIConfig.SingleView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-				for key8, value14 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
-					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key8] = types.StringValue(value14)
+				for key64, value70 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
+					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key64] = types.StringValue(value70)
 				}
 				if resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions = nil
@@ -17255,6 +17934,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					for _, optionsItem6 := range navbarActionsItem.Options {
 						var options15 EntityDefaultTableNavbarActionsOptions
 						options15.Label = types.StringValue(optionsItem6.Label)
+						options15.Params = make(map[string]types.String)
+						for key65, value71 := range optionsItem6.Params {
+							result59, _ := json.Marshal(value71)
+							options15.Params[key65] = types.StringValue(string(result59))
+						}
 						navbarActions1.Options = append(navbarActions1.Options, options15)
 					}
 					navbarActions1.Type = types.StringValue(navbarActionsItem.Type)
