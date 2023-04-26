@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 )
 
 // RelationAttributeActionsActionTypeEnum - The action type. Currently supported actions:
@@ -42,6 +43,71 @@ func (e *RelationAttributeActionsActionTypeEnum) UnmarshalJSON(data []byte) erro
 	}
 }
 
+type RelationAttributeActionsNewEntityItem struct {
+	CreatedAt time.Time `json:"_created_at"`
+	ID        string    `json:"_id"`
+	// Organization Id the entity belongs to
+	Org string `json:"_org"`
+	// URL-friendly identifier for the entity schema
+	Schema string   `json:"_schema"`
+	Tags   []string `json:"_tags,omitempty"`
+	// Title of entity
+	Title     string    `json:"_title"`
+	UpdatedAt time.Time `json:"_updated_at"`
+
+	AdditionalProperties map[string]interface{} `json:"-"`
+}
+type _RelationAttributeActionsNewEntityItem RelationAttributeActionsNewEntityItem
+
+func (c *RelationAttributeActionsNewEntityItem) UnmarshalJSON(bs []byte) error {
+	data := _RelationAttributeActionsNewEntityItem{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = RelationAttributeActionsNewEntityItem(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+	delete(additionalFields, "_created_at")
+	delete(additionalFields, "_id")
+	delete(additionalFields, "_org")
+	delete(additionalFields, "_schema")
+	delete(additionalFields, "_tags")
+	delete(additionalFields, "_title")
+	delete(additionalFields, "_updated_at")
+
+	c.AdditionalProperties = additionalFields
+
+	return nil
+}
+
+func (c RelationAttributeActionsNewEntityItem) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_RelationAttributeActionsNewEntityItem(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
+}
+
 type RelationAttributeActions struct {
 	// The action type. Currently supported actions:
 	//
@@ -57,8 +123,8 @@ type RelationAttributeActions struct {
 	// Name of the feature flag that enables this action
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// The action label or action translation key (i18n)
-	Label         *string                `json:"label,omitempty"`
-	NewEntityItem map[string]interface{} `json:"new_entity_item,omitempty"`
+	Label         *string                                `json:"label,omitempty"`
+	NewEntityItem *RelationAttributeActionsNewEntityItem `json:"new_entity_item,omitempty"`
 	// Name of the setting flag that enables this action
 	SettingFlag *string `json:"setting_flag,omitempty"`
 }
@@ -249,14 +315,10 @@ type RelationAttribute struct {
 	Purpose []string                   `json:"_purpose,omitempty"`
 	Actions []RelationAttributeActions `json:"actions,omitempty"`
 	// Optional label for the add button. The translated value for add_button_lable is used, if found else the string is used as is.
-	AddButtonLabel *string  `json:"add_button_label,omitempty"`
-	AllowedSchemas []string `json:"allowedSchemas,omitempty"`
-	// A set of constraints applicable to the attribute.
-	// These constraints should and will be enforced by the attribute renderer.
-	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	AddButtonLabel *string     `json:"add_button_label,omitempty"`
+	AllowedSchemas []string    `json:"allowedSchemas,omitempty"`
+	DefaultValue   interface{} `json:"default_value,omitempty"`
+	Deprecated     *bool       `json:"deprecated,omitempty"`
 	// Enables the preview, edition, and creation of relation items on a Master-Details view mode.
 	DetailsViewModeEnabled *bool                            `json:"details_view_mode_enabled,omitempty"`
 	DrawerSize             *RelationAttributeDrawerSizeEnum `json:"drawer_size,omitempty"`

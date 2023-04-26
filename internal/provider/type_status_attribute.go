@@ -6,7 +6,6 @@ import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type StatusAttribute struct {
 	Purpose                  []types.String           `tfsdk:"purpose"`
-	Constraints              map[string]types.String  `tfsdk:"constraints"`
 	DefaultValue             types.String             `tfsdk:"default_value"`
 	Deprecated               types.Bool               `tfsdk:"deprecated"`
 	EntityBuilderDisableEdit types.Bool               `tfsdk:"entity_builder_disable_edit"`

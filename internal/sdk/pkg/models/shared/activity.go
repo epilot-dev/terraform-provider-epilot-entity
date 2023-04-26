@@ -4,8 +4,7 @@ package shared
 
 type Activity struct {
 	// Message for activity. Supports handlebars syntax.
-	Message string                 `json:"message"`
-	Payload map[string]interface{} `json:"payload,omitempty"`
+	Message string `json:"message"`
 	// Title for activity. Supports handlebars syntax.
 	Title string `json:"title"`
 	Type  string `json:"type"`

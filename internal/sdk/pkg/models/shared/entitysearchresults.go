@@ -4,7 +4,6 @@ package shared
 
 // EntitySearchResults - Success
 type EntitySearchResults struct {
-	Aggregations map[string]interface{}   `json:"aggregations,omitempty"`
-	Hits         *float64                 `json:"hits,omitempty"`
-	Results      []map[string]interface{} `json:"results,omitempty"`
+	Hits    *float64     `json:"hits,omitempty"`
+	Results []EntityItem `json:"results,omitempty"`
 }

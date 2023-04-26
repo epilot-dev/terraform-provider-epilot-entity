@@ -344,12 +344,14 @@ paths:
         name: activity_id
         description: Activity to include in event feed
         required: false
+        x-speakeasy-terraform-ignore: true
         schema:
           $ref: '#/components/schemas/ActivityId'
       - in: query
         name: async
         description: Don't wait for updated entity to become available in Search API. Useful for large migrations
         required: false
+        x-speakeasy-terraform-ignore: true
         schema:
           type: boolean
           default: false
@@ -550,6 +552,7 @@ paths:
           $ref: '#/components/schemas/EntityId'
       - in: query
         name: hydrate
+        x-speakeasy-terraform-ignore: true
         description: When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
         schema:
           default: false
@@ -615,12 +618,14 @@ paths:
           $ref: '#/components/schemas/EntityId'
       - in: query
         name: activity_id
+        x-speakeasy-terraform-ignore: true
         description: Activity to include in event feed
         required: false
         schema:
           $ref: '#/components/schemas/ActivityId'
       - in: query
         name: async
+        x-speakeasy-terraform-ignore: true
         description: Don't wait for updated entity to become available in Search API. Useful for large migrations
         required: false
         schema:
@@ -711,7 +716,6 @@ paths:
             schema:
               $ref: '#/components/schemas/Entity'
             example: {}
-            required: true
       responses:
         '200':
           description: Entity was updated
@@ -747,6 +751,7 @@ paths:
           $ref: '#/components/schemas/EntityId'
       - in: query
         name: activity_id
+        x-speakeasy-terraform-ignore: true
         description: Activity to include in event feed
         required: false
         schema:
@@ -2756,7 +2761,7 @@ components:
       type: string
       format: uuid
     BaseEntity:
-#      x-speakeasy-entity: Entity
+      x-speakeasy-entity: Entity
       allOf:
       - $ref: '#/components/schemas/Entity'
       - required:

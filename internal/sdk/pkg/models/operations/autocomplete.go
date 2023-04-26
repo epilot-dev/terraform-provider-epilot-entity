@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"encoding/json"
 	"net/http"
 )
 
@@ -15,6 +16,53 @@ type AutocompleteRequest struct {
 	Size *int64 `queryParam:"style=form,explode=true,name=size"`
 	// Limit results to entity schema
 	Slug *string `queryParam:"style=form,explode=true,name=slug"`
+}
+
+type Autocomplete200ApplicationJSONResults3 struct {
+	AdditionalProperties map[string]interface{} `json:"-"`
+}
+type _Autocomplete200ApplicationJSONResults3 Autocomplete200ApplicationJSONResults3
+
+func (c *Autocomplete200ApplicationJSONResults3) UnmarshalJSON(bs []byte) error {
+	data := _Autocomplete200ApplicationJSONResults3{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = Autocomplete200ApplicationJSONResults3(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+
+	c.AdditionalProperties = additionalFields
+
+	return nil
+}
+
+func (c Autocomplete200ApplicationJSONResults3) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_Autocomplete200ApplicationJSONResults3(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
 }
 
 // Autocomplete200ApplicationJSON - Success

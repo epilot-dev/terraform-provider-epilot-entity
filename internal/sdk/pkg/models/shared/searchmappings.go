@@ -52,7 +52,6 @@ func (e *SearchMappingsTypeEnum) UnmarshalJSON(data []byte) error {
 }
 
 type SearchMappings struct {
-	Fields map[string]interface{}  `json:"fields,omitempty"`
-	Index  *bool                   `json:"index,omitempty"`
-	Type   *SearchMappingsTypeEnum `json:"type,omitempty"`
+	Index *bool                   `json:"index,omitempty"`
+	Type  *SearchMappingsTypeEnum `json:"type,omitempty"`
 }

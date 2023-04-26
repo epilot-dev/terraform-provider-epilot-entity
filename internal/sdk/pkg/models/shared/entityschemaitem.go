@@ -28,6 +28,63 @@ type EntitySchemaItemGroupSettings struct {
 	SettingFlag *string `json:"setting_flag,omitempty"`
 }
 
+// EntitySchemaItemLayoutSettings - Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:
+// - Managed Properties: are interpreted and transformed into layout styles
+// - Un-managed Properties: are appended as styles into the attribute mounting node
+type EntitySchemaItemLayoutSettings struct {
+	// Defines the grid gap for the mounting node of the attribute.
+	GridGap *string `json:"grid_gap,omitempty"`
+	// Defines the grid column template for the mounting node of the attribute.
+	GridTemplateColumns *string `json:"grid_template_columns,omitempty"`
+
+	AdditionalProperties map[string]interface{} `json:"-"`
+}
+type _EntitySchemaItemLayoutSettings EntitySchemaItemLayoutSettings
+
+func (c *EntitySchemaItemLayoutSettings) UnmarshalJSON(bs []byte) error {
+	data := _EntitySchemaItemLayoutSettings{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = EntitySchemaItemLayoutSettings(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+	delete(additionalFields, "grid_gap")
+	delete(additionalFields, "grid_template_columns")
+
+	c.AdditionalProperties = additionalFields
+
+	return nil
+}
+
+func (c EntitySchemaItemLayoutSettings) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_EntitySchemaItemLayoutSettings(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
+}
+
 type EntitySchemaItemSource struct {
 	ID   *string `json:"id,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -492,12 +549,11 @@ type EntitySchemaItem struct {
 	// An ordered list of attributes the entity contains
 	Attributes []Attribute `json:"attributes,omitempty"`
 	// Reference to blueprint
-	Blueprint    *string                `json:"blueprint,omitempty"`
-	Capabilities []EntityCapability     `json:"capabilities,omitempty"`
-	Comment      *string                `json:"comment,omitempty"`
-	CreatedAt    *string                `json:"created_at,omitempty"`
-	DialogConfig map[string]interface{} `json:"dialog_config,omitempty"`
-	Draft        *bool                  `json:"draft,omitempty"`
+	Blueprint    *string            `json:"blueprint,omitempty"`
+	Capabilities []EntityCapability `json:"capabilities,omitempty"`
+	Comment      *string            `json:"comment,omitempty"`
+	CreatedAt    *string            `json:"created_at,omitempty"`
+	Draft        *bool              `json:"draft,omitempty"`
 	// This schema should only be active when one of the organization settings is enabled
 	EnableSetting []string `json:"enable_setting,omitempty"`
 	// Advanced: explicit Elasticsearch index mapping definitions for entity data
@@ -514,7 +570,7 @@ type EntitySchemaItem struct {
 	// - Managed Properties: are interpreted and transformed into layout styles
 	// - Un-managed Properties: are appended as styles into the attribute mounting node
 	//
-	LayoutSettings map[string]interface{} `json:"layout_settings,omitempty"`
+	LayoutSettings *EntitySchemaItemLayoutSettings `json:"layout_settings,omitempty"`
 	// User-friendly identifier for the entity schema
 	Name      string `json:"name"`
 	Plural    string `json:"plural"`

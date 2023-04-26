@@ -9,7 +9,6 @@ type RelationAttribute struct {
 	Actions                  []RelationAttributeActions       `tfsdk:"actions"`
 	AddButtonLabel           types.String                     `tfsdk:"add_button_label"`
 	AllowedSchemas           []types.String                   `tfsdk:"allowed_schemas"`
-	Constraints              map[string]types.String          `tfsdk:"constraints"`
 	DefaultValue             types.String                     `tfsdk:"default_value"`
 	Deprecated               types.Bool                       `tfsdk:"deprecated"`
 	DetailsViewModeEnabled   types.Bool                       `tfsdk:"details_view_mode_enabled"`

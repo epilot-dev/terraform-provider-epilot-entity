@@ -6,7 +6,6 @@ import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type CurrencyAttribute struct {
 	Purpose                  []types.String              `tfsdk:"purpose"`
-	Constraints              map[string]types.String     `tfsdk:"constraints"`
 	Currency                 []CurrencyAttributeCurrency `tfsdk:"currency"`
 	CurrencySelectorOnly     types.Bool                  `tfsdk:"currency_selector_only"`
 	DefaultValue             types.String                `tfsdk:"default_value"`

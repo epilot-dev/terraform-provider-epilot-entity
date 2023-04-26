@@ -89,7 +89,10 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 // Deletes a saved view
 func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.DeleteSavedViewRequest) (*operations.DeleteSavedViewResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
 	if err != nil {
@@ -125,7 +128,10 @@ func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.Del
 // Gets Saved View configuration by id.
 func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSavedViewRequest) (*operations.GetSavedViewResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -215,7 +221,10 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 // Updates a saved view
 func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.UpdateSavedViewRequest) (*operations.UpdateSavedViewResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "SavedView", "json")
 	if err != nil {

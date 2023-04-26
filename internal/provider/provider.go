@@ -40,7 +40,7 @@ func (p *EpilotEntityProvider) Schema(ctx context.Context, req provider.SchemaRe
 		Attributes: map[string]schema.Attribute{
 			"server_url": schema.StringAttribute{
 				MarkdownDescription: "Server URL (defaults to https://entity.sls.epilot.io)",
-				Optional:            true,
+				Optional:            false,
 			},
 			"epilot_auth": schema.StringAttribute{
 				Optional:  true,
@@ -98,6 +98,7 @@ func (p *EpilotEntityProvider) Configure(ctx context.Context, req provider.Confi
 
 func (p *EpilotEntityProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewEntityResource,
 		NewSchemaResource,
 	}
 }

@@ -16,7 +16,6 @@ type UpdateClassificationsForTaxonomyRequest struct {
 // UpdateClassificationsForTaxonomy200ApplicationJSON - Taxonomies classifications
 type UpdateClassificationsForTaxonomy200ApplicationJSON struct {
 	Created []shared.TaxonomyClassification `json:"created,omitempty"`
-	Deleted map[string]interface{}          `json:"deleted,omitempty"`
 	Updated []shared.TaxonomyClassification `json:"updated,omitempty"`
 }
 

@@ -84,10 +84,6 @@ func (e *CurrencyAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 // CurrencyAttribute - Currency input
 type CurrencyAttribute struct {
 	Purpose []string `json:"_purpose,omitempty"`
-	// A set of constraints applicable to the attribute.
-	// These constraints should and will be enforced by the attribute renderer.
-	//
-	Constraints map[string]interface{} `json:"constraints,omitempty"`
 	// An array of currency configurations with a country code (ISO-4217)
 	Currency             []CurrencyAttributeCurrency `json:"currency"`
 	CurrencySelectorOnly *bool                       `json:"currency_selector_only,omitempty"`
