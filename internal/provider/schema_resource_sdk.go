@@ -1631,21 +1631,21 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					}
 					title3 := actionsItem.NewEntityItem.Title.ValueString()
 					updatedAt, _ := time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.UpdatedAt.ValueString())
-					additionalProperties := make(map[string]interface{})
-					for additionalPropertiesKey, additionalPropertiesValue := range actionsItem.NewEntityItem.AdditionalProperties {
-						var additionalPropertiesInst interface{}
-						_ = json.Unmarshal([]byte(additionalPropertiesValue.ValueString()), &additionalPropertiesInst)
-						additionalProperties[additionalPropertiesKey] = additionalPropertiesInst
+					entity := make(map[string]interface{})
+					for entityKey, entityValue := range actionsItem.NewEntityItem.Entity {
+						var entityInst interface{}
+						_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
+						entity[entityKey] = entityInst
 					}
 					newEntityItem = &shared.RelationAttributeActionsNewEntityItem{
-						CreatedAt:            createdAt,
-						ID:                   id,
-						Org:                  org,
-						Schema:               schema,
-						Tags:                 tags,
-						Title:                title3,
-						UpdatedAt:            updatedAt,
-						AdditionalProperties: additionalProperties,
+						CreatedAt: createdAt,
+						ID:        id,
+						Org:       org,
+						Schema:    schema,
+						Tags:      tags,
+						Title:     title3,
+						UpdatedAt: updatedAt,
+						Entity:    entity,
 					}
 				}
 				settingFlag9 := new(string)
@@ -6451,21 +6451,21 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						}
 						title7 := actionsItem1.NewEntityItem.Title.ValueString()
 						updatedAt2, _ := time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.UpdatedAt.ValueString())
-						additionalProperties1 := make(map[string]interface{})
-						for additionalPropertiesKey1, additionalPropertiesValue1 := range actionsItem1.NewEntityItem.AdditionalProperties {
-							var additionalPropertiesInst1 interface{}
-							_ = json.Unmarshal([]byte(additionalPropertiesValue1.ValueString()), &additionalPropertiesInst1)
-							additionalProperties1[additionalPropertiesKey1] = additionalPropertiesInst1
+						entity1 := make(map[string]interface{})
+						for entityKey1, entityValue1 := range actionsItem1.NewEntityItem.Entity {
+							var entityInst1 interface{}
+							_ = json.Unmarshal([]byte(entityValue1.ValueString()), &entityInst1)
+							entity1[entityKey1] = entityInst1
 						}
 						newEntityItem1 = &shared.RelationAttributeActionsNewEntityItem{
-							CreatedAt:            createdAt2,
-							ID:                   id2,
-							Org:                  org1,
-							Schema:               schema1,
-							Tags:                 tags1,
-							Title:                title7,
-							UpdatedAt:            updatedAt2,
-							AdditionalProperties: additionalProperties1,
+							CreatedAt: createdAt2,
+							ID:        id2,
+							Org:       org1,
+							Schema:    schema1,
+							Tags:      tags1,
+							Title:     title7,
+							UpdatedAt: updatedAt2,
+							Entity:    entity1,
 						}
 					}
 					settingFlag37 := new(string)
@@ -9904,16 +9904,16 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		} else {
 			gridTemplateColumns = nil
 		}
-		additionalProperties2 := make(map[string]interface{})
-		for additionalPropertiesKey2, additionalPropertiesValue2 := range r.LayoutSettings.AdditionalProperties {
-			var additionalPropertiesInst2 interface{}
-			_ = json.Unmarshal([]byte(additionalPropertiesValue2.ValueString()), &additionalPropertiesInst2)
-			additionalProperties2[additionalPropertiesKey2] = additionalPropertiesInst2
+		additionalProperties := make(map[string]interface{})
+		for additionalPropertiesKey, additionalPropertiesValue := range r.LayoutSettings.AdditionalProperties {
+			var additionalPropertiesInst interface{}
+			_ = json.Unmarshal([]byte(additionalPropertiesValue.ValueString()), &additionalPropertiesInst)
+			additionalProperties[additionalPropertiesKey] = additionalPropertiesInst
 		}
 		layoutSettings = &shared.EntitySchemaLayoutSettings{
 			GridGap:              gridGap,
 			GridTemplateColumns:  gridTemplateColumns,
-			AdditionalProperties: additionalProperties2,
+			AdditionalProperties: additionalProperties,
 		}
 	}
 	name55 := r.Name.ValueString()
@@ -10273,11 +10273,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			dropdownItems := make([]shared.EntityDefaultTableDropdownItems, 0)
 			for _, dropdownItemsItem := range r.UIConfig.TableView.EntityDefaultTable.DropdownItems {
 				if dropdownItemsItem.EntityDefaultTableDropdownItems1 != nil {
-					entity := new(string)
+					entity2 := new(string)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.IsNull() {
-						*entity = dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.ValueString()
+						*entity2 = dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.ValueString()
 					} else {
-						entity = nil
+						entity2 = nil
 					}
 					featureFlag60 := new(string)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.IsNull() {
@@ -10298,7 +10298,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						type56 = nil
 					}
 					entityDefaultTableDropdownItems1 := shared.EntityDefaultTableDropdownItems1{
-						Entity:      entity,
+						Entity:      entity2,
 						FeatureFlag: featureFlag60,
 						Legacy:      legacy1,
 						Type:        type56,
@@ -11662,10 +11662,10 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					}
 					actions1.NewEntityItem.Title = types.StringValue(actionsItem.NewEntityItem.Title)
 					actions1.NewEntityItem.UpdatedAt = types.StringValue(actionsItem.NewEntityItem.UpdatedAt.Format(time.RFC3339))
-					actions1.NewEntityItem.AdditionalProperties = make(map[string]types.String)
-					for key9, value12 := range actionsItem.NewEntityItem.AdditionalProperties {
+					actions1.NewEntityItem.Entity = make(map[string]types.String)
+					for key9, value12 := range actionsItem.NewEntityItem.Entity {
 						result9, _ := json.Marshal(value12)
-						actions1.NewEntityItem.AdditionalProperties[key9] = types.StringValue(string(result9))
+						actions1.NewEntityItem.Entity[key9] = types.StringValue(string(result9))
 					}
 				}
 				if actionsItem.SettingFlag != nil {
@@ -15120,10 +15120,10 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 						}
 						actions3.NewEntityItem.Title = types.StringValue(actionsItem1.NewEntityItem.Title)
 						actions3.NewEntityItem.UpdatedAt = types.StringValue(actionsItem1.NewEntityItem.UpdatedAt.Format(time.RFC3339))
-						actions3.NewEntityItem.AdditionalProperties = make(map[string]types.String)
-						for key38, value44 := range actionsItem1.NewEntityItem.AdditionalProperties {
+						actions3.NewEntityItem.Entity = make(map[string]types.String)
+						for key38, value44 := range actionsItem1.NewEntityItem.Entity {
 							result37, _ := json.Marshal(value44)
-							actions3.NewEntityItem.AdditionalProperties[key38] = types.StringValue(string(result37))
+							actions3.NewEntityItem.Entity[key38] = types.StringValue(string(result37))
 						}
 					}
 					if actionsItem1.SettingFlag != nil {

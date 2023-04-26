@@ -19,7 +19,7 @@ type BaseEntity struct {
 	Title     string    `json:"_title"`
 	UpdatedAt time.Time `json:"_updated_at"`
 
-	AdditionalProperties map[string]interface{} `json:"-"`
+	Entity map[string]interface{} `json:"-"`
 }
 type _BaseEntity BaseEntity
 
@@ -44,7 +44,7 @@ func (c *BaseEntity) UnmarshalJSON(bs []byte) error {
 	delete(additionalFields, "_title")
 	delete(additionalFields, "_updated_at")
 
-	c.AdditionalProperties = additionalFields
+	c.Entity = additionalFields
 
 	return nil
 }
@@ -60,7 +60,7 @@ func (c BaseEntity) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	bs, err = json.Marshal(c.AdditionalProperties)
+	bs, err = json.Marshal(c.Entity)
 	if err != nil {
 		return nil, err
 	}

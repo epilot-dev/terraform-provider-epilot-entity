@@ -39,15 +39,15 @@ type EntityResource struct {
 
 // EntityResourceModel describes the resource data model.
 type EntityResourceModel struct {
-	CreatedAt            types.String            `tfsdk:"created_at"`
-	ID                   types.String            `tfsdk:"id"`
-	Org                  types.String            `tfsdk:"org"`
-	Schema               types.String            `tfsdk:"schema"`
-	Tags                 []types.String          `tfsdk:"tags"`
-	Title                types.String            `tfsdk:"title"`
-	UpdatedAt            types.String            `tfsdk:"updated_at"`
-	Slug                 types.String            `tfsdk:"slug"`
-	AdditionalProperties map[string]types.String `tfsdk:"additional_properties"`
+	CreatedAt types.String            `tfsdk:"created_at"`
+	ID        types.String            `tfsdk:"id"`
+	Org       types.String            `tfsdk:"org"`
+	Schema    types.String            `tfsdk:"schema"`
+	Tags      []types.String          `tfsdk:"tags"`
+	Title     types.String            `tfsdk:"title"`
+	UpdatedAt types.String            `tfsdk:"updated_at"`
+	Slug      types.String            `tfsdk:"slug"`
+	Entity    map[string]types.String `tfsdk:"entity"`
 }
 
 func (r *EntityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -94,7 +94,7 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required:    true,
 				Description: `Entity Schema`,
 			},
-			"additional_properties": schema.MapAttribute{
+			"entity": schema.MapAttribute{
 				Required:    true,
 				ElementType: types.StringType,
 				Validators: []validator.Map{
@@ -184,21 +184,21 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 	} else {
 		updatedAt = nil
 	}
-	additionalProperties := make(map[string]interface{})
-	for additionalPropertiesKey, additionalPropertiesValue := range data.AdditionalProperties {
-		var additionalPropertiesInst interface{}
-		_ = json.Unmarshal([]byte(additionalPropertiesValue.ValueString()), &additionalPropertiesInst)
-		additionalProperties[additionalPropertiesKey] = additionalPropertiesInst
+	entity1 := make(map[string]interface{})
+	for entityKey, entityValue := range data.Entity {
+		var entityInst interface{}
+		_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
+		entity1[entityKey] = entityInst
 	}
 	entity = &shared.Entity{
-		CreatedAt:            createdAt,
-		ID:                   id,
-		Org:                  org,
-		Schema:               schema,
-		Tags:                 tags,
-		Title:                title,
-		UpdatedAt:            updatedAt,
-		AdditionalProperties: additionalProperties,
+		CreatedAt: createdAt,
+		ID:        id,
+		Org:       org,
+		Schema:    schema,
+		Tags:      tags,
+		Title:     title,
+		UpdatedAt: updatedAt,
+		Entity:    entity1,
 	}
 	slug := data.Slug.ValueString()
 	request := operations.CreateEntityRequest{
@@ -334,21 +334,21 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 	} else {
 		updatedAt = nil
 	}
-	additionalProperties := make(map[string]interface{})
-	for additionalPropertiesKey, additionalPropertiesValue := range data.AdditionalProperties {
-		var additionalPropertiesInst interface{}
-		_ = json.Unmarshal([]byte(additionalPropertiesValue.ValueString()), &additionalPropertiesInst)
-		additionalProperties[additionalPropertiesKey] = additionalPropertiesInst
+	entity1 := make(map[string]interface{})
+	for entityKey, entityValue := range data.Entity {
+		var entityInst interface{}
+		_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
+		entity1[entityKey] = entityInst
 	}
 	entity = &shared.Entity{
-		CreatedAt:            createdAt,
-		ID:                   id,
-		Org:                  org,
-		Schema:               schema,
-		Tags:                 tags,
-		Title:                title,
-		UpdatedAt:            updatedAt,
-		AdditionalProperties: additionalProperties,
+		CreatedAt: createdAt,
+		ID:        id,
+		Org:       org,
+		Schema:    schema,
+		Tags:      tags,
+		Title:     title,
+		UpdatedAt: updatedAt,
+		Entity:    entity1,
 	}
 	id1 := data.ID.ValueString()
 	slug := data.Slug.ValueString()

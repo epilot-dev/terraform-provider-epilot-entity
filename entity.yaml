@@ -2773,6 +2773,7 @@ components:
         - _updated_at
     Entity:
       type: object
+      x-speakeasy-additional-properties-name: entity
       additionalProperties: true
       properties:
         _id:

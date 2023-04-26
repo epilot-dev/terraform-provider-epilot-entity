@@ -58,7 +58,7 @@ type EntityOperationPayload struct {
 	Title     *string    `json:"_title,omitempty"`
 	UpdatedAt *time.Time `json:"_updated_at,omitempty"`
 
-	AdditionalProperties map[string]interface{} `json:"-"`
+	Entity map[string]interface{} `json:"-"`
 }
 type _EntityOperationPayload EntityOperationPayload
 
@@ -83,7 +83,7 @@ func (c *EntityOperationPayload) UnmarshalJSON(bs []byte) error {
 	delete(additionalFields, "_title")
 	delete(additionalFields, "_updated_at")
 
-	c.AdditionalProperties = additionalFields
+	c.Entity = additionalFields
 
 	return nil
 }
@@ -99,7 +99,7 @@ func (c EntityOperationPayload) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	bs, err = json.Marshal(c.AdditionalProperties)
+	bs, err = json.Marshal(c.Entity)
 	if err != nil {
 		return nil, err
 	}

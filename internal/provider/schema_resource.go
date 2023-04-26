@@ -1304,7 +1304,7 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															validators.IsRFC3339(),
 														},
 													},
-													"additional_properties": schema.MapAttribute{
+													"entity": schema.MapAttribute{
 														Required:    true,
 														ElementType: types.StringType,
 														Validators: []validator.Map{
@@ -4885,7 +4885,7 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																		validators.IsRFC3339(),
 																	},
 																},
-																"additional_properties": schema.MapAttribute{
+																"entity": schema.MapAttribute{
 																	Required:    true,
 																	ElementType: types.StringType,
 																	Validators: []validator.Map{
