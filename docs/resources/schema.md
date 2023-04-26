@@ -33,7 +33,9 @@ Schema Resource
 - `feature_flag` (String)
 - `group_settings` (Attributes List) (see [below for nested schema](#nestedatt--group_settings))
 - `icon` (String)
-- `layout_settings` (Map of String)
+- `layout_settings` (Attributes) Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:
+- Managed Properties: are interpreted and transformed into layout styles
+- Un-managed Properties: are appended as styles into the attribute mounting node (see [below for nested schema](#nestedatt--layout_settings))
 - `published` (Boolean)
 - `title_template` (String)
 - `ui_config` (Attributes) (see [below for nested schema](#nestedatt--ui_config))
@@ -851,8 +853,26 @@ Optional:
 - `default` (Boolean)
 - `feature_flag` (String)
 - `label` (String)
-- `new_entity_item` (Map of String)
+- `new_entity_item` (Attributes) (see [below for nested schema](#nestedatt--attributes--relation_attribute--actions--new_entity_item))
 - `setting_flag` (String)
+
+<a id="nestedatt--attributes--relation_attribute--actions--new_entity_item"></a>
+### Nested Schema for `attributes.relation_attribute.actions.setting_flag`
+
+Required:
+
+- `created_at` (String)
+- `entity` (Map of String)
+- `id` (String)
+- `org` (String)
+- `schema` (String)
+- `title` (String)
+- `updated_at` (String)
+
+Optional:
+
+- `tags` (List of String)
+
 
 
 <a id="nestedatt--attributes--relation_attribute--summary_fields"></a>
@@ -1989,8 +2009,26 @@ Optional:
 - `default` (Boolean)
 - `feature_flag` (String)
 - `label` (String)
-- `new_entity_item` (Map of String)
+- `new_entity_item` (Attributes) (see [below for nested schema](#nestedatt--capabilities--attributes--relation_attribute--value_formatter--new_entity_item))
 - `setting_flag` (String)
+
+<a id="nestedatt--capabilities--attributes--relation_attribute--value_formatter--new_entity_item"></a>
+### Nested Schema for `capabilities.attributes.relation_attribute.value_formatter.new_entity_item`
+
+Required:
+
+- `created_at` (String)
+- `entity` (Map of String)
+- `id` (String)
+- `org` (String)
+- `schema` (String)
+- `title` (String)
+- `updated_at` (String)
+
+Optional:
+
+- `tags` (List of String)
+
 
 
 <a id="nestedatt--capabilities--attributes--relation_attribute--summary_fields"></a>
@@ -2377,6 +2415,19 @@ Optional:
 - `default` (String)
 - `key` (String)
 
+
+
+<a id="nestedatt--layout_settings"></a>
+### Nested Schema for `layout_settings`
+
+Required:
+
+- `additional_properties` (Map of String)
+
+Optional:
+
+- `grid_gap` (String)
+- `grid_template_columns` (String)
 
 
 <a id="nestedatt--ui_config"></a>
