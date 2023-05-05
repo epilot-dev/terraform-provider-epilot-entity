@@ -14,19 +14,23 @@ const (
 	SavedViewCreatedBy2SourceEnumBlueprint SavedViewCreatedBy2SourceEnum = "BLUEPRINT"
 )
 
+func (e SavedViewCreatedBy2SourceEnum) ToPointer() *SavedViewCreatedBy2SourceEnum {
+	return &e
+}
+
 func (e *SavedViewCreatedBy2SourceEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "SYSTEM":
 		fallthrough
 	case "BLUEPRINT":
-		*e = SavedViewCreatedBy2SourceEnum(s)
+		*e = SavedViewCreatedBy2SourceEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SavedViewCreatedBy2SourceEnum: %s", s)
+		return fmt.Errorf("invalid value for SavedViewCreatedBy2SourceEnum: %v", v)
 	}
 }
 

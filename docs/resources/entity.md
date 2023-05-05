@@ -17,8 +17,11 @@ Entity Resource
 
 ### Required
 
-- `entity` (Map of String)
 - `slug` (String) Entity Schema
+
+### Optional
+
+- `entity` (Map of String)
 
 ### Read-Only
 

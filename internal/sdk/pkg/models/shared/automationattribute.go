@@ -13,17 +13,21 @@ const (
 	AutomationAttributeTypeEnumAutomation AutomationAttributeTypeEnum = "automation"
 )
 
+func (e AutomationAttributeTypeEnum) ToPointer() *AutomationAttributeTypeEnum {
+	return &e
+}
+
 func (e *AutomationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "automation":
-		*e = AutomationAttributeTypeEnum(s)
+		*e = AutomationAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for AutomationAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for AutomationAttributeTypeEnum: %v", v)
 	}
 }
 

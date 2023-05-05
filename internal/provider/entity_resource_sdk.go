@@ -27,10 +27,12 @@ func (r *EntityResourceModel) RefreshFromSDKType(resp *shared.EntityItem) {
 	}
 	r.Title = types.StringValue(resp.Title)
 	r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339))
-	r.Entity = make(map[string]types.String)
-	for key, value := range resp.Entity {
-		result, _ := json.Marshal(value)
-		r.Entity[key] = types.StringValue(string(result))
+	if r.Entity == nil && len(resp.Entity) > 0 {
+		r.Entity = make(map[string]types.String)
+		for key, value := range resp.Entity {
+			result, _ := json.Marshal(value)
+			r.Entity[key] = types.StringValue(string(result))
+		}
 	}
 
 }

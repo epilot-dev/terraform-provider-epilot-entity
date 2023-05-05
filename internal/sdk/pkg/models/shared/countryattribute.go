@@ -13,17 +13,21 @@ const (
 	CountryAttributeTypeEnumCountry CountryAttributeTypeEnum = "country"
 )
 
+func (e CountryAttributeTypeEnum) ToPointer() *CountryAttributeTypeEnum {
+	return &e
+}
+
 func (e *CountryAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "country":
-		*e = CountryAttributeTypeEnum(s)
+		*e = CountryAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CountryAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for CountryAttributeTypeEnum: %v", v)
 	}
 }
 

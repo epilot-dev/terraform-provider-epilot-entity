@@ -88,17 +88,21 @@ const (
 	StatusAttributeTypeEnumStatus StatusAttributeTypeEnum = "status"
 )
 
+func (e StatusAttributeTypeEnum) ToPointer() *StatusAttributeTypeEnum {
+	return &e
+}
+
 func (e *StatusAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "status":
-		*e = StatusAttributeTypeEnum(s)
+		*e = StatusAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for StatusAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for StatusAttributeTypeEnum: %v", v)
 	}
 }
 

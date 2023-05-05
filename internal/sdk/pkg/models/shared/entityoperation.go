@@ -22,21 +22,25 @@ const (
 	EntityOperationOperationEnumDeleteEntity EntityOperationOperationEnum = "deleteEntity"
 )
 
+func (e EntityOperationOperationEnum) ToPointer() *EntityOperationOperationEnum {
+	return &e
+}
+
 func (e *EntityOperationOperationEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "createEntity":
 		fallthrough
 	case "updateEntity":
 		fallthrough
 	case "deleteEntity":
-		*e = EntityOperationOperationEnum(s)
+		*e = EntityOperationOperationEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityOperationOperationEnum: %s", s)
+		return fmt.Errorf("invalid value for EntityOperationOperationEnum: %v", v)
 	}
 }
 

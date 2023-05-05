@@ -14,19 +14,23 @@ const (
 	DateAttributeTypeEnumDatetime DateAttributeTypeEnum = "datetime"
 )
 
+func (e DateAttributeTypeEnum) ToPointer() *DateAttributeTypeEnum {
+	return &e
+}
+
 func (e *DateAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "date":
 		fallthrough
 	case "datetime":
-		*e = DateAttributeTypeEnum(s)
+		*e = DateAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for DateAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for DateAttributeTypeEnum: %v", v)
 	}
 }
 

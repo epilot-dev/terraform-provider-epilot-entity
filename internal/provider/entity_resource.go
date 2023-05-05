@@ -95,7 +95,8 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Entity Schema`,
 			},
 			"entity": schema.MapAttribute{
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
 				Validators: []validator.Map{
 					mapvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -277,18 +278,7 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *EntityResourceModel
-	var item types.Object
-
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &item)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(item.As(ctx, &data, basetypes.ObjectAsOptions{
-		UnhandledNullAsEmpty:    true,
-		UnhandledUnknownAsEmpty: true,
-	})...)
-
+	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
 	}

@@ -1305,7 +1305,8 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														},
 													},
 													"entity": schema.MapAttribute{
-														Required:    true,
+														Computed:    true,
+														Optional:    true,
 														ElementType: types.StringType,
 														Validators: []validator.Map{
 															mapvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -4886,7 +4887,8 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																	},
 																},
 																"entity": schema.MapAttribute{
-																	Required:    true,
+																	Computed:    true,
+																	Optional:    true,
 																	ElementType: types.StringType,
 																	Validators: []validator.Map{
 																		mapvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -7443,7 +7445,8 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 					},
 					"additional_properties": schema.MapAttribute{
-						Required:    true,
+						Computed:    true,
+						Optional:    true,
 						ElementType: types.StringType,
 						Validators: []validator.Map{
 							mapvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -8107,18 +8110,7 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *SchemaResourceModel
-	var item types.Object
-
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &item)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(item.As(ctx, &data, basetypes.ObjectAsOptions{
-		UnhandledNullAsEmpty:    true,
-		UnhandledUnknownAsEmpty: true,
-	})...)
-
+	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
 	}

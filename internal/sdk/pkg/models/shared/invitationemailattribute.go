@@ -13,17 +13,21 @@ const (
 	InvitationEmailAttributeTypeEnumInvitationEmail InvitationEmailAttributeTypeEnum = "invitation_email"
 )
 
+func (e InvitationEmailAttributeTypeEnum) ToPointer() *InvitationEmailAttributeTypeEnum {
+	return &e
+}
+
 func (e *InvitationEmailAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "invitation_email":
-		*e = InvitationEmailAttributeTypeEnum(s)
+		*e = InvitationEmailAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InvitationEmailAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for InvitationEmailAttributeTypeEnum: %v", v)
 	}
 }
 

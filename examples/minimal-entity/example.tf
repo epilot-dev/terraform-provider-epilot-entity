@@ -49,3 +49,11 @@ resource "epilot-entity_schema" "test" {
     }
   ]
 }
+
+resource "epilot-entity_entity" "contact_test" {
+  slug = epilot-entity_schema.test.slug
+
+  entity = {
+    test = jsonencode("test")
+  }
+}

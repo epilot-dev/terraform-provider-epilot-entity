@@ -13,17 +13,21 @@ const (
 	ConsentAttributeTypeEnumConsent ConsentAttributeTypeEnum = "consent"
 )
 
+func (e ConsentAttributeTypeEnum) ToPointer() *ConsentAttributeTypeEnum {
+	return &e
+}
+
 func (e *ConsentAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "consent":
-		*e = ConsentAttributeTypeEnum(s)
+		*e = ConsentAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ConsentAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for ConsentAttributeTypeEnum: %v", v)
 	}
 }
 

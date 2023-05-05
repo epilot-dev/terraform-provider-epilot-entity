@@ -15,19 +15,23 @@ const (
 	RepeatableAttributeRelationAffinityModeEnumStrong RepeatableAttributeRelationAffinityModeEnum = "strong"
 )
 
+func (e RepeatableAttributeRelationAffinityModeEnum) ToPointer() *RepeatableAttributeRelationAffinityModeEnum {
+	return &e
+}
+
 func (e *RepeatableAttributeRelationAffinityModeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "weak":
 		fallthrough
 	case "strong":
-		*e = RepeatableAttributeRelationAffinityModeEnum(s)
+		*e = RepeatableAttributeRelationAffinityModeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RepeatableAttributeRelationAffinityModeEnum: %s", s)
+		return fmt.Errorf("invalid value for RepeatableAttributeRelationAffinityModeEnum: %v", v)
 	}
 }
 
@@ -44,12 +48,16 @@ const (
 	RepeatableAttributeTypeEnumDate           RepeatableAttributeTypeEnum = "date"
 )
 
+func (e RepeatableAttributeTypeEnum) ToPointer() *RepeatableAttributeTypeEnum {
+	return &e
+}
+
 func (e *RepeatableAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "string":
 		fallthrough
 	case "phone":
@@ -65,10 +73,10 @@ func (e *RepeatableAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 	case "price_component":
 		fallthrough
 	case "date":
-		*e = RepeatableAttributeTypeEnum(s)
+		*e = RepeatableAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RepeatableAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for RepeatableAttributeTypeEnum: %v", v)
 	}
 }
 

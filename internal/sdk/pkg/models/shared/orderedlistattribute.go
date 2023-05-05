@@ -13,17 +13,21 @@ const (
 	OrderedListAttributeTypeEnumOrderedList OrderedListAttributeTypeEnum = "ordered_list"
 )
 
+func (e OrderedListAttributeTypeEnum) ToPointer() *OrderedListAttributeTypeEnum {
+	return &e
+}
+
 func (e *OrderedListAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "ordered_list":
-		*e = OrderedListAttributeTypeEnum(s)
+		*e = OrderedListAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OrderedListAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for OrderedListAttributeTypeEnum: %v", v)
 	}
 }
 

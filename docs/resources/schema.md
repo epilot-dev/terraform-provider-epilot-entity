@@ -862,7 +862,6 @@ Optional:
 Required:
 
 - `created_at` (String)
-- `entity` (Map of String)
 - `id` (String)
 - `org` (String)
 - `schema` (String)
@@ -871,6 +870,7 @@ Required:
 
 Optional:
 
+- `entity` (Map of String)
 - `tags` (List of String)
 
 
@@ -2018,7 +2018,6 @@ Optional:
 Required:
 
 - `created_at` (String)
-- `entity` (Map of String)
 - `id` (String)
 - `org` (String)
 - `schema` (String)
@@ -2027,6 +2026,7 @@ Required:
 
 Optional:
 
+- `entity` (Map of String)
 - `tags` (List of String)
 
 
@@ -2420,12 +2420,9 @@ Optional:
 <a id="nestedatt--layout_settings"></a>
 ### Nested Schema for `layout_settings`
 
-Required:
-
-- `additional_properties` (Map of String)
-
 Optional:
 
+- `additional_properties` (Map of String)
 - `grid_gap` (String)
 - `grid_template_columns` (String)
 
