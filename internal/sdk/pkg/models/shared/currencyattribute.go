@@ -67,17 +67,21 @@ const (
 	CurrencyAttributeTypeEnumCurrency CurrencyAttributeTypeEnum = "currency"
 )
 
+func (e CurrencyAttributeTypeEnum) ToPointer() *CurrencyAttributeTypeEnum {
+	return &e
+}
+
 func (e *CurrencyAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "currency":
-		*e = CurrencyAttributeTypeEnum(s)
+		*e = CurrencyAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CurrencyAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for CurrencyAttributeTypeEnum: %v", v)
 	}
 }
 

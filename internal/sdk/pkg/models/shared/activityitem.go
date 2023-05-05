@@ -10,7 +10,7 @@ import (
 type ActivityItem struct {
 	// See https://github.com/ulid/spec
 	ID     *string                `json:"_id,omitempty"`
-	Caller map[string]interface{} `json:"caller,omitempty"`
+	Caller *ActivityCallerContext `json:"caller,omitempty"`
 	// Message for activity. Supports handlebars syntax.
 	Message    string            `json:"message"`
 	Operations []EntityOperation `json:"operations,omitempty"`

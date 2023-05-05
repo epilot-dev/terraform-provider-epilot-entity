@@ -13,17 +13,21 @@ const (
 	LinkAttributeTypeEnumLink LinkAttributeTypeEnum = "link"
 )
 
+func (e LinkAttributeTypeEnum) ToPointer() *LinkAttributeTypeEnum {
+	return &e
+}
+
 func (e *LinkAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "link":
-		*e = LinkAttributeTypeEnum(s)
+		*e = LinkAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for LinkAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for LinkAttributeTypeEnum: %v", v)
 	}
 }
 

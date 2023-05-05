@@ -13,17 +13,21 @@ const (
 	UserRelationAttributeTypeEnumRelationUser UserRelationAttributeTypeEnum = "relation_user"
 )
 
+func (e UserRelationAttributeTypeEnum) ToPointer() *UserRelationAttributeTypeEnum {
+	return &e
+}
+
 func (e *UserRelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "relation_user":
-		*e = UserRelationAttributeTypeEnum(s)
+		*e = UserRelationAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for UserRelationAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for UserRelationAttributeTypeEnum: %v", v)
 	}
 }
 

@@ -18,17 +18,21 @@ const (
 	EntityDefaultCreateViewTypeEnumDefault EntityDefaultCreateViewTypeEnum = "default"
 )
 
+func (e EntityDefaultCreateViewTypeEnum) ToPointer() *EntityDefaultCreateViewTypeEnum {
+	return &e
+}
+
 func (e *EntityDefaultCreateViewTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "default":
-		*e = EntityDefaultCreateViewTypeEnum(s)
+		*e = EntityDefaultCreateViewTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultCreateViewTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for EntityDefaultCreateViewTypeEnum: %v", v)
 	}
 }
 

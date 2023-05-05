@@ -13,17 +13,21 @@ const (
 	PaymentMethodRelationAttributeTypeEnumRelationPaymentMethod PaymentMethodRelationAttributeTypeEnum = "relation_payment_method"
 )
 
+func (e PaymentMethodRelationAttributeTypeEnum) ToPointer() *PaymentMethodRelationAttributeTypeEnum {
+	return &e
+}
+
 func (e *PaymentMethodRelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "relation_payment_method":
-		*e = PaymentMethodRelationAttributeTypeEnum(s)
+		*e = PaymentMethodRelationAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PaymentMethodRelationAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for PaymentMethodRelationAttributeTypeEnum: %v", v)
 	}
 }
 

@@ -14,17 +14,21 @@ const (
 	PurposeAttributeTypeEnumPurpose PurposeAttributeTypeEnum = "purpose"
 )
 
+func (e PurposeAttributeTypeEnum) ToPointer() *PurposeAttributeTypeEnum {
+	return &e
+}
+
 func (e *PurposeAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "purpose":
-		*e = PurposeAttributeTypeEnum(s)
+		*e = PurposeAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PurposeAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for PurposeAttributeTypeEnum: %v", v)
 	}
 }
 

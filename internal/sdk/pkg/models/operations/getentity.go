@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -17,8 +18,8 @@ type GetEntityRequest struct {
 
 // GetEntity200ApplicationJSON - Success
 type GetEntity200ApplicationJSON struct {
-	Entity    map[string]interface{}   `json:"entity,omitempty"`
-	Relations []map[string]interface{} `json:"relations,omitempty"`
+	Entity    *shared.EntityItem  `json:"entity,omitempty"`
+	Relations []shared.EntityItem `json:"relations,omitempty"`
 }
 
 type GetEntityResponse struct {

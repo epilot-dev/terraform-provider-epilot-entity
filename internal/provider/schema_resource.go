@@ -50,7 +50,7 @@ type SchemaResourceModel struct {
 	GroupSettings          []EntitySchemaGroupSettings `tfsdk:"group_settings"`
 	Icon                   types.String                `tfsdk:"icon"`
 	ID                     types.String                `tfsdk:"id"`
-	LayoutSettings         map[string]types.String     `tfsdk:"layout_settings"`
+	LayoutSettings         *EntitySchemaLayoutSettings `tfsdk:"layout_settings"`
 	Name                   types.String                `tfsdk:"name"`
 	Plural                 types.String                `tfsdk:"plural"`
 	Published              types.Bool                  `tfsdk:"published"`
@@ -1271,12 +1271,47 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 												Optional: true,
 											},
-											"new_entity_item": schema.MapAttribute{
-												Computed:    true,
-												Optional:    true,
-												ElementType: types.StringType,
-												Validators: []validator.Map{
-													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+											"new_entity_item": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												Attributes: map[string]schema.Attribute{
+													"created_at": schema.StringAttribute{
+														Required: true,
+														Validators: []validator.String{
+															validators.IsRFC3339(),
+														},
+													},
+													"id": schema.StringAttribute{
+														Required: true,
+													},
+													"org": schema.StringAttribute{
+														Required: true,
+													},
+													"schema": schema.StringAttribute{
+														Required: true,
+													},
+													"tags": schema.ListAttribute{
+														Computed:    true,
+														Optional:    true,
+														ElementType: types.StringType,
+													},
+													"title": schema.StringAttribute{
+														Required: true,
+													},
+													"updated_at": schema.StringAttribute{
+														Required: true,
+														Validators: []validator.String{
+															validators.IsRFC3339(),
+														},
+													},
+													"entity": schema.MapAttribute{
+														Computed:    true,
+														Optional:    true,
+														ElementType: types.StringType,
+														Validators: []validator.Map{
+															mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+														},
+													},
 												},
 											},
 											"setting_flag": schema.StringAttribute{
@@ -4818,12 +4853,47 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															Computed: true,
 															Optional: true,
 														},
-														"new_entity_item": schema.MapAttribute{
-															Computed:    true,
-															Optional:    true,
-															ElementType: types.StringType,
-															Validators: []validator.Map{
-																mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+														"new_entity_item": schema.SingleNestedAttribute{
+															Computed: true,
+															Optional: true,
+															Attributes: map[string]schema.Attribute{
+																"created_at": schema.StringAttribute{
+																	Required: true,
+																	Validators: []validator.String{
+																		validators.IsRFC3339(),
+																	},
+																},
+																"id": schema.StringAttribute{
+																	Required: true,
+																},
+																"org": schema.StringAttribute{
+																	Required: true,
+																},
+																"schema": schema.StringAttribute{
+																	Required: true,
+																},
+																"tags": schema.ListAttribute{
+																	Computed:    true,
+																	Optional:    true,
+																	ElementType: types.StringType,
+																},
+																"title": schema.StringAttribute{
+																	Required: true,
+																},
+																"updated_at": schema.StringAttribute{
+																	Required: true,
+																	Validators: []validator.String{
+																		validators.IsRFC3339(),
+																	},
+																},
+																"entity": schema.MapAttribute{
+																	Computed:    true,
+																	Optional:    true,
+																	ElementType: types.StringType,
+																	Validators: []validator.Map{
+																		mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+																	},
+																},
 															},
 														},
 														"setting_flag": schema.StringAttribute{
@@ -7362,13 +7432,31 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"id": schema.StringAttribute{
 				Computed: true,
 			},
-			"layout_settings": schema.MapAttribute{
-				Computed:    true,
-				Optional:    true,
-				ElementType: types.StringType,
-				Validators: []validator.Map{
-					mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+			"layout_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"grid_gap": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+					},
+					"grid_template_columns": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+					},
+					"additional_properties": schema.MapAttribute{
+						Computed:    true,
+						Optional:    true,
+						ElementType: types.StringType,
+						Validators: []validator.Map{
+							mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+						},
+					},
 				},
+				MarkdownDescription: `Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:` + "\n" +
+					`- Managed Properties: are interpreted and transformed into layout styles` + "\n" +
+					`- Un-managed Properties: are appended as styles into the attribute mounting node` + "\n" +
+					``,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -8022,18 +8110,7 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *SchemaResourceModel
-	var item types.Object
-
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &item)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(item.As(ctx, &data, basetypes.ObjectAsOptions{
-		UnhandledNullAsEmpty:    true,
-		UnhandledUnknownAsEmpty: true,
-	})...)
-
+	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
 	}

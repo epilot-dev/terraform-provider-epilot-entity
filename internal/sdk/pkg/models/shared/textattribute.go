@@ -13,17 +13,21 @@ const (
 	TextAttributeTypeEnumString TextAttributeTypeEnum = "string"
 )
 
+func (e TextAttributeTypeEnum) ToPointer() *TextAttributeTypeEnum {
+	return &e
+}
+
 func (e *TextAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "string":
-		*e = TextAttributeTypeEnum(s)
+		*e = TextAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TextAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for TextAttributeTypeEnum: %v", v)
 	}
 }
 

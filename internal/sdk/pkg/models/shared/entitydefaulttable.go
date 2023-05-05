@@ -15,17 +15,21 @@ const (
 	EntityDefaultTableDropdownItems2TypeEnumLink EntityDefaultTableDropdownItems2TypeEnum = "link"
 )
 
+func (e EntityDefaultTableDropdownItems2TypeEnum) ToPointer() *EntityDefaultTableDropdownItems2TypeEnum {
+	return &e
+}
+
 func (e *EntityDefaultTableDropdownItems2TypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "link":
-		*e = EntityDefaultTableDropdownItems2TypeEnum(s)
+		*e = EntityDefaultTableDropdownItems2TypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems2TypeEnum: %s", s)
+		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems2TypeEnum: %v", v)
 	}
 }
 
@@ -45,17 +49,21 @@ const (
 	EntityDefaultTableDropdownItems1TypeEnumEntity EntityDefaultTableDropdownItems1TypeEnum = "entity"
 )
 
+func (e EntityDefaultTableDropdownItems1TypeEnum) ToPointer() *EntityDefaultTableDropdownItems1TypeEnum {
+	return &e
+}
+
 func (e *EntityDefaultTableDropdownItems1TypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "entity":
-		*e = EntityDefaultTableDropdownItems1TypeEnum(s)
+		*e = EntityDefaultTableDropdownItems1TypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems1TypeEnum: %s", s)
+		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems1TypeEnum: %v", v)
 	}
 }
 
@@ -153,17 +161,21 @@ const (
 	EntityDefaultTableViewTypeEnumDefault EntityDefaultTableViewTypeEnum = "default"
 )
 
+func (e EntityDefaultTableViewTypeEnum) ToPointer() *EntityDefaultTableViewTypeEnum {
+	return &e
+}
+
 func (e *EntityDefaultTableViewTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "default":
-		*e = EntityDefaultTableViewTypeEnum(s)
+		*e = EntityDefaultTableViewTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableViewTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for EntityDefaultTableViewTypeEnum: %v", v)
 	}
 }
 

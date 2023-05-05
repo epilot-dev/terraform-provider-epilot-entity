@@ -2,6 +2,89 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type SavedViewItemCreatedBy2SourceEnum string
+
+const (
+	SavedViewItemCreatedBy2SourceEnumSystem    SavedViewItemCreatedBy2SourceEnum = "SYSTEM"
+	SavedViewItemCreatedBy2SourceEnumBlueprint SavedViewItemCreatedBy2SourceEnum = "BLUEPRINT"
+)
+
+func (e SavedViewItemCreatedBy2SourceEnum) ToPointer() *SavedViewItemCreatedBy2SourceEnum {
+	return &e
+}
+
+func (e *SavedViewItemCreatedBy2SourceEnum) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "SYSTEM":
+		fallthrough
+	case "BLUEPRINT":
+		*e = SavedViewItemCreatedBy2SourceEnum(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for SavedViewItemCreatedBy2SourceEnum: %v", v)
+	}
+}
+
+// SavedViewItemCreatedBy2 - A system-created view
+type SavedViewItemCreatedBy2 struct {
+	Source *SavedViewItemCreatedBy2SourceEnum `json:"source,omitempty"`
+
+	AdditionalProperties map[string]interface{} `json:"-"`
+}
+type _SavedViewItemCreatedBy2 SavedViewItemCreatedBy2
+
+func (c *SavedViewItemCreatedBy2) UnmarshalJSON(bs []byte) error {
+	data := _SavedViewItemCreatedBy2{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = SavedViewItemCreatedBy2(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+	delete(additionalFields, "source")
+
+	c.AdditionalProperties = additionalFields
+
+	return nil
+}
+
+func (c SavedViewItemCreatedBy2) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_SavedViewItemCreatedBy2(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
+}
+
 // SavedViewItemCreatedBy1 - A user that created the view
 type SavedViewItemCreatedBy1 struct {
 	UserID *string `json:"user_id,omitempty"`

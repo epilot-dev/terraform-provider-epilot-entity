@@ -28,6 +28,63 @@ type EntitySchemaGroupSettings struct {
 	SettingFlag *string `json:"setting_flag,omitempty"`
 }
 
+// EntitySchemaLayoutSettings - Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:
+// - Managed Properties: are interpreted and transformed into layout styles
+// - Un-managed Properties: are appended as styles into the attribute mounting node
+type EntitySchemaLayoutSettings struct {
+	// Defines the grid gap for the mounting node of the attribute.
+	GridGap *string `json:"grid_gap,omitempty"`
+	// Defines the grid column template for the mounting node of the attribute.
+	GridTemplateColumns *string `json:"grid_template_columns,omitempty"`
+
+	AdditionalProperties map[string]interface{} `json:"-"`
+}
+type _EntitySchemaLayoutSettings EntitySchemaLayoutSettings
+
+func (c *EntitySchemaLayoutSettings) UnmarshalJSON(bs []byte) error {
+	data := _EntitySchemaLayoutSettings{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = EntitySchemaLayoutSettings(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+	delete(additionalFields, "grid_gap")
+	delete(additionalFields, "grid_template_columns")
+
+	c.AdditionalProperties = additionalFields
+
+	return nil
+}
+
+func (c EntitySchemaLayoutSettings) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_EntitySchemaLayoutSettings(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
+}
+
 type EntitySchemaUIConfigCreateViewType string
 
 const (
@@ -505,7 +562,7 @@ type EntitySchema struct {
 	// - Managed Properties: are interpreted and transformed into layout styles
 	// - Un-managed Properties: are appended as styles into the attribute mounting node
 	//
-	LayoutSettings map[string]interface{} `json:"layout_settings,omitempty"`
+	LayoutSettings *EntitySchemaLayoutSettings `json:"layout_settings,omitempty"`
 	// User-friendly identifier for the entity schema
 	Name      string `json:"name"`
 	Plural    string `json:"plural"`

@@ -6,7 +6,7 @@ import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type EntityCapability struct {
 	Purpose     []types.String            `tfsdk:"purpose"`
-	Attributes  []Attribute               `tfsdk:"attributes"`
+	Attributes  []Attribute1              `tfsdk:"attributes"`
 	FeatureFlag types.String              `tfsdk:"feature_flag"`
 	Legacy      types.Bool                `tfsdk:"legacy"`
 	Name        types.String              `tfsdk:"name"`

@@ -14,19 +14,23 @@ const (
 	FileAttributeDefaultAccessControlEnumPrivate    FileAttributeDefaultAccessControlEnum = "private"
 )
 
+func (e FileAttributeDefaultAccessControlEnum) ToPointer() *FileAttributeDefaultAccessControlEnum {
+	return &e
+}
+
 func (e *FileAttributeDefaultAccessControlEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "public-read":
 		fallthrough
 	case "private":
-		*e = FileAttributeDefaultAccessControlEnum(s)
+		*e = FileAttributeDefaultAccessControlEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for FileAttributeDefaultAccessControlEnum: %s", s)
+		return fmt.Errorf("invalid value for FileAttributeDefaultAccessControlEnum: %v", v)
 	}
 }
 
@@ -37,19 +41,23 @@ const (
 	FileAttributeTypeEnumFile  FileAttributeTypeEnum = "file"
 )
 
+func (e FileAttributeTypeEnum) ToPointer() *FileAttributeTypeEnum {
+	return &e
+}
+
 func (e *FileAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "image":
 		fallthrough
 	case "file":
-		*e = FileAttributeTypeEnum(s)
+		*e = FileAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for FileAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for FileAttributeTypeEnum: %v", v)
 	}
 }
 

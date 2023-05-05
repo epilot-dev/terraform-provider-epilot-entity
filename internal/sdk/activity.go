@@ -37,7 +37,10 @@ func newActivity(defaultClient, securityClient HTTPClient, serverURL, language, 
 // Attach existing activity to entity activity feeds
 func (s *activity) AttachActivity(ctx context.Context, request operations.AttachActivityRequest) (*operations.AttachActivityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/activity/{id}:attach", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/activity/{id}:attach", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "POST", url, nil)
 	if err != nil {
@@ -145,7 +148,10 @@ func (s *activity) CreateActivity(ctx context.Context, request operations.Create
 // Get activity by id
 func (s *activity) GetActivity(ctx context.Context, request operations.GetActivityRequest) (*operations.GetActivityResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/activity/{id}", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/activity/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -194,7 +200,10 @@ func (s *activity) GetActivity(ctx context.Context, request operations.GetActivi
 // Get activity feed for an entity
 func (s *activity) GetEntityActivityFeed(ctx context.Context, request operations.GetEntityActivityFeedRequest) (*operations.GetEntityActivityFeedResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/activity", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/activity", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {

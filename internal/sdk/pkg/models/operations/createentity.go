@@ -3,11 +3,12 @@
 package operations
 
 import (
+	"epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
 type CreateEntityRequest struct {
-	RequestBody map[string]interface{} `request:"mediaType=application/json"`
+	Entity *shared.Entity `request:"mediaType=application/json"`
 	// Activity to include in event feed
 	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
 	// Don't wait for updated entity to become available in Search API. Useful for large migrations
@@ -19,7 +20,7 @@ type CreateEntityRequest struct {
 type CreateEntityResponse struct {
 	ContentType string
 	// Success
-	EntityItem  map[string]interface{}
+	EntityItem  *shared.EntityItem
 	StatusCode  int
 	RawResponse *http.Response
 }

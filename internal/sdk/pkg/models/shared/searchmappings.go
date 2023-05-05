@@ -21,12 +21,16 @@ const (
 	SearchMappingsTypeEnumNested    SearchMappingsTypeEnum = "nested"
 )
 
+func (e SearchMappingsTypeEnum) ToPointer() *SearchMappingsTypeEnum {
+	return &e
+}
+
 func (e *SearchMappingsTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "keyword":
 		fallthrough
 	case "text":
@@ -44,10 +48,10 @@ func (e *SearchMappingsTypeEnum) UnmarshalJSON(data []byte) error {
 	case "flattened":
 		fallthrough
 	case "nested":
-		*e = SearchMappingsTypeEnum(s)
+		*e = SearchMappingsTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SearchMappingsTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for SearchMappingsTypeEnum: %v", v)
 	}
 }
 

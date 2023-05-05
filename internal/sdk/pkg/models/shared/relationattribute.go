@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 )
 
 // RelationAttributeActionsActionTypeEnum - The action type. Currently supported actions:
@@ -24,22 +25,91 @@ const (
 	RelationAttributeActionsActionTypeEnumCreateFromExisting RelationAttributeActionsActionTypeEnum = "create_from_existing"
 )
 
+func (e RelationAttributeActionsActionTypeEnum) ToPointer() *RelationAttributeActionsActionTypeEnum {
+	return &e
+}
+
 func (e *RelationAttributeActionsActionTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "add_existing":
 		fallthrough
 	case "create_new":
 		fallthrough
 	case "create_from_existing":
-		*e = RelationAttributeActionsActionTypeEnum(s)
+		*e = RelationAttributeActionsActionTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeActionsActionTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for RelationAttributeActionsActionTypeEnum: %v", v)
 	}
+}
+
+type RelationAttributeActionsNewEntityItem struct {
+	CreatedAt time.Time `json:"_created_at"`
+	ID        string    `json:"_id"`
+	// Organization Id the entity belongs to
+	Org string `json:"_org"`
+	// URL-friendly identifier for the entity schema
+	Schema string   `json:"_schema"`
+	Tags   []string `json:"_tags,omitempty"`
+	// Title of entity
+	Title     string    `json:"_title"`
+	UpdatedAt time.Time `json:"_updated_at"`
+
+	Entity map[string]interface{} `json:"-"`
+}
+type _RelationAttributeActionsNewEntityItem RelationAttributeActionsNewEntityItem
+
+func (c *RelationAttributeActionsNewEntityItem) UnmarshalJSON(bs []byte) error {
+	data := _RelationAttributeActionsNewEntityItem{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = RelationAttributeActionsNewEntityItem(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+	delete(additionalFields, "_created_at")
+	delete(additionalFields, "_id")
+	delete(additionalFields, "_org")
+	delete(additionalFields, "_schema")
+	delete(additionalFields, "_tags")
+	delete(additionalFields, "_title")
+	delete(additionalFields, "_updated_at")
+
+	c.Entity = additionalFields
+
+	return nil
+}
+
+func (c RelationAttributeActionsNewEntityItem) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_RelationAttributeActionsNewEntityItem(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.Entity)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
 }
 
 type RelationAttributeActions struct {
@@ -57,8 +127,8 @@ type RelationAttributeActions struct {
 	// Name of the feature flag that enables this action
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// The action label or action translation key (i18n)
-	Label         *string                `json:"label,omitempty"`
-	NewEntityItem map[string]interface{} `json:"new_entity_item,omitempty"`
+	Label         *string                                `json:"label,omitempty"`
+	NewEntityItem *RelationAttributeActionsNewEntityItem `json:"new_entity_item,omitempty"`
 	// Name of the setting flag that enables this action
 	SettingFlag *string `json:"setting_flag,omitempty"`
 }
@@ -71,21 +141,25 @@ const (
 	RelationAttributeDrawerSizeEnumLarge  RelationAttributeDrawerSizeEnum = "large"
 )
 
+func (e RelationAttributeDrawerSizeEnum) ToPointer() *RelationAttributeDrawerSizeEnum {
+	return &e
+}
+
 func (e *RelationAttributeDrawerSizeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "small":
 		fallthrough
 	case "medium":
 		fallthrough
 	case "large":
-		*e = RelationAttributeDrawerSizeEnum(s)
+		*e = RelationAttributeDrawerSizeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeDrawerSizeEnum: %s", s)
+		return fmt.Errorf("invalid value for RelationAttributeDrawerSizeEnum: %v", v)
 	}
 }
 
@@ -95,17 +169,21 @@ const (
 	RelationAttributeEditModeEnumListView RelationAttributeEditModeEnum = "list-view"
 )
 
+func (e RelationAttributeEditModeEnum) ToPointer() *RelationAttributeEditModeEnum {
+	return &e
+}
+
 func (e *RelationAttributeEditModeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "list-view":
-		*e = RelationAttributeEditModeEnum(s)
+		*e = RelationAttributeEditModeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeEditModeEnum: %s", s)
+		return fmt.Errorf("invalid value for RelationAttributeEditModeEnum: %v", v)
 	}
 }
 
@@ -117,19 +195,23 @@ const (
 	RelationAttributeRelationAffinityModeEnumStrong RelationAttributeRelationAffinityModeEnum = "strong"
 )
 
+func (e RelationAttributeRelationAffinityModeEnum) ToPointer() *RelationAttributeRelationAffinityModeEnum {
+	return &e
+}
+
 func (e *RelationAttributeRelationAffinityModeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "weak":
 		fallthrough
 	case "strong":
-		*e = RelationAttributeRelationAffinityModeEnum(s)
+		*e = RelationAttributeRelationAffinityModeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeRelationAffinityModeEnum: %s", s)
+		return fmt.Errorf("invalid value for RelationAttributeRelationAffinityModeEnum: %v", v)
 	}
 }
 
@@ -140,19 +222,23 @@ const (
 	RelationAttributeRelationTypeEnumHasOne  RelationAttributeRelationTypeEnum = "has_one"
 )
 
+func (e RelationAttributeRelationTypeEnum) ToPointer() *RelationAttributeRelationTypeEnum {
+	return &e
+}
+
 func (e *RelationAttributeRelationTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "has_many":
 		fallthrough
 	case "has_one":
-		*e = RelationAttributeRelationTypeEnum(s)
+		*e = RelationAttributeRelationTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeRelationTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for RelationAttributeRelationTypeEnum: %v", v)
 	}
 }
 
@@ -230,17 +316,21 @@ const (
 	RelationAttributeTypeEnumRelation RelationAttributeTypeEnum = "relation"
 )
 
+func (e RelationAttributeTypeEnum) ToPointer() *RelationAttributeTypeEnum {
+	return &e
+}
+
 func (e *RelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "relation":
-		*e = RelationAttributeTypeEnum(s)
+		*e = RelationAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for RelationAttributeTypeEnum: %v", v)
 	}
 }
 

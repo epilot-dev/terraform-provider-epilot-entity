@@ -1619,11 +1619,34 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					label9 = nil
 				}
-				newEntityItem := make(map[string]interface{})
-				for newEntityItemKey, newEntityItemValue := range actionsItem.NewEntityItem {
-					var newEntityItemInst interface{}
-					_ = json.Unmarshal([]byte(newEntityItemValue.ValueString()), &newEntityItemInst)
-					newEntityItem[newEntityItemKey] = newEntityItemInst
+				var newEntityItem *shared.RelationAttributeActionsNewEntityItem
+				if actionsItem.NewEntityItem != nil {
+					createdAt, _ := time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.CreatedAt.ValueString())
+					id := actionsItem.NewEntityItem.ID.ValueString()
+					org := actionsItem.NewEntityItem.Org.ValueString()
+					schema := actionsItem.NewEntityItem.Schema.ValueString()
+					tags := make([]string, 0)
+					for _, tagsItem := range actionsItem.NewEntityItem.Tags {
+						tags = append(tags, tagsItem.ValueString())
+					}
+					title3 := actionsItem.NewEntityItem.Title.ValueString()
+					updatedAt, _ := time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.UpdatedAt.ValueString())
+					entity := make(map[string]interface{})
+					for entityKey, entityValue := range actionsItem.NewEntityItem.Entity {
+						var entityInst interface{}
+						_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
+						entity[entityKey] = entityInst
+					}
+					newEntityItem = &shared.RelationAttributeActionsNewEntityItem{
+						CreatedAt: createdAt,
+						ID:        id,
+						Org:       org,
+						Schema:    schema,
+						Tags:      tags,
+						Title:     title3,
+						UpdatedAt: updatedAt,
+						Entity:    entity,
+					}
 				}
 				settingFlag9 := new(string)
 				if !actionsItem.SettingFlag.IsUnknown() && !actionsItem.SettingFlag.IsNull() {
@@ -4618,11 +4641,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue26.ValueString()), &constraintsInst26)
 				constraints26[constraintsKey26] = constraintsInst26
 			}
-			createdAt := new(time.Time)
+			createdAt1 := new(time.Time)
 			if !attributesItem.PurposeAttribute.CreatedAt.IsUnknown() && !attributesItem.PurposeAttribute.CreatedAt.IsNull() {
-				*createdAt, _ = time.Parse(time.RFC3339Nano, attributesItem.PurposeAttribute.CreatedAt.ValueString())
+				*createdAt1, _ = time.Parse(time.RFC3339Nano, attributesItem.PurposeAttribute.CreatedAt.ValueString())
 			} else {
-				createdAt = nil
+				createdAt1 = nil
 			}
 			var defaultValue26 *interface{}
 			if !attributesItem.PurposeAttribute.DefaultValue.IsUnknown() && !attributesItem.PurposeAttribute.DefaultValue.IsNull() {
@@ -4670,11 +4693,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				icon26 = nil
 			}
-			id := new(string)
+			id1 := new(string)
 			if !attributesItem.PurposeAttribute.ID.IsUnknown() && !attributesItem.PurposeAttribute.ID.IsNull() {
-				*id = attributesItem.PurposeAttribute.ID.ValueString()
+				*id1 = attributesItem.PurposeAttribute.ID.ValueString()
 			} else {
-				id = nil
+				id1 = nil
 			}
 			label27 := attributesItem.PurposeAttribute.Label.ValueString()
 			layout26 := new(string)
@@ -4748,11 +4771,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				type27 = nil
 			}
-			updatedAt := new(time.Time)
+			updatedAt1 := new(time.Time)
 			if !attributesItem.PurposeAttribute.UpdatedAt.IsUnknown() && !attributesItem.PurposeAttribute.UpdatedAt.IsNull() {
-				*updatedAt, _ = time.Parse(time.RFC3339Nano, attributesItem.PurposeAttribute.UpdatedAt.ValueString())
+				*updatedAt1, _ = time.Parse(time.RFC3339Nano, attributesItem.PurposeAttribute.UpdatedAt.ValueString())
 			} else {
-				updatedAt = nil
+				updatedAt1 = nil
 			}
 			valueFormatter26 := new(string)
 			if !attributesItem.PurposeAttribute.ValueFormatter.IsUnknown() && !attributesItem.PurposeAttribute.ValueFormatter.IsNull() {
@@ -4763,7 +4786,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			purposeAttribute := shared.PurposeAttribute{
 				Purpose:                  purpose26,
 				Constraints:              constraints26,
-				CreatedAt:                createdAt,
+				CreatedAt:                createdAt1,
 				DefaultValue:             defaultValue26,
 				Deprecated:               deprecated26,
 				EntityBuilderDisableEdit: entityBuilderDisableEdit26,
@@ -4772,7 +4795,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				Hidden:                   hidden26,
 				HideLabel:                hideLabel26,
 				Icon:                     icon26,
-				ID:                       id,
+				ID:                       id1,
 				Label:                    label27,
 				Layout:                   layout26,
 				Name:                     name26,
@@ -4787,7 +4810,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				SettingFlag:              settingFlag27,
 				ShowInTable:              showInTable26,
 				Type:                     type27,
-				UpdatedAt:                updatedAt,
+				UpdatedAt:                updatedAt1,
 				ValueFormatter:           valueFormatter26,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -5695,15 +5718,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				options4 := make([]shared.SelectAttributeOptions, 0)
 				for _, optionsItem4 := range attributesItem1.SelectAttribute.Options {
 					if optionsItem4.SelectAttributeOptionsOption != nil {
-						title3 := new(string)
+						title4 := new(string)
 						if !optionsItem4.SelectAttributeOptionsOption.Title.IsUnknown() && !optionsItem4.SelectAttributeOptionsOption.Title.IsNull() {
-							*title3 = optionsItem4.SelectAttributeOptionsOption.Title.ValueString()
+							*title4 = optionsItem4.SelectAttributeOptionsOption.Title.ValueString()
 						} else {
-							title3 = nil
+							title4 = nil
 						}
 						value3 := optionsItem4.SelectAttributeOptionsOption.Value.ValueString()
 						selectAttributeOptionsOption1 := shared.SelectAttributeOptionsOption{
-							Title: title3,
+							Title: title4,
 							Value: value3,
 						}
 						options4 = append(options4, shared.SelectAttributeOptions{
@@ -5907,15 +5930,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						})
 					}
 					if optionsItem5.MultiSelectAttributeOptions2 != nil {
-						title4 := new(string)
+						title5 := new(string)
 						if !optionsItem5.MultiSelectAttributeOptions2.Title.IsUnknown() && !optionsItem5.MultiSelectAttributeOptions2.Title.IsNull() {
-							*title4 = optionsItem5.MultiSelectAttributeOptions2.Title.ValueString()
+							*title5 = optionsItem5.MultiSelectAttributeOptions2.Title.ValueString()
 						} else {
-							title4 = nil
+							title5 = nil
 						}
 						value4 := optionsItem5.MultiSelectAttributeOptions2.Value.ValueString()
 						multiSelectAttributeOptions21 := shared.MultiSelectAttributeOptions2{
-							Title: title4,
+							Title: title5,
 							Value: value4,
 						}
 						options5 = append(options5, shared.MultiSelectAttributeOptions{
@@ -6097,15 +6120,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						})
 					}
 					if optionsItem6.StatusAttributeOptions2 != nil {
-						title5 := new(string)
+						title6 := new(string)
 						if !optionsItem6.StatusAttributeOptions2.Title.IsUnknown() && !optionsItem6.StatusAttributeOptions2.Title.IsNull() {
-							*title5 = optionsItem6.StatusAttributeOptions2.Title.ValueString()
+							*title6 = optionsItem6.StatusAttributeOptions2.Title.ValueString()
 						} else {
-							title5 = nil
+							title6 = nil
 						}
 						value5 := optionsItem6.StatusAttributeOptions2.Value.ValueString()
 						statusAttributeOptions21 := shared.StatusAttributeOptions2{
-							Title: title5,
+							Title: title6,
 							Value: value5,
 						}
 						options6 = append(options6, shared.StatusAttributeOptions{
@@ -6416,11 +6439,34 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					} else {
 						label37 = nil
 					}
-					newEntityItem1 := make(map[string]interface{})
-					for newEntityItemKey1, newEntityItemValue1 := range actionsItem1.NewEntityItem {
-						var newEntityItemInst1 interface{}
-						_ = json.Unmarshal([]byte(newEntityItemValue1.ValueString()), &newEntityItemInst1)
-						newEntityItem1[newEntityItemKey1] = newEntityItemInst1
+					var newEntityItem1 *shared.RelationAttributeActionsNewEntityItem
+					if actionsItem1.NewEntityItem != nil {
+						createdAt2, _ := time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.CreatedAt.ValueString())
+						id2 := actionsItem1.NewEntityItem.ID.ValueString()
+						org1 := actionsItem1.NewEntityItem.Org.ValueString()
+						schema1 := actionsItem1.NewEntityItem.Schema.ValueString()
+						tags1 := make([]string, 0)
+						for _, tagsItem1 := range actionsItem1.NewEntityItem.Tags {
+							tags1 = append(tags1, tagsItem1.ValueString())
+						}
+						title7 := actionsItem1.NewEntityItem.Title.ValueString()
+						updatedAt2, _ := time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.UpdatedAt.ValueString())
+						entity1 := make(map[string]interface{})
+						for entityKey1, entityValue1 := range actionsItem1.NewEntityItem.Entity {
+							var entityInst1 interface{}
+							_ = json.Unmarshal([]byte(entityValue1.ValueString()), &entityInst1)
+							entity1[entityKey1] = entityInst1
+						}
+						newEntityItem1 = &shared.RelationAttributeActionsNewEntityItem{
+							CreatedAt: createdAt2,
+							ID:        id2,
+							Org:       org1,
+							Schema:    schema1,
+							Tags:      tags1,
+							Title:     title7,
+							UpdatedAt: updatedAt2,
+							Entity:    entity1,
+						}
 					}
 					settingFlag37 := new(string)
 					if !actionsItem1.SettingFlag.IsUnknown() && !actionsItem1.SettingFlag.IsNull() {
@@ -9415,11 +9461,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue53.ValueString()), &constraintsInst53)
 					constraints53[constraintsKey53] = constraintsInst53
 				}
-				createdAt1 := new(time.Time)
+				createdAt3 := new(time.Time)
 				if !attributesItem1.PurposeAttribute.CreatedAt.IsUnknown() && !attributesItem1.PurposeAttribute.CreatedAt.IsNull() {
-					*createdAt1, _ = time.Parse(time.RFC3339Nano, attributesItem1.PurposeAttribute.CreatedAt.ValueString())
+					*createdAt3, _ = time.Parse(time.RFC3339Nano, attributesItem1.PurposeAttribute.CreatedAt.ValueString())
 				} else {
-					createdAt1 = nil
+					createdAt3 = nil
 				}
 				var defaultValue53 *interface{}
 				if !attributesItem1.PurposeAttribute.DefaultValue.IsUnknown() && !attributesItem1.PurposeAttribute.DefaultValue.IsNull() {
@@ -9467,11 +9513,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					icon53 = nil
 				}
-				id1 := new(string)
+				id3 := new(string)
 				if !attributesItem1.PurposeAttribute.ID.IsUnknown() && !attributesItem1.PurposeAttribute.ID.IsNull() {
-					*id1 = attributesItem1.PurposeAttribute.ID.ValueString()
+					*id3 = attributesItem1.PurposeAttribute.ID.ValueString()
 				} else {
-					id1 = nil
+					id3 = nil
 				}
 				label55 := attributesItem1.PurposeAttribute.Label.ValueString()
 				layout53 := new(string)
@@ -9545,11 +9591,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					type54 = nil
 				}
-				updatedAt1 := new(time.Time)
+				updatedAt3 := new(time.Time)
 				if !attributesItem1.PurposeAttribute.UpdatedAt.IsUnknown() && !attributesItem1.PurposeAttribute.UpdatedAt.IsNull() {
-					*updatedAt1, _ = time.Parse(time.RFC3339Nano, attributesItem1.PurposeAttribute.UpdatedAt.ValueString())
+					*updatedAt3, _ = time.Parse(time.RFC3339Nano, attributesItem1.PurposeAttribute.UpdatedAt.ValueString())
 				} else {
-					updatedAt1 = nil
+					updatedAt3 = nil
 				}
 				valueFormatter53 := new(string)
 				if !attributesItem1.PurposeAttribute.ValueFormatter.IsUnknown() && !attributesItem1.PurposeAttribute.ValueFormatter.IsNull() {
@@ -9560,7 +9606,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				purposeAttribute1 := shared.PurposeAttribute{
 					Purpose:                  purpose54,
 					Constraints:              constraints53,
-					CreatedAt:                createdAt1,
+					CreatedAt:                createdAt3,
 					DefaultValue:             defaultValue53,
 					Deprecated:               deprecated53,
 					EntityBuilderDisableEdit: entityBuilderDisableEdit53,
@@ -9569,7 +9615,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					Hidden:                   hidden53,
 					HideLabel:                hideLabel53,
 					Icon:                     icon53,
-					ID:                       id1,
+					ID:                       id3,
 					Label:                    label55,
 					Layout:                   layout53,
 					Name:                     name53,
@@ -9584,7 +9630,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					SettingFlag:              settingFlag55,
 					ShowInTable:              showInTable53,
 					Type:                     type54,
-					UpdatedAt:                updatedAt1,
+					UpdatedAt:                updatedAt3,
 					ValueFormatter:           valueFormatter53,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -9611,11 +9657,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		} else {
 			settingFlag56 = nil
 		}
-		title6 := new(string)
+		title8 := new(string)
 		if !capabilitiesItem.Title.IsUnknown() && !capabilitiesItem.Title.IsNull() {
-			*title6 = capabilitiesItem.Title.ValueString()
+			*title8 = capabilitiesItem.Title.ValueString()
 		} else {
-			title6 = nil
+			title8 = nil
 		}
 		uiHooks := make([]shared.EntityCapabilityUIHooks, 0)
 		for _, uiHooksItem := range capabilitiesItem.UIHooks {
@@ -9688,11 +9734,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				route = nil
 			}
-			title7 := new(string)
+			title9 := new(string)
 			if !uiHooksItem.Title.IsUnknown() && !uiHooksItem.Title.IsNull() {
-				*title7 = uiHooksItem.Title.ValueString()
+				*title9 = uiHooksItem.Title.ValueString()
 			} else {
-				title7 = nil
+				title9 = nil
 			}
 			uiHooks = append(uiHooks, shared.EntityCapabilityUIHooks{
 				Component:          component,
@@ -9706,7 +9752,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				RenderCondition:    renderCondition54,
 				RequiredPermission: requiredPermission,
 				Route:              route,
-				Title:              title7,
+				Title:              title9,
 			})
 		}
 		capabilities = append(capabilities, shared.EntityCapability{
@@ -9716,7 +9762,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			Legacy:      legacy,
 			Name:        name54,
 			SettingFlag: settingFlag56,
-			Title:       title6,
+			Title:       title8,
 			UIHooks:     uiHooks,
 		})
 	}
@@ -9787,7 +9833,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		} else {
 			featureFlag58 = nil
 		}
-		id2 := groupSettingsItem.ID.ValueString()
+		id4 := groupSettingsItem.ID.ValueString()
 		var infoTooltipTitle *shared.EntitySchemaGroupSettingsInfoTooltipTitle
 		if groupSettingsItem.InfoTooltipTitle != nil {
 			default3 := new(string)
@@ -9830,7 +9876,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			Purpose:          purpose55,
 			Expanded:         expanded,
 			FeatureFlag:      featureFlag58,
-			ID:               id2,
+			ID:               id4,
 			InfoTooltipTitle: infoTooltipTitle,
 			Label:            label56,
 			Order:            order55,
@@ -9844,11 +9890,31 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 	} else {
 		icon55 = nil
 	}
-	layoutSettings := make(map[string]interface{})
-	for layoutSettingsKey, layoutSettingsValue := range r.LayoutSettings {
-		var layoutSettingsInst interface{}
-		_ = json.Unmarshal([]byte(layoutSettingsValue.ValueString()), &layoutSettingsInst)
-		layoutSettings[layoutSettingsKey] = layoutSettingsInst
+	var layoutSettings *shared.EntitySchemaLayoutSettings
+	if r.LayoutSettings != nil {
+		gridGap := new(string)
+		if !r.LayoutSettings.GridGap.IsUnknown() && !r.LayoutSettings.GridGap.IsNull() {
+			*gridGap = r.LayoutSettings.GridGap.ValueString()
+		} else {
+			gridGap = nil
+		}
+		gridTemplateColumns := new(string)
+		if !r.LayoutSettings.GridTemplateColumns.IsUnknown() && !r.LayoutSettings.GridTemplateColumns.IsNull() {
+			*gridTemplateColumns = r.LayoutSettings.GridTemplateColumns.ValueString()
+		} else {
+			gridTemplateColumns = nil
+		}
+		additionalProperties := make(map[string]interface{})
+		for additionalPropertiesKey, additionalPropertiesValue := range r.LayoutSettings.AdditionalProperties {
+			var additionalPropertiesInst interface{}
+			_ = json.Unmarshal([]byte(additionalPropertiesValue.ValueString()), &additionalPropertiesInst)
+			additionalProperties[additionalPropertiesKey] = additionalPropertiesInst
+		}
+		layoutSettings = &shared.EntitySchemaLayoutSettings{
+			GridGap:              gridGap,
+			GridTemplateColumns:  gridTemplateColumns,
+			AdditionalProperties: additionalProperties,
+		}
 	}
 	name55 := r.Name.ValueString()
 	plural := r.Plural.ValueString()
@@ -10207,11 +10273,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			dropdownItems := make([]shared.EntityDefaultTableDropdownItems, 0)
 			for _, dropdownItemsItem := range r.UIConfig.TableView.EntityDefaultTable.DropdownItems {
 				if dropdownItemsItem.EntityDefaultTableDropdownItems1 != nil {
-					entity := new(string)
+					entity2 := new(string)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.IsNull() {
-						*entity = dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.ValueString()
+						*entity2 = dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.ValueString()
 					} else {
-						entity = nil
+						entity2 = nil
 					}
 					featureFlag60 := new(string)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.IsNull() {
@@ -10232,7 +10298,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						type56 = nil
 					}
 					entityDefaultTableDropdownItems1 := shared.EntityDefaultTableDropdownItems1{
-						Entity:      entity,
+						Entity:      entity2,
 						FeatureFlag: featureFlag60,
 						Legacy:      legacy1,
 						Type:        type56,
@@ -10254,11 +10320,11 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					} else {
 						legacy2 = nil
 					}
-					title8 := new(string)
+					title10 := new(string)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.IsNull() {
-						*title8 = dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.ValueString()
+						*title10 = dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.ValueString()
 					} else {
-						title8 = nil
+						title10 = nil
 					}
 					type57 := new(shared.EntityDefaultTableDropdownItems2TypeEnum)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.IsNull() {
@@ -10275,7 +10341,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					entityDefaultTableDropdownItems2 := shared.EntityDefaultTableDropdownItems2{
 						FeatureFlag: featureFlag61,
 						Legacy:      legacy2,
-						Title:       title8,
+						Title:       title10,
 						Type:        type57,
 						URI:         uri,
 					}
@@ -10426,10 +10492,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.TextAttribute.Purpose {
 				attributes1.TextAttribute.Purpose = append(attributes1.TextAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.TextAttribute.Constraints = make(map[string]types.String)
-			for key, value := range attributesItem.TextAttribute.Constraints {
-				result, _ := json.Marshal(value)
-				attributes1.TextAttribute.Constraints[key] = types.StringValue(string(result))
+			if attributes1.TextAttribute.Constraints == nil && len(attributesItem.TextAttribute.Constraints) > 0 {
+				attributes1.TextAttribute.Constraints = make(map[string]types.String)
+				for key, value := range attributesItem.TextAttribute.Constraints {
+					result, _ := json.Marshal(value)
+					attributes1.TextAttribute.Constraints[key] = types.StringValue(string(result))
+				}
 			}
 			if attributesItem.TextAttribute.DefaultValue == nil {
 				attributes1.TextAttribute.DefaultValue = types.StringNull()
@@ -10546,10 +10614,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.LinkAttribute.Purpose {
 				attributes1.LinkAttribute.Purpose = append(attributes1.LinkAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.LinkAttribute.Constraints = make(map[string]types.String)
-			for key1, value1 := range attributesItem.LinkAttribute.Constraints {
-				result1, _ := json.Marshal(value1)
-				attributes1.LinkAttribute.Constraints[key1] = types.StringValue(string(result1))
+			if attributes1.LinkAttribute.Constraints == nil && len(attributesItem.LinkAttribute.Constraints) > 0 {
+				attributes1.LinkAttribute.Constraints = make(map[string]types.String)
+				for key1, value1 := range attributesItem.LinkAttribute.Constraints {
+					result1, _ := json.Marshal(value1)
+					attributes1.LinkAttribute.Constraints[key1] = types.StringValue(string(result1))
+				}
 			}
 			if attributesItem.LinkAttribute.DefaultValue == nil {
 				attributes1.LinkAttribute.DefaultValue = types.StringNull()
@@ -10661,10 +10731,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.DateAttribute.Purpose {
 				attributes1.DateAttribute.Purpose = append(attributes1.DateAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.DateAttribute.Constraints = make(map[string]types.String)
-			for key2, value2 := range attributesItem.DateAttribute.Constraints {
-				result2, _ := json.Marshal(value2)
-				attributes1.DateAttribute.Constraints[key2] = types.StringValue(string(result2))
+			if attributes1.DateAttribute.Constraints == nil && len(attributesItem.DateAttribute.Constraints) > 0 {
+				attributes1.DateAttribute.Constraints = make(map[string]types.String)
+				for key2, value2 := range attributesItem.DateAttribute.Constraints {
+					result2, _ := json.Marshal(value2)
+					attributes1.DateAttribute.Constraints[key2] = types.StringValue(string(result2))
+				}
 			}
 			if attributesItem.DateAttribute.DefaultValue == nil {
 				attributes1.DateAttribute.DefaultValue = types.StringNull()
@@ -10776,10 +10848,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.CountryAttribute.Purpose {
 				attributes1.CountryAttribute.Purpose = append(attributes1.CountryAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.CountryAttribute.Constraints = make(map[string]types.String)
-			for key3, value3 := range attributesItem.CountryAttribute.Constraints {
-				result3, _ := json.Marshal(value3)
-				attributes1.CountryAttribute.Constraints[key3] = types.StringValue(string(result3))
+			if attributes1.CountryAttribute.Constraints == nil && len(attributesItem.CountryAttribute.Constraints) > 0 {
+				attributes1.CountryAttribute.Constraints = make(map[string]types.String)
+				for key3, value3 := range attributesItem.CountryAttribute.Constraints {
+					result3, _ := json.Marshal(value3)
+					attributes1.CountryAttribute.Constraints[key3] = types.StringValue(string(result3))
+				}
 			}
 			if attributesItem.CountryAttribute.DefaultValue == nil {
 				attributes1.CountryAttribute.DefaultValue = types.StringNull()
@@ -10891,10 +10965,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.BooleanAttribute.Purpose {
 				attributes1.BooleanAttribute.Purpose = append(attributes1.BooleanAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.BooleanAttribute.Constraints = make(map[string]types.String)
-			for key4, value4 := range attributesItem.BooleanAttribute.Constraints {
-				result4, _ := json.Marshal(value4)
-				attributes1.BooleanAttribute.Constraints[key4] = types.StringValue(string(result4))
+			if attributes1.BooleanAttribute.Constraints == nil && len(attributesItem.BooleanAttribute.Constraints) > 0 {
+				attributes1.BooleanAttribute.Constraints = make(map[string]types.String)
+				for key4, value4 := range attributesItem.BooleanAttribute.Constraints {
+					result4, _ := json.Marshal(value4)
+					attributes1.BooleanAttribute.Constraints[key4] = types.StringValue(string(result4))
+				}
 			}
 			if attributesItem.BooleanAttribute.DefaultValue == nil {
 				attributes1.BooleanAttribute.DefaultValue = types.StringNull()
@@ -11011,10 +11087,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			} else {
 				attributes1.SelectAttribute.AllowAny = types.BoolNull()
 			}
-			attributes1.SelectAttribute.Constraints = make(map[string]types.String)
-			for key5, value5 := range attributesItem.SelectAttribute.Constraints {
-				result5, _ := json.Marshal(value5)
-				attributes1.SelectAttribute.Constraints[key5] = types.StringValue(string(result5))
+			if attributes1.SelectAttribute.Constraints == nil && len(attributesItem.SelectAttribute.Constraints) > 0 {
+				attributes1.SelectAttribute.Constraints = make(map[string]types.String)
+				for key5, value5 := range attributesItem.SelectAttribute.Constraints {
+					result5, _ := json.Marshal(value5)
+					attributes1.SelectAttribute.Constraints[key5] = types.StringValue(string(result5))
+				}
 			}
 			if attributesItem.SelectAttribute.DefaultValue == nil {
 				attributes1.SelectAttribute.DefaultValue = types.StringNull()
@@ -11157,10 +11235,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			} else {
 				attributes1.MultiSelectAttribute.AllowExtraOptions = types.BoolNull()
 			}
-			attributes1.MultiSelectAttribute.Constraints = make(map[string]types.String)
-			for key6, value7 := range attributesItem.MultiSelectAttribute.Constraints {
-				result6, _ := json.Marshal(value7)
-				attributes1.MultiSelectAttribute.Constraints[key6] = types.StringValue(string(result6))
+			if attributes1.MultiSelectAttribute.Constraints == nil && len(attributesItem.MultiSelectAttribute.Constraints) > 0 {
+				attributes1.MultiSelectAttribute.Constraints = make(map[string]types.String)
+				for key6, value7 := range attributesItem.MultiSelectAttribute.Constraints {
+					result6, _ := json.Marshal(value7)
+					attributes1.MultiSelectAttribute.Constraints[key6] = types.StringValue(string(result6))
+				}
 			}
 			if attributesItem.MultiSelectAttribute.DefaultValue == nil {
 				attributes1.MultiSelectAttribute.DefaultValue = types.StringNull()
@@ -11298,10 +11378,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.StatusAttribute.Purpose {
 				attributes1.StatusAttribute.Purpose = append(attributes1.StatusAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.StatusAttribute.Constraints = make(map[string]types.String)
-			for key7, value9 := range attributesItem.StatusAttribute.Constraints {
-				result7, _ := json.Marshal(value9)
-				attributes1.StatusAttribute.Constraints[key7] = types.StringValue(string(result7))
+			if attributes1.StatusAttribute.Constraints == nil && len(attributesItem.StatusAttribute.Constraints) > 0 {
+				attributes1.StatusAttribute.Constraints = make(map[string]types.String)
+				for key7, value9 := range attributesItem.StatusAttribute.Constraints {
+					result7, _ := json.Marshal(value9)
+					attributes1.StatusAttribute.Constraints[key7] = types.StringValue(string(result7))
+				}
 			}
 			if attributesItem.StatusAttribute.DefaultValue == nil {
 				attributes1.StatusAttribute.DefaultValue = types.StringNull()
@@ -11434,10 +11516,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.SequenceAttribute.Purpose {
 				attributes1.SequenceAttribute.Purpose = append(attributes1.SequenceAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.SequenceAttribute.Constraints = make(map[string]types.String)
-			for key8, value11 := range attributesItem.SequenceAttribute.Constraints {
-				result8, _ := json.Marshal(value11)
-				attributes1.SequenceAttribute.Constraints[key8] = types.StringValue(string(result8))
+			if attributes1.SequenceAttribute.Constraints == nil && len(attributesItem.SequenceAttribute.Constraints) > 0 {
+				attributes1.SequenceAttribute.Constraints = make(map[string]types.String)
+				for key8, value11 := range attributesItem.SequenceAttribute.Constraints {
+					result8, _ := json.Marshal(value11)
+					attributes1.SequenceAttribute.Constraints[key8] = types.StringValue(string(result8))
+				}
 			}
 			if attributesItem.SequenceAttribute.DefaultValue == nil {
 				attributes1.SequenceAttribute.DefaultValue = types.StringNull()
@@ -11582,10 +11666,27 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				} else {
 					actions1.Label = types.StringNull()
 				}
-				actions1.NewEntityItem = make(map[string]types.String)
-				for key9, value12 := range actionsItem.NewEntityItem {
-					result9, _ := json.Marshal(value12)
-					actions1.NewEntityItem[key9] = types.StringValue(string(result9))
+				if actionsItem.NewEntityItem == nil {
+					actions1.NewEntityItem = nil
+				} else {
+					actions1.NewEntityItem = &RelationAttributeActionsNewEntityItem{}
+					actions1.NewEntityItem.CreatedAt = types.StringValue(actionsItem.NewEntityItem.CreatedAt.Format(time.RFC3339))
+					actions1.NewEntityItem.ID = types.StringValue(actionsItem.NewEntityItem.ID)
+					actions1.NewEntityItem.Org = types.StringValue(actionsItem.NewEntityItem.Org)
+					actions1.NewEntityItem.Schema = types.StringValue(actionsItem.NewEntityItem.Schema)
+					actions1.NewEntityItem.Tags = nil
+					for _, v := range actionsItem.NewEntityItem.Tags {
+						actions1.NewEntityItem.Tags = append(actions1.NewEntityItem.Tags, types.StringValue(v))
+					}
+					actions1.NewEntityItem.Title = types.StringValue(actionsItem.NewEntityItem.Title)
+					actions1.NewEntityItem.UpdatedAt = types.StringValue(actionsItem.NewEntityItem.UpdatedAt.Format(time.RFC3339))
+					if actions1.NewEntityItem.Entity == nil && len(actionsItem.NewEntityItem.Entity) > 0 {
+						actions1.NewEntityItem.Entity = make(map[string]types.String)
+						for key9, value12 := range actionsItem.NewEntityItem.Entity {
+							result9, _ := json.Marshal(value12)
+							actions1.NewEntityItem.Entity[key9] = types.StringValue(string(result9))
+						}
+					}
 				}
 				if actionsItem.SettingFlag != nil {
 					actions1.SettingFlag = types.StringValue(*actionsItem.SettingFlag)
@@ -11603,10 +11704,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.RelationAttribute.AllowedSchemas {
 				attributes1.RelationAttribute.AllowedSchemas = append(attributes1.RelationAttribute.AllowedSchemas, types.StringValue(v))
 			}
-			attributes1.RelationAttribute.Constraints = make(map[string]types.String)
-			for key10, value13 := range attributesItem.RelationAttribute.Constraints {
-				result10, _ := json.Marshal(value13)
-				attributes1.RelationAttribute.Constraints[key10] = types.StringValue(string(result10))
+			if attributes1.RelationAttribute.Constraints == nil && len(attributesItem.RelationAttribute.Constraints) > 0 {
+				attributes1.RelationAttribute.Constraints = make(map[string]types.String)
+				for key10, value13 := range attributesItem.RelationAttribute.Constraints {
+					result10, _ := json.Marshal(value13)
+					attributes1.RelationAttribute.Constraints[key10] = types.StringValue(string(result10))
+				}
 			}
 			if attributesItem.RelationAttribute.DefaultValue == nil {
 				attributes1.RelationAttribute.DefaultValue = types.StringNull()
@@ -11731,9 +11834,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			} else {
 				attributes1.RelationAttribute.Required = types.BoolNull()
 			}
-			attributes1.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-			for key11, value14 := range attributesItem.RelationAttribute.ReverseAttributes {
-				attributes1.RelationAttribute.ReverseAttributes[key11] = types.StringValue(value14)
+			if attributes1.RelationAttribute.ReverseAttributes == nil && len(attributesItem.RelationAttribute.ReverseAttributes) > 0 {
+				attributes1.RelationAttribute.ReverseAttributes = make(map[string]types.String)
+				for key11, value14 := range attributesItem.RelationAttribute.ReverseAttributes {
+					attributes1.RelationAttribute.ReverseAttributes[key11] = types.StringValue(value14)
+				}
 			}
 			if attributesItem.RelationAttribute.SearchPlaceholder != nil {
 				attributes1.RelationAttribute.SearchPlaceholder = types.StringValue(*attributesItem.RelationAttribute.SearchPlaceholder)
@@ -11792,10 +11897,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.UserRelationAttribute.Purpose {
 				attributes1.UserRelationAttribute.Purpose = append(attributes1.UserRelationAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.UserRelationAttribute.Constraints = make(map[string]types.String)
-			for key12, value15 := range attributesItem.UserRelationAttribute.Constraints {
-				result11, _ := json.Marshal(value15)
-				attributes1.UserRelationAttribute.Constraints[key12] = types.StringValue(string(result11))
+			if attributes1.UserRelationAttribute.Constraints == nil && len(attributesItem.UserRelationAttribute.Constraints) > 0 {
+				attributes1.UserRelationAttribute.Constraints = make(map[string]types.String)
+				for key12, value15 := range attributesItem.UserRelationAttribute.Constraints {
+					result11, _ := json.Marshal(value15)
+					attributes1.UserRelationAttribute.Constraints[key12] = types.StringValue(string(result11))
+				}
 			}
 			if attributesItem.UserRelationAttribute.DefaultValue == nil {
 				attributes1.UserRelationAttribute.DefaultValue = types.StringNull()
@@ -11912,10 +12019,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.AddressRelationAttribute.Purpose {
 				attributes1.AddressRelationAttribute.Purpose = append(attributes1.AddressRelationAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.AddressRelationAttribute.Constraints = make(map[string]types.String)
-			for key13, value16 := range attributesItem.AddressRelationAttribute.Constraints {
-				result12, _ := json.Marshal(value16)
-				attributes1.AddressRelationAttribute.Constraints[key13] = types.StringValue(string(result12))
+			if attributes1.AddressRelationAttribute.Constraints == nil && len(attributesItem.AddressRelationAttribute.Constraints) > 0 {
+				attributes1.AddressRelationAttribute.Constraints = make(map[string]types.String)
+				for key13, value16 := range attributesItem.AddressRelationAttribute.Constraints {
+					result12, _ := json.Marshal(value16)
+					attributes1.AddressRelationAttribute.Constraints[key13] = types.StringValue(string(result12))
+				}
 			}
 			if attributesItem.AddressRelationAttribute.DefaultValue == nil {
 				attributes1.AddressRelationAttribute.DefaultValue = types.StringNull()
@@ -12032,10 +12141,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.PaymentMethodRelationAttribute.Purpose {
 				attributes1.PaymentMethodRelationAttribute.Purpose = append(attributes1.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
-			for key14, value17 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
-				result13, _ := json.Marshal(value17)
-				attributes1.PaymentMethodRelationAttribute.Constraints[key14] = types.StringValue(string(result13))
+			if attributes1.PaymentMethodRelationAttribute.Constraints == nil && len(attributesItem.PaymentMethodRelationAttribute.Constraints) > 0 {
+				attributes1.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
+				for key14, value17 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
+					result13, _ := json.Marshal(value17)
+					attributes1.PaymentMethodRelationAttribute.Constraints[key14] = types.StringValue(string(result13))
+				}
 			}
 			if attributesItem.PaymentMethodRelationAttribute.DefaultValue == nil {
 				attributes1.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
@@ -12152,10 +12263,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.CurrencyAttribute.Purpose {
 				attributes1.CurrencyAttribute.Purpose = append(attributes1.CurrencyAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.CurrencyAttribute.Constraints = make(map[string]types.String)
-			for key15, value18 := range attributesItem.CurrencyAttribute.Constraints {
-				result14, _ := json.Marshal(value18)
-				attributes1.CurrencyAttribute.Constraints[key15] = types.StringValue(string(result14))
+			if attributes1.CurrencyAttribute.Constraints == nil && len(attributesItem.CurrencyAttribute.Constraints) > 0 {
+				attributes1.CurrencyAttribute.Constraints = make(map[string]types.String)
+				for key15, value18 := range attributesItem.CurrencyAttribute.Constraints {
+					result14, _ := json.Marshal(value18)
+					attributes1.CurrencyAttribute.Constraints[key15] = types.StringValue(string(result14))
+				}
 			}
 			attributes1.CurrencyAttribute.Currency = nil
 			for _, currencyItem := range attributesItem.CurrencyAttribute.Currency {
@@ -12284,10 +12397,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.RepeatableAttribute.Purpose {
 				attributes1.RepeatableAttribute.Purpose = append(attributes1.RepeatableAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.RepeatableAttribute.Constraints = make(map[string]types.String)
-			for key16, value19 := range attributesItem.RepeatableAttribute.Constraints {
-				result15, _ := json.Marshal(value19)
-				attributes1.RepeatableAttribute.Constraints[key16] = types.StringValue(string(result15))
+			if attributes1.RepeatableAttribute.Constraints == nil && len(attributesItem.RepeatableAttribute.Constraints) > 0 {
+				attributes1.RepeatableAttribute.Constraints = make(map[string]types.String)
+				for key16, value19 := range attributesItem.RepeatableAttribute.Constraints {
+					result15, _ := json.Marshal(value19)
+					attributes1.RepeatableAttribute.Constraints[key16] = types.StringValue(string(result15))
+				}
 			}
 			if attributesItem.RepeatableAttribute.DefaultValue == nil {
 				attributes1.RepeatableAttribute.DefaultValue = types.StringNull()
@@ -12419,10 +12534,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.TagsAttribute.Purpose {
 				attributes1.TagsAttribute.Purpose = append(attributes1.TagsAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.TagsAttribute.Constraints = make(map[string]types.String)
-			for key17, value20 := range attributesItem.TagsAttribute.Constraints {
-				result16, _ := json.Marshal(value20)
-				attributes1.TagsAttribute.Constraints[key17] = types.StringValue(string(result16))
+			if attributes1.TagsAttribute.Constraints == nil && len(attributesItem.TagsAttribute.Constraints) > 0 {
+				attributes1.TagsAttribute.Constraints = make(map[string]types.String)
+				for key17, value20 := range attributesItem.TagsAttribute.Constraints {
+					result16, _ := json.Marshal(value20)
+					attributes1.TagsAttribute.Constraints[key17] = types.StringValue(string(result16))
+				}
 			}
 			if attributesItem.TagsAttribute.DefaultValue == nil {
 				attributes1.TagsAttribute.DefaultValue = types.StringNull()
@@ -12542,10 +12659,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.NumberAttribute.Purpose {
 				attributes1.NumberAttribute.Purpose = append(attributes1.NumberAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.NumberAttribute.Constraints = make(map[string]types.String)
-			for key18, value21 := range attributesItem.NumberAttribute.Constraints {
-				result17, _ := json.Marshal(value21)
-				attributes1.NumberAttribute.Constraints[key18] = types.StringValue(string(result17))
+			if attributes1.NumberAttribute.Constraints == nil && len(attributesItem.NumberAttribute.Constraints) > 0 {
+				attributes1.NumberAttribute.Constraints = make(map[string]types.String)
+				for key18, value21 := range attributesItem.NumberAttribute.Constraints {
+					result17, _ := json.Marshal(value21)
+					attributes1.NumberAttribute.Constraints[key18] = types.StringValue(string(result17))
+				}
 			}
 			if attributesItem.NumberAttribute.DefaultValue == nil {
 				attributes1.NumberAttribute.DefaultValue = types.StringNull()
@@ -12662,10 +12781,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.ConsentAttribute.Purpose {
 				attributes1.ConsentAttribute.Purpose = append(attributes1.ConsentAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.ConsentAttribute.Constraints = make(map[string]types.String)
-			for key19, value22 := range attributesItem.ConsentAttribute.Constraints {
-				result18, _ := json.Marshal(value22)
-				attributes1.ConsentAttribute.Constraints[key19] = types.StringValue(string(result18))
+			if attributes1.ConsentAttribute.Constraints == nil && len(attributesItem.ConsentAttribute.Constraints) > 0 {
+				attributes1.ConsentAttribute.Constraints = make(map[string]types.String)
+				for key19, value22 := range attributesItem.ConsentAttribute.Constraints {
+					result18, _ := json.Marshal(value22)
+					attributes1.ConsentAttribute.Constraints[key19] = types.StringValue(string(result18))
+				}
 			}
 			if attributesItem.ConsentAttribute.DefaultValue == nil {
 				attributes1.ConsentAttribute.DefaultValue = types.StringNull()
@@ -12778,10 +12899,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.InternalAttribute.Purpose {
 				attributes1.InternalAttribute.Purpose = append(attributes1.InternalAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.InternalAttribute.Constraints = make(map[string]types.String)
-			for key20, value23 := range attributesItem.InternalAttribute.Constraints {
-				result19, _ := json.Marshal(value23)
-				attributes1.InternalAttribute.Constraints[key20] = types.StringValue(string(result19))
+			if attributes1.InternalAttribute.Constraints == nil && len(attributesItem.InternalAttribute.Constraints) > 0 {
+				attributes1.InternalAttribute.Constraints = make(map[string]types.String)
+				for key20, value23 := range attributesItem.InternalAttribute.Constraints {
+					result19, _ := json.Marshal(value23)
+					attributes1.InternalAttribute.Constraints[key20] = types.StringValue(string(result19))
+				}
 			}
 			if attributesItem.InternalAttribute.DefaultValue == nil {
 				attributes1.InternalAttribute.DefaultValue = types.StringNull()
@@ -12893,10 +13016,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.OrderedListAttribute.Purpose {
 				attributes1.OrderedListAttribute.Purpose = append(attributes1.OrderedListAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.OrderedListAttribute.Constraints = make(map[string]types.String)
-			for key21, value24 := range attributesItem.OrderedListAttribute.Constraints {
-				result20, _ := json.Marshal(value24)
-				attributes1.OrderedListAttribute.Constraints[key21] = types.StringValue(string(result20))
+			if attributes1.OrderedListAttribute.Constraints == nil && len(attributesItem.OrderedListAttribute.Constraints) > 0 {
+				attributes1.OrderedListAttribute.Constraints = make(map[string]types.String)
+				for key21, value24 := range attributesItem.OrderedListAttribute.Constraints {
+					result20, _ := json.Marshal(value24)
+					attributes1.OrderedListAttribute.Constraints[key21] = types.StringValue(string(result20))
+				}
 			}
 			if attributesItem.OrderedListAttribute.DefaultValue == nil {
 				attributes1.OrderedListAttribute.DefaultValue = types.StringNull()
@@ -13012,10 +13137,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.FileAttribute.AllowedExtensions {
 				attributes1.FileAttribute.AllowedExtensions = append(attributes1.FileAttribute.AllowedExtensions, types.StringValue(v))
 			}
-			attributes1.FileAttribute.Constraints = make(map[string]types.String)
-			for key22, value25 := range attributesItem.FileAttribute.Constraints {
-				result21, _ := json.Marshal(value25)
-				attributes1.FileAttribute.Constraints[key22] = types.StringValue(string(result21))
+			if attributes1.FileAttribute.Constraints == nil && len(attributesItem.FileAttribute.Constraints) > 0 {
+				attributes1.FileAttribute.Constraints = make(map[string]types.String)
+				for key22, value25 := range attributesItem.FileAttribute.Constraints {
+					result21, _ := json.Marshal(value25)
+					attributes1.FileAttribute.Constraints[key22] = types.StringValue(string(result21))
+				}
 			}
 			if attributesItem.FileAttribute.DefaultAccessControl != nil {
 				attributes1.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem.FileAttribute.DefaultAccessControl))
@@ -13143,10 +13270,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.ComputedAttribute.Purpose {
 				attributes1.ComputedAttribute.Purpose = append(attributes1.ComputedAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.ComputedAttribute.Constraints = make(map[string]types.String)
-			for key23, value26 := range attributesItem.ComputedAttribute.Constraints {
-				result22, _ := json.Marshal(value26)
-				attributes1.ComputedAttribute.Constraints[key23] = types.StringValue(string(result22))
+			if attributes1.ComputedAttribute.Constraints == nil && len(attributesItem.ComputedAttribute.Constraints) > 0 {
+				attributes1.ComputedAttribute.Constraints = make(map[string]types.String)
+				for key23, value26 := range attributesItem.ComputedAttribute.Constraints {
+					result22, _ := json.Marshal(value26)
+					attributes1.ComputedAttribute.Constraints[key23] = types.StringValue(string(result22))
+				}
 			}
 			if attributesItem.ComputedAttribute.DefaultValue == nil {
 				attributes1.ComputedAttribute.DefaultValue = types.StringNull()
@@ -13258,10 +13387,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.PartnerStatusAttribute.Purpose {
 				attributes1.PartnerStatusAttribute.Purpose = append(attributes1.PartnerStatusAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.PartnerStatusAttribute.Constraints = make(map[string]types.String)
-			for key24, value27 := range attributesItem.PartnerStatusAttribute.Constraints {
-				result23, _ := json.Marshal(value27)
-				attributes1.PartnerStatusAttribute.Constraints[key24] = types.StringValue(string(result23))
+			if attributes1.PartnerStatusAttribute.Constraints == nil && len(attributesItem.PartnerStatusAttribute.Constraints) > 0 {
+				attributes1.PartnerStatusAttribute.Constraints = make(map[string]types.String)
+				for key24, value27 := range attributesItem.PartnerStatusAttribute.Constraints {
+					result23, _ := json.Marshal(value27)
+					attributes1.PartnerStatusAttribute.Constraints[key24] = types.StringValue(string(result23))
+				}
 			}
 			if attributesItem.PartnerStatusAttribute.DefaultValue == nil {
 				attributes1.PartnerStatusAttribute.DefaultValue = types.StringNull()
@@ -13373,10 +13504,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.InvitationEmailAttribute.Purpose {
 				attributes1.InvitationEmailAttribute.Purpose = append(attributes1.InvitationEmailAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.InvitationEmailAttribute.Constraints = make(map[string]types.String)
-			for key25, value28 := range attributesItem.InvitationEmailAttribute.Constraints {
-				result24, _ := json.Marshal(value28)
-				attributes1.InvitationEmailAttribute.Constraints[key25] = types.StringValue(string(result24))
+			if attributes1.InvitationEmailAttribute.Constraints == nil && len(attributesItem.InvitationEmailAttribute.Constraints) > 0 {
+				attributes1.InvitationEmailAttribute.Constraints = make(map[string]types.String)
+				for key25, value28 := range attributesItem.InvitationEmailAttribute.Constraints {
+					result24, _ := json.Marshal(value28)
+					attributes1.InvitationEmailAttribute.Constraints[key25] = types.StringValue(string(result24))
+				}
 			}
 			if attributesItem.InvitationEmailAttribute.DefaultValue == nil {
 				attributes1.InvitationEmailAttribute.DefaultValue = types.StringNull()
@@ -13488,10 +13621,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.AutomationAttribute.Purpose {
 				attributes1.AutomationAttribute.Purpose = append(attributes1.AutomationAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.AutomationAttribute.Constraints = make(map[string]types.String)
-			for key26, value29 := range attributesItem.AutomationAttribute.Constraints {
-				result25, _ := json.Marshal(value29)
-				attributes1.AutomationAttribute.Constraints[key26] = types.StringValue(string(result25))
+			if attributes1.AutomationAttribute.Constraints == nil && len(attributesItem.AutomationAttribute.Constraints) > 0 {
+				attributes1.AutomationAttribute.Constraints = make(map[string]types.String)
+				for key26, value29 := range attributesItem.AutomationAttribute.Constraints {
+					result25, _ := json.Marshal(value29)
+					attributes1.AutomationAttribute.Constraints[key26] = types.StringValue(string(result25))
+				}
 			}
 			if attributesItem.AutomationAttribute.DefaultValue == nil {
 				attributes1.AutomationAttribute.DefaultValue = types.StringNull()
@@ -13603,10 +13738,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.InternalUserAttribute.Purpose {
 				attributes1.InternalUserAttribute.Purpose = append(attributes1.InternalUserAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.InternalUserAttribute.Constraints = make(map[string]types.String)
-			for key27, value30 := range attributesItem.InternalUserAttribute.Constraints {
-				result26, _ := json.Marshal(value30)
-				attributes1.InternalUserAttribute.Constraints[key27] = types.StringValue(string(result26))
+			if attributes1.InternalUserAttribute.Constraints == nil && len(attributesItem.InternalUserAttribute.Constraints) > 0 {
+				attributes1.InternalUserAttribute.Constraints = make(map[string]types.String)
+				for key27, value30 := range attributesItem.InternalUserAttribute.Constraints {
+					result26, _ := json.Marshal(value30)
+					attributes1.InternalUserAttribute.Constraints[key27] = types.StringValue(string(result26))
+				}
 			}
 			if attributesItem.InternalUserAttribute.DefaultValue == nil {
 				attributes1.InternalUserAttribute.DefaultValue = types.StringNull()
@@ -13718,10 +13855,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			for _, v := range attributesItem.PurposeAttribute.Purpose {
 				attributes1.PurposeAttribute.Purpose = append(attributes1.PurposeAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.PurposeAttribute.Constraints = make(map[string]types.String)
-			for key28, value31 := range attributesItem.PurposeAttribute.Constraints {
-				result27, _ := json.Marshal(value31)
-				attributes1.PurposeAttribute.Constraints[key28] = types.StringValue(string(result27))
+			if attributes1.PurposeAttribute.Constraints == nil && len(attributesItem.PurposeAttribute.Constraints) > 0 {
+				attributes1.PurposeAttribute.Constraints = make(map[string]types.String)
+				for key28, value31 := range attributesItem.PurposeAttribute.Constraints {
+					result27, _ := json.Marshal(value31)
+					attributes1.PurposeAttribute.Constraints[key28] = types.StringValue(string(result27))
+				}
 			}
 			if attributesItem.PurposeAttribute.CreatedAt != nil {
 				attributes1.PurposeAttribute.CreatedAt = types.StringValue(attributesItem.PurposeAttribute.CreatedAt.Format(time.RFC3339))
@@ -13862,17 +14001,19 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 		}
 		capabilities1.Attributes = nil
 		for _, attributesItem1 := range capabilitiesItem.Attributes {
-			var attributes3 Attribute
+			var attributes3 Attribute1
 			if attributesItem1.TextAttribute != nil {
 				attributes3.TextAttribute = &TextAttribute{}
 				attributes3.TextAttribute.Purpose = nil
 				for _, v := range attributesItem1.TextAttribute.Purpose {
 					attributes3.TextAttribute.Purpose = append(attributes3.TextAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.TextAttribute.Constraints = make(map[string]types.String)
-				for key29, value32 := range attributesItem1.TextAttribute.Constraints {
-					result28, _ := json.Marshal(value32)
-					attributes3.TextAttribute.Constraints[key29] = types.StringValue(string(result28))
+				if attributes3.TextAttribute.Constraints == nil && len(attributesItem1.TextAttribute.Constraints) > 0 {
+					attributes3.TextAttribute.Constraints = make(map[string]types.String)
+					for key29, value32 := range attributesItem1.TextAttribute.Constraints {
+						result28, _ := json.Marshal(value32)
+						attributes3.TextAttribute.Constraints[key29] = types.StringValue(string(result28))
+					}
 				}
 				if attributesItem1.TextAttribute.DefaultValue == nil {
 					attributes3.TextAttribute.DefaultValue = types.StringNull()
@@ -13989,10 +14130,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.LinkAttribute.Purpose {
 					attributes3.LinkAttribute.Purpose = append(attributes3.LinkAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.LinkAttribute.Constraints = make(map[string]types.String)
-				for key30, value33 := range attributesItem1.LinkAttribute.Constraints {
-					result29, _ := json.Marshal(value33)
-					attributes3.LinkAttribute.Constraints[key30] = types.StringValue(string(result29))
+				if attributes3.LinkAttribute.Constraints == nil && len(attributesItem1.LinkAttribute.Constraints) > 0 {
+					attributes3.LinkAttribute.Constraints = make(map[string]types.String)
+					for key30, value33 := range attributesItem1.LinkAttribute.Constraints {
+						result29, _ := json.Marshal(value33)
+						attributes3.LinkAttribute.Constraints[key30] = types.StringValue(string(result29))
+					}
 				}
 				if attributesItem1.LinkAttribute.DefaultValue == nil {
 					attributes3.LinkAttribute.DefaultValue = types.StringNull()
@@ -14104,10 +14247,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.DateAttribute.Purpose {
 					attributes3.DateAttribute.Purpose = append(attributes3.DateAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.DateAttribute.Constraints = make(map[string]types.String)
-				for key31, value34 := range attributesItem1.DateAttribute.Constraints {
-					result30, _ := json.Marshal(value34)
-					attributes3.DateAttribute.Constraints[key31] = types.StringValue(string(result30))
+				if attributes3.DateAttribute.Constraints == nil && len(attributesItem1.DateAttribute.Constraints) > 0 {
+					attributes3.DateAttribute.Constraints = make(map[string]types.String)
+					for key31, value34 := range attributesItem1.DateAttribute.Constraints {
+						result30, _ := json.Marshal(value34)
+						attributes3.DateAttribute.Constraints[key31] = types.StringValue(string(result30))
+					}
 				}
 				if attributesItem1.DateAttribute.DefaultValue == nil {
 					attributes3.DateAttribute.DefaultValue = types.StringNull()
@@ -14219,10 +14364,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.CountryAttribute.Purpose {
 					attributes3.CountryAttribute.Purpose = append(attributes3.CountryAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.CountryAttribute.Constraints = make(map[string]types.String)
-				for key32, value35 := range attributesItem1.CountryAttribute.Constraints {
-					result31, _ := json.Marshal(value35)
-					attributes3.CountryAttribute.Constraints[key32] = types.StringValue(string(result31))
+				if attributes3.CountryAttribute.Constraints == nil && len(attributesItem1.CountryAttribute.Constraints) > 0 {
+					attributes3.CountryAttribute.Constraints = make(map[string]types.String)
+					for key32, value35 := range attributesItem1.CountryAttribute.Constraints {
+						result31, _ := json.Marshal(value35)
+						attributes3.CountryAttribute.Constraints[key32] = types.StringValue(string(result31))
+					}
 				}
 				if attributesItem1.CountryAttribute.DefaultValue == nil {
 					attributes3.CountryAttribute.DefaultValue = types.StringNull()
@@ -14334,10 +14481,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.BooleanAttribute.Purpose {
 					attributes3.BooleanAttribute.Purpose = append(attributes3.BooleanAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.BooleanAttribute.Constraints = make(map[string]types.String)
-				for key33, value36 := range attributesItem1.BooleanAttribute.Constraints {
-					result32, _ := json.Marshal(value36)
-					attributes3.BooleanAttribute.Constraints[key33] = types.StringValue(string(result32))
+				if attributes3.BooleanAttribute.Constraints == nil && len(attributesItem1.BooleanAttribute.Constraints) > 0 {
+					attributes3.BooleanAttribute.Constraints = make(map[string]types.String)
+					for key33, value36 := range attributesItem1.BooleanAttribute.Constraints {
+						result32, _ := json.Marshal(value36)
+						attributes3.BooleanAttribute.Constraints[key33] = types.StringValue(string(result32))
+					}
 				}
 				if attributesItem1.BooleanAttribute.DefaultValue == nil {
 					attributes3.BooleanAttribute.DefaultValue = types.StringNull()
@@ -14454,10 +14603,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				} else {
 					attributes3.SelectAttribute.AllowAny = types.BoolNull()
 				}
-				attributes3.SelectAttribute.Constraints = make(map[string]types.String)
-				for key34, value37 := range attributesItem1.SelectAttribute.Constraints {
-					result33, _ := json.Marshal(value37)
-					attributes3.SelectAttribute.Constraints[key34] = types.StringValue(string(result33))
+				if attributes3.SelectAttribute.Constraints == nil && len(attributesItem1.SelectAttribute.Constraints) > 0 {
+					attributes3.SelectAttribute.Constraints = make(map[string]types.String)
+					for key34, value37 := range attributesItem1.SelectAttribute.Constraints {
+						result33, _ := json.Marshal(value37)
+						attributes3.SelectAttribute.Constraints[key34] = types.StringValue(string(result33))
+					}
 				}
 				if attributesItem1.SelectAttribute.DefaultValue == nil {
 					attributes3.SelectAttribute.DefaultValue = types.StringNull()
@@ -14600,10 +14751,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				} else {
 					attributes3.MultiSelectAttribute.AllowExtraOptions = types.BoolNull()
 				}
-				attributes3.MultiSelectAttribute.Constraints = make(map[string]types.String)
-				for key35, value39 := range attributesItem1.MultiSelectAttribute.Constraints {
-					result34, _ := json.Marshal(value39)
-					attributes3.MultiSelectAttribute.Constraints[key35] = types.StringValue(string(result34))
+				if attributes3.MultiSelectAttribute.Constraints == nil && len(attributesItem1.MultiSelectAttribute.Constraints) > 0 {
+					attributes3.MultiSelectAttribute.Constraints = make(map[string]types.String)
+					for key35, value39 := range attributesItem1.MultiSelectAttribute.Constraints {
+						result34, _ := json.Marshal(value39)
+						attributes3.MultiSelectAttribute.Constraints[key35] = types.StringValue(string(result34))
+					}
 				}
 				if attributesItem1.MultiSelectAttribute.DefaultValue == nil {
 					attributes3.MultiSelectAttribute.DefaultValue = types.StringNull()
@@ -14741,10 +14894,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.StatusAttribute.Purpose {
 					attributes3.StatusAttribute.Purpose = append(attributes3.StatusAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.StatusAttribute.Constraints = make(map[string]types.String)
-				for key36, value41 := range attributesItem1.StatusAttribute.Constraints {
-					result35, _ := json.Marshal(value41)
-					attributes3.StatusAttribute.Constraints[key36] = types.StringValue(string(result35))
+				if attributes3.StatusAttribute.Constraints == nil && len(attributesItem1.StatusAttribute.Constraints) > 0 {
+					attributes3.StatusAttribute.Constraints = make(map[string]types.String)
+					for key36, value41 := range attributesItem1.StatusAttribute.Constraints {
+						result35, _ := json.Marshal(value41)
+						attributes3.StatusAttribute.Constraints[key36] = types.StringValue(string(result35))
+					}
 				}
 				if attributesItem1.StatusAttribute.DefaultValue == nil {
 					attributes3.StatusAttribute.DefaultValue = types.StringNull()
@@ -14877,10 +15032,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.SequenceAttribute.Purpose {
 					attributes3.SequenceAttribute.Purpose = append(attributes3.SequenceAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.SequenceAttribute.Constraints = make(map[string]types.String)
-				for key37, value43 := range attributesItem1.SequenceAttribute.Constraints {
-					result36, _ := json.Marshal(value43)
-					attributes3.SequenceAttribute.Constraints[key37] = types.StringValue(string(result36))
+				if attributes3.SequenceAttribute.Constraints == nil && len(attributesItem1.SequenceAttribute.Constraints) > 0 {
+					attributes3.SequenceAttribute.Constraints = make(map[string]types.String)
+					for key37, value43 := range attributesItem1.SequenceAttribute.Constraints {
+						result36, _ := json.Marshal(value43)
+						attributes3.SequenceAttribute.Constraints[key37] = types.StringValue(string(result36))
+					}
 				}
 				if attributesItem1.SequenceAttribute.DefaultValue == nil {
 					attributes3.SequenceAttribute.DefaultValue = types.StringNull()
@@ -14997,14 +15154,14 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 			}
 			if attributesItem1.RelationAttribute != nil {
-				attributes3.RelationAttribute = &RelationAttribute{}
+				attributes3.RelationAttribute = &RelationAttribute1{}
 				attributes3.RelationAttribute.Purpose = nil
 				for _, v := range attributesItem1.RelationAttribute.Purpose {
 					attributes3.RelationAttribute.Purpose = append(attributes3.RelationAttribute.Purpose, types.StringValue(v))
 				}
 				attributes3.RelationAttribute.Actions = nil
 				for _, actionsItem1 := range attributesItem1.RelationAttribute.Actions {
-					var actions3 RelationAttributeActions
+					var actions3 RelationAttributeActions1
 					if actionsItem1.ActionType != nil {
 						actions3.ActionType = types.StringValue(string(*actionsItem1.ActionType))
 					} else {
@@ -15025,10 +15182,27 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					} else {
 						actions3.Label = types.StringNull()
 					}
-					actions3.NewEntityItem = make(map[string]types.String)
-					for key38, value44 := range actionsItem1.NewEntityItem {
-						result37, _ := json.Marshal(value44)
-						actions3.NewEntityItem[key38] = types.StringValue(string(result37))
+					if actionsItem1.NewEntityItem == nil {
+						actions3.NewEntityItem = nil
+					} else {
+						actions3.NewEntityItem = &RelationAttributeActionsNewEntityItem1{}
+						actions3.NewEntityItem.CreatedAt = types.StringValue(actionsItem1.NewEntityItem.CreatedAt.Format(time.RFC3339))
+						actions3.NewEntityItem.ID = types.StringValue(actionsItem1.NewEntityItem.ID)
+						actions3.NewEntityItem.Org = types.StringValue(actionsItem1.NewEntityItem.Org)
+						actions3.NewEntityItem.Schema = types.StringValue(actionsItem1.NewEntityItem.Schema)
+						actions3.NewEntityItem.Tags = nil
+						for _, v := range actionsItem1.NewEntityItem.Tags {
+							actions3.NewEntityItem.Tags = append(actions3.NewEntityItem.Tags, types.StringValue(v))
+						}
+						actions3.NewEntityItem.Title = types.StringValue(actionsItem1.NewEntityItem.Title)
+						actions3.NewEntityItem.UpdatedAt = types.StringValue(actionsItem1.NewEntityItem.UpdatedAt.Format(time.RFC3339))
+						if actions3.NewEntityItem.Entity == nil && len(actionsItem1.NewEntityItem.Entity) > 0 {
+							actions3.NewEntityItem.Entity = make(map[string]types.String)
+							for key38, value44 := range actionsItem1.NewEntityItem.Entity {
+								result37, _ := json.Marshal(value44)
+								actions3.NewEntityItem.Entity[key38] = types.StringValue(string(result37))
+							}
+						}
 					}
 					if actionsItem1.SettingFlag != nil {
 						actions3.SettingFlag = types.StringValue(*actionsItem1.SettingFlag)
@@ -15046,10 +15220,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.RelationAttribute.AllowedSchemas {
 					attributes3.RelationAttribute.AllowedSchemas = append(attributes3.RelationAttribute.AllowedSchemas, types.StringValue(v))
 				}
-				attributes3.RelationAttribute.Constraints = make(map[string]types.String)
-				for key39, value45 := range attributesItem1.RelationAttribute.Constraints {
-					result38, _ := json.Marshal(value45)
-					attributes3.RelationAttribute.Constraints[key39] = types.StringValue(string(result38))
+				if attributes3.RelationAttribute.Constraints == nil && len(attributesItem1.RelationAttribute.Constraints) > 0 {
+					attributes3.RelationAttribute.Constraints = make(map[string]types.String)
+					for key39, value45 := range attributesItem1.RelationAttribute.Constraints {
+						result38, _ := json.Marshal(value45)
+						attributes3.RelationAttribute.Constraints[key39] = types.StringValue(string(result38))
+					}
 				}
 				if attributesItem1.RelationAttribute.DefaultValue == nil {
 					attributes3.RelationAttribute.DefaultValue = types.StringNull()
@@ -15174,9 +15350,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				} else {
 					attributes3.RelationAttribute.Required = types.BoolNull()
 				}
-				attributes3.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-				for key40, value46 := range attributesItem1.RelationAttribute.ReverseAttributes {
-					attributes3.RelationAttribute.ReverseAttributes[key40] = types.StringValue(value46)
+				if attributes3.RelationAttribute.ReverseAttributes == nil && len(attributesItem1.RelationAttribute.ReverseAttributes) > 0 {
+					attributes3.RelationAttribute.ReverseAttributes = make(map[string]types.String)
+					for key40, value46 := range attributesItem1.RelationAttribute.ReverseAttributes {
+						attributes3.RelationAttribute.ReverseAttributes[key40] = types.StringValue(value46)
+					}
 				}
 				if attributesItem1.RelationAttribute.SearchPlaceholder != nil {
 					attributes3.RelationAttribute.SearchPlaceholder = types.StringValue(*attributesItem1.RelationAttribute.SearchPlaceholder)
@@ -15235,10 +15413,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.UserRelationAttribute.Purpose {
 					attributes3.UserRelationAttribute.Purpose = append(attributes3.UserRelationAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.UserRelationAttribute.Constraints = make(map[string]types.String)
-				for key41, value47 := range attributesItem1.UserRelationAttribute.Constraints {
-					result39, _ := json.Marshal(value47)
-					attributes3.UserRelationAttribute.Constraints[key41] = types.StringValue(string(result39))
+				if attributes3.UserRelationAttribute.Constraints == nil && len(attributesItem1.UserRelationAttribute.Constraints) > 0 {
+					attributes3.UserRelationAttribute.Constraints = make(map[string]types.String)
+					for key41, value47 := range attributesItem1.UserRelationAttribute.Constraints {
+						result39, _ := json.Marshal(value47)
+						attributes3.UserRelationAttribute.Constraints[key41] = types.StringValue(string(result39))
+					}
 				}
 				if attributesItem1.UserRelationAttribute.DefaultValue == nil {
 					attributes3.UserRelationAttribute.DefaultValue = types.StringNull()
@@ -15355,10 +15535,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.AddressRelationAttribute.Purpose {
 					attributes3.AddressRelationAttribute.Purpose = append(attributes3.AddressRelationAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.AddressRelationAttribute.Constraints = make(map[string]types.String)
-				for key42, value48 := range attributesItem1.AddressRelationAttribute.Constraints {
-					result40, _ := json.Marshal(value48)
-					attributes3.AddressRelationAttribute.Constraints[key42] = types.StringValue(string(result40))
+				if attributes3.AddressRelationAttribute.Constraints == nil && len(attributesItem1.AddressRelationAttribute.Constraints) > 0 {
+					attributes3.AddressRelationAttribute.Constraints = make(map[string]types.String)
+					for key42, value48 := range attributesItem1.AddressRelationAttribute.Constraints {
+						result40, _ := json.Marshal(value48)
+						attributes3.AddressRelationAttribute.Constraints[key42] = types.StringValue(string(result40))
+					}
 				}
 				if attributesItem1.AddressRelationAttribute.DefaultValue == nil {
 					attributes3.AddressRelationAttribute.DefaultValue = types.StringNull()
@@ -15475,10 +15657,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.PaymentMethodRelationAttribute.Purpose {
 					attributes3.PaymentMethodRelationAttribute.Purpose = append(attributes3.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
-				for key43, value49 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
-					result41, _ := json.Marshal(value49)
-					attributes3.PaymentMethodRelationAttribute.Constraints[key43] = types.StringValue(string(result41))
+				if attributes3.PaymentMethodRelationAttribute.Constraints == nil && len(attributesItem1.PaymentMethodRelationAttribute.Constraints) > 0 {
+					attributes3.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
+					for key43, value49 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
+						result41, _ := json.Marshal(value49)
+						attributes3.PaymentMethodRelationAttribute.Constraints[key43] = types.StringValue(string(result41))
+					}
 				}
 				if attributesItem1.PaymentMethodRelationAttribute.DefaultValue == nil {
 					attributes3.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
@@ -15595,10 +15779,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.CurrencyAttribute.Purpose {
 					attributes3.CurrencyAttribute.Purpose = append(attributes3.CurrencyAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.CurrencyAttribute.Constraints = make(map[string]types.String)
-				for key44, value50 := range attributesItem1.CurrencyAttribute.Constraints {
-					result42, _ := json.Marshal(value50)
-					attributes3.CurrencyAttribute.Constraints[key44] = types.StringValue(string(result42))
+				if attributes3.CurrencyAttribute.Constraints == nil && len(attributesItem1.CurrencyAttribute.Constraints) > 0 {
+					attributes3.CurrencyAttribute.Constraints = make(map[string]types.String)
+					for key44, value50 := range attributesItem1.CurrencyAttribute.Constraints {
+						result42, _ := json.Marshal(value50)
+						attributes3.CurrencyAttribute.Constraints[key44] = types.StringValue(string(result42))
+					}
 				}
 				attributes3.CurrencyAttribute.Currency = nil
 				for _, currencyItem1 := range attributesItem1.CurrencyAttribute.Currency {
@@ -15727,10 +15913,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.RepeatableAttribute.Purpose {
 					attributes3.RepeatableAttribute.Purpose = append(attributes3.RepeatableAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.RepeatableAttribute.Constraints = make(map[string]types.String)
-				for key45, value51 := range attributesItem1.RepeatableAttribute.Constraints {
-					result43, _ := json.Marshal(value51)
-					attributes3.RepeatableAttribute.Constraints[key45] = types.StringValue(string(result43))
+				if attributes3.RepeatableAttribute.Constraints == nil && len(attributesItem1.RepeatableAttribute.Constraints) > 0 {
+					attributes3.RepeatableAttribute.Constraints = make(map[string]types.String)
+					for key45, value51 := range attributesItem1.RepeatableAttribute.Constraints {
+						result43, _ := json.Marshal(value51)
+						attributes3.RepeatableAttribute.Constraints[key45] = types.StringValue(string(result43))
+					}
 				}
 				if attributesItem1.RepeatableAttribute.DefaultValue == nil {
 					attributes3.RepeatableAttribute.DefaultValue = types.StringNull()
@@ -15862,10 +16050,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.TagsAttribute.Purpose {
 					attributes3.TagsAttribute.Purpose = append(attributes3.TagsAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.TagsAttribute.Constraints = make(map[string]types.String)
-				for key46, value52 := range attributesItem1.TagsAttribute.Constraints {
-					result44, _ := json.Marshal(value52)
-					attributes3.TagsAttribute.Constraints[key46] = types.StringValue(string(result44))
+				if attributes3.TagsAttribute.Constraints == nil && len(attributesItem1.TagsAttribute.Constraints) > 0 {
+					attributes3.TagsAttribute.Constraints = make(map[string]types.String)
+					for key46, value52 := range attributesItem1.TagsAttribute.Constraints {
+						result44, _ := json.Marshal(value52)
+						attributes3.TagsAttribute.Constraints[key46] = types.StringValue(string(result44))
+					}
 				}
 				if attributesItem1.TagsAttribute.DefaultValue == nil {
 					attributes3.TagsAttribute.DefaultValue = types.StringNull()
@@ -15985,10 +16175,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.NumberAttribute.Purpose {
 					attributes3.NumberAttribute.Purpose = append(attributes3.NumberAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.NumberAttribute.Constraints = make(map[string]types.String)
-				for key47, value53 := range attributesItem1.NumberAttribute.Constraints {
-					result45, _ := json.Marshal(value53)
-					attributes3.NumberAttribute.Constraints[key47] = types.StringValue(string(result45))
+				if attributes3.NumberAttribute.Constraints == nil && len(attributesItem1.NumberAttribute.Constraints) > 0 {
+					attributes3.NumberAttribute.Constraints = make(map[string]types.String)
+					for key47, value53 := range attributesItem1.NumberAttribute.Constraints {
+						result45, _ := json.Marshal(value53)
+						attributes3.NumberAttribute.Constraints[key47] = types.StringValue(string(result45))
+					}
 				}
 				if attributesItem1.NumberAttribute.DefaultValue == nil {
 					attributes3.NumberAttribute.DefaultValue = types.StringNull()
@@ -16105,10 +16297,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.ConsentAttribute.Purpose {
 					attributes3.ConsentAttribute.Purpose = append(attributes3.ConsentAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.ConsentAttribute.Constraints = make(map[string]types.String)
-				for key48, value54 := range attributesItem1.ConsentAttribute.Constraints {
-					result46, _ := json.Marshal(value54)
-					attributes3.ConsentAttribute.Constraints[key48] = types.StringValue(string(result46))
+				if attributes3.ConsentAttribute.Constraints == nil && len(attributesItem1.ConsentAttribute.Constraints) > 0 {
+					attributes3.ConsentAttribute.Constraints = make(map[string]types.String)
+					for key48, value54 := range attributesItem1.ConsentAttribute.Constraints {
+						result46, _ := json.Marshal(value54)
+						attributes3.ConsentAttribute.Constraints[key48] = types.StringValue(string(result46))
+					}
 				}
 				if attributesItem1.ConsentAttribute.DefaultValue == nil {
 					attributes3.ConsentAttribute.DefaultValue = types.StringNull()
@@ -16221,10 +16415,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.InternalAttribute.Purpose {
 					attributes3.InternalAttribute.Purpose = append(attributes3.InternalAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.InternalAttribute.Constraints = make(map[string]types.String)
-				for key49, value55 := range attributesItem1.InternalAttribute.Constraints {
-					result47, _ := json.Marshal(value55)
-					attributes3.InternalAttribute.Constraints[key49] = types.StringValue(string(result47))
+				if attributes3.InternalAttribute.Constraints == nil && len(attributesItem1.InternalAttribute.Constraints) > 0 {
+					attributes3.InternalAttribute.Constraints = make(map[string]types.String)
+					for key49, value55 := range attributesItem1.InternalAttribute.Constraints {
+						result47, _ := json.Marshal(value55)
+						attributes3.InternalAttribute.Constraints[key49] = types.StringValue(string(result47))
+					}
 				}
 				if attributesItem1.InternalAttribute.DefaultValue == nil {
 					attributes3.InternalAttribute.DefaultValue = types.StringNull()
@@ -16336,10 +16532,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.OrderedListAttribute.Purpose {
 					attributes3.OrderedListAttribute.Purpose = append(attributes3.OrderedListAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.OrderedListAttribute.Constraints = make(map[string]types.String)
-				for key50, value56 := range attributesItem1.OrderedListAttribute.Constraints {
-					result48, _ := json.Marshal(value56)
-					attributes3.OrderedListAttribute.Constraints[key50] = types.StringValue(string(result48))
+				if attributes3.OrderedListAttribute.Constraints == nil && len(attributesItem1.OrderedListAttribute.Constraints) > 0 {
+					attributes3.OrderedListAttribute.Constraints = make(map[string]types.String)
+					for key50, value56 := range attributesItem1.OrderedListAttribute.Constraints {
+						result48, _ := json.Marshal(value56)
+						attributes3.OrderedListAttribute.Constraints[key50] = types.StringValue(string(result48))
+					}
 				}
 				if attributesItem1.OrderedListAttribute.DefaultValue == nil {
 					attributes3.OrderedListAttribute.DefaultValue = types.StringNull()
@@ -16455,10 +16653,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.FileAttribute.AllowedExtensions {
 					attributes3.FileAttribute.AllowedExtensions = append(attributes3.FileAttribute.AllowedExtensions, types.StringValue(v))
 				}
-				attributes3.FileAttribute.Constraints = make(map[string]types.String)
-				for key51, value57 := range attributesItem1.FileAttribute.Constraints {
-					result49, _ := json.Marshal(value57)
-					attributes3.FileAttribute.Constraints[key51] = types.StringValue(string(result49))
+				if attributes3.FileAttribute.Constraints == nil && len(attributesItem1.FileAttribute.Constraints) > 0 {
+					attributes3.FileAttribute.Constraints = make(map[string]types.String)
+					for key51, value57 := range attributesItem1.FileAttribute.Constraints {
+						result49, _ := json.Marshal(value57)
+						attributes3.FileAttribute.Constraints[key51] = types.StringValue(string(result49))
+					}
 				}
 				if attributesItem1.FileAttribute.DefaultAccessControl != nil {
 					attributes3.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem1.FileAttribute.DefaultAccessControl))
@@ -16586,10 +16786,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.ComputedAttribute.Purpose {
 					attributes3.ComputedAttribute.Purpose = append(attributes3.ComputedAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.ComputedAttribute.Constraints = make(map[string]types.String)
-				for key52, value58 := range attributesItem1.ComputedAttribute.Constraints {
-					result50, _ := json.Marshal(value58)
-					attributes3.ComputedAttribute.Constraints[key52] = types.StringValue(string(result50))
+				if attributes3.ComputedAttribute.Constraints == nil && len(attributesItem1.ComputedAttribute.Constraints) > 0 {
+					attributes3.ComputedAttribute.Constraints = make(map[string]types.String)
+					for key52, value58 := range attributesItem1.ComputedAttribute.Constraints {
+						result50, _ := json.Marshal(value58)
+						attributes3.ComputedAttribute.Constraints[key52] = types.StringValue(string(result50))
+					}
 				}
 				if attributesItem1.ComputedAttribute.DefaultValue == nil {
 					attributes3.ComputedAttribute.DefaultValue = types.StringNull()
@@ -16701,10 +16903,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.PartnerStatusAttribute.Purpose {
 					attributes3.PartnerStatusAttribute.Purpose = append(attributes3.PartnerStatusAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.PartnerStatusAttribute.Constraints = make(map[string]types.String)
-				for key53, value59 := range attributesItem1.PartnerStatusAttribute.Constraints {
-					result51, _ := json.Marshal(value59)
-					attributes3.PartnerStatusAttribute.Constraints[key53] = types.StringValue(string(result51))
+				if attributes3.PartnerStatusAttribute.Constraints == nil && len(attributesItem1.PartnerStatusAttribute.Constraints) > 0 {
+					attributes3.PartnerStatusAttribute.Constraints = make(map[string]types.String)
+					for key53, value59 := range attributesItem1.PartnerStatusAttribute.Constraints {
+						result51, _ := json.Marshal(value59)
+						attributes3.PartnerStatusAttribute.Constraints[key53] = types.StringValue(string(result51))
+					}
 				}
 				if attributesItem1.PartnerStatusAttribute.DefaultValue == nil {
 					attributes3.PartnerStatusAttribute.DefaultValue = types.StringNull()
@@ -16816,10 +17020,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.InvitationEmailAttribute.Purpose {
 					attributes3.InvitationEmailAttribute.Purpose = append(attributes3.InvitationEmailAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.InvitationEmailAttribute.Constraints = make(map[string]types.String)
-				for key54, value60 := range attributesItem1.InvitationEmailAttribute.Constraints {
-					result52, _ := json.Marshal(value60)
-					attributes3.InvitationEmailAttribute.Constraints[key54] = types.StringValue(string(result52))
+				if attributes3.InvitationEmailAttribute.Constraints == nil && len(attributesItem1.InvitationEmailAttribute.Constraints) > 0 {
+					attributes3.InvitationEmailAttribute.Constraints = make(map[string]types.String)
+					for key54, value60 := range attributesItem1.InvitationEmailAttribute.Constraints {
+						result52, _ := json.Marshal(value60)
+						attributes3.InvitationEmailAttribute.Constraints[key54] = types.StringValue(string(result52))
+					}
 				}
 				if attributesItem1.InvitationEmailAttribute.DefaultValue == nil {
 					attributes3.InvitationEmailAttribute.DefaultValue = types.StringNull()
@@ -16931,10 +17137,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.AutomationAttribute.Purpose {
 					attributes3.AutomationAttribute.Purpose = append(attributes3.AutomationAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.AutomationAttribute.Constraints = make(map[string]types.String)
-				for key55, value61 := range attributesItem1.AutomationAttribute.Constraints {
-					result53, _ := json.Marshal(value61)
-					attributes3.AutomationAttribute.Constraints[key55] = types.StringValue(string(result53))
+				if attributes3.AutomationAttribute.Constraints == nil && len(attributesItem1.AutomationAttribute.Constraints) > 0 {
+					attributes3.AutomationAttribute.Constraints = make(map[string]types.String)
+					for key55, value61 := range attributesItem1.AutomationAttribute.Constraints {
+						result53, _ := json.Marshal(value61)
+						attributes3.AutomationAttribute.Constraints[key55] = types.StringValue(string(result53))
+					}
 				}
 				if attributesItem1.AutomationAttribute.DefaultValue == nil {
 					attributes3.AutomationAttribute.DefaultValue = types.StringNull()
@@ -17046,10 +17254,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.InternalUserAttribute.Purpose {
 					attributes3.InternalUserAttribute.Purpose = append(attributes3.InternalUserAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.InternalUserAttribute.Constraints = make(map[string]types.String)
-				for key56, value62 := range attributesItem1.InternalUserAttribute.Constraints {
-					result54, _ := json.Marshal(value62)
-					attributes3.InternalUserAttribute.Constraints[key56] = types.StringValue(string(result54))
+				if attributes3.InternalUserAttribute.Constraints == nil && len(attributesItem1.InternalUserAttribute.Constraints) > 0 {
+					attributes3.InternalUserAttribute.Constraints = make(map[string]types.String)
+					for key56, value62 := range attributesItem1.InternalUserAttribute.Constraints {
+						result54, _ := json.Marshal(value62)
+						attributes3.InternalUserAttribute.Constraints[key56] = types.StringValue(string(result54))
+					}
 				}
 				if attributesItem1.InternalUserAttribute.DefaultValue == nil {
 					attributes3.InternalUserAttribute.DefaultValue = types.StringNull()
@@ -17161,10 +17371,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				for _, v := range attributesItem1.PurposeAttribute.Purpose {
 					attributes3.PurposeAttribute.Purpose = append(attributes3.PurposeAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.PurposeAttribute.Constraints = make(map[string]types.String)
-				for key57, value63 := range attributesItem1.PurposeAttribute.Constraints {
-					result55, _ := json.Marshal(value63)
-					attributes3.PurposeAttribute.Constraints[key57] = types.StringValue(string(result55))
+				if attributes3.PurposeAttribute.Constraints == nil && len(attributesItem1.PurposeAttribute.Constraints) > 0 {
+					attributes3.PurposeAttribute.Constraints = make(map[string]types.String)
+					for key57, value63 := range attributesItem1.PurposeAttribute.Constraints {
+						result55, _ := json.Marshal(value63)
+						attributes3.PurposeAttribute.Constraints[key57] = types.StringValue(string(result55))
+					}
 				}
 				if attributesItem1.PurposeAttribute.CreatedAt != nil {
 					attributes3.PurposeAttribute.CreatedAt = types.StringValue(attributesItem1.PurposeAttribute.CreatedAt.Format(time.RFC3339))
@@ -17391,10 +17603,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	} else {
 		r.CreatedAt = types.StringNull()
 	}
-	r.DialogConfig = make(map[string]types.String)
-	for key58, value64 := range resp.DialogConfig {
-		result56, _ := json.Marshal(value64)
-		r.DialogConfig[key58] = types.StringValue(string(result56))
+	if r.DialogConfig == nil && len(resp.DialogConfig) > 0 {
+		r.DialogConfig = make(map[string]types.String)
+		for key58, value64 := range resp.DialogConfig {
+			result56, _ := json.Marshal(value64)
+			r.DialogConfig[key58] = types.StringValue(string(result56))
+		}
 	}
 	if resp.Draft != nil {
 		r.Draft = types.BoolValue(*resp.Draft)
@@ -17405,25 +17619,29 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	for _, v := range resp.EnableSetting {
 		r.EnableSetting = append(r.EnableSetting, types.StringValue(v))
 	}
-	r.ExplicitSearchMappings = make(map[string]SearchMappings)
-	for searchMappingsKey, searchMappingsValue := range resp.ExplicitSearchMappings {
-		var searchMappingsResult SearchMappings
-		searchMappingsResult.Fields = make(map[string]types.String)
-		for key59, value65 := range searchMappingsValue.Fields {
-			result57, _ := json.Marshal(value65)
-			searchMappingsResult.Fields[key59] = types.StringValue(string(result57))
+	if r.ExplicitSearchMappings == nil && len(resp.ExplicitSearchMappings) > 0 {
+		r.ExplicitSearchMappings = make(map[string]SearchMappings)
+		for searchMappingsKey, searchMappingsValue := range resp.ExplicitSearchMappings {
+			var searchMappingsResult SearchMappings
+			if searchMappingsResult.Fields == nil && len(searchMappingsValue.Fields) > 0 {
+				searchMappingsResult.Fields = make(map[string]types.String)
+				for key59, value65 := range searchMappingsValue.Fields {
+					result57, _ := json.Marshal(value65)
+					searchMappingsResult.Fields[key59] = types.StringValue(string(result57))
+				}
+			}
+			if searchMappingsValue.Index != nil {
+				searchMappingsResult.Index = types.BoolValue(*searchMappingsValue.Index)
+			} else {
+				searchMappingsResult.Index = types.BoolNull()
+			}
+			if searchMappingsValue.Type != nil {
+				searchMappingsResult.Type = types.StringValue(string(*searchMappingsValue.Type))
+			} else {
+				searchMappingsResult.Type = types.StringNull()
+			}
+			r.ExplicitSearchMappings[searchMappingsKey] = searchMappingsResult
 		}
-		if searchMappingsValue.Index != nil {
-			searchMappingsResult.Index = types.BoolValue(*searchMappingsValue.Index)
-		} else {
-			searchMappingsResult.Index = types.BoolNull()
-		}
-		if searchMappingsValue.Type != nil {
-			searchMappingsResult.Type = types.StringValue(string(*searchMappingsValue.Type))
-		} else {
-			searchMappingsResult.Type = types.StringNull()
-		}
-		r.ExplicitSearchMappings[searchMappingsKey] = searchMappingsResult
 	}
 	if resp.FeatureFlag != nil {
 		r.FeatureFlag = types.StringValue(*resp.FeatureFlag)
@@ -17491,10 +17709,27 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	} else {
 		r.ID = types.StringNull()
 	}
-	r.LayoutSettings = make(map[string]types.String)
-	for key61, value66 := range resp.LayoutSettings {
-		result58, _ := json.Marshal(value66)
-		r.LayoutSettings[key61] = types.StringValue(string(result58))
+	if resp.LayoutSettings == nil {
+		r.LayoutSettings = nil
+	} else {
+		r.LayoutSettings = &EntitySchemaLayoutSettings{}
+		if resp.LayoutSettings.GridGap != nil {
+			r.LayoutSettings.GridGap = types.StringValue(*resp.LayoutSettings.GridGap)
+		} else {
+			r.LayoutSettings.GridGap = types.StringNull()
+		}
+		if resp.LayoutSettings.GridTemplateColumns != nil {
+			r.LayoutSettings.GridTemplateColumns = types.StringValue(*resp.LayoutSettings.GridTemplateColumns)
+		} else {
+			r.LayoutSettings.GridTemplateColumns = types.StringNull()
+		}
+		if r.LayoutSettings.AdditionalProperties == nil && len(resp.LayoutSettings.AdditionalProperties) > 0 {
+			r.LayoutSettings.AdditionalProperties = make(map[string]types.String)
+			for key61, value66 := range resp.LayoutSettings.AdditionalProperties {
+				result58, _ := json.Marshal(value66)
+				r.LayoutSettings.AdditionalProperties[key61] = types.StringValue(string(result58))
+			}
+		}
 	}
 	r.Name = types.StringValue(resp.Name)
 	r.Plural = types.StringValue(resp.Plural)
@@ -17534,9 +17769,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			r.UIConfig.CreateView = &EntitySchemaUIConfigCreateView{}
 			if resp.UIConfig.CreateView.EntityDefaultCreate != nil {
 				r.UIConfig.CreateView.EntityDefaultCreate = &EntityDefaultCreate{}
-				r.UIConfig.CreateView.EntityDefaultCreate.SearchParams = make(map[string]types.String)
-				for key62, value67 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
-					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key62] = types.StringValue(value67)
+				if r.UIConfig.CreateView.EntityDefaultCreate.SearchParams == nil && len(resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams) > 0 {
+					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams = make(map[string]types.String)
+					for key62, value67 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
+						r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key62] = types.StringValue(value67)
+					}
 				}
 				if resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions == nil {
 					r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions = nil
@@ -17587,9 +17824,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			r.UIConfig.EditView = &EntitySchemaUIConfigEditView{}
 			if resp.UIConfig.EditView.EntityDefaultEdit != nil {
 				r.UIConfig.EditView.EntityDefaultEdit = &EntityDefaultCreate{}
-				r.UIConfig.EditView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-				for key63, value68 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
-					r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key63] = types.StringValue(value68)
+				if r.UIConfig.EditView.EntityDefaultEdit.SearchParams == nil && len(resp.UIConfig.EditView.EntityDefaultEdit.SearchParams) > 0 {
+					r.UIConfig.EditView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
+					for key63, value68 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
+						r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key63] = types.StringValue(value68)
+					}
 				}
 				if resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions = nil
@@ -17697,9 +17936,11 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			r.UIConfig.SingleView = &EntitySchemaUIConfigEditView{}
 			if resp.UIConfig.SingleView.EntityDefaultEdit != nil {
 				r.UIConfig.SingleView.EntityDefaultEdit = &EntityDefaultCreate{}
-				r.UIConfig.SingleView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-				for key64, value70 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
-					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key64] = types.StringValue(value70)
+				if r.UIConfig.SingleView.EntityDefaultEdit.SearchParams == nil && len(resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams) > 0 {
+					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
+					for key64, value70 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
+						r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key64] = types.StringValue(value70)
+					}
 				}
 				if resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions = nil
@@ -17823,10 +18064,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					for _, optionsItem6 := range navbarActionsItem.Options {
 						var options15 EntityDefaultTableNavbarActionsOptions
 						options15.Label = types.StringValue(optionsItem6.Label)
-						options15.Params = make(map[string]types.String)
-						for key65, value71 := range optionsItem6.Params {
-							result59, _ := json.Marshal(value71)
-							options15.Params[key65] = types.StringValue(string(result59))
+						if options15.Params == nil && len(optionsItem6.Params) > 0 {
+							options15.Params = make(map[string]types.String)
+							for key65, value71 := range optionsItem6.Params {
+								result59, _ := json.Marshal(value71)
+								options15.Params[key65] = types.StringValue(string(result59))
+							}
 						}
 						navbarActions1.Options = append(navbarActions1.Options, options15)
 					}

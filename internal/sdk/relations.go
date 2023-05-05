@@ -36,7 +36,10 @@ func newRelations(defaultClient, securityClient HTTPClient, serverURL, language,
 // Relates one or more entities to parent entity by adding items to a relation attribute
 func (s *relations) AddRelations(ctx context.Context, request operations.AddRelationsRequest) (*operations.AddRelationsResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
 	if err != nil {
@@ -92,7 +95,10 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 // Removes relation between two entities
 func (s *relations) DeleteRelation(ctx context.Context, request operations.DeleteRelationRequest) (*operations.DeleteRelationResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
 	if err != nil {
@@ -136,7 +142,10 @@ func (s *relations) DeleteRelation(ctx context.Context, request operations.Delet
 // Reverse relations i.e. entities referring to this entity are included with the `?include_reverse` query param.
 func (s *relations) GetRelations(ctx context.Context, request operations.GetRelationsRequest) (*operations.GetRelationsResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -189,7 +198,10 @@ func (s *relations) GetRelations(ctx context.Context, request operations.GetRela
 // Reverse relations i.e. entities referring to this entity are included with the `?include_reverse` query param.
 func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRelationsV2Request) (*operations.GetRelationsV2Response, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v2/entity/{slug}/{id}/relations", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v2/entity/{slug}/{id}/relations", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -238,7 +250,10 @@ func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRe
 // Updates an existing relation between two entities.
 func (s *relations) UpdateRelation(ctx context.Context, request operations.UpdateRelationRequest) (*operations.UpdateRelationResponse, error) {
 	baseURL := s.serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}", request, nil)
+	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
 	if err != nil {

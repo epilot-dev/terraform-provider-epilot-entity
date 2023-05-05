@@ -5,12 +5,13 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 type EntityOperationDiff struct {
-	Added   map[string]interface{} `json:"added,omitempty"`
-	Deleted map[string]interface{} `json:"deleted,omitempty"`
-	Updated map[string]interface{} `json:"updated,omitempty"`
+	Added   *Entity `json:"added,omitempty"`
+	Deleted *Entity `json:"deleted,omitempty"`
+	Updated *Entity `json:"updated,omitempty"`
 }
 
 type EntityOperationOperationEnum string
@@ -21,21 +22,25 @@ const (
 	EntityOperationOperationEnumDeleteEntity EntityOperationOperationEnum = "deleteEntity"
 )
 
+func (e EntityOperationOperationEnum) ToPointer() *EntityOperationOperationEnum {
+	return &e
+}
+
 func (e *EntityOperationOperationEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "createEntity":
 		fallthrough
 	case "updateEntity":
 		fallthrough
 	case "deleteEntity":
-		*e = EntityOperationOperationEnum(s)
+		*e = EntityOperationOperationEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityOperationOperationEnum: %s", s)
+		return fmt.Errorf("invalid value for EntityOperationOperationEnum: %v", v)
 	}
 }
 
@@ -43,6 +48,71 @@ type EntityOperationParams struct {
 	ID *string `json:"id,omitempty"`
 	// URL-friendly identifier for the entity schema
 	Slug *string `json:"slug,omitempty"`
+}
+
+type EntityOperationPayload struct {
+	CreatedAt *time.Time `json:"_created_at,omitempty"`
+	ID        *string    `json:"_id,omitempty"`
+	// Organization Id the entity belongs to
+	Org *string `json:"_org,omitempty"`
+	// URL-friendly identifier for the entity schema
+	Schema *string  `json:"_schema,omitempty"`
+	Tags   []string `json:"_tags,omitempty"`
+	// Title of entity
+	Title     *string    `json:"_title,omitempty"`
+	UpdatedAt *time.Time `json:"_updated_at,omitempty"`
+
+	Entity map[string]interface{} `json:"-"`
+}
+type _EntityOperationPayload EntityOperationPayload
+
+func (c *EntityOperationPayload) UnmarshalJSON(bs []byte) error {
+	data := _EntityOperationPayload{}
+
+	if err := json.Unmarshal(bs, &data); err != nil {
+		return err
+	}
+	*c = EntityOperationPayload(data)
+
+	additionalFields := make(map[string]interface{})
+
+	if err := json.Unmarshal(bs, &additionalFields); err != nil {
+		return err
+	}
+	delete(additionalFields, "_created_at")
+	delete(additionalFields, "_id")
+	delete(additionalFields, "_org")
+	delete(additionalFields, "_schema")
+	delete(additionalFields, "_tags")
+	delete(additionalFields, "_title")
+	delete(additionalFields, "_updated_at")
+
+	c.Entity = additionalFields
+
+	return nil
+}
+
+func (c EntityOperationPayload) MarshalJSON() ([]byte, error) {
+	out := map[string]interface{}{}
+	bs, err := json.Marshal(_EntityOperationPayload(c))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	bs, err = json.Marshal(c.Entity)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(bs), &out); err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(out)
 }
 
 type EntityOperation struct {
@@ -53,5 +123,5 @@ type EntityOperation struct {
 	Operation  EntityOperationOperationEnum `json:"operation"`
 	Org        string                       `json:"org"`
 	Params     *EntityOperationParams       `json:"params,omitempty"`
-	Payload    map[string]interface{}       `json:"payload,omitempty"`
+	Payload    *EntityOperationPayload      `json:"payload,omitempty"`
 }

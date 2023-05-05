@@ -13,17 +13,21 @@ const (
 	TagsAttributeTypeEnumTags TagsAttributeTypeEnum = "tags"
 )
 
+func (e TagsAttributeTypeEnum) ToPointer() *TagsAttributeTypeEnum {
+	return &e
+}
+
 func (e *TagsAttributeTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "tags":
-		*e = TagsAttributeTypeEnum(s)
+		*e = TagsAttributeTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TagsAttributeTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for TagsAttributeTypeEnum: %v", v)
 	}
 }
 

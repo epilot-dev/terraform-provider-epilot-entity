@@ -13,17 +13,21 @@ const (
 	RedirectEntityViewViewTypeEnumRedirect RedirectEntityViewViewTypeEnum = "redirect"
 )
 
+func (e RedirectEntityViewViewTypeEnum) ToPointer() *RedirectEntityViewViewTypeEnum {
+	return &e
+}
+
 func (e *RedirectEntityViewViewTypeEnum) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch s {
+	switch v {
 	case "redirect":
-		*e = RedirectEntityViewViewTypeEnum(s)
+		*e = RedirectEntityViewViewTypeEnum(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RedirectEntityViewViewTypeEnum: %s", s)
+		return fmt.Errorf("invalid value for RedirectEntityViewViewTypeEnum: %v", v)
 	}
 }
 

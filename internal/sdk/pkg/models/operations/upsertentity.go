@@ -3,12 +3,13 @@
 package operations
 
 import (
+	"epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
 type UpsertEntityRequestBody struct {
-	Entity    map[string]interface{} `json:"entity"`
-	UniqueKey []string               `json:"unique_key"`
+	Entity    shared.Entity `json:"entity"`
+	UniqueKey []string      `json:"unique_key"`
 }
 
 type UpsertEntityRequest struct {
@@ -26,7 +27,7 @@ type UpsertEntityRequest struct {
 type UpsertEntityResponse struct {
 	ContentType string
 	// Entity was updated
-	EntityItem  map[string]interface{}
+	EntityItem  *shared.EntityItem
 	StatusCode  int
 	RawResponse *http.Response
 }
