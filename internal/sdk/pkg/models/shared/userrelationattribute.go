@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type UserRelationAttributeTypeEnum string
+type UserRelationAttributeType string
 
 const (
-	UserRelationAttributeTypeEnumRelationUser UserRelationAttributeTypeEnum = "relation_user"
+	UserRelationAttributeTypeRelationUser UserRelationAttributeType = "relation_user"
 )
 
-func (e UserRelationAttributeTypeEnum) ToPointer() *UserRelationAttributeTypeEnum {
+func (e UserRelationAttributeType) ToPointer() *UserRelationAttributeType {
 	return &e
 }
 
-func (e *UserRelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *UserRelationAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "relation_user":
-		*e = UserRelationAttributeTypeEnum(v)
+		*e = UserRelationAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for UserRelationAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for UserRelationAttributeType: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type UserRelationAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                          `json:"show_in_table,omitempty"`
-	Type           *UserRelationAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                        `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                      `json:"show_in_table,omitempty"`
+	Type           *UserRelationAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                    `json:"value_formatter,omitempty"`
 }

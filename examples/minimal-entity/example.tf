@@ -2,7 +2,7 @@ terraform {
   required_providers {
     epilot-entity = {
       source  = "epilot-dev/epilot-entity"
-      version = "0.1.0"
+      version = "0.2.0"
     }
   }
 }
@@ -53,7 +53,7 @@ resource "epilot-entity_schema" "test" {
 resource "epilot-entity_entity" "contact_test" {
   slug = epilot-entity_schema.test.slug
 
-  entity = {
-    test = jsonencode("test")
-  }
+  entity = jsonencode({
+    "test" = "test"
+  })
 }

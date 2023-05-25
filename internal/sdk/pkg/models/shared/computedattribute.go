@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type ComputedAttributeTypeEnum string
+type ComputedAttributeType string
 
 const (
-	ComputedAttributeTypeEnumComputed ComputedAttributeTypeEnum = "computed"
+	ComputedAttributeTypeComputed ComputedAttributeType = "computed"
 )
 
-func (e ComputedAttributeTypeEnum) ToPointer() *ComputedAttributeTypeEnum {
+func (e ComputedAttributeType) ToPointer() *ComputedAttributeType {
 	return &e
 }
 
-func (e *ComputedAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *ComputedAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "computed":
-		*e = ComputedAttributeTypeEnum(v)
+		*e = ComputedAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ComputedAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for ComputedAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type ComputedAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                      `json:"show_in_table,omitempty"`
-	Type           *ComputedAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                    `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
+	Type           *ComputedAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                `json:"value_formatter,omitempty"`
 }

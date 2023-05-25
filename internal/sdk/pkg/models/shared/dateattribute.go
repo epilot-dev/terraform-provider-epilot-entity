@@ -7,18 +7,18 @@ import (
 	"fmt"
 )
 
-type DateAttributeTypeEnum string
+type DateAttributeType string
 
 const (
-	DateAttributeTypeEnumDate     DateAttributeTypeEnum = "date"
-	DateAttributeTypeEnumDatetime DateAttributeTypeEnum = "datetime"
+	DateAttributeTypeDate     DateAttributeType = "date"
+	DateAttributeTypeDatetime DateAttributeType = "datetime"
 )
 
-func (e DateAttributeTypeEnum) ToPointer() *DateAttributeTypeEnum {
+func (e DateAttributeType) ToPointer() *DateAttributeType {
 	return &e
 }
 
-func (e *DateAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *DateAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -27,10 +27,10 @@ func (e *DateAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 	case "date":
 		fallthrough
 	case "datetime":
-		*e = DateAttributeTypeEnum(v)
+		*e = DateAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for DateAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for DateAttributeType: %v", v)
 	}
 }
 
@@ -76,7 +76,7 @@ type DateAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
-	Type           *DateAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                `json:"value_formatter,omitempty"`
+	ShowInTable    *bool              `json:"show_in_table,omitempty"`
+	Type           *DateAttributeType `json:"type,omitempty"`
+	ValueFormatter *string            `json:"value_formatter,omitempty"`
 }

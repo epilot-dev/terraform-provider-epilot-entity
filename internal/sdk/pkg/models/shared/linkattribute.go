@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type LinkAttributeTypeEnum string
+type LinkAttributeType string
 
 const (
-	LinkAttributeTypeEnumLink LinkAttributeTypeEnum = "link"
+	LinkAttributeTypeLink LinkAttributeType = "link"
 )
 
-func (e LinkAttributeTypeEnum) ToPointer() *LinkAttributeTypeEnum {
+func (e LinkAttributeType) ToPointer() *LinkAttributeType {
 	return &e
 }
 
-func (e *LinkAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *LinkAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "link":
-		*e = LinkAttributeTypeEnum(v)
+		*e = LinkAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for LinkAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for LinkAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type LinkAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
-	Type           *LinkAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                `json:"value_formatter,omitempty"`
+	ShowInTable    *bool              `json:"show_in_table,omitempty"`
+	Type           *LinkAttributeType `json:"type,omitempty"`
+	ValueFormatter *string            `json:"value_formatter,omitempty"`
 }

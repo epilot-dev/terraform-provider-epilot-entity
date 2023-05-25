@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type ConsentAttributeTypeEnum string
+type ConsentAttributeType string
 
 const (
-	ConsentAttributeTypeEnumConsent ConsentAttributeTypeEnum = "consent"
+	ConsentAttributeTypeConsent ConsentAttributeType = "consent"
 )
 
-func (e ConsentAttributeTypeEnum) ToPointer() *ConsentAttributeTypeEnum {
+func (e ConsentAttributeType) ToPointer() *ConsentAttributeType {
 	return &e
 }
 
-func (e *ConsentAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *ConsentAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "consent":
-		*e = ConsentAttributeTypeEnum(v)
+		*e = ConsentAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ConsentAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for ConsentAttributeType: %v", v)
 	}
 }
 
@@ -74,8 +74,8 @@ type ConsentAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                    `json:"show_in_table,omitempty"`
-	Topic          string                   `json:"topic"`
-	Type           ConsentAttributeTypeEnum `json:"type"`
-	ValueFormatter *string                  `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                `json:"show_in_table,omitempty"`
+	Topic          string               `json:"topic"`
+	Type           ConsentAttributeType `json:"type"`
+	ValueFormatter *string              `json:"value_formatter,omitempty"`
 }

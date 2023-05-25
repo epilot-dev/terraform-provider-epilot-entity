@@ -82,27 +82,27 @@ func (u StatusAttributeOptions) MarshalJSON() ([]byte, error) {
 	return nil, nil
 }
 
-type StatusAttributeTypeEnum string
+type StatusAttributeType string
 
 const (
-	StatusAttributeTypeEnumStatus StatusAttributeTypeEnum = "status"
+	StatusAttributeTypeStatus StatusAttributeType = "status"
 )
 
-func (e StatusAttributeTypeEnum) ToPointer() *StatusAttributeTypeEnum {
+func (e StatusAttributeType) ToPointer() *StatusAttributeType {
 	return &e
 }
 
-func (e *StatusAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *StatusAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "status":
-		*e = StatusAttributeTypeEnum(v)
+		*e = StatusAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for StatusAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for StatusAttributeType: %v", v)
 	}
 }
 
@@ -149,7 +149,7 @@ type StatusAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                    `json:"show_in_table,omitempty"`
-	Type           *StatusAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                  `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                `json:"show_in_table,omitempty"`
+	Type           *StatusAttributeType `json:"type,omitempty"`
+	ValueFormatter *string              `json:"value_formatter,omitempty"`
 }

@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type SequenceAttributeTypeEnum string
+type SequenceAttributeType string
 
 const (
-	SequenceAttributeTypeEnumSequence SequenceAttributeTypeEnum = "sequence"
+	SequenceAttributeTypeSequence SequenceAttributeType = "sequence"
 )
 
-func (e SequenceAttributeTypeEnum) ToPointer() *SequenceAttributeTypeEnum {
+func (e SequenceAttributeType) ToPointer() *SequenceAttributeType {
 	return &e
 }
 
-func (e *SequenceAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *SequenceAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "sequence":
-		*e = SequenceAttributeTypeEnum(v)
+		*e = SequenceAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SequenceAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for SequenceAttributeType: %v", v)
 	}
 }
 
@@ -75,8 +75,8 @@ type SequenceAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                      `json:"show_in_table,omitempty"`
-	StartNumber    *int64                     `json:"start_number,omitempty"`
-	Type           *SequenceAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                    `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
+	StartNumber    *int64                 `json:"start_number,omitempty"`
+	Type           *SequenceAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                `json:"value_formatter,omitempty"`
 }

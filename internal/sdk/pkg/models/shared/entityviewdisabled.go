@@ -7,30 +7,30 @@ import (
 	"fmt"
 )
 
-type EntityViewDisabledViewTypeEnum string
+type EntityViewDisabledViewType string
 
 const (
-	EntityViewDisabledViewTypeEnumDisabled EntityViewDisabledViewTypeEnum = "disabled"
+	EntityViewDisabledViewTypeDisabled EntityViewDisabledViewType = "disabled"
 )
 
-func (e EntityViewDisabledViewTypeEnum) ToPointer() *EntityViewDisabledViewTypeEnum {
+func (e EntityViewDisabledViewType) ToPointer() *EntityViewDisabledViewType {
 	return &e
 }
 
-func (e *EntityViewDisabledViewTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityViewDisabledViewType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "disabled":
-		*e = EntityViewDisabledViewTypeEnum(v)
+		*e = EntityViewDisabledViewType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityViewDisabledViewTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityViewDisabledViewType: %v", v)
 	}
 }
 
 type EntityViewDisabled struct {
-	ViewType *EntityViewDisabledViewTypeEnum `json:"view_type,omitempty"`
+	ViewType *EntityViewDisabledViewType `json:"view_type,omitempty"`
 }

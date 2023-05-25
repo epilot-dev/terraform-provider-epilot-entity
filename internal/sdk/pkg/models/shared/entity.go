@@ -19,7 +19,7 @@ type Entity struct {
 	Title     *string    `json:"_title,omitempty"`
 	UpdatedAt *time.Time `json:"_updated_at,omitempty"`
 
-	Entity map[string]interface{} `json:"-"`
+	Entity interface{} `json:"-"`
 }
 type _Entity Entity
 

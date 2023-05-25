@@ -4,6 +4,6 @@ generation:
   singleTagPerOp: false
   telemetryEnabled: false
 terraform:
-  version: 0.0.3
+  version: 0.2.0
   author: epilot-dev
   packageName: epilot-entity

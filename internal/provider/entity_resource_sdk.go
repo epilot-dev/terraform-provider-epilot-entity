@@ -9,14 +9,7 @@ import (
 	"time"
 )
 
-func (r *EntityResourceModel) ToSDKType() interface{} {
-	// Not Used
-
-	return nil
-
-}
-
-func (r *EntityResourceModel) RefreshFromSDKType(resp *shared.EntityItem) {
+func (r *EntityResourceModel) RefreshFromGetResponse(resp *shared.EntityItem) {
 	r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339))
 	r.ID = types.StringValue(resp.ID)
 	r.Org = types.StringValue(resp.Org)
@@ -27,12 +20,20 @@ func (r *EntityResourceModel) RefreshFromSDKType(resp *shared.EntityItem) {
 	}
 	r.Title = types.StringValue(resp.Title)
 	r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339))
-	if r.Entity == nil && len(resp.Entity) > 0 {
-		r.Entity = make(map[string]types.String)
-		for key, value := range resp.Entity {
-			result, _ := json.Marshal(value)
-			r.Entity[key] = types.StringValue(string(result))
+	if r.Entity.IsUnknown() {
+		if resp.Entity == nil {
+			r.Entity = types.StringNull()
+		} else {
+			entityResult, _ := json.Marshal(resp.Entity)
+			r.Entity = types.StringValue(string(entityResult))
 		}
 	}
+}
 
+func (r *EntityResourceModel) RefreshFromCreateResponse(resp *shared.EntityItem) {
+	r.RefreshFromGetResponse(resp)
+}
+
+func (r *EntityResourceModel) RefreshFromUpdateResponse(resp *shared.EntityItem) {
+	r.RefreshFromGetResponse(resp)
 }

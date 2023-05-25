@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type CountryAttributeTypeEnum string
+type CountryAttributeType string
 
 const (
-	CountryAttributeTypeEnumCountry CountryAttributeTypeEnum = "country"
+	CountryAttributeTypeCountry CountryAttributeType = "country"
 )
 
-func (e CountryAttributeTypeEnum) ToPointer() *CountryAttributeTypeEnum {
+func (e CountryAttributeType) ToPointer() *CountryAttributeType {
 	return &e
 }
 
-func (e *CountryAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *CountryAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "country":
-		*e = CountryAttributeTypeEnum(v)
+		*e = CountryAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CountryAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for CountryAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type CountryAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                     `json:"show_in_table,omitempty"`
-	Type           *CountryAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                   `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                 `json:"show_in_table,omitempty"`
+	Type           *CountryAttributeType `json:"type,omitempty"`
+	ValueFormatter *string               `json:"value_formatter,omitempty"`
 }

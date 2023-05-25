@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type OrderedListAttributeTypeEnum string
+type OrderedListAttributeType string
 
 const (
-	OrderedListAttributeTypeEnumOrderedList OrderedListAttributeTypeEnum = "ordered_list"
+	OrderedListAttributeTypeOrderedList OrderedListAttributeType = "ordered_list"
 )
 
-func (e OrderedListAttributeTypeEnum) ToPointer() *OrderedListAttributeTypeEnum {
+func (e OrderedListAttributeType) ToPointer() *OrderedListAttributeType {
 	return &e
 }
 
-func (e *OrderedListAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *OrderedListAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "ordered_list":
-		*e = OrderedListAttributeTypeEnum(v)
+		*e = OrderedListAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OrderedListAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for OrderedListAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type OrderedListAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                         `json:"show_in_table,omitempty"`
-	Type           *OrderedListAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                       `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                     `json:"show_in_table,omitempty"`
+	Type           *OrderedListAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                   `json:"value_formatter,omitempty"`
 }

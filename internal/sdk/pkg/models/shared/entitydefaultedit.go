@@ -12,32 +12,32 @@ type EntityDefaultEditTableMenuOptions struct {
 	Label *string `json:"label,omitempty"`
 }
 
-type EntityDefaultEditViewTypeEnum string
+type EntityDefaultEditViewType string
 
 const (
-	EntityDefaultEditViewTypeEnumDefault EntityDefaultEditViewTypeEnum = "default"
+	EntityDefaultEditViewTypeDefault EntityDefaultEditViewType = "default"
 )
 
-func (e EntityDefaultEditViewTypeEnum) ToPointer() *EntityDefaultEditViewTypeEnum {
+func (e EntityDefaultEditViewType) ToPointer() *EntityDefaultEditViewType {
 	return &e
 }
 
-func (e *EntityDefaultEditViewTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultEditViewType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "default":
-		*e = EntityDefaultEditViewTypeEnum(v)
+		*e = EntityDefaultEditViewType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultEditViewTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultEditViewType: %v", v)
 	}
 }
 
 type EntityDefaultEdit struct {
 	SearchParams     map[string]string                  `json:"search_params,omitempty"`
 	TableMenuOptions *EntityDefaultEditTableMenuOptions `json:"table_menu_options,omitempty"`
-	ViewType         *EntityDefaultEditViewTypeEnum     `json:"view_type,omitempty"`
+	ViewType         *EntityDefaultEditViewType         `json:"view_type,omitempty"`
 }

@@ -37,7 +37,7 @@ type EntitySchemaLayoutSettings struct {
 	// Defines the grid column template for the mounting node of the attribute.
 	GridTemplateColumns *string `json:"grid_template_columns,omitempty"`
 
-	AdditionalProperties map[string]interface{} `json:"-"`
+	AdditionalProperties interface{} `json:"-"`
 }
 type _EntitySchemaLayoutSettings EntitySchemaLayoutSettings
 

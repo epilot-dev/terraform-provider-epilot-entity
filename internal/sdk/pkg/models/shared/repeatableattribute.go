@@ -7,19 +7,19 @@ import (
 	"fmt"
 )
 
-// RepeatableAttributeRelationAffinityModeEnum - Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.
-type RepeatableAttributeRelationAffinityModeEnum string
+// RepeatableAttributeRelationAffinityMode - Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.
+type RepeatableAttributeRelationAffinityMode string
 
 const (
-	RepeatableAttributeRelationAffinityModeEnumWeak   RepeatableAttributeRelationAffinityModeEnum = "weak"
-	RepeatableAttributeRelationAffinityModeEnumStrong RepeatableAttributeRelationAffinityModeEnum = "strong"
+	RepeatableAttributeRelationAffinityModeWeak   RepeatableAttributeRelationAffinityMode = "weak"
+	RepeatableAttributeRelationAffinityModeStrong RepeatableAttributeRelationAffinityMode = "strong"
 )
 
-func (e RepeatableAttributeRelationAffinityModeEnum) ToPointer() *RepeatableAttributeRelationAffinityModeEnum {
+func (e RepeatableAttributeRelationAffinityMode) ToPointer() *RepeatableAttributeRelationAffinityMode {
 	return &e
 }
 
-func (e *RepeatableAttributeRelationAffinityModeEnum) UnmarshalJSON(data []byte) error {
+func (e *RepeatableAttributeRelationAffinityMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -28,31 +28,31 @@ func (e *RepeatableAttributeRelationAffinityModeEnum) UnmarshalJSON(data []byte)
 	case "weak":
 		fallthrough
 	case "strong":
-		*e = RepeatableAttributeRelationAffinityModeEnum(v)
+		*e = RepeatableAttributeRelationAffinityMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RepeatableAttributeRelationAffinityModeEnum: %v", v)
+		return fmt.Errorf("invalid value for RepeatableAttributeRelationAffinityMode: %v", v)
 	}
 }
 
-type RepeatableAttributeTypeEnum string
+type RepeatableAttributeType string
 
 const (
-	RepeatableAttributeTypeEnumString         RepeatableAttributeTypeEnum = "string"
-	RepeatableAttributeTypeEnumPhone          RepeatableAttributeTypeEnum = "phone"
-	RepeatableAttributeTypeEnumEmail          RepeatableAttributeTypeEnum = "email"
-	RepeatableAttributeTypeEnumAddress        RepeatableAttributeTypeEnum = "address"
-	RepeatableAttributeTypeEnumRelation       RepeatableAttributeTypeEnum = "relation"
-	RepeatableAttributeTypeEnumPayment        RepeatableAttributeTypeEnum = "payment"
-	RepeatableAttributeTypeEnumPriceComponent RepeatableAttributeTypeEnum = "price_component"
-	RepeatableAttributeTypeEnumDate           RepeatableAttributeTypeEnum = "date"
+	RepeatableAttributeTypeString         RepeatableAttributeType = "string"
+	RepeatableAttributeTypePhone          RepeatableAttributeType = "phone"
+	RepeatableAttributeTypeEmail          RepeatableAttributeType = "email"
+	RepeatableAttributeTypeAddress        RepeatableAttributeType = "address"
+	RepeatableAttributeTypeRelation       RepeatableAttributeType = "relation"
+	RepeatableAttributeTypePayment        RepeatableAttributeType = "payment"
+	RepeatableAttributeTypePriceComponent RepeatableAttributeType = "price_component"
+	RepeatableAttributeTypeDate           RepeatableAttributeType = "date"
 )
 
-func (e RepeatableAttributeTypeEnum) ToPointer() *RepeatableAttributeTypeEnum {
+func (e RepeatableAttributeType) ToPointer() *RepeatableAttributeType {
 	return &e
 }
 
-func (e *RepeatableAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *RepeatableAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -73,10 +73,10 @@ func (e *RepeatableAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 	case "price_component":
 		fallthrough
 	case "date":
-		*e = RepeatableAttributeTypeEnum(v)
+		*e = RepeatableAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RepeatableAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for RepeatableAttributeType: %v", v)
 	}
 }
 
@@ -117,7 +117,7 @@ type RepeatableAttribute struct {
 	Protected *bool `json:"protected,omitempty"`
 	Readonly  *bool `json:"readonly,omitempty"`
 	// Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.
-	RelationAffinityMode *RepeatableAttributeRelationAffinityModeEnum `json:"relation_affinity_mode,omitempty"`
+	RelationAffinityMode *RepeatableAttributeRelationAffinityMode `json:"relation_affinity_mode,omitempty"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
@@ -128,7 +128,7 @@ type RepeatableAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                        `json:"show_in_table,omitempty"`
-	Type           *RepeatableAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                      `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                    `json:"show_in_table,omitempty"`
+	Type           *RepeatableAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                  `json:"value_formatter,omitempty"`
 }

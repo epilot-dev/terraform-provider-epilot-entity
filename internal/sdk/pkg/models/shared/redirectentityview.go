@@ -7,31 +7,31 @@ import (
 	"fmt"
 )
 
-type RedirectEntityViewViewTypeEnum string
+type RedirectEntityViewViewType string
 
 const (
-	RedirectEntityViewViewTypeEnumRedirect RedirectEntityViewViewTypeEnum = "redirect"
+	RedirectEntityViewViewTypeRedirect RedirectEntityViewViewType = "redirect"
 )
 
-func (e RedirectEntityViewViewTypeEnum) ToPointer() *RedirectEntityViewViewTypeEnum {
+func (e RedirectEntityViewViewType) ToPointer() *RedirectEntityViewViewType {
 	return &e
 }
 
-func (e *RedirectEntityViewViewTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *RedirectEntityViewViewType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "redirect":
-		*e = RedirectEntityViewViewTypeEnum(v)
+		*e = RedirectEntityViewViewType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RedirectEntityViewViewTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for RedirectEntityViewViewType: %v", v)
 	}
 }
 
 type RedirectEntityView struct {
-	Route    *string                         `json:"route,omitempty"`
-	ViewType *RedirectEntityViewViewTypeEnum `json:"view_type,omitempty"`
+	Route    *string                     `json:"route,omitempty"`
+	ViewType *RedirectEntityViewViewType `json:"view_type,omitempty"`
 }

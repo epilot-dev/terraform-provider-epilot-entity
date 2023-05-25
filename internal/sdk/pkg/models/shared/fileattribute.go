@@ -7,18 +7,18 @@ import (
 	"fmt"
 )
 
-type FileAttributeDefaultAccessControlEnum string
+type FileAttributeDefaultAccessControl string
 
 const (
-	FileAttributeDefaultAccessControlEnumPublicRead FileAttributeDefaultAccessControlEnum = "public-read"
-	FileAttributeDefaultAccessControlEnumPrivate    FileAttributeDefaultAccessControlEnum = "private"
+	FileAttributeDefaultAccessControlPublicRead FileAttributeDefaultAccessControl = "public-read"
+	FileAttributeDefaultAccessControlPrivate    FileAttributeDefaultAccessControl = "private"
 )
 
-func (e FileAttributeDefaultAccessControlEnum) ToPointer() *FileAttributeDefaultAccessControlEnum {
+func (e FileAttributeDefaultAccessControl) ToPointer() *FileAttributeDefaultAccessControl {
 	return &e
 }
 
-func (e *FileAttributeDefaultAccessControlEnum) UnmarshalJSON(data []byte) error {
+func (e *FileAttributeDefaultAccessControl) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -27,25 +27,25 @@ func (e *FileAttributeDefaultAccessControlEnum) UnmarshalJSON(data []byte) error
 	case "public-read":
 		fallthrough
 	case "private":
-		*e = FileAttributeDefaultAccessControlEnum(v)
+		*e = FileAttributeDefaultAccessControl(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for FileAttributeDefaultAccessControlEnum: %v", v)
+		return fmt.Errorf("invalid value for FileAttributeDefaultAccessControl: %v", v)
 	}
 }
 
-type FileAttributeTypeEnum string
+type FileAttributeType string
 
 const (
-	FileAttributeTypeEnumImage FileAttributeTypeEnum = "image"
-	FileAttributeTypeEnumFile  FileAttributeTypeEnum = "file"
+	FileAttributeTypeImage FileAttributeType = "image"
+	FileAttributeTypeFile  FileAttributeType = "file"
 )
 
-func (e FileAttributeTypeEnum) ToPointer() *FileAttributeTypeEnum {
+func (e FileAttributeType) ToPointer() *FileAttributeType {
 	return &e
 }
 
-func (e *FileAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *FileAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -54,10 +54,10 @@ func (e *FileAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 	case "image":
 		fallthrough
 	case "file":
-		*e = FileAttributeTypeEnum(v)
+		*e = FileAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for FileAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for FileAttributeType: %v", v)
 	}
 }
 
@@ -69,10 +69,10 @@ type FileAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints          map[string]interface{}                 `json:"constraints,omitempty"`
-	DefaultAccessControl *FileAttributeDefaultAccessControlEnum `json:"default_access_control,omitempty"`
-	DefaultValue         interface{}                            `json:"default_value,omitempty"`
-	Deprecated           *bool                                  `json:"deprecated,omitempty"`
+	Constraints          map[string]interface{}             `json:"constraints,omitempty"`
+	DefaultAccessControl *FileAttributeDefaultAccessControl `json:"default_access_control,omitempty"`
+	DefaultValue         interface{}                        `json:"default_value,omitempty"`
+	Deprecated           *bool                              `json:"deprecated,omitempty"`
 	// Controls how the images are presented to the user during upload on the Entity Details view.
 	DisplayImagesLandscaped *bool `json:"display_images_landscaped,omitempty"`
 	// When set to true, an i18n description will be used alongside the attribute label.
@@ -113,7 +113,7 @@ type FileAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                 `json:"show_in_table,omitempty"`
-	Type           FileAttributeTypeEnum `json:"type"`
-	ValueFormatter *string               `json:"value_formatter,omitempty"`
+	ShowInTable    *bool             `json:"show_in_table,omitempty"`
+	Type           FileAttributeType `json:"type"`
+	ValueFormatter *string           `json:"value_formatter,omitempty"`
 }

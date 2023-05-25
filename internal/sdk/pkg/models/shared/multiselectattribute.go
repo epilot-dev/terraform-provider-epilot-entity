@@ -82,18 +82,18 @@ func (u MultiSelectAttributeOptions) MarshalJSON() ([]byte, error) {
 	return nil, nil
 }
 
-type MultiSelectAttributeTypeEnum string
+type MultiSelectAttributeType string
 
 const (
-	MultiSelectAttributeTypeEnumMultiselect MultiSelectAttributeTypeEnum = "multiselect"
-	MultiSelectAttributeTypeEnumCheckbox    MultiSelectAttributeTypeEnum = "checkbox"
+	MultiSelectAttributeTypeMultiselect MultiSelectAttributeType = "multiselect"
+	MultiSelectAttributeTypeCheckbox    MultiSelectAttributeType = "checkbox"
 )
 
-func (e MultiSelectAttributeTypeEnum) ToPointer() *MultiSelectAttributeTypeEnum {
+func (e MultiSelectAttributeType) ToPointer() *MultiSelectAttributeType {
 	return &e
 }
 
-func (e *MultiSelectAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *MultiSelectAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -102,10 +102,10 @@ func (e *MultiSelectAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 	case "multiselect":
 		fallthrough
 	case "checkbox":
-		*e = MultiSelectAttributeTypeEnum(v)
+		*e = MultiSelectAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for MultiSelectAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for MultiSelectAttributeType: %v", v)
 	}
 }
 
@@ -158,7 +158,7 @@ type MultiSelectAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                         `json:"show_in_table,omitempty"`
-	Type           *MultiSelectAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                       `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                     `json:"show_in_table,omitempty"`
+	Type           *MultiSelectAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                   `json:"value_formatter,omitempty"`
 }

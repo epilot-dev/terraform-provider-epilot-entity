@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type AutomationAttributeTypeEnum string
+type AutomationAttributeType string
 
 const (
-	AutomationAttributeTypeEnumAutomation AutomationAttributeTypeEnum = "automation"
+	AutomationAttributeTypeAutomation AutomationAttributeType = "automation"
 )
 
-func (e AutomationAttributeTypeEnum) ToPointer() *AutomationAttributeTypeEnum {
+func (e AutomationAttributeType) ToPointer() *AutomationAttributeType {
 	return &e
 }
 
-func (e *AutomationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *AutomationAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "automation":
-		*e = AutomationAttributeTypeEnum(v)
+		*e = AutomationAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for AutomationAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for AutomationAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type AutomationAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                        `json:"show_in_table,omitempty"`
-	Type           *AutomationAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                      `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                    `json:"show_in_table,omitempty"`
+	Type           *AutomationAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                  `json:"value_formatter,omitempty"`
 }

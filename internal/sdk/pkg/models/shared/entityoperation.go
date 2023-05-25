@@ -14,19 +14,19 @@ type EntityOperationDiff struct {
 	Updated *Entity `json:"updated,omitempty"`
 }
 
-type EntityOperationOperationEnum string
+type EntityOperationOperation string
 
 const (
-	EntityOperationOperationEnumCreateEntity EntityOperationOperationEnum = "createEntity"
-	EntityOperationOperationEnumUpdateEntity EntityOperationOperationEnum = "updateEntity"
-	EntityOperationOperationEnumDeleteEntity EntityOperationOperationEnum = "deleteEntity"
+	EntityOperationOperationCreateEntity EntityOperationOperation = "createEntity"
+	EntityOperationOperationUpdateEntity EntityOperationOperation = "updateEntity"
+	EntityOperationOperationDeleteEntity EntityOperationOperation = "deleteEntity"
 )
 
-func (e EntityOperationOperationEnum) ToPointer() *EntityOperationOperationEnum {
+func (e EntityOperationOperation) ToPointer() *EntityOperationOperation {
 	return &e
 }
 
-func (e *EntityOperationOperationEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityOperationOperation) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -37,10 +37,10 @@ func (e *EntityOperationOperationEnum) UnmarshalJSON(data []byte) error {
 	case "updateEntity":
 		fallthrough
 	case "deleteEntity":
-		*e = EntityOperationOperationEnum(v)
+		*e = EntityOperationOperation(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityOperationOperationEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityOperationOperation: %v", v)
 	}
 }
 
@@ -62,7 +62,7 @@ type EntityOperationPayload struct {
 	Title     *string    `json:"_title,omitempty"`
 	UpdatedAt *time.Time `json:"_updated_at,omitempty"`
 
-	Entity map[string]interface{} `json:"-"`
+	Entity interface{} `json:"-"`
 }
 type _EntityOperationPayload EntityOperationPayload
 
@@ -117,11 +117,11 @@ func (c EntityOperationPayload) MarshalJSON() ([]byte, error) {
 
 type EntityOperation struct {
 	// See https://github.com/ulid/spec
-	ActivityID *string                      `json:"activity_id,omitempty"`
-	Diff       *EntityOperationDiff         `json:"diff,omitempty"`
-	Entity     string                       `json:"entity"`
-	Operation  EntityOperationOperationEnum `json:"operation"`
-	Org        string                       `json:"org"`
-	Params     *EntityOperationParams       `json:"params,omitempty"`
-	Payload    *EntityOperationPayload      `json:"payload,omitempty"`
+	ActivityID *string                  `json:"activity_id,omitempty"`
+	Diff       *EntityOperationDiff     `json:"diff,omitempty"`
+	Entity     string                   `json:"entity"`
+	Operation  EntityOperationOperation `json:"operation"`
+	Org        string                   `json:"org"`
+	Params     *EntityOperationParams   `json:"params,omitempty"`
+	Payload    *EntityOperationPayload  `json:"payload,omitempty"`
 }

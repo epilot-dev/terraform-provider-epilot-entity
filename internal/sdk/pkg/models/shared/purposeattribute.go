@@ -8,27 +8,27 @@ import (
 	"time"
 )
 
-type PurposeAttributeTypeEnum string
+type PurposeAttributeType string
 
 const (
-	PurposeAttributeTypeEnumPurpose PurposeAttributeTypeEnum = "purpose"
+	PurposeAttributeTypePurpose PurposeAttributeType = "purpose"
 )
 
-func (e PurposeAttributeTypeEnum) ToPointer() *PurposeAttributeTypeEnum {
+func (e PurposeAttributeType) ToPointer() *PurposeAttributeType {
 	return &e
 }
 
-func (e *PurposeAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *PurposeAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "purpose":
-		*e = PurposeAttributeTypeEnum(v)
+		*e = PurposeAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PurposeAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for PurposeAttributeType: %v", v)
 	}
 }
 
@@ -77,8 +77,8 @@ type PurposeAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                     `json:"show_in_table,omitempty"`
-	Type           *PurposeAttributeTypeEnum `json:"type,omitempty"`
-	UpdatedAt      *time.Time                `json:"updated_at,omitempty"`
-	ValueFormatter *string                   `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                 `json:"show_in_table,omitempty"`
+	Type           *PurposeAttributeType `json:"type,omitempty"`
+	UpdatedAt      *time.Time            `json:"updated_at,omitempty"`
+	ValueFormatter *string               `json:"value_formatter,omitempty"`
 }

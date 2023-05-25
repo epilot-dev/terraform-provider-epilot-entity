@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type InternalAttributeTypeEnum string
+type InternalAttributeType string
 
 const (
-	InternalAttributeTypeEnumInternal InternalAttributeTypeEnum = "internal"
+	InternalAttributeTypeInternal InternalAttributeType = "internal"
 )
 
-func (e InternalAttributeTypeEnum) ToPointer() *InternalAttributeTypeEnum {
+func (e InternalAttributeType) ToPointer() *InternalAttributeType {
 	return &e
 }
 
-func (e *InternalAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *InternalAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "internal":
-		*e = InternalAttributeTypeEnum(v)
+		*e = InternalAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InternalAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for InternalAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type InternalAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                      `json:"show_in_table,omitempty"`
-	Type           *InternalAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                    `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
+	Type           *InternalAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                `json:"value_formatter,omitempty"`
 }

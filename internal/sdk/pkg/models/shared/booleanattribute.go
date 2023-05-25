@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type BooleanAttributeTypeEnum string
+type BooleanAttributeType string
 
 const (
-	BooleanAttributeTypeEnumBoolean BooleanAttributeTypeEnum = "boolean"
+	BooleanAttributeTypeBoolean BooleanAttributeType = "boolean"
 )
 
-func (e BooleanAttributeTypeEnum) ToPointer() *BooleanAttributeTypeEnum {
+func (e BooleanAttributeType) ToPointer() *BooleanAttributeType {
 	return &e
 }
 
-func (e *BooleanAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *BooleanAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "boolean":
-		*e = BooleanAttributeTypeEnum(v)
+		*e = BooleanAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for BooleanAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for BooleanAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type BooleanAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                     `json:"show_in_table,omitempty"`
-	Type           *BooleanAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                   `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                 `json:"show_in_table,omitempty"`
+	Type           *BooleanAttributeType `json:"type,omitempty"`
+	ValueFormatter *string               `json:"value_formatter,omitempty"`
 }

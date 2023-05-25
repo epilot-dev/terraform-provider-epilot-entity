@@ -20,7 +20,7 @@ type ActivityCallerContextEpilotAuth struct {
 type ActivityCallerContext struct {
 	EpilotAuth *ActivityCallerContextEpilotAuth `json:"EpilotAuth,omitempty"`
 
-	AdditionalProperties map[string]interface{} `json:"-"`
+	AdditionalProperties interface{} `json:"-"`
 }
 type _ActivityCallerContext ActivityCallerContext
 

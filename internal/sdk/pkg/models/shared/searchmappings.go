@@ -7,25 +7,25 @@ import (
 	"fmt"
 )
 
-type SearchMappingsTypeEnum string
+type SearchMappingsType string
 
 const (
-	SearchMappingsTypeEnumKeyword   SearchMappingsTypeEnum = "keyword"
-	SearchMappingsTypeEnumText      SearchMappingsTypeEnum = "text"
-	SearchMappingsTypeEnumBoolean   SearchMappingsTypeEnum = "boolean"
-	SearchMappingsTypeEnumInteger   SearchMappingsTypeEnum = "integer"
-	SearchMappingsTypeEnumLong      SearchMappingsTypeEnum = "long"
-	SearchMappingsTypeEnumFloat     SearchMappingsTypeEnum = "float"
-	SearchMappingsTypeEnumDate      SearchMappingsTypeEnum = "date"
-	SearchMappingsTypeEnumFlattened SearchMappingsTypeEnum = "flattened"
-	SearchMappingsTypeEnumNested    SearchMappingsTypeEnum = "nested"
+	SearchMappingsTypeKeyword   SearchMappingsType = "keyword"
+	SearchMappingsTypeText      SearchMappingsType = "text"
+	SearchMappingsTypeBoolean   SearchMappingsType = "boolean"
+	SearchMappingsTypeInteger   SearchMappingsType = "integer"
+	SearchMappingsTypeLong      SearchMappingsType = "long"
+	SearchMappingsTypeFloat     SearchMappingsType = "float"
+	SearchMappingsTypeDate      SearchMappingsType = "date"
+	SearchMappingsTypeFlattened SearchMappingsType = "flattened"
+	SearchMappingsTypeNested    SearchMappingsType = "nested"
 )
 
-func (e SearchMappingsTypeEnum) ToPointer() *SearchMappingsTypeEnum {
+func (e SearchMappingsType) ToPointer() *SearchMappingsType {
 	return &e
 }
 
-func (e *SearchMappingsTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *SearchMappingsType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -48,15 +48,15 @@ func (e *SearchMappingsTypeEnum) UnmarshalJSON(data []byte) error {
 	case "flattened":
 		fallthrough
 	case "nested":
-		*e = SearchMappingsTypeEnum(v)
+		*e = SearchMappingsType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SearchMappingsTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for SearchMappingsType: %v", v)
 	}
 }
 
 type SearchMappings struct {
-	Fields map[string]interface{}  `json:"fields,omitempty"`
-	Index  *bool                   `json:"index,omitempty"`
-	Type   *SearchMappingsTypeEnum `json:"type,omitempty"`
+	Fields map[string]interface{} `json:"fields,omitempty"`
+	Index  *bool                  `json:"index,omitempty"`
+	Type   *SearchMappingsType    `json:"type,omitempty"`
 }

@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type InvitationEmailAttributeTypeEnum string
+type InvitationEmailAttributeType string
 
 const (
-	InvitationEmailAttributeTypeEnumInvitationEmail InvitationEmailAttributeTypeEnum = "invitation_email"
+	InvitationEmailAttributeTypeInvitationEmail InvitationEmailAttributeType = "invitation_email"
 )
 
-func (e InvitationEmailAttributeTypeEnum) ToPointer() *InvitationEmailAttributeTypeEnum {
+func (e InvitationEmailAttributeType) ToPointer() *InvitationEmailAttributeType {
 	return &e
 }
 
-func (e *InvitationEmailAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *InvitationEmailAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "invitation_email":
-		*e = InvitationEmailAttributeTypeEnum(v)
+		*e = InvitationEmailAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InvitationEmailAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for InvitationEmailAttributeType: %v", v)
 	}
 }
 
@@ -73,7 +73,7 @@ type InvitationEmailAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                             `json:"show_in_table,omitempty"`
-	Type           *InvitationEmailAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                           `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                         `json:"show_in_table,omitempty"`
+	Type           *InvitationEmailAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                       `json:"value_formatter,omitempty"`
 }

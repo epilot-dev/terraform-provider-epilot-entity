@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type NumberAttributeTypeEnum string
+type NumberAttributeType string
 
 const (
-	NumberAttributeTypeEnumNumber NumberAttributeTypeEnum = "number"
+	NumberAttributeTypeNumber NumberAttributeType = "number"
 )
 
-func (e NumberAttributeTypeEnum) ToPointer() *NumberAttributeTypeEnum {
+func (e NumberAttributeType) ToPointer() *NumberAttributeType {
 	return &e
 }
 
-func (e *NumberAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *NumberAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "number":
-		*e = NumberAttributeTypeEnum(v)
+		*e = NumberAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NumberAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for NumberAttributeType: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type NumberAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                    `json:"show_in_table,omitempty"`
-	Type           *NumberAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                  `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                `json:"show_in_table,omitempty"`
+	Type           *NumberAttributeType `json:"type,omitempty"`
+	ValueFormatter *string              `json:"value_formatter,omitempty"`
 }

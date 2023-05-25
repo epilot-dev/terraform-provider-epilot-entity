@@ -82,18 +82,18 @@ func (u SelectAttributeOptions) MarshalJSON() ([]byte, error) {
 	return nil, nil
 }
 
-type SelectAttributeTypeEnum string
+type SelectAttributeType string
 
 const (
-	SelectAttributeTypeEnumSelect SelectAttributeTypeEnum = "select"
-	SelectAttributeTypeEnumRadio  SelectAttributeTypeEnum = "radio"
+	SelectAttributeTypeSelect SelectAttributeType = "select"
+	SelectAttributeTypeRadio  SelectAttributeType = "radio"
 )
 
-func (e SelectAttributeTypeEnum) ToPointer() *SelectAttributeTypeEnum {
+func (e SelectAttributeType) ToPointer() *SelectAttributeType {
 	return &e
 }
 
-func (e *SelectAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *SelectAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -102,10 +102,10 @@ func (e *SelectAttributeTypeEnum) UnmarshalJSON(data []byte) error {
 	case "select":
 		fallthrough
 	case "radio":
-		*e = SelectAttributeTypeEnum(v)
+		*e = SelectAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SelectAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for SelectAttributeType: %v", v)
 	}
 }
 
@@ -154,7 +154,7 @@ type SelectAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                    `json:"show_in_table,omitempty"`
-	Type           *SelectAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                  `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                `json:"show_in_table,omitempty"`
+	Type           *SelectAttributeType `json:"type,omitempty"`
+	ValueFormatter *string              `json:"value_formatter,omitempty"`
 }

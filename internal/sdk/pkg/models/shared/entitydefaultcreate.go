@@ -12,32 +12,32 @@ type EntityDefaultCreateTableMenuOptions struct {
 	Label *string `json:"label,omitempty"`
 }
 
-type EntityDefaultCreateViewTypeEnum string
+type EntityDefaultCreateViewType string
 
 const (
-	EntityDefaultCreateViewTypeEnumDefault EntityDefaultCreateViewTypeEnum = "default"
+	EntityDefaultCreateViewTypeDefault EntityDefaultCreateViewType = "default"
 )
 
-func (e EntityDefaultCreateViewTypeEnum) ToPointer() *EntityDefaultCreateViewTypeEnum {
+func (e EntityDefaultCreateViewType) ToPointer() *EntityDefaultCreateViewType {
 	return &e
 }
 
-func (e *EntityDefaultCreateViewTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultCreateViewType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "default":
-		*e = EntityDefaultCreateViewTypeEnum(v)
+		*e = EntityDefaultCreateViewType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultCreateViewTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultCreateViewType: %v", v)
 	}
 }
 
 type EntityDefaultCreate struct {
 	SearchParams     map[string]string                    `json:"search_params,omitempty"`
 	TableMenuOptions *EntityDefaultCreateTableMenuOptions `json:"table_menu_options,omitempty"`
-	ViewType         *EntityDefaultCreateViewTypeEnum     `json:"view_type,omitempty"`
+	ViewType         *EntityDefaultCreateViewType         `json:"view_type,omitempty"`
 }

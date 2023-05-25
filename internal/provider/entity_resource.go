@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"epilot-entity/internal/validators"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -39,15 +38,15 @@ type EntityResource struct {
 
 // EntityResourceModel describes the resource data model.
 type EntityResourceModel struct {
-	CreatedAt types.String            `tfsdk:"created_at"`
-	ID        types.String            `tfsdk:"id"`
-	Org       types.String            `tfsdk:"org"`
-	Schema    types.String            `tfsdk:"schema"`
-	Tags      []types.String          `tfsdk:"tags"`
-	Title     types.String            `tfsdk:"title"`
-	UpdatedAt types.String            `tfsdk:"updated_at"`
-	Slug      types.String            `tfsdk:"slug"`
-	Entity    map[string]types.String `tfsdk:"entity"`
+	CreatedAt types.String   `tfsdk:"created_at"`
+	ID        types.String   `tfsdk:"id"`
+	Org       types.String   `tfsdk:"org"`
+	Schema    types.String   `tfsdk:"schema"`
+	Tags      []types.String `tfsdk:"tags"`
+	Title     types.String   `tfsdk:"title"`
+	UpdatedAt types.String   `tfsdk:"updated_at"`
+	Slug      types.String   `tfsdk:"slug"`
+	Entity    types.String   `tfsdk:"entity"`
 }
 
 func (r *EntityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -94,13 +93,13 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required:    true,
 				Description: `Entity Schema`,
 			},
-			"entity": schema.MapAttribute{
-				Computed:    true,
-				Optional:    true,
-				ElementType: types.StringType,
-				Validators: []validator.Map{
-					mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+			"entity": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				Validators: []validator.String{
+					validators.IsValidJSON(),
 				},
+				Description: `Parsed as JSON.`,
 			},
 		},
 	}
@@ -185,11 +184,9 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 	} else {
 		updatedAt = nil
 	}
-	entity1 := make(map[string]interface{})
-	for entityKey, entityValue := range data.Entity {
-		var entityInst interface{}
-		_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
-		entity1[entityKey] = entityInst
+	var entity1 interface{}
+	if !data.Entity.IsUnknown() && !data.Entity.IsNull() {
+		_ = json.Unmarshal([]byte(data.Entity.ValueString()), &entity1)
 	}
 	entity = &shared.Entity{
 		CreatedAt: createdAt,
@@ -223,7 +220,7 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSDKType(res.EntityItem)
+	data.RefreshFromCreateResponse(res.EntityItem)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -270,7 +267,7 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSDKType(res.GetEntity200ApplicationJSONObject.Entity)
+	data.RefreshFromGetResponse(res.GetEntity200ApplicationJSONObject.Entity)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -324,11 +321,9 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 	} else {
 		updatedAt = nil
 	}
-	entity1 := make(map[string]interface{})
-	for entityKey, entityValue := range data.Entity {
-		var entityInst interface{}
-		_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
-		entity1[entityKey] = entityInst
+	var entity1 interface{}
+	if !data.Entity.IsUnknown() && !data.Entity.IsNull() {
+		_ = json.Unmarshal([]byte(data.Entity.ValueString()), &entity1)
 	}
 	entity = &shared.Entity{
 		CreatedAt: createdAt,
@@ -364,7 +359,7 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSDKType(res.EntityItem)
+	data.RefreshFromUpdateResponse(res.EntityItem)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

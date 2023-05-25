@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type AddressRelationAttributeTypeEnum string
+type AddressRelationAttributeType string
 
 const (
-	AddressRelationAttributeTypeEnumRelationAddress AddressRelationAttributeTypeEnum = "relation_address"
+	AddressRelationAttributeTypeRelationAddress AddressRelationAttributeType = "relation_address"
 )
 
-func (e AddressRelationAttributeTypeEnum) ToPointer() *AddressRelationAttributeTypeEnum {
+func (e AddressRelationAttributeType) ToPointer() *AddressRelationAttributeType {
 	return &e
 }
 
-func (e *AddressRelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *AddressRelationAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "relation_address":
-		*e = AddressRelationAttributeTypeEnum(v)
+		*e = AddressRelationAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for AddressRelationAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for AddressRelationAttributeType: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type AddressRelationAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                             `json:"show_in_table,omitempty"`
-	Type           *AddressRelationAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                           `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                         `json:"show_in_table,omitempty"`
+	Type           *AddressRelationAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                       `json:"value_formatter,omitempty"`
 }

@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type PaymentMethodRelationAttributeTypeEnum string
+type PaymentMethodRelationAttributeType string
 
 const (
-	PaymentMethodRelationAttributeTypeEnumRelationPaymentMethod PaymentMethodRelationAttributeTypeEnum = "relation_payment_method"
+	PaymentMethodRelationAttributeTypeRelationPaymentMethod PaymentMethodRelationAttributeType = "relation_payment_method"
 )
 
-func (e PaymentMethodRelationAttributeTypeEnum) ToPointer() *PaymentMethodRelationAttributeTypeEnum {
+func (e PaymentMethodRelationAttributeType) ToPointer() *PaymentMethodRelationAttributeType {
 	return &e
 }
 
-func (e *PaymentMethodRelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *PaymentMethodRelationAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "relation_payment_method":
-		*e = PaymentMethodRelationAttributeTypeEnum(v)
+		*e = PaymentMethodRelationAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PaymentMethodRelationAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for PaymentMethodRelationAttributeType: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type PaymentMethodRelationAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                                   `json:"show_in_table,omitempty"`
-	Type           *PaymentMethodRelationAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                                 `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                               `json:"show_in_table,omitempty"`
+	Type           *PaymentMethodRelationAttributeType `json:"type,omitempty"`
+	ValueFormatter *string                             `json:"value_formatter,omitempty"`
 }

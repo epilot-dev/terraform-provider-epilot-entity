@@ -61,27 +61,27 @@ func (u CurrencyAttributeCurrency) MarshalJSON() ([]byte, error) {
 	return nil, nil
 }
 
-type CurrencyAttributeTypeEnum string
+type CurrencyAttributeType string
 
 const (
-	CurrencyAttributeTypeEnumCurrency CurrencyAttributeTypeEnum = "currency"
+	CurrencyAttributeTypeCurrency CurrencyAttributeType = "currency"
 )
 
-func (e CurrencyAttributeTypeEnum) ToPointer() *CurrencyAttributeTypeEnum {
+func (e CurrencyAttributeType) ToPointer() *CurrencyAttributeType {
 	return &e
 }
 
-func (e *CurrencyAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *CurrencyAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "currency":
-		*e = CurrencyAttributeTypeEnum(v)
+		*e = CurrencyAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CurrencyAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for CurrencyAttributeType: %v", v)
 	}
 }
 
@@ -130,7 +130,7 @@ type CurrencyAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                     `json:"show_in_table,omitempty"`
-	Type           CurrencyAttributeTypeEnum `json:"type"`
-	ValueFormatter *string                   `json:"value_formatter,omitempty"`
+	ShowInTable    *bool                 `json:"show_in_table,omitempty"`
+	Type           CurrencyAttributeType `json:"type"`
+	ValueFormatter *string               `json:"value_formatter,omitempty"`
 }

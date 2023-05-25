@@ -9,27 +9,27 @@ import (
 	"fmt"
 )
 
-type EntityDefaultTableDropdownItems2TypeEnum string
+type EntityDefaultTableDropdownItems2Type string
 
 const (
-	EntityDefaultTableDropdownItems2TypeEnumLink EntityDefaultTableDropdownItems2TypeEnum = "link"
+	EntityDefaultTableDropdownItems2TypeLink EntityDefaultTableDropdownItems2Type = "link"
 )
 
-func (e EntityDefaultTableDropdownItems2TypeEnum) ToPointer() *EntityDefaultTableDropdownItems2TypeEnum {
+func (e EntityDefaultTableDropdownItems2Type) ToPointer() *EntityDefaultTableDropdownItems2Type {
 	return &e
 }
 
-func (e *EntityDefaultTableDropdownItems2TypeEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultTableDropdownItems2Type) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "link":
-		*e = EntityDefaultTableDropdownItems2TypeEnum(v)
+		*e = EntityDefaultTableDropdownItems2Type(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems2TypeEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems2Type: %v", v)
 	}
 }
 
@@ -37,33 +37,33 @@ type EntityDefaultTableDropdownItems2 struct {
 	// This dropdown item should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Only show item for legacy tenants (ivy)
-	Legacy *bool                                     `json:"legacy,omitempty"`
-	Title  *string                                   `json:"title,omitempty"`
-	Type   *EntityDefaultTableDropdownItems2TypeEnum `json:"type,omitempty"`
-	URI    *string                                   `json:"uri,omitempty"`
+	Legacy *bool                                 `json:"legacy,omitempty"`
+	Title  *string                               `json:"title,omitempty"`
+	Type   *EntityDefaultTableDropdownItems2Type `json:"type,omitempty"`
+	URI    *string                               `json:"uri,omitempty"`
 }
 
-type EntityDefaultTableDropdownItems1TypeEnum string
+type EntityDefaultTableDropdownItems1Type string
 
 const (
-	EntityDefaultTableDropdownItems1TypeEnumEntity EntityDefaultTableDropdownItems1TypeEnum = "entity"
+	EntityDefaultTableDropdownItems1TypeEntity EntityDefaultTableDropdownItems1Type = "entity"
 )
 
-func (e EntityDefaultTableDropdownItems1TypeEnum) ToPointer() *EntityDefaultTableDropdownItems1TypeEnum {
+func (e EntityDefaultTableDropdownItems1Type) ToPointer() *EntityDefaultTableDropdownItems1Type {
 	return &e
 }
 
-func (e *EntityDefaultTableDropdownItems1TypeEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultTableDropdownItems1Type) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "entity":
-		*e = EntityDefaultTableDropdownItems1TypeEnum(v)
+		*e = EntityDefaultTableDropdownItems1Type(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems1TypeEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems1Type: %v", v)
 	}
 }
 
@@ -73,8 +73,8 @@ type EntityDefaultTableDropdownItems1 struct {
 	// This dropdown item should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Only show item for legacy tenants (ivy)
-	Legacy *bool                                     `json:"legacy,omitempty"`
-	Type   *EntityDefaultTableDropdownItems1TypeEnum `json:"type,omitempty"`
+	Legacy *bool                                 `json:"legacy,omitempty"`
+	Type   *EntityDefaultTableDropdownItems1Type `json:"type,omitempty"`
 }
 
 type EntityDefaultTableDropdownItemsType string
@@ -155,27 +155,27 @@ type EntityDefaultTableNavbarActions struct {
 	Type    string                                   `json:"type"`
 }
 
-type EntityDefaultTableViewTypeEnum string
+type EntityDefaultTableViewType string
 
 const (
-	EntityDefaultTableViewTypeEnumDefault EntityDefaultTableViewTypeEnum = "default"
+	EntityDefaultTableViewTypeDefault EntityDefaultTableViewType = "default"
 )
 
-func (e EntityDefaultTableViewTypeEnum) ToPointer() *EntityDefaultTableViewTypeEnum {
+func (e EntityDefaultTableViewType) ToPointer() *EntityDefaultTableViewType {
 	return &e
 }
 
-func (e *EntityDefaultTableViewTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultTableViewType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "default":
-		*e = EntityDefaultTableViewTypeEnum(v)
+		*e = EntityDefaultTableViewType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableViewTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultTableViewType: %v", v)
 	}
 }
 
@@ -186,5 +186,5 @@ type EntityDefaultTable struct {
 	EnableThumbnails *bool                             `json:"enable_thumbnails,omitempty"`
 	NavbarActions    []EntityDefaultTableNavbarActions `json:"navbar_actions,omitempty"`
 	RowActions       []string                          `json:"row_actions,omitempty"`
-	ViewType         *EntityDefaultTableViewTypeEnum   `json:"view_type,omitempty"`
+	ViewType         *EntityDefaultTableViewType       `json:"view_type,omitempty"`
 }

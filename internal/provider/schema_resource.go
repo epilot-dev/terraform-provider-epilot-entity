@@ -1304,13 +1304,13 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															validators.IsRFC3339(),
 														},
 													},
-													"entity": schema.MapAttribute{
-														Computed:    true,
-														Optional:    true,
-														ElementType: types.StringType,
-														Validators: []validator.Map{
-															mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+													"entity": schema.StringAttribute{
+														Computed: true,
+														Optional: true,
+														Validators: []validator.String{
+															validators.IsValidJSON(),
 														},
+														Description: `Parsed as JSON.`,
 													},
 												},
 											},
@@ -4886,13 +4886,13 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																		validators.IsRFC3339(),
 																	},
 																},
-																"entity": schema.MapAttribute{
-																	Computed:    true,
-																	Optional:    true,
-																	ElementType: types.StringType,
-																	Validators: []validator.Map{
-																		mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+																"entity": schema.StringAttribute{
+																	Computed: true,
+																	Optional: true,
+																	Validators: []validator.String{
+																		validators.IsValidJSON(),
 																	},
+																	Description: `Parsed as JSON.`,
 																},
 															},
 														},
@@ -7444,13 +7444,13 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 					},
-					"additional_properties": schema.MapAttribute{
-						Computed:    true,
-						Optional:    true,
-						ElementType: types.StringType,
-						Validators: []validator.Map{
-							mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+					"additional_properties": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						Validators: []validator.String{
+							validators.IsValidJSON(),
 						},
+						Description: `Parsed as JSON.`,
 					},
 				},
 				MarkdownDescription: `Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:` + "\n" +
@@ -8020,7 +8020,7 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	entitySchema := data.ToSDKType()
+	entitySchema := data.ToCreateSDKType()
 	draft := new(bool)
 	if !data.Draft.IsUnknown() && !data.Draft.IsNull() {
 		*draft = data.Draft.ValueBool()
@@ -8050,7 +8050,7 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSDKType(res.PutSchema200ApplicationJSONObject.Results)
+	data.RefreshFromCreateResponse(res.PutSchema200ApplicationJSONObject.Results)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -8102,7 +8102,7 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSDKType(res.EntitySchemaItem)
+	data.RefreshFromGetResponse(res.EntitySchemaItem)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -8115,7 +8115,7 @@ func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	entitySchema := data.ToSDKType()
+	entitySchema := data.ToUpdateSDKType()
 	draft := new(bool)
 	if !data.Draft.IsUnknown() && !data.Draft.IsNull() {
 		*draft = data.Draft.ValueBool()
@@ -8145,7 +8145,7 @@ func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSDKType(res.PutSchema200ApplicationJSONObject.Results)
+	data.RefreshFromUpdateResponse(res.PutSchema200ApplicationJSONObject.Results)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

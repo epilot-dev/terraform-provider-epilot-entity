@@ -870,7 +870,7 @@ Required:
 
 Optional:
 
-- `entity` (Map of String)
+- `entity` (String) Parsed as JSON.
 - `tags` (List of String)
 
 
@@ -2026,7 +2026,7 @@ Required:
 
 Optional:
 
-- `entity` (Map of String)
+- `entity` (String) Parsed as JSON.
 - `tags` (List of String)
 
 
@@ -2422,7 +2422,7 @@ Optional:
 
 Optional:
 
-- `additional_properties` (Map of String)
+- `additional_properties` (String) Parsed as JSON.
 - `grid_gap` (String)
 - `grid_template_columns` (String)
 

@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type TextAttributeTypeEnum string
+type TextAttributeType string
 
 const (
-	TextAttributeTypeEnumString TextAttributeTypeEnum = "string"
+	TextAttributeTypeString TextAttributeType = "string"
 )
 
-func (e TextAttributeTypeEnum) ToPointer() *TextAttributeTypeEnum {
+func (e TextAttributeType) ToPointer() *TextAttributeType {
 	return &e
 }
 
-func (e *TextAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *TextAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "string":
-		*e = TextAttributeTypeEnum(v)
+		*e = TextAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TextAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for TextAttributeType: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type TextAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
-	Type           *TextAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                `json:"value_formatter,omitempty"`
+	ShowInTable    *bool              `json:"show_in_table,omitempty"`
+	Type           *TextAttributeType `json:"type,omitempty"`
+	ValueFormatter *string            `json:"value_formatter,omitempty"`
 }

@@ -21,7 +21,7 @@ Entity Resource
 
 ### Optional
 
-- `entity` (Map of String)
+- `entity` (String) Parsed as JSON.
 
 ### Read-Only
 

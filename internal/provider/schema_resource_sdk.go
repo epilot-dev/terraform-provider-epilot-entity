@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
+func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 	attributes := make([]shared.Attribute, 0)
 	for _, attributesItem := range r.Attributes {
 		if attributesItem.TextAttribute != nil {
@@ -23,7 +23,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue.ValueString()), &constraintsInst)
 				constraints[constraintsKey] = constraintsInst
 			}
-			var defaultValue *interface{}
+			var defaultValue interface{}
 			if !attributesItem.TextAttribute.DefaultValue.IsUnknown() && !attributesItem.TextAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.TextAttribute.DefaultValue.ValueString()), &defaultValue)
 			}
@@ -137,9 +137,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable = nil
 			}
-			type1 := new(shared.TextAttributeTypeEnum)
+			type1 := new(shared.TextAttributeType)
 			if !attributesItem.TextAttribute.Type.IsUnknown() && !attributesItem.TextAttribute.Type.IsNull() {
-				*type1 = shared.TextAttributeTypeEnum(attributesItem.TextAttribute.Type.ValueString())
+				*type1 = shared.TextAttributeType(attributesItem.TextAttribute.Type.ValueString())
 			} else {
 				type1 = nil
 			}
@@ -191,7 +191,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue1.ValueString()), &constraintsInst1)
 				constraints1[constraintsKey1] = constraintsInst1
 			}
-			var defaultValue1 *interface{}
+			var defaultValue1 interface{}
 			if !attributesItem.LinkAttribute.DefaultValue.IsUnknown() && !attributesItem.LinkAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.LinkAttribute.DefaultValue.ValueString()), &defaultValue1)
 			}
@@ -299,9 +299,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable1 = nil
 			}
-			type2 := new(shared.LinkAttributeTypeEnum)
+			type2 := new(shared.LinkAttributeType)
 			if !attributesItem.LinkAttribute.Type.IsUnknown() && !attributesItem.LinkAttribute.Type.IsNull() {
-				*type2 = shared.LinkAttributeTypeEnum(attributesItem.LinkAttribute.Type.ValueString())
+				*type2 = shared.LinkAttributeType(attributesItem.LinkAttribute.Type.ValueString())
 			} else {
 				type2 = nil
 			}
@@ -352,7 +352,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue2.ValueString()), &constraintsInst2)
 				constraints2[constraintsKey2] = constraintsInst2
 			}
-			var defaultValue2 *interface{}
+			var defaultValue2 interface{}
 			if !attributesItem.DateAttribute.DefaultValue.IsUnknown() && !attributesItem.DateAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.DateAttribute.DefaultValue.ValueString()), &defaultValue2)
 			}
@@ -460,9 +460,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable2 = nil
 			}
-			type3 := new(shared.DateAttributeTypeEnum)
+			type3 := new(shared.DateAttributeType)
 			if !attributesItem.DateAttribute.Type.IsUnknown() && !attributesItem.DateAttribute.Type.IsNull() {
-				*type3 = shared.DateAttributeTypeEnum(attributesItem.DateAttribute.Type.ValueString())
+				*type3 = shared.DateAttributeType(attributesItem.DateAttribute.Type.ValueString())
 			} else {
 				type3 = nil
 			}
@@ -513,7 +513,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue3.ValueString()), &constraintsInst3)
 				constraints3[constraintsKey3] = constraintsInst3
 			}
-			var defaultValue3 *interface{}
+			var defaultValue3 interface{}
 			if !attributesItem.CountryAttribute.DefaultValue.IsUnknown() && !attributesItem.CountryAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.CountryAttribute.DefaultValue.ValueString()), &defaultValue3)
 			}
@@ -621,9 +621,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable3 = nil
 			}
-			type4 := new(shared.CountryAttributeTypeEnum)
+			type4 := new(shared.CountryAttributeType)
 			if !attributesItem.CountryAttribute.Type.IsUnknown() && !attributesItem.CountryAttribute.Type.IsNull() {
-				*type4 = shared.CountryAttributeTypeEnum(attributesItem.CountryAttribute.Type.ValueString())
+				*type4 = shared.CountryAttributeType(attributesItem.CountryAttribute.Type.ValueString())
 			} else {
 				type4 = nil
 			}
@@ -674,7 +674,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue4.ValueString()), &constraintsInst4)
 				constraints4[constraintsKey4] = constraintsInst4
 			}
-			var defaultValue4 *interface{}
+			var defaultValue4 interface{}
 			if !attributesItem.BooleanAttribute.DefaultValue.IsUnknown() && !attributesItem.BooleanAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.BooleanAttribute.DefaultValue.ValueString()), &defaultValue4)
 			}
@@ -782,9 +782,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable4 = nil
 			}
-			type5 := new(shared.BooleanAttributeTypeEnum)
+			type5 := new(shared.BooleanAttributeType)
 			if !attributesItem.BooleanAttribute.Type.IsUnknown() && !attributesItem.BooleanAttribute.Type.IsNull() {
-				*type5 = shared.BooleanAttributeTypeEnum(attributesItem.BooleanAttribute.Type.ValueString())
+				*type5 = shared.BooleanAttributeType(attributesItem.BooleanAttribute.Type.ValueString())
 			} else {
 				type5 = nil
 			}
@@ -841,7 +841,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue5.ValueString()), &constraintsInst5)
 				constraints5[constraintsKey5] = constraintsInst5
 			}
-			var defaultValue5 *interface{}
+			var defaultValue5 interface{}
 			if !attributesItem.SelectAttribute.DefaultValue.IsUnknown() && !attributesItem.SelectAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.SelectAttribute.DefaultValue.ValueString()), &defaultValue5)
 			}
@@ -974,9 +974,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable5 = nil
 			}
-			type6 := new(shared.SelectAttributeTypeEnum)
+			type6 := new(shared.SelectAttributeType)
 			if !attributesItem.SelectAttribute.Type.IsUnknown() && !attributesItem.SelectAttribute.Type.IsNull() {
-				*type6 = shared.SelectAttributeTypeEnum(attributesItem.SelectAttribute.Type.ValueString())
+				*type6 = shared.SelectAttributeType(attributesItem.SelectAttribute.Type.ValueString())
 			} else {
 				type6 = nil
 			}
@@ -1041,7 +1041,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue6.ValueString()), &constraintsInst6)
 				constraints6[constraintsKey6] = constraintsInst6
 			}
-			var defaultValue6 *interface{}
+			var defaultValue6 interface{}
 			if !attributesItem.MultiSelectAttribute.DefaultValue.IsUnknown() && !attributesItem.MultiSelectAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.MultiSelectAttribute.DefaultValue.ValueString()), &defaultValue6)
 			}
@@ -1180,9 +1180,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable6 = nil
 			}
-			type7 := new(shared.MultiSelectAttributeTypeEnum)
+			type7 := new(shared.MultiSelectAttributeType)
 			if !attributesItem.MultiSelectAttribute.Type.IsUnknown() && !attributesItem.MultiSelectAttribute.Type.IsNull() {
-				*type7 = shared.MultiSelectAttributeTypeEnum(attributesItem.MultiSelectAttribute.Type.ValueString())
+				*type7 = shared.MultiSelectAttributeType(attributesItem.MultiSelectAttribute.Type.ValueString())
 			} else {
 				type7 = nil
 			}
@@ -1237,7 +1237,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue7.ValueString()), &constraintsInst7)
 				constraints7[constraintsKey7] = constraintsInst7
 			}
-			var defaultValue7 *interface{}
+			var defaultValue7 interface{}
 			if !attributesItem.StatusAttribute.DefaultValue.IsUnknown() && !attributesItem.StatusAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.StatusAttribute.DefaultValue.ValueString()), &defaultValue7)
 			}
@@ -1370,9 +1370,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable7 = nil
 			}
-			type8 := new(shared.StatusAttributeTypeEnum)
+			type8 := new(shared.StatusAttributeType)
 			if !attributesItem.StatusAttribute.Type.IsUnknown() && !attributesItem.StatusAttribute.Type.IsNull() {
-				*type8 = shared.StatusAttributeTypeEnum(attributesItem.StatusAttribute.Type.ValueString())
+				*type8 = shared.StatusAttributeType(attributesItem.StatusAttribute.Type.ValueString())
 			} else {
 				type8 = nil
 			}
@@ -1424,7 +1424,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue8.ValueString()), &constraintsInst8)
 				constraints8[constraintsKey8] = constraintsInst8
 			}
-			var defaultValue8 *interface{}
+			var defaultValue8 interface{}
 			if !attributesItem.SequenceAttribute.DefaultValue.IsUnknown() && !attributesItem.SequenceAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.SequenceAttribute.DefaultValue.ValueString()), &defaultValue8)
 			}
@@ -1544,9 +1544,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				startNumber = nil
 			}
-			type9 := new(shared.SequenceAttributeTypeEnum)
+			type9 := new(shared.SequenceAttributeType)
 			if !attributesItem.SequenceAttribute.Type.IsUnknown() && !attributesItem.SequenceAttribute.Type.IsNull() {
-				*type9 = shared.SequenceAttributeTypeEnum(attributesItem.SequenceAttribute.Type.ValueString())
+				*type9 = shared.SequenceAttributeType(attributesItem.SequenceAttribute.Type.ValueString())
 			} else {
 				type9 = nil
 			}
@@ -1595,9 +1595,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			}
 			actions := make([]shared.RelationAttributeActions, 0)
 			for _, actionsItem := range attributesItem.RelationAttribute.Actions {
-				actionType := new(shared.RelationAttributeActionsActionTypeEnum)
+				actionType := new(shared.RelationAttributeActionsActionType)
 				if !actionsItem.ActionType.IsUnknown() && !actionsItem.ActionType.IsNull() {
-					*actionType = shared.RelationAttributeActionsActionTypeEnum(actionsItem.ActionType.ValueString())
+					*actionType = shared.RelationAttributeActionsActionType(actionsItem.ActionType.ValueString())
 				} else {
 					actionType = nil
 				}
@@ -1631,11 +1631,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					}
 					title3 := actionsItem.NewEntityItem.Title.ValueString()
 					updatedAt, _ := time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.UpdatedAt.ValueString())
-					entity := make(map[string]interface{})
-					for entityKey, entityValue := range actionsItem.NewEntityItem.Entity {
-						var entityInst interface{}
-						_ = json.Unmarshal([]byte(entityValue.ValueString()), &entityInst)
-						entity[entityKey] = entityInst
+					var entity interface{}
+					if !actionsItem.NewEntityItem.Entity.IsUnknown() && !actionsItem.NewEntityItem.Entity.IsNull() {
+						_ = json.Unmarshal([]byte(actionsItem.NewEntityItem.Entity.ValueString()), &entity)
 					}
 					newEntityItem = &shared.RelationAttributeActionsNewEntityItem{
 						CreatedAt: createdAt,
@@ -1679,7 +1677,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue9.ValueString()), &constraintsInst9)
 				constraints9[constraintsKey9] = constraintsInst9
 			}
-			var defaultValue9 *interface{}
+			var defaultValue9 interface{}
 			if !attributesItem.RelationAttribute.DefaultValue.IsUnknown() && !attributesItem.RelationAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.RelationAttribute.DefaultValue.ValueString()), &defaultValue9)
 			}
@@ -1695,15 +1693,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				detailsViewModeEnabled = nil
 			}
-			drawerSize := new(shared.RelationAttributeDrawerSizeEnum)
+			drawerSize := new(shared.RelationAttributeDrawerSize)
 			if !attributesItem.RelationAttribute.DrawerSize.IsUnknown() && !attributesItem.RelationAttribute.DrawerSize.IsNull() {
-				*drawerSize = shared.RelationAttributeDrawerSizeEnum(attributesItem.RelationAttribute.DrawerSize.ValueString())
+				*drawerSize = shared.RelationAttributeDrawerSize(attributesItem.RelationAttribute.DrawerSize.ValueString())
 			} else {
 				drawerSize = nil
 			}
-			editMode := new(shared.RelationAttributeEditModeEnum)
+			editMode := new(shared.RelationAttributeEditMode)
 			if !attributesItem.RelationAttribute.EditMode.IsUnknown() && !attributesItem.RelationAttribute.EditMode.IsNull() {
-				*editMode = shared.RelationAttributeEditModeEnum(attributesItem.RelationAttribute.EditMode.ValueString())
+				*editMode = shared.RelationAttributeEditMode(attributesItem.RelationAttribute.EditMode.ValueString())
 			} else {
 				editMode = nil
 			}
@@ -1799,15 +1797,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				readonly9 = nil
 			}
-			relationAffinityMode := new(shared.RelationAttributeRelationAffinityModeEnum)
+			relationAffinityMode := new(shared.RelationAttributeRelationAffinityMode)
 			if !attributesItem.RelationAttribute.RelationAffinityMode.IsUnknown() && !attributesItem.RelationAttribute.RelationAffinityMode.IsNull() {
-				*relationAffinityMode = shared.RelationAttributeRelationAffinityModeEnum(attributesItem.RelationAttribute.RelationAffinityMode.ValueString())
+				*relationAffinityMode = shared.RelationAttributeRelationAffinityMode(attributesItem.RelationAttribute.RelationAffinityMode.ValueString())
 			} else {
 				relationAffinityMode = nil
 			}
-			relationType := new(shared.RelationAttributeRelationTypeEnum)
+			relationType := new(shared.RelationAttributeRelationType)
 			if !attributesItem.RelationAttribute.RelationType.IsUnknown() && !attributesItem.RelationAttribute.RelationType.IsNull() {
-				*relationType = shared.RelationAttributeRelationTypeEnum(attributesItem.RelationAttribute.RelationType.ValueString())
+				*relationType = shared.RelationAttributeRelationType(attributesItem.RelationAttribute.RelationType.ValueString())
 			} else {
 				relationType = nil
 			}
@@ -1876,9 +1874,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					})
 				}
 			}
-			type10 := new(shared.RelationAttributeTypeEnum)
+			type10 := new(shared.RelationAttributeType)
 			if !attributesItem.RelationAttribute.Type.IsUnknown() && !attributesItem.RelationAttribute.Type.IsNull() {
-				*type10 = shared.RelationAttributeTypeEnum(attributesItem.RelationAttribute.Type.ValueString())
+				*type10 = shared.RelationAttributeType(attributesItem.RelationAttribute.Type.ValueString())
 			} else {
 				type10 = nil
 			}
@@ -1943,7 +1941,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue10.ValueString()), &constraintsInst10)
 				constraints10[constraintsKey10] = constraintsInst10
 			}
-			var defaultValue10 *interface{}
+			var defaultValue10 interface{}
 			if !attributesItem.UserRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.UserRelationAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.UserRelationAttribute.DefaultValue.ValueString()), &defaultValue10)
 			}
@@ -2057,9 +2055,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable10 = nil
 			}
-			type11 := new(shared.UserRelationAttributeTypeEnum)
+			type11 := new(shared.UserRelationAttributeType)
 			if !attributesItem.UserRelationAttribute.Type.IsUnknown() && !attributesItem.UserRelationAttribute.Type.IsNull() {
-				*type11 = shared.UserRelationAttributeTypeEnum(attributesItem.UserRelationAttribute.Type.ValueString())
+				*type11 = shared.UserRelationAttributeType(attributesItem.UserRelationAttribute.Type.ValueString())
 			} else {
 				type11 = nil
 			}
@@ -2111,7 +2109,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue11.ValueString()), &constraintsInst11)
 				constraints11[constraintsKey11] = constraintsInst11
 			}
-			var defaultValue11 *interface{}
+			var defaultValue11 interface{}
 			if !attributesItem.AddressRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.AddressRelationAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.AddressRelationAttribute.DefaultValue.ValueString()), &defaultValue11)
 			}
@@ -2225,9 +2223,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable11 = nil
 			}
-			type12 := new(shared.AddressRelationAttributeTypeEnum)
+			type12 := new(shared.AddressRelationAttributeType)
 			if !attributesItem.AddressRelationAttribute.Type.IsUnknown() && !attributesItem.AddressRelationAttribute.Type.IsNull() {
-				*type12 = shared.AddressRelationAttributeTypeEnum(attributesItem.AddressRelationAttribute.Type.ValueString())
+				*type12 = shared.AddressRelationAttributeType(attributesItem.AddressRelationAttribute.Type.ValueString())
 			} else {
 				type12 = nil
 			}
@@ -2279,7 +2277,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue12.ValueString()), &constraintsInst12)
 				constraints12[constraintsKey12] = constraintsInst12
 			}
-			var defaultValue12 *interface{}
+			var defaultValue12 interface{}
 			if !attributesItem.PaymentMethodRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.PaymentMethodRelationAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.PaymentMethodRelationAttribute.DefaultValue.ValueString()), &defaultValue12)
 			}
@@ -2393,9 +2391,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable12 = nil
 			}
-			type13 := new(shared.PaymentMethodRelationAttributeTypeEnum)
+			type13 := new(shared.PaymentMethodRelationAttributeType)
 			if !attributesItem.PaymentMethodRelationAttribute.Type.IsUnknown() && !attributesItem.PaymentMethodRelationAttribute.Type.IsNull() {
-				*type13 = shared.PaymentMethodRelationAttributeTypeEnum(attributesItem.PaymentMethodRelationAttribute.Type.ValueString())
+				*type13 = shared.PaymentMethodRelationAttributeType(attributesItem.PaymentMethodRelationAttribute.Type.ValueString())
 			} else {
 				type13 = nil
 			}
@@ -2476,7 +2474,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				currencySelectorOnly = nil
 			}
-			var defaultValue13 *interface{}
+			var defaultValue13 interface{}
 			if !attributesItem.CurrencyAttribute.DefaultValue.IsUnknown() && !attributesItem.CurrencyAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.CurrencyAttribute.DefaultValue.ValueString()), &defaultValue13)
 			}
@@ -2584,7 +2582,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable13 = nil
 			}
-			type14 := shared.CurrencyAttributeTypeEnum(attributesItem.CurrencyAttribute.Type.ValueString())
+			type14 := shared.CurrencyAttributeType(attributesItem.CurrencyAttribute.Type.ValueString())
 			valueFormatter13 := new(string)
 			if !attributesItem.CurrencyAttribute.ValueFormatter.IsUnknown() && !attributesItem.CurrencyAttribute.ValueFormatter.IsNull() {
 				*valueFormatter13 = attributesItem.CurrencyAttribute.ValueFormatter.ValueString()
@@ -2634,7 +2632,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue14.ValueString()), &constraintsInst14)
 				constraints14[constraintsKey14] = constraintsInst14
 			}
-			var defaultValue14 *interface{}
+			var defaultValue14 interface{}
 			if !attributesItem.RepeatableAttribute.DefaultValue.IsUnknown() && !attributesItem.RepeatableAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.RepeatableAttribute.DefaultValue.ValueString()), &defaultValue14)
 			}
@@ -2730,9 +2728,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				readonly14 = nil
 			}
-			relationAffinityMode1 := new(shared.RepeatableAttributeRelationAffinityModeEnum)
+			relationAffinityMode1 := new(shared.RepeatableAttributeRelationAffinityMode)
 			if !attributesItem.RepeatableAttribute.RelationAffinityMode.IsUnknown() && !attributesItem.RepeatableAttribute.RelationAffinityMode.IsNull() {
-				*relationAffinityMode1 = shared.RepeatableAttributeRelationAffinityModeEnum(attributesItem.RepeatableAttribute.RelationAffinityMode.ValueString())
+				*relationAffinityMode1 = shared.RepeatableAttributeRelationAffinityMode(attributesItem.RepeatableAttribute.RelationAffinityMode.ValueString())
 			} else {
 				relationAffinityMode1 = nil
 			}
@@ -2766,9 +2764,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable14 = nil
 			}
-			type15 := new(shared.RepeatableAttributeTypeEnum)
+			type15 := new(shared.RepeatableAttributeType)
 			if !attributesItem.RepeatableAttribute.Type.IsUnknown() && !attributesItem.RepeatableAttribute.Type.IsNull() {
-				*type15 = shared.RepeatableAttributeTypeEnum(attributesItem.RepeatableAttribute.Type.ValueString())
+				*type15 = shared.RepeatableAttributeType(attributesItem.RepeatableAttribute.Type.ValueString())
 			} else {
 				type15 = nil
 			}
@@ -2823,7 +2821,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue15.ValueString()), &constraintsInst15)
 				constraints15[constraintsKey15] = constraintsInst15
 			}
-			var defaultValue15 *interface{}
+			var defaultValue15 interface{}
 			if !attributesItem.TagsAttribute.DefaultValue.IsUnknown() && !attributesItem.TagsAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.TagsAttribute.DefaultValue.ValueString()), &defaultValue15)
 			}
@@ -2939,9 +2937,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			for _, suggestionsItem := range attributesItem.TagsAttribute.Suggestions {
 				suggestions = append(suggestions, suggestionsItem.ValueString())
 			}
-			type16 := new(shared.TagsAttributeTypeEnum)
+			type16 := new(shared.TagsAttributeType)
 			if !attributesItem.TagsAttribute.Type.IsUnknown() && !attributesItem.TagsAttribute.Type.IsNull() {
-				*type16 = shared.TagsAttributeTypeEnum(attributesItem.TagsAttribute.Type.ValueString())
+				*type16 = shared.TagsAttributeType(attributesItem.TagsAttribute.Type.ValueString())
 			} else {
 				type16 = nil
 			}
@@ -2994,7 +2992,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue16.ValueString()), &constraintsInst16)
 				constraints16[constraintsKey16] = constraintsInst16
 			}
-			var defaultValue16 *interface{}
+			var defaultValue16 interface{}
 			if !attributesItem.NumberAttribute.DefaultValue.IsUnknown() && !attributesItem.NumberAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.NumberAttribute.DefaultValue.ValueString()), &defaultValue16)
 			}
@@ -3108,9 +3106,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable16 = nil
 			}
-			type17 := new(shared.NumberAttributeTypeEnum)
+			type17 := new(shared.NumberAttributeType)
 			if !attributesItem.NumberAttribute.Type.IsUnknown() && !attributesItem.NumberAttribute.Type.IsNull() {
-				*type17 = shared.NumberAttributeTypeEnum(attributesItem.NumberAttribute.Type.ValueString())
+				*type17 = shared.NumberAttributeType(attributesItem.NumberAttribute.Type.ValueString())
 			} else {
 				type17 = nil
 			}
@@ -3162,7 +3160,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue17.ValueString()), &constraintsInst17)
 				constraints17[constraintsKey17] = constraintsInst17
 			}
-			var defaultValue17 *interface{}
+			var defaultValue17 interface{}
 			if !attributesItem.ConsentAttribute.DefaultValue.IsUnknown() && !attributesItem.ConsentAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.ConsentAttribute.DefaultValue.ValueString()), &defaultValue17)
 			}
@@ -3275,7 +3273,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				showInTable17 = nil
 			}
 			topic := attributesItem.ConsentAttribute.Topic.ValueString()
-			type18 := shared.ConsentAttributeTypeEnum(attributesItem.ConsentAttribute.Type.ValueString())
+			type18 := shared.ConsentAttributeType(attributesItem.ConsentAttribute.Type.ValueString())
 			valueFormatter17 := new(string)
 			if !attributesItem.ConsentAttribute.ValueFormatter.IsUnknown() && !attributesItem.ConsentAttribute.ValueFormatter.IsNull() {
 				*valueFormatter17 = attributesItem.ConsentAttribute.ValueFormatter.ValueString()
@@ -3325,7 +3323,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue18.ValueString()), &constraintsInst18)
 				constraints18[constraintsKey18] = constraintsInst18
 			}
-			var defaultValue18 *interface{}
+			var defaultValue18 interface{}
 			if !attributesItem.InternalAttribute.DefaultValue.IsUnknown() && !attributesItem.InternalAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.InternalAttribute.DefaultValue.ValueString()), &defaultValue18)
 			}
@@ -3433,9 +3431,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable18 = nil
 			}
-			type19 := new(shared.InternalAttributeTypeEnum)
+			type19 := new(shared.InternalAttributeType)
 			if !attributesItem.InternalAttribute.Type.IsUnknown() && !attributesItem.InternalAttribute.Type.IsNull() {
-				*type19 = shared.InternalAttributeTypeEnum(attributesItem.InternalAttribute.Type.ValueString())
+				*type19 = shared.InternalAttributeType(attributesItem.InternalAttribute.Type.ValueString())
 			} else {
 				type19 = nil
 			}
@@ -3486,7 +3484,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue19.ValueString()), &constraintsInst19)
 				constraints19[constraintsKey19] = constraintsInst19
 			}
-			var defaultValue19 *interface{}
+			var defaultValue19 interface{}
 			if !attributesItem.OrderedListAttribute.DefaultValue.IsUnknown() && !attributesItem.OrderedListAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.OrderedListAttribute.DefaultValue.ValueString()), &defaultValue19)
 			}
@@ -3594,9 +3592,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable19 = nil
 			}
-			type20 := new(shared.OrderedListAttributeTypeEnum)
+			type20 := new(shared.OrderedListAttributeType)
 			if !attributesItem.OrderedListAttribute.Type.IsUnknown() && !attributesItem.OrderedListAttribute.Type.IsNull() {
-				*type20 = shared.OrderedListAttributeTypeEnum(attributesItem.OrderedListAttribute.Type.ValueString())
+				*type20 = shared.OrderedListAttributeType(attributesItem.OrderedListAttribute.Type.ValueString())
 			} else {
 				type20 = nil
 			}
@@ -3651,13 +3649,13 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue20.ValueString()), &constraintsInst20)
 				constraints20[constraintsKey20] = constraintsInst20
 			}
-			defaultAccessControl := new(shared.FileAttributeDefaultAccessControlEnum)
+			defaultAccessControl := new(shared.FileAttributeDefaultAccessControl)
 			if !attributesItem.FileAttribute.DefaultAccessControl.IsUnknown() && !attributesItem.FileAttribute.DefaultAccessControl.IsNull() {
-				*defaultAccessControl = shared.FileAttributeDefaultAccessControlEnum(attributesItem.FileAttribute.DefaultAccessControl.ValueString())
+				*defaultAccessControl = shared.FileAttributeDefaultAccessControl(attributesItem.FileAttribute.DefaultAccessControl.ValueString())
 			} else {
 				defaultAccessControl = nil
 			}
-			var defaultValue20 *interface{}
+			var defaultValue20 interface{}
 			if !attributesItem.FileAttribute.DefaultValue.IsUnknown() && !attributesItem.FileAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.FileAttribute.DefaultValue.ValueString()), &defaultValue20)
 			}
@@ -3783,7 +3781,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable20 = nil
 			}
-			type21 := shared.FileAttributeTypeEnum(attributesItem.FileAttribute.Type.ValueString())
+			type21 := shared.FileAttributeType(attributesItem.FileAttribute.Type.ValueString())
 			valueFormatter20 := new(string)
 			if !attributesItem.FileAttribute.ValueFormatter.IsUnknown() && !attributesItem.FileAttribute.ValueFormatter.IsNull() {
 				*valueFormatter20 = attributesItem.FileAttribute.ValueFormatter.ValueString()
@@ -3836,7 +3834,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue21.ValueString()), &constraintsInst21)
 				constraints21[constraintsKey21] = constraintsInst21
 			}
-			var defaultValue21 *interface{}
+			var defaultValue21 interface{}
 			if !attributesItem.ComputedAttribute.DefaultValue.IsUnknown() && !attributesItem.ComputedAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.ComputedAttribute.DefaultValue.ValueString()), &defaultValue21)
 			}
@@ -3944,9 +3942,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable21 = nil
 			}
-			type22 := new(shared.ComputedAttributeTypeEnum)
+			type22 := new(shared.ComputedAttributeType)
 			if !attributesItem.ComputedAttribute.Type.IsUnknown() && !attributesItem.ComputedAttribute.Type.IsNull() {
-				*type22 = shared.ComputedAttributeTypeEnum(attributesItem.ComputedAttribute.Type.ValueString())
+				*type22 = shared.ComputedAttributeType(attributesItem.ComputedAttribute.Type.ValueString())
 			} else {
 				type22 = nil
 			}
@@ -3997,7 +3995,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue22.ValueString()), &constraintsInst22)
 				constraints22[constraintsKey22] = constraintsInst22
 			}
-			var defaultValue22 *interface{}
+			var defaultValue22 interface{}
 			if !attributesItem.PartnerStatusAttribute.DefaultValue.IsUnknown() && !attributesItem.PartnerStatusAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.PartnerStatusAttribute.DefaultValue.ValueString()), &defaultValue22)
 			}
@@ -4105,9 +4103,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable22 = nil
 			}
-			type23 := new(shared.PartnerStatusAttributeTypeEnum)
+			type23 := new(shared.PartnerStatusAttributeType)
 			if !attributesItem.PartnerStatusAttribute.Type.IsUnknown() && !attributesItem.PartnerStatusAttribute.Type.IsNull() {
-				*type23 = shared.PartnerStatusAttributeTypeEnum(attributesItem.PartnerStatusAttribute.Type.ValueString())
+				*type23 = shared.PartnerStatusAttributeType(attributesItem.PartnerStatusAttribute.Type.ValueString())
 			} else {
 				type23 = nil
 			}
@@ -4158,7 +4156,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue23.ValueString()), &constraintsInst23)
 				constraints23[constraintsKey23] = constraintsInst23
 			}
-			var defaultValue23 *interface{}
+			var defaultValue23 interface{}
 			if !attributesItem.InvitationEmailAttribute.DefaultValue.IsUnknown() && !attributesItem.InvitationEmailAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.InvitationEmailAttribute.DefaultValue.ValueString()), &defaultValue23)
 			}
@@ -4266,9 +4264,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable23 = nil
 			}
-			type24 := new(shared.InvitationEmailAttributeTypeEnum)
+			type24 := new(shared.InvitationEmailAttributeType)
 			if !attributesItem.InvitationEmailAttribute.Type.IsUnknown() && !attributesItem.InvitationEmailAttribute.Type.IsNull() {
-				*type24 = shared.InvitationEmailAttributeTypeEnum(attributesItem.InvitationEmailAttribute.Type.ValueString())
+				*type24 = shared.InvitationEmailAttributeType(attributesItem.InvitationEmailAttribute.Type.ValueString())
 			} else {
 				type24 = nil
 			}
@@ -4319,7 +4317,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue24.ValueString()), &constraintsInst24)
 				constraints24[constraintsKey24] = constraintsInst24
 			}
-			var defaultValue24 *interface{}
+			var defaultValue24 interface{}
 			if !attributesItem.AutomationAttribute.DefaultValue.IsUnknown() && !attributesItem.AutomationAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.AutomationAttribute.DefaultValue.ValueString()), &defaultValue24)
 			}
@@ -4427,9 +4425,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable24 = nil
 			}
-			type25 := new(shared.AutomationAttributeTypeEnum)
+			type25 := new(shared.AutomationAttributeType)
 			if !attributesItem.AutomationAttribute.Type.IsUnknown() && !attributesItem.AutomationAttribute.Type.IsNull() {
-				*type25 = shared.AutomationAttributeTypeEnum(attributesItem.AutomationAttribute.Type.ValueString())
+				*type25 = shared.AutomationAttributeType(attributesItem.AutomationAttribute.Type.ValueString())
 			} else {
 				type25 = nil
 			}
@@ -4480,7 +4478,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				_ = json.Unmarshal([]byte(constraintsValue25.ValueString()), &constraintsInst25)
 				constraints25[constraintsKey25] = constraintsInst25
 			}
-			var defaultValue25 *interface{}
+			var defaultValue25 interface{}
 			if !attributesItem.InternalUserAttribute.DefaultValue.IsUnknown() && !attributesItem.InternalUserAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.InternalUserAttribute.DefaultValue.ValueString()), &defaultValue25)
 			}
@@ -4588,9 +4586,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable25 = nil
 			}
-			type26 := new(shared.InternalUserAttributeTypeEnum)
+			type26 := new(shared.InternalUserAttributeType)
 			if !attributesItem.InternalUserAttribute.Type.IsUnknown() && !attributesItem.InternalUserAttribute.Type.IsNull() {
-				*type26 = shared.InternalUserAttributeTypeEnum(attributesItem.InternalUserAttribute.Type.ValueString())
+				*type26 = shared.InternalUserAttributeType(attributesItem.InternalUserAttribute.Type.ValueString())
 			} else {
 				type26 = nil
 			}
@@ -4647,7 +4645,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				createdAt1 = nil
 			}
-			var defaultValue26 *interface{}
+			var defaultValue26 interface{}
 			if !attributesItem.PurposeAttribute.DefaultValue.IsUnknown() && !attributesItem.PurposeAttribute.DefaultValue.IsNull() {
 				_ = json.Unmarshal([]byte(attributesItem.PurposeAttribute.DefaultValue.ValueString()), &defaultValue26)
 			}
@@ -4765,9 +4763,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				showInTable26 = nil
 			}
-			type27 := new(shared.PurposeAttributeTypeEnum)
+			type27 := new(shared.PurposeAttributeType)
 			if !attributesItem.PurposeAttribute.Type.IsUnknown() && !attributesItem.PurposeAttribute.Type.IsNull() {
-				*type27 = shared.PurposeAttributeTypeEnum(attributesItem.PurposeAttribute.Type.ValueString())
+				*type27 = shared.PurposeAttributeType(attributesItem.PurposeAttribute.Type.ValueString())
 			} else {
 				type27 = nil
 			}
@@ -4843,7 +4841,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue27.ValueString()), &constraintsInst27)
 					constraints27[constraintsKey27] = constraintsInst27
 				}
-				var defaultValue27 *interface{}
+				var defaultValue27 interface{}
 				if !attributesItem1.TextAttribute.DefaultValue.IsUnknown() && !attributesItem1.TextAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.TextAttribute.DefaultValue.ValueString()), &defaultValue27)
 				}
@@ -4957,9 +4955,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable27 = nil
 				}
-				type28 := new(shared.TextAttributeTypeEnum)
+				type28 := new(shared.TextAttributeType)
 				if !attributesItem1.TextAttribute.Type.IsUnknown() && !attributesItem1.TextAttribute.Type.IsNull() {
-					*type28 = shared.TextAttributeTypeEnum(attributesItem1.TextAttribute.Type.ValueString())
+					*type28 = shared.TextAttributeType(attributesItem1.TextAttribute.Type.ValueString())
 				} else {
 					type28 = nil
 				}
@@ -5011,7 +5009,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue28.ValueString()), &constraintsInst28)
 					constraints28[constraintsKey28] = constraintsInst28
 				}
-				var defaultValue28 *interface{}
+				var defaultValue28 interface{}
 				if !attributesItem1.LinkAttribute.DefaultValue.IsUnknown() && !attributesItem1.LinkAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.LinkAttribute.DefaultValue.ValueString()), &defaultValue28)
 				}
@@ -5119,9 +5117,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable28 = nil
 				}
-				type29 := new(shared.LinkAttributeTypeEnum)
+				type29 := new(shared.LinkAttributeType)
 				if !attributesItem1.LinkAttribute.Type.IsUnknown() && !attributesItem1.LinkAttribute.Type.IsNull() {
-					*type29 = shared.LinkAttributeTypeEnum(attributesItem1.LinkAttribute.Type.ValueString())
+					*type29 = shared.LinkAttributeType(attributesItem1.LinkAttribute.Type.ValueString())
 				} else {
 					type29 = nil
 				}
@@ -5172,7 +5170,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue29.ValueString()), &constraintsInst29)
 					constraints29[constraintsKey29] = constraintsInst29
 				}
-				var defaultValue29 *interface{}
+				var defaultValue29 interface{}
 				if !attributesItem1.DateAttribute.DefaultValue.IsUnknown() && !attributesItem1.DateAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.DateAttribute.DefaultValue.ValueString()), &defaultValue29)
 				}
@@ -5280,9 +5278,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable29 = nil
 				}
-				type30 := new(shared.DateAttributeTypeEnum)
+				type30 := new(shared.DateAttributeType)
 				if !attributesItem1.DateAttribute.Type.IsUnknown() && !attributesItem1.DateAttribute.Type.IsNull() {
-					*type30 = shared.DateAttributeTypeEnum(attributesItem1.DateAttribute.Type.ValueString())
+					*type30 = shared.DateAttributeType(attributesItem1.DateAttribute.Type.ValueString())
 				} else {
 					type30 = nil
 				}
@@ -5333,7 +5331,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue30.ValueString()), &constraintsInst30)
 					constraints30[constraintsKey30] = constraintsInst30
 				}
-				var defaultValue30 *interface{}
+				var defaultValue30 interface{}
 				if !attributesItem1.CountryAttribute.DefaultValue.IsUnknown() && !attributesItem1.CountryAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.CountryAttribute.DefaultValue.ValueString()), &defaultValue30)
 				}
@@ -5441,9 +5439,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable30 = nil
 				}
-				type31 := new(shared.CountryAttributeTypeEnum)
+				type31 := new(shared.CountryAttributeType)
 				if !attributesItem1.CountryAttribute.Type.IsUnknown() && !attributesItem1.CountryAttribute.Type.IsNull() {
-					*type31 = shared.CountryAttributeTypeEnum(attributesItem1.CountryAttribute.Type.ValueString())
+					*type31 = shared.CountryAttributeType(attributesItem1.CountryAttribute.Type.ValueString())
 				} else {
 					type31 = nil
 				}
@@ -5494,7 +5492,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue31.ValueString()), &constraintsInst31)
 					constraints31[constraintsKey31] = constraintsInst31
 				}
-				var defaultValue31 *interface{}
+				var defaultValue31 interface{}
 				if !attributesItem1.BooleanAttribute.DefaultValue.IsUnknown() && !attributesItem1.BooleanAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.BooleanAttribute.DefaultValue.ValueString()), &defaultValue31)
 				}
@@ -5602,9 +5600,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable31 = nil
 				}
-				type32 := new(shared.BooleanAttributeTypeEnum)
+				type32 := new(shared.BooleanAttributeType)
 				if !attributesItem1.BooleanAttribute.Type.IsUnknown() && !attributesItem1.BooleanAttribute.Type.IsNull() {
-					*type32 = shared.BooleanAttributeTypeEnum(attributesItem1.BooleanAttribute.Type.ValueString())
+					*type32 = shared.BooleanAttributeType(attributesItem1.BooleanAttribute.Type.ValueString())
 				} else {
 					type32 = nil
 				}
@@ -5661,7 +5659,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue32.ValueString()), &constraintsInst32)
 					constraints32[constraintsKey32] = constraintsInst32
 				}
-				var defaultValue32 *interface{}
+				var defaultValue32 interface{}
 				if !attributesItem1.SelectAttribute.DefaultValue.IsUnknown() && !attributesItem1.SelectAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.SelectAttribute.DefaultValue.ValueString()), &defaultValue32)
 				}
@@ -5794,9 +5792,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable32 = nil
 				}
-				type33 := new(shared.SelectAttributeTypeEnum)
+				type33 := new(shared.SelectAttributeType)
 				if !attributesItem1.SelectAttribute.Type.IsUnknown() && !attributesItem1.SelectAttribute.Type.IsNull() {
-					*type33 = shared.SelectAttributeTypeEnum(attributesItem1.SelectAttribute.Type.ValueString())
+					*type33 = shared.SelectAttributeType(attributesItem1.SelectAttribute.Type.ValueString())
 				} else {
 					type33 = nil
 				}
@@ -5861,7 +5859,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue33.ValueString()), &constraintsInst33)
 					constraints33[constraintsKey33] = constraintsInst33
 				}
-				var defaultValue33 *interface{}
+				var defaultValue33 interface{}
 				if !attributesItem1.MultiSelectAttribute.DefaultValue.IsUnknown() && !attributesItem1.MultiSelectAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.MultiSelectAttribute.DefaultValue.ValueString()), &defaultValue33)
 				}
@@ -6000,9 +5998,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable33 = nil
 				}
-				type34 := new(shared.MultiSelectAttributeTypeEnum)
+				type34 := new(shared.MultiSelectAttributeType)
 				if !attributesItem1.MultiSelectAttribute.Type.IsUnknown() && !attributesItem1.MultiSelectAttribute.Type.IsNull() {
-					*type34 = shared.MultiSelectAttributeTypeEnum(attributesItem1.MultiSelectAttribute.Type.ValueString())
+					*type34 = shared.MultiSelectAttributeType(attributesItem1.MultiSelectAttribute.Type.ValueString())
 				} else {
 					type34 = nil
 				}
@@ -6057,7 +6055,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue34.ValueString()), &constraintsInst34)
 					constraints34[constraintsKey34] = constraintsInst34
 				}
-				var defaultValue34 *interface{}
+				var defaultValue34 interface{}
 				if !attributesItem1.StatusAttribute.DefaultValue.IsUnknown() && !attributesItem1.StatusAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.StatusAttribute.DefaultValue.ValueString()), &defaultValue34)
 				}
@@ -6190,9 +6188,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable34 = nil
 				}
-				type35 := new(shared.StatusAttributeTypeEnum)
+				type35 := new(shared.StatusAttributeType)
 				if !attributesItem1.StatusAttribute.Type.IsUnknown() && !attributesItem1.StatusAttribute.Type.IsNull() {
-					*type35 = shared.StatusAttributeTypeEnum(attributesItem1.StatusAttribute.Type.ValueString())
+					*type35 = shared.StatusAttributeType(attributesItem1.StatusAttribute.Type.ValueString())
 				} else {
 					type35 = nil
 				}
@@ -6244,7 +6242,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue35.ValueString()), &constraintsInst35)
 					constraints35[constraintsKey35] = constraintsInst35
 				}
-				var defaultValue35 *interface{}
+				var defaultValue35 interface{}
 				if !attributesItem1.SequenceAttribute.DefaultValue.IsUnknown() && !attributesItem1.SequenceAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.SequenceAttribute.DefaultValue.ValueString()), &defaultValue35)
 				}
@@ -6364,9 +6362,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					startNumber1 = nil
 				}
-				type36 := new(shared.SequenceAttributeTypeEnum)
+				type36 := new(shared.SequenceAttributeType)
 				if !attributesItem1.SequenceAttribute.Type.IsUnknown() && !attributesItem1.SequenceAttribute.Type.IsNull() {
-					*type36 = shared.SequenceAttributeTypeEnum(attributesItem1.SequenceAttribute.Type.ValueString())
+					*type36 = shared.SequenceAttributeType(attributesItem1.SequenceAttribute.Type.ValueString())
 				} else {
 					type36 = nil
 				}
@@ -6415,9 +6413,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				}
 				actions1 := make([]shared.RelationAttributeActions, 0)
 				for _, actionsItem1 := range attributesItem1.RelationAttribute.Actions {
-					actionType1 := new(shared.RelationAttributeActionsActionTypeEnum)
+					actionType1 := new(shared.RelationAttributeActionsActionType)
 					if !actionsItem1.ActionType.IsUnknown() && !actionsItem1.ActionType.IsNull() {
-						*actionType1 = shared.RelationAttributeActionsActionTypeEnum(actionsItem1.ActionType.ValueString())
+						*actionType1 = shared.RelationAttributeActionsActionType(actionsItem1.ActionType.ValueString())
 					} else {
 						actionType1 = nil
 					}
@@ -6451,11 +6449,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						}
 						title7 := actionsItem1.NewEntityItem.Title.ValueString()
 						updatedAt2, _ := time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.UpdatedAt.ValueString())
-						entity1 := make(map[string]interface{})
-						for entityKey1, entityValue1 := range actionsItem1.NewEntityItem.Entity {
-							var entityInst1 interface{}
-							_ = json.Unmarshal([]byte(entityValue1.ValueString()), &entityInst1)
-							entity1[entityKey1] = entityInst1
+						var entity1 interface{}
+						if !actionsItem1.NewEntityItem.Entity.IsUnknown() && !actionsItem1.NewEntityItem.Entity.IsNull() {
+							_ = json.Unmarshal([]byte(actionsItem1.NewEntityItem.Entity.ValueString()), &entity1)
 						}
 						newEntityItem1 = &shared.RelationAttributeActionsNewEntityItem{
 							CreatedAt: createdAt2,
@@ -6499,7 +6495,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue36.ValueString()), &constraintsInst36)
 					constraints36[constraintsKey36] = constraintsInst36
 				}
-				var defaultValue36 *interface{}
+				var defaultValue36 interface{}
 				if !attributesItem1.RelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.RelationAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.RelationAttribute.DefaultValue.ValueString()), &defaultValue36)
 				}
@@ -6515,15 +6511,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					detailsViewModeEnabled1 = nil
 				}
-				drawerSize1 := new(shared.RelationAttributeDrawerSizeEnum)
+				drawerSize1 := new(shared.RelationAttributeDrawerSize)
 				if !attributesItem1.RelationAttribute.DrawerSize.IsUnknown() && !attributesItem1.RelationAttribute.DrawerSize.IsNull() {
-					*drawerSize1 = shared.RelationAttributeDrawerSizeEnum(attributesItem1.RelationAttribute.DrawerSize.ValueString())
+					*drawerSize1 = shared.RelationAttributeDrawerSize(attributesItem1.RelationAttribute.DrawerSize.ValueString())
 				} else {
 					drawerSize1 = nil
 				}
-				editMode1 := new(shared.RelationAttributeEditModeEnum)
+				editMode1 := new(shared.RelationAttributeEditMode)
 				if !attributesItem1.RelationAttribute.EditMode.IsUnknown() && !attributesItem1.RelationAttribute.EditMode.IsNull() {
-					*editMode1 = shared.RelationAttributeEditModeEnum(attributesItem1.RelationAttribute.EditMode.ValueString())
+					*editMode1 = shared.RelationAttributeEditMode(attributesItem1.RelationAttribute.EditMode.ValueString())
 				} else {
 					editMode1 = nil
 				}
@@ -6619,15 +6615,15 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					readonly36 = nil
 				}
-				relationAffinityMode2 := new(shared.RelationAttributeRelationAffinityModeEnum)
+				relationAffinityMode2 := new(shared.RelationAttributeRelationAffinityMode)
 				if !attributesItem1.RelationAttribute.RelationAffinityMode.IsUnknown() && !attributesItem1.RelationAttribute.RelationAffinityMode.IsNull() {
-					*relationAffinityMode2 = shared.RelationAttributeRelationAffinityModeEnum(attributesItem1.RelationAttribute.RelationAffinityMode.ValueString())
+					*relationAffinityMode2 = shared.RelationAttributeRelationAffinityMode(attributesItem1.RelationAttribute.RelationAffinityMode.ValueString())
 				} else {
 					relationAffinityMode2 = nil
 				}
-				relationType1 := new(shared.RelationAttributeRelationTypeEnum)
+				relationType1 := new(shared.RelationAttributeRelationType)
 				if !attributesItem1.RelationAttribute.RelationType.IsUnknown() && !attributesItem1.RelationAttribute.RelationType.IsNull() {
-					*relationType1 = shared.RelationAttributeRelationTypeEnum(attributesItem1.RelationAttribute.RelationType.ValueString())
+					*relationType1 = shared.RelationAttributeRelationType(attributesItem1.RelationAttribute.RelationType.ValueString())
 				} else {
 					relationType1 = nil
 				}
@@ -6696,9 +6692,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 						})
 					}
 				}
-				type37 := new(shared.RelationAttributeTypeEnum)
+				type37 := new(shared.RelationAttributeType)
 				if !attributesItem1.RelationAttribute.Type.IsUnknown() && !attributesItem1.RelationAttribute.Type.IsNull() {
-					*type37 = shared.RelationAttributeTypeEnum(attributesItem1.RelationAttribute.Type.ValueString())
+					*type37 = shared.RelationAttributeType(attributesItem1.RelationAttribute.Type.ValueString())
 				} else {
 					type37 = nil
 				}
@@ -6763,7 +6759,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue37.ValueString()), &constraintsInst37)
 					constraints37[constraintsKey37] = constraintsInst37
 				}
-				var defaultValue37 *interface{}
+				var defaultValue37 interface{}
 				if !attributesItem1.UserRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.UserRelationAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.UserRelationAttribute.DefaultValue.ValueString()), &defaultValue37)
 				}
@@ -6877,9 +6873,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable37 = nil
 				}
-				type38 := new(shared.UserRelationAttributeTypeEnum)
+				type38 := new(shared.UserRelationAttributeType)
 				if !attributesItem1.UserRelationAttribute.Type.IsUnknown() && !attributesItem1.UserRelationAttribute.Type.IsNull() {
-					*type38 = shared.UserRelationAttributeTypeEnum(attributesItem1.UserRelationAttribute.Type.ValueString())
+					*type38 = shared.UserRelationAttributeType(attributesItem1.UserRelationAttribute.Type.ValueString())
 				} else {
 					type38 = nil
 				}
@@ -6931,7 +6927,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue38.ValueString()), &constraintsInst38)
 					constraints38[constraintsKey38] = constraintsInst38
 				}
-				var defaultValue38 *interface{}
+				var defaultValue38 interface{}
 				if !attributesItem1.AddressRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.AddressRelationAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.AddressRelationAttribute.DefaultValue.ValueString()), &defaultValue38)
 				}
@@ -7045,9 +7041,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable38 = nil
 				}
-				type39 := new(shared.AddressRelationAttributeTypeEnum)
+				type39 := new(shared.AddressRelationAttributeType)
 				if !attributesItem1.AddressRelationAttribute.Type.IsUnknown() && !attributesItem1.AddressRelationAttribute.Type.IsNull() {
-					*type39 = shared.AddressRelationAttributeTypeEnum(attributesItem1.AddressRelationAttribute.Type.ValueString())
+					*type39 = shared.AddressRelationAttributeType(attributesItem1.AddressRelationAttribute.Type.ValueString())
 				} else {
 					type39 = nil
 				}
@@ -7099,7 +7095,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue39.ValueString()), &constraintsInst39)
 					constraints39[constraintsKey39] = constraintsInst39
 				}
-				var defaultValue39 *interface{}
+				var defaultValue39 interface{}
 				if !attributesItem1.PaymentMethodRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.PaymentMethodRelationAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.PaymentMethodRelationAttribute.DefaultValue.ValueString()), &defaultValue39)
 				}
@@ -7213,9 +7209,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable39 = nil
 				}
-				type40 := new(shared.PaymentMethodRelationAttributeTypeEnum)
+				type40 := new(shared.PaymentMethodRelationAttributeType)
 				if !attributesItem1.PaymentMethodRelationAttribute.Type.IsUnknown() && !attributesItem1.PaymentMethodRelationAttribute.Type.IsNull() {
-					*type40 = shared.PaymentMethodRelationAttributeTypeEnum(attributesItem1.PaymentMethodRelationAttribute.Type.ValueString())
+					*type40 = shared.PaymentMethodRelationAttributeType(attributesItem1.PaymentMethodRelationAttribute.Type.ValueString())
 				} else {
 					type40 = nil
 				}
@@ -7296,7 +7292,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					currencySelectorOnly1 = nil
 				}
-				var defaultValue40 *interface{}
+				var defaultValue40 interface{}
 				if !attributesItem1.CurrencyAttribute.DefaultValue.IsUnknown() && !attributesItem1.CurrencyAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.CurrencyAttribute.DefaultValue.ValueString()), &defaultValue40)
 				}
@@ -7404,7 +7400,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable40 = nil
 				}
-				type41 := shared.CurrencyAttributeTypeEnum(attributesItem1.CurrencyAttribute.Type.ValueString())
+				type41 := shared.CurrencyAttributeType(attributesItem1.CurrencyAttribute.Type.ValueString())
 				valueFormatter40 := new(string)
 				if !attributesItem1.CurrencyAttribute.ValueFormatter.IsUnknown() && !attributesItem1.CurrencyAttribute.ValueFormatter.IsNull() {
 					*valueFormatter40 = attributesItem1.CurrencyAttribute.ValueFormatter.ValueString()
@@ -7454,7 +7450,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue41.ValueString()), &constraintsInst41)
 					constraints41[constraintsKey41] = constraintsInst41
 				}
-				var defaultValue41 *interface{}
+				var defaultValue41 interface{}
 				if !attributesItem1.RepeatableAttribute.DefaultValue.IsUnknown() && !attributesItem1.RepeatableAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.RepeatableAttribute.DefaultValue.ValueString()), &defaultValue41)
 				}
@@ -7550,9 +7546,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					readonly41 = nil
 				}
-				relationAffinityMode3 := new(shared.RepeatableAttributeRelationAffinityModeEnum)
+				relationAffinityMode3 := new(shared.RepeatableAttributeRelationAffinityMode)
 				if !attributesItem1.RepeatableAttribute.RelationAffinityMode.IsUnknown() && !attributesItem1.RepeatableAttribute.RelationAffinityMode.IsNull() {
-					*relationAffinityMode3 = shared.RepeatableAttributeRelationAffinityModeEnum(attributesItem1.RepeatableAttribute.RelationAffinityMode.ValueString())
+					*relationAffinityMode3 = shared.RepeatableAttributeRelationAffinityMode(attributesItem1.RepeatableAttribute.RelationAffinityMode.ValueString())
 				} else {
 					relationAffinityMode3 = nil
 				}
@@ -7586,9 +7582,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable41 = nil
 				}
-				type42 := new(shared.RepeatableAttributeTypeEnum)
+				type42 := new(shared.RepeatableAttributeType)
 				if !attributesItem1.RepeatableAttribute.Type.IsUnknown() && !attributesItem1.RepeatableAttribute.Type.IsNull() {
-					*type42 = shared.RepeatableAttributeTypeEnum(attributesItem1.RepeatableAttribute.Type.ValueString())
+					*type42 = shared.RepeatableAttributeType(attributesItem1.RepeatableAttribute.Type.ValueString())
 				} else {
 					type42 = nil
 				}
@@ -7643,7 +7639,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue42.ValueString()), &constraintsInst42)
 					constraints42[constraintsKey42] = constraintsInst42
 				}
-				var defaultValue42 *interface{}
+				var defaultValue42 interface{}
 				if !attributesItem1.TagsAttribute.DefaultValue.IsUnknown() && !attributesItem1.TagsAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.TagsAttribute.DefaultValue.ValueString()), &defaultValue42)
 				}
@@ -7759,9 +7755,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				for _, suggestionsItem1 := range attributesItem1.TagsAttribute.Suggestions {
 					suggestions1 = append(suggestions1, suggestionsItem1.ValueString())
 				}
-				type43 := new(shared.TagsAttributeTypeEnum)
+				type43 := new(shared.TagsAttributeType)
 				if !attributesItem1.TagsAttribute.Type.IsUnknown() && !attributesItem1.TagsAttribute.Type.IsNull() {
-					*type43 = shared.TagsAttributeTypeEnum(attributesItem1.TagsAttribute.Type.ValueString())
+					*type43 = shared.TagsAttributeType(attributesItem1.TagsAttribute.Type.ValueString())
 				} else {
 					type43 = nil
 				}
@@ -7814,7 +7810,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue43.ValueString()), &constraintsInst43)
 					constraints43[constraintsKey43] = constraintsInst43
 				}
-				var defaultValue43 *interface{}
+				var defaultValue43 interface{}
 				if !attributesItem1.NumberAttribute.DefaultValue.IsUnknown() && !attributesItem1.NumberAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.NumberAttribute.DefaultValue.ValueString()), &defaultValue43)
 				}
@@ -7928,9 +7924,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable43 = nil
 				}
-				type44 := new(shared.NumberAttributeTypeEnum)
+				type44 := new(shared.NumberAttributeType)
 				if !attributesItem1.NumberAttribute.Type.IsUnknown() && !attributesItem1.NumberAttribute.Type.IsNull() {
-					*type44 = shared.NumberAttributeTypeEnum(attributesItem1.NumberAttribute.Type.ValueString())
+					*type44 = shared.NumberAttributeType(attributesItem1.NumberAttribute.Type.ValueString())
 				} else {
 					type44 = nil
 				}
@@ -7982,7 +7978,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue44.ValueString()), &constraintsInst44)
 					constraints44[constraintsKey44] = constraintsInst44
 				}
-				var defaultValue44 *interface{}
+				var defaultValue44 interface{}
 				if !attributesItem1.ConsentAttribute.DefaultValue.IsUnknown() && !attributesItem1.ConsentAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.ConsentAttribute.DefaultValue.ValueString()), &defaultValue44)
 				}
@@ -8095,7 +8091,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					showInTable44 = nil
 				}
 				topic1 := attributesItem1.ConsentAttribute.Topic.ValueString()
-				type45 := shared.ConsentAttributeTypeEnum(attributesItem1.ConsentAttribute.Type.ValueString())
+				type45 := shared.ConsentAttributeType(attributesItem1.ConsentAttribute.Type.ValueString())
 				valueFormatter44 := new(string)
 				if !attributesItem1.ConsentAttribute.ValueFormatter.IsUnknown() && !attributesItem1.ConsentAttribute.ValueFormatter.IsNull() {
 					*valueFormatter44 = attributesItem1.ConsentAttribute.ValueFormatter.ValueString()
@@ -8145,7 +8141,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue45.ValueString()), &constraintsInst45)
 					constraints45[constraintsKey45] = constraintsInst45
 				}
-				var defaultValue45 *interface{}
+				var defaultValue45 interface{}
 				if !attributesItem1.InternalAttribute.DefaultValue.IsUnknown() && !attributesItem1.InternalAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.InternalAttribute.DefaultValue.ValueString()), &defaultValue45)
 				}
@@ -8253,9 +8249,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable45 = nil
 				}
-				type46 := new(shared.InternalAttributeTypeEnum)
+				type46 := new(shared.InternalAttributeType)
 				if !attributesItem1.InternalAttribute.Type.IsUnknown() && !attributesItem1.InternalAttribute.Type.IsNull() {
-					*type46 = shared.InternalAttributeTypeEnum(attributesItem1.InternalAttribute.Type.ValueString())
+					*type46 = shared.InternalAttributeType(attributesItem1.InternalAttribute.Type.ValueString())
 				} else {
 					type46 = nil
 				}
@@ -8306,7 +8302,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue46.ValueString()), &constraintsInst46)
 					constraints46[constraintsKey46] = constraintsInst46
 				}
-				var defaultValue46 *interface{}
+				var defaultValue46 interface{}
 				if !attributesItem1.OrderedListAttribute.DefaultValue.IsUnknown() && !attributesItem1.OrderedListAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.OrderedListAttribute.DefaultValue.ValueString()), &defaultValue46)
 				}
@@ -8414,9 +8410,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable46 = nil
 				}
-				type47 := new(shared.OrderedListAttributeTypeEnum)
+				type47 := new(shared.OrderedListAttributeType)
 				if !attributesItem1.OrderedListAttribute.Type.IsUnknown() && !attributesItem1.OrderedListAttribute.Type.IsNull() {
-					*type47 = shared.OrderedListAttributeTypeEnum(attributesItem1.OrderedListAttribute.Type.ValueString())
+					*type47 = shared.OrderedListAttributeType(attributesItem1.OrderedListAttribute.Type.ValueString())
 				} else {
 					type47 = nil
 				}
@@ -8471,13 +8467,13 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue47.ValueString()), &constraintsInst47)
 					constraints47[constraintsKey47] = constraintsInst47
 				}
-				defaultAccessControl1 := new(shared.FileAttributeDefaultAccessControlEnum)
+				defaultAccessControl1 := new(shared.FileAttributeDefaultAccessControl)
 				if !attributesItem1.FileAttribute.DefaultAccessControl.IsUnknown() && !attributesItem1.FileAttribute.DefaultAccessControl.IsNull() {
-					*defaultAccessControl1 = shared.FileAttributeDefaultAccessControlEnum(attributesItem1.FileAttribute.DefaultAccessControl.ValueString())
+					*defaultAccessControl1 = shared.FileAttributeDefaultAccessControl(attributesItem1.FileAttribute.DefaultAccessControl.ValueString())
 				} else {
 					defaultAccessControl1 = nil
 				}
-				var defaultValue47 *interface{}
+				var defaultValue47 interface{}
 				if !attributesItem1.FileAttribute.DefaultValue.IsUnknown() && !attributesItem1.FileAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.FileAttribute.DefaultValue.ValueString()), &defaultValue47)
 				}
@@ -8603,7 +8599,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable47 = nil
 				}
-				type48 := shared.FileAttributeTypeEnum(attributesItem1.FileAttribute.Type.ValueString())
+				type48 := shared.FileAttributeType(attributesItem1.FileAttribute.Type.ValueString())
 				valueFormatter47 := new(string)
 				if !attributesItem1.FileAttribute.ValueFormatter.IsUnknown() && !attributesItem1.FileAttribute.ValueFormatter.IsNull() {
 					*valueFormatter47 = attributesItem1.FileAttribute.ValueFormatter.ValueString()
@@ -8656,7 +8652,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue48.ValueString()), &constraintsInst48)
 					constraints48[constraintsKey48] = constraintsInst48
 				}
-				var defaultValue48 *interface{}
+				var defaultValue48 interface{}
 				if !attributesItem1.ComputedAttribute.DefaultValue.IsUnknown() && !attributesItem1.ComputedAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.ComputedAttribute.DefaultValue.ValueString()), &defaultValue48)
 				}
@@ -8764,9 +8760,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable48 = nil
 				}
-				type49 := new(shared.ComputedAttributeTypeEnum)
+				type49 := new(shared.ComputedAttributeType)
 				if !attributesItem1.ComputedAttribute.Type.IsUnknown() && !attributesItem1.ComputedAttribute.Type.IsNull() {
-					*type49 = shared.ComputedAttributeTypeEnum(attributesItem1.ComputedAttribute.Type.ValueString())
+					*type49 = shared.ComputedAttributeType(attributesItem1.ComputedAttribute.Type.ValueString())
 				} else {
 					type49 = nil
 				}
@@ -8817,7 +8813,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue49.ValueString()), &constraintsInst49)
 					constraints49[constraintsKey49] = constraintsInst49
 				}
-				var defaultValue49 *interface{}
+				var defaultValue49 interface{}
 				if !attributesItem1.PartnerStatusAttribute.DefaultValue.IsUnknown() && !attributesItem1.PartnerStatusAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.PartnerStatusAttribute.DefaultValue.ValueString()), &defaultValue49)
 				}
@@ -8925,9 +8921,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable49 = nil
 				}
-				type50 := new(shared.PartnerStatusAttributeTypeEnum)
+				type50 := new(shared.PartnerStatusAttributeType)
 				if !attributesItem1.PartnerStatusAttribute.Type.IsUnknown() && !attributesItem1.PartnerStatusAttribute.Type.IsNull() {
-					*type50 = shared.PartnerStatusAttributeTypeEnum(attributesItem1.PartnerStatusAttribute.Type.ValueString())
+					*type50 = shared.PartnerStatusAttributeType(attributesItem1.PartnerStatusAttribute.Type.ValueString())
 				} else {
 					type50 = nil
 				}
@@ -8978,7 +8974,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue50.ValueString()), &constraintsInst50)
 					constraints50[constraintsKey50] = constraintsInst50
 				}
-				var defaultValue50 *interface{}
+				var defaultValue50 interface{}
 				if !attributesItem1.InvitationEmailAttribute.DefaultValue.IsUnknown() && !attributesItem1.InvitationEmailAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.InvitationEmailAttribute.DefaultValue.ValueString()), &defaultValue50)
 				}
@@ -9086,9 +9082,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable50 = nil
 				}
-				type51 := new(shared.InvitationEmailAttributeTypeEnum)
+				type51 := new(shared.InvitationEmailAttributeType)
 				if !attributesItem1.InvitationEmailAttribute.Type.IsUnknown() && !attributesItem1.InvitationEmailAttribute.Type.IsNull() {
-					*type51 = shared.InvitationEmailAttributeTypeEnum(attributesItem1.InvitationEmailAttribute.Type.ValueString())
+					*type51 = shared.InvitationEmailAttributeType(attributesItem1.InvitationEmailAttribute.Type.ValueString())
 				} else {
 					type51 = nil
 				}
@@ -9139,7 +9135,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue51.ValueString()), &constraintsInst51)
 					constraints51[constraintsKey51] = constraintsInst51
 				}
-				var defaultValue51 *interface{}
+				var defaultValue51 interface{}
 				if !attributesItem1.AutomationAttribute.DefaultValue.IsUnknown() && !attributesItem1.AutomationAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.AutomationAttribute.DefaultValue.ValueString()), &defaultValue51)
 				}
@@ -9247,9 +9243,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable51 = nil
 				}
-				type52 := new(shared.AutomationAttributeTypeEnum)
+				type52 := new(shared.AutomationAttributeType)
 				if !attributesItem1.AutomationAttribute.Type.IsUnknown() && !attributesItem1.AutomationAttribute.Type.IsNull() {
-					*type52 = shared.AutomationAttributeTypeEnum(attributesItem1.AutomationAttribute.Type.ValueString())
+					*type52 = shared.AutomationAttributeType(attributesItem1.AutomationAttribute.Type.ValueString())
 				} else {
 					type52 = nil
 				}
@@ -9300,7 +9296,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					_ = json.Unmarshal([]byte(constraintsValue52.ValueString()), &constraintsInst52)
 					constraints52[constraintsKey52] = constraintsInst52
 				}
-				var defaultValue52 *interface{}
+				var defaultValue52 interface{}
 				if !attributesItem1.InternalUserAttribute.DefaultValue.IsUnknown() && !attributesItem1.InternalUserAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.InternalUserAttribute.DefaultValue.ValueString()), &defaultValue52)
 				}
@@ -9408,9 +9404,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable52 = nil
 				}
-				type53 := new(shared.InternalUserAttributeTypeEnum)
+				type53 := new(shared.InternalUserAttributeType)
 				if !attributesItem1.InternalUserAttribute.Type.IsUnknown() && !attributesItem1.InternalUserAttribute.Type.IsNull() {
-					*type53 = shared.InternalUserAttributeTypeEnum(attributesItem1.InternalUserAttribute.Type.ValueString())
+					*type53 = shared.InternalUserAttributeType(attributesItem1.InternalUserAttribute.Type.ValueString())
 				} else {
 					type53 = nil
 				}
@@ -9467,7 +9463,7 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					createdAt3 = nil
 				}
-				var defaultValue53 *interface{}
+				var defaultValue53 interface{}
 				if !attributesItem1.PurposeAttribute.DefaultValue.IsUnknown() && !attributesItem1.PurposeAttribute.DefaultValue.IsNull() {
 					_ = json.Unmarshal([]byte(attributesItem1.PurposeAttribute.DefaultValue.ValueString()), &defaultValue53)
 				}
@@ -9585,9 +9581,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 				} else {
 					showInTable53 = nil
 				}
-				type54 := new(shared.PurposeAttributeTypeEnum)
+				type54 := new(shared.PurposeAttributeType)
 				if !attributesItem1.PurposeAttribute.Type.IsUnknown() && !attributesItem1.PurposeAttribute.Type.IsNull() {
-					*type54 = shared.PurposeAttributeTypeEnum(attributesItem1.PurposeAttribute.Type.ValueString())
+					*type54 = shared.PurposeAttributeType(attributesItem1.PurposeAttribute.Type.ValueString())
 				} else {
 					type54 = nil
 				}
@@ -9796,9 +9792,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		} else {
 			index = nil
 		}
-		type55 := new(shared.SearchMappingsTypeEnum)
+		type55 := new(shared.SearchMappingsType)
 		if !explicitSearchMappingsValue.Type.IsUnknown() && !explicitSearchMappingsValue.Type.IsNull() {
-			*type55 = shared.SearchMappingsTypeEnum(explicitSearchMappingsValue.Type.ValueString())
+			*type55 = shared.SearchMappingsType(explicitSearchMappingsValue.Type.ValueString())
 		} else {
 			type55 = nil
 		}
@@ -9904,11 +9900,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		} else {
 			gridTemplateColumns = nil
 		}
-		additionalProperties := make(map[string]interface{})
-		for additionalPropertiesKey, additionalPropertiesValue := range r.LayoutSettings.AdditionalProperties {
-			var additionalPropertiesInst interface{}
-			_ = json.Unmarshal([]byte(additionalPropertiesValue.ValueString()), &additionalPropertiesInst)
-			additionalProperties[additionalPropertiesKey] = additionalPropertiesInst
+		var additionalProperties interface{}
+		if !r.LayoutSettings.AdditionalProperties.IsUnknown() && !r.LayoutSettings.AdditionalProperties.IsNull() {
+			_ = json.Unmarshal([]byte(r.LayoutSettings.AdditionalProperties.ValueString()), &additionalProperties)
 		}
 		layoutSettings = &shared.EntitySchemaLayoutSettings{
 			GridGap:              gridGap,
@@ -9960,9 +9954,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					Label: label57,
 				}
 			}
-			viewType := new(shared.EntityDefaultCreateViewTypeEnum)
+			viewType := new(shared.EntityDefaultCreateViewType)
 			if !r.UIConfig.CreateView.EntityDefaultCreate.ViewType.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.ViewType.IsNull() {
-				*viewType = shared.EntityDefaultCreateViewTypeEnum(r.UIConfig.CreateView.EntityDefaultCreate.ViewType.ValueString())
+				*viewType = shared.EntityDefaultCreateViewType(r.UIConfig.CreateView.EntityDefaultCreate.ViewType.ValueString())
 			} else {
 				viewType = nil
 			}
@@ -9985,9 +9979,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				route1 = nil
 			}
-			viewType1 := new(shared.RedirectEntityViewViewTypeEnum)
+			viewType1 := new(shared.RedirectEntityViewViewType)
 			if !r.UIConfig.CreateView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.CreateView.RedirectEntityView.ViewType.IsNull() {
-				*viewType1 = shared.RedirectEntityViewViewTypeEnum(r.UIConfig.CreateView.RedirectEntityView.ViewType.ValueString())
+				*viewType1 = shared.RedirectEntityViewViewType(r.UIConfig.CreateView.RedirectEntityView.ViewType.ValueString())
 			} else {
 				viewType1 = nil
 			}
@@ -10003,9 +9997,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		}
 		var entityViewDisabled *shared.EntityViewDisabled
 		if r.UIConfig.CreateView.EntityViewDisabled != nil {
-			viewType2 := new(shared.EntityViewDisabledViewTypeEnum)
+			viewType2 := new(shared.EntityViewDisabledViewType)
 			if !r.UIConfig.CreateView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.CreateView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType2 = shared.EntityViewDisabledViewTypeEnum(r.UIConfig.CreateView.EntityViewDisabled.ViewType.ValueString())
+				*viewType2 = shared.EntityViewDisabledViewType(r.UIConfig.CreateView.EntityViewDisabled.ViewType.ValueString())
 			} else {
 				viewType2 = nil
 			}
@@ -10045,9 +10039,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					Label: label58,
 				}
 			}
-			viewType3 := new(shared.EntityDefaultEditViewTypeEnum)
+			viewType3 := new(shared.EntityDefaultEditViewType)
 			if !r.UIConfig.EditView.EntityDefaultEdit.ViewType.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.ViewType.IsNull() {
-				*viewType3 = shared.EntityDefaultEditViewTypeEnum(r.UIConfig.EditView.EntityDefaultEdit.ViewType.ValueString())
+				*viewType3 = shared.EntityDefaultEditViewType(r.UIConfig.EditView.EntityDefaultEdit.ViewType.ValueString())
 			} else {
 				viewType3 = nil
 			}
@@ -10070,9 +10064,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				route2 = nil
 			}
-			viewType4 := new(shared.RedirectEntityViewViewTypeEnum)
+			viewType4 := new(shared.RedirectEntityViewViewType)
 			if !r.UIConfig.EditView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.EditView.RedirectEntityView.ViewType.IsNull() {
-				*viewType4 = shared.RedirectEntityViewViewTypeEnum(r.UIConfig.EditView.RedirectEntityView.ViewType.ValueString())
+				*viewType4 = shared.RedirectEntityViewViewType(r.UIConfig.EditView.RedirectEntityView.ViewType.ValueString())
 			} else {
 				viewType4 = nil
 			}
@@ -10088,9 +10082,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		}
 		var entityViewDisabled1 *shared.EntityViewDisabled
 		if r.UIConfig.EditView.EntityViewDisabled != nil {
-			viewType5 := new(shared.EntityViewDisabledViewTypeEnum)
+			viewType5 := new(shared.EntityViewDisabledViewType)
 			if !r.UIConfig.EditView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.EditView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType5 = shared.EntityViewDisabledViewTypeEnum(r.UIConfig.EditView.EntityViewDisabled.ViewType.ValueString())
+				*viewType5 = shared.EntityViewDisabledViewType(r.UIConfig.EditView.EntityViewDisabled.ViewType.ValueString())
 			} else {
 				viewType5 = nil
 			}
@@ -10203,9 +10197,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					Label: label60,
 				}
 			}
-			viewType6 := new(shared.EntityDefaultEditViewTypeEnum)
+			viewType6 := new(shared.EntityDefaultEditViewType)
 			if !r.UIConfig.SingleView.EntityDefaultEdit.ViewType.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.ViewType.IsNull() {
-				*viewType6 = shared.EntityDefaultEditViewTypeEnum(r.UIConfig.SingleView.EntityDefaultEdit.ViewType.ValueString())
+				*viewType6 = shared.EntityDefaultEditViewType(r.UIConfig.SingleView.EntityDefaultEdit.ViewType.ValueString())
 			} else {
 				viewType6 = nil
 			}
@@ -10228,9 +10222,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				route3 = nil
 			}
-			viewType7 := new(shared.RedirectEntityViewViewTypeEnum)
+			viewType7 := new(shared.RedirectEntityViewViewType)
 			if !r.UIConfig.SingleView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.SingleView.RedirectEntityView.ViewType.IsNull() {
-				*viewType7 = shared.RedirectEntityViewViewTypeEnum(r.UIConfig.SingleView.RedirectEntityView.ViewType.ValueString())
+				*viewType7 = shared.RedirectEntityViewViewType(r.UIConfig.SingleView.RedirectEntityView.ViewType.ValueString())
 			} else {
 				viewType7 = nil
 			}
@@ -10246,9 +10240,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		}
 		var entityViewDisabled2 *shared.EntityViewDisabled
 		if r.UIConfig.SingleView.EntityViewDisabled != nil {
-			viewType8 := new(shared.EntityViewDisabledViewTypeEnum)
+			viewType8 := new(shared.EntityViewDisabledViewType)
 			if !r.UIConfig.SingleView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.SingleView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType8 = shared.EntityViewDisabledViewTypeEnum(r.UIConfig.SingleView.EntityViewDisabled.ViewType.ValueString())
+				*viewType8 = shared.EntityViewDisabledViewType(r.UIConfig.SingleView.EntityViewDisabled.ViewType.ValueString())
 			} else {
 				viewType8 = nil
 			}
@@ -10291,9 +10285,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					} else {
 						legacy1 = nil
 					}
-					type56 := new(shared.EntityDefaultTableDropdownItems1TypeEnum)
+					type56 := new(shared.EntityDefaultTableDropdownItems1Type)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.IsNull() {
-						*type56 = shared.EntityDefaultTableDropdownItems1TypeEnum(dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.ValueString())
+						*type56 = shared.EntityDefaultTableDropdownItems1Type(dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.ValueString())
 					} else {
 						type56 = nil
 					}
@@ -10326,9 +10320,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 					} else {
 						title10 = nil
 					}
-					type57 := new(shared.EntityDefaultTableDropdownItems2TypeEnum)
+					type57 := new(shared.EntityDefaultTableDropdownItems2Type)
 					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.IsNull() {
-						*type57 = shared.EntityDefaultTableDropdownItems2TypeEnum(dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.ValueString())
+						*type57 = shared.EntityDefaultTableDropdownItems2Type(dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.ValueString())
 					} else {
 						type57 = nil
 					}
@@ -10382,9 +10376,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			for _, rowActionsItem := range r.UIConfig.TableView.EntityDefaultTable.RowActions {
 				rowActions = append(rowActions, rowActionsItem.ValueString())
 			}
-			viewType9 := new(shared.EntityDefaultTableViewTypeEnum)
+			viewType9 := new(shared.EntityDefaultTableViewType)
 			if !r.UIConfig.TableView.EntityDefaultTable.ViewType.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.ViewType.IsNull() {
-				*viewType9 = shared.EntityDefaultTableViewTypeEnum(r.UIConfig.TableView.EntityDefaultTable.ViewType.ValueString())
+				*viewType9 = shared.EntityDefaultTableViewType(r.UIConfig.TableView.EntityDefaultTable.ViewType.ValueString())
 			} else {
 				viewType9 = nil
 			}
@@ -10410,9 +10404,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 			} else {
 				route4 = nil
 			}
-			viewType10 := new(shared.RedirectEntityViewViewTypeEnum)
+			viewType10 := new(shared.RedirectEntityViewViewType)
 			if !r.UIConfig.TableView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.TableView.RedirectEntityView.ViewType.IsNull() {
-				*viewType10 = shared.RedirectEntityViewViewTypeEnum(r.UIConfig.TableView.RedirectEntityView.ViewType.ValueString())
+				*viewType10 = shared.RedirectEntityViewViewType(r.UIConfig.TableView.RedirectEntityView.ViewType.ValueString())
 			} else {
 				viewType10 = nil
 			}
@@ -10428,9 +10422,9 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		}
 		var entityViewDisabled3 *shared.EntityViewDisabled
 		if r.UIConfig.TableView.EntityViewDisabled != nil {
-			viewType11 := new(shared.EntityViewDisabledViewTypeEnum)
+			viewType11 := new(shared.EntityViewDisabledViewType)
 			if !r.UIConfig.TableView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.TableView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType11 = shared.EntityViewDisabledViewTypeEnum(r.UIConfig.TableView.EntityViewDisabled.ViewType.ValueString())
+				*viewType11 = shared.EntityViewDisabledViewType(r.UIConfig.TableView.EntityViewDisabled.ViewType.ValueString())
 			} else {
 				viewType11 = nil
 			}
@@ -10479,10 +10473,24 @@ func (r *SchemaResourceModel) ToSDKType() *shared.EntitySchema {
 		Version:                version,
 	}
 	return &out
-
 }
 
-func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) {
+func (r *SchemaResourceModel) ToGetSDKType() *shared.EntitySchema {
+	out := r.ToCreateSDKType()
+	return out
+}
+
+func (r *SchemaResourceModel) ToUpdateSDKType() *shared.EntitySchema {
+	out := r.ToCreateSDKType()
+	return out
+}
+
+func (r *SchemaResourceModel) ToDeleteSDKType() *shared.EntitySchema {
+	out := r.ToCreateSDKType()
+	return out
+}
+
+func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaItem) {
 	r.Attributes = nil
 	for _, attributesItem := range resp.Attributes {
 		var attributes1 Attribute
@@ -11680,11 +11688,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 					}
 					actions1.NewEntityItem.Title = types.StringValue(actionsItem.NewEntityItem.Title)
 					actions1.NewEntityItem.UpdatedAt = types.StringValue(actionsItem.NewEntityItem.UpdatedAt.Format(time.RFC3339))
-					if actions1.NewEntityItem.Entity == nil && len(actionsItem.NewEntityItem.Entity) > 0 {
-						actions1.NewEntityItem.Entity = make(map[string]types.String)
-						for key9, value12 := range actionsItem.NewEntityItem.Entity {
-							result9, _ := json.Marshal(value12)
-							actions1.NewEntityItem.Entity[key9] = types.StringValue(string(result9))
+					if actions1.NewEntityItem.Entity.IsUnknown() {
+						if actionsItem.NewEntityItem.Entity == nil {
+							actions1.NewEntityItem.Entity = types.StringNull()
+						} else {
+							entityResult, _ := json.Marshal(actionsItem.NewEntityItem.Entity)
+							actions1.NewEntityItem.Entity = types.StringValue(string(entityResult))
 						}
 					}
 				}
@@ -11706,9 +11715,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.RelationAttribute.Constraints == nil && len(attributesItem.RelationAttribute.Constraints) > 0 {
 				attributes1.RelationAttribute.Constraints = make(map[string]types.String)
-				for key10, value13 := range attributesItem.RelationAttribute.Constraints {
-					result10, _ := json.Marshal(value13)
-					attributes1.RelationAttribute.Constraints[key10] = types.StringValue(string(result10))
+				for key9, value12 := range attributesItem.RelationAttribute.Constraints {
+					result9, _ := json.Marshal(value12)
+					attributes1.RelationAttribute.Constraints[key9] = types.StringValue(string(result9))
 				}
 			}
 			if attributesItem.RelationAttribute.DefaultValue == nil {
@@ -11836,8 +11845,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.RelationAttribute.ReverseAttributes == nil && len(attributesItem.RelationAttribute.ReverseAttributes) > 0 {
 				attributes1.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-				for key11, value14 := range attributesItem.RelationAttribute.ReverseAttributes {
-					attributes1.RelationAttribute.ReverseAttributes[key11] = types.StringValue(value14)
+				for key10, value13 := range attributesItem.RelationAttribute.ReverseAttributes {
+					attributes1.RelationAttribute.ReverseAttributes[key10] = types.StringValue(value13)
 				}
 			}
 			if attributesItem.RelationAttribute.SearchPlaceholder != nil {
@@ -11899,9 +11908,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.UserRelationAttribute.Constraints == nil && len(attributesItem.UserRelationAttribute.Constraints) > 0 {
 				attributes1.UserRelationAttribute.Constraints = make(map[string]types.String)
-				for key12, value15 := range attributesItem.UserRelationAttribute.Constraints {
-					result11, _ := json.Marshal(value15)
-					attributes1.UserRelationAttribute.Constraints[key12] = types.StringValue(string(result11))
+				for key11, value14 := range attributesItem.UserRelationAttribute.Constraints {
+					result10, _ := json.Marshal(value14)
+					attributes1.UserRelationAttribute.Constraints[key11] = types.StringValue(string(result10))
 				}
 			}
 			if attributesItem.UserRelationAttribute.DefaultValue == nil {
@@ -12021,9 +12030,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.AddressRelationAttribute.Constraints == nil && len(attributesItem.AddressRelationAttribute.Constraints) > 0 {
 				attributes1.AddressRelationAttribute.Constraints = make(map[string]types.String)
-				for key13, value16 := range attributesItem.AddressRelationAttribute.Constraints {
-					result12, _ := json.Marshal(value16)
-					attributes1.AddressRelationAttribute.Constraints[key13] = types.StringValue(string(result12))
+				for key12, value15 := range attributesItem.AddressRelationAttribute.Constraints {
+					result11, _ := json.Marshal(value15)
+					attributes1.AddressRelationAttribute.Constraints[key12] = types.StringValue(string(result11))
 				}
 			}
 			if attributesItem.AddressRelationAttribute.DefaultValue == nil {
@@ -12143,9 +12152,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.PaymentMethodRelationAttribute.Constraints == nil && len(attributesItem.PaymentMethodRelationAttribute.Constraints) > 0 {
 				attributes1.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
-				for key14, value17 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
-					result13, _ := json.Marshal(value17)
-					attributes1.PaymentMethodRelationAttribute.Constraints[key14] = types.StringValue(string(result13))
+				for key13, value16 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
+					result12, _ := json.Marshal(value16)
+					attributes1.PaymentMethodRelationAttribute.Constraints[key13] = types.StringValue(string(result12))
 				}
 			}
 			if attributesItem.PaymentMethodRelationAttribute.DefaultValue == nil {
@@ -12265,9 +12274,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.CurrencyAttribute.Constraints == nil && len(attributesItem.CurrencyAttribute.Constraints) > 0 {
 				attributes1.CurrencyAttribute.Constraints = make(map[string]types.String)
-				for key15, value18 := range attributesItem.CurrencyAttribute.Constraints {
-					result14, _ := json.Marshal(value18)
-					attributes1.CurrencyAttribute.Constraints[key15] = types.StringValue(string(result14))
+				for key14, value17 := range attributesItem.CurrencyAttribute.Constraints {
+					result13, _ := json.Marshal(value17)
+					attributes1.CurrencyAttribute.Constraints[key14] = types.StringValue(string(result13))
 				}
 			}
 			attributes1.CurrencyAttribute.Currency = nil
@@ -12399,9 +12408,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.RepeatableAttribute.Constraints == nil && len(attributesItem.RepeatableAttribute.Constraints) > 0 {
 				attributes1.RepeatableAttribute.Constraints = make(map[string]types.String)
-				for key16, value19 := range attributesItem.RepeatableAttribute.Constraints {
-					result15, _ := json.Marshal(value19)
-					attributes1.RepeatableAttribute.Constraints[key16] = types.StringValue(string(result15))
+				for key15, value18 := range attributesItem.RepeatableAttribute.Constraints {
+					result14, _ := json.Marshal(value18)
+					attributes1.RepeatableAttribute.Constraints[key15] = types.StringValue(string(result14))
 				}
 			}
 			if attributesItem.RepeatableAttribute.DefaultValue == nil {
@@ -12536,9 +12545,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.TagsAttribute.Constraints == nil && len(attributesItem.TagsAttribute.Constraints) > 0 {
 				attributes1.TagsAttribute.Constraints = make(map[string]types.String)
-				for key17, value20 := range attributesItem.TagsAttribute.Constraints {
-					result16, _ := json.Marshal(value20)
-					attributes1.TagsAttribute.Constraints[key17] = types.StringValue(string(result16))
+				for key16, value19 := range attributesItem.TagsAttribute.Constraints {
+					result15, _ := json.Marshal(value19)
+					attributes1.TagsAttribute.Constraints[key16] = types.StringValue(string(result15))
 				}
 			}
 			if attributesItem.TagsAttribute.DefaultValue == nil {
@@ -12661,9 +12670,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.NumberAttribute.Constraints == nil && len(attributesItem.NumberAttribute.Constraints) > 0 {
 				attributes1.NumberAttribute.Constraints = make(map[string]types.String)
-				for key18, value21 := range attributesItem.NumberAttribute.Constraints {
-					result17, _ := json.Marshal(value21)
-					attributes1.NumberAttribute.Constraints[key18] = types.StringValue(string(result17))
+				for key17, value20 := range attributesItem.NumberAttribute.Constraints {
+					result16, _ := json.Marshal(value20)
+					attributes1.NumberAttribute.Constraints[key17] = types.StringValue(string(result16))
 				}
 			}
 			if attributesItem.NumberAttribute.DefaultValue == nil {
@@ -12783,9 +12792,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.ConsentAttribute.Constraints == nil && len(attributesItem.ConsentAttribute.Constraints) > 0 {
 				attributes1.ConsentAttribute.Constraints = make(map[string]types.String)
-				for key19, value22 := range attributesItem.ConsentAttribute.Constraints {
-					result18, _ := json.Marshal(value22)
-					attributes1.ConsentAttribute.Constraints[key19] = types.StringValue(string(result18))
+				for key18, value21 := range attributesItem.ConsentAttribute.Constraints {
+					result17, _ := json.Marshal(value21)
+					attributes1.ConsentAttribute.Constraints[key18] = types.StringValue(string(result17))
 				}
 			}
 			if attributesItem.ConsentAttribute.DefaultValue == nil {
@@ -12901,9 +12910,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.InternalAttribute.Constraints == nil && len(attributesItem.InternalAttribute.Constraints) > 0 {
 				attributes1.InternalAttribute.Constraints = make(map[string]types.String)
-				for key20, value23 := range attributesItem.InternalAttribute.Constraints {
-					result19, _ := json.Marshal(value23)
-					attributes1.InternalAttribute.Constraints[key20] = types.StringValue(string(result19))
+				for key19, value22 := range attributesItem.InternalAttribute.Constraints {
+					result18, _ := json.Marshal(value22)
+					attributes1.InternalAttribute.Constraints[key19] = types.StringValue(string(result18))
 				}
 			}
 			if attributesItem.InternalAttribute.DefaultValue == nil {
@@ -13018,9 +13027,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.OrderedListAttribute.Constraints == nil && len(attributesItem.OrderedListAttribute.Constraints) > 0 {
 				attributes1.OrderedListAttribute.Constraints = make(map[string]types.String)
-				for key21, value24 := range attributesItem.OrderedListAttribute.Constraints {
-					result20, _ := json.Marshal(value24)
-					attributes1.OrderedListAttribute.Constraints[key21] = types.StringValue(string(result20))
+				for key20, value23 := range attributesItem.OrderedListAttribute.Constraints {
+					result19, _ := json.Marshal(value23)
+					attributes1.OrderedListAttribute.Constraints[key20] = types.StringValue(string(result19))
 				}
 			}
 			if attributesItem.OrderedListAttribute.DefaultValue == nil {
@@ -13139,9 +13148,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.FileAttribute.Constraints == nil && len(attributesItem.FileAttribute.Constraints) > 0 {
 				attributes1.FileAttribute.Constraints = make(map[string]types.String)
-				for key22, value25 := range attributesItem.FileAttribute.Constraints {
-					result21, _ := json.Marshal(value25)
-					attributes1.FileAttribute.Constraints[key22] = types.StringValue(string(result21))
+				for key21, value24 := range attributesItem.FileAttribute.Constraints {
+					result20, _ := json.Marshal(value24)
+					attributes1.FileAttribute.Constraints[key21] = types.StringValue(string(result20))
 				}
 			}
 			if attributesItem.FileAttribute.DefaultAccessControl != nil {
@@ -13272,9 +13281,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.ComputedAttribute.Constraints == nil && len(attributesItem.ComputedAttribute.Constraints) > 0 {
 				attributes1.ComputedAttribute.Constraints = make(map[string]types.String)
-				for key23, value26 := range attributesItem.ComputedAttribute.Constraints {
-					result22, _ := json.Marshal(value26)
-					attributes1.ComputedAttribute.Constraints[key23] = types.StringValue(string(result22))
+				for key22, value25 := range attributesItem.ComputedAttribute.Constraints {
+					result21, _ := json.Marshal(value25)
+					attributes1.ComputedAttribute.Constraints[key22] = types.StringValue(string(result21))
 				}
 			}
 			if attributesItem.ComputedAttribute.DefaultValue == nil {
@@ -13389,9 +13398,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.PartnerStatusAttribute.Constraints == nil && len(attributesItem.PartnerStatusAttribute.Constraints) > 0 {
 				attributes1.PartnerStatusAttribute.Constraints = make(map[string]types.String)
-				for key24, value27 := range attributesItem.PartnerStatusAttribute.Constraints {
-					result23, _ := json.Marshal(value27)
-					attributes1.PartnerStatusAttribute.Constraints[key24] = types.StringValue(string(result23))
+				for key23, value26 := range attributesItem.PartnerStatusAttribute.Constraints {
+					result22, _ := json.Marshal(value26)
+					attributes1.PartnerStatusAttribute.Constraints[key23] = types.StringValue(string(result22))
 				}
 			}
 			if attributesItem.PartnerStatusAttribute.DefaultValue == nil {
@@ -13506,9 +13515,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.InvitationEmailAttribute.Constraints == nil && len(attributesItem.InvitationEmailAttribute.Constraints) > 0 {
 				attributes1.InvitationEmailAttribute.Constraints = make(map[string]types.String)
-				for key25, value28 := range attributesItem.InvitationEmailAttribute.Constraints {
-					result24, _ := json.Marshal(value28)
-					attributes1.InvitationEmailAttribute.Constraints[key25] = types.StringValue(string(result24))
+				for key24, value27 := range attributesItem.InvitationEmailAttribute.Constraints {
+					result23, _ := json.Marshal(value27)
+					attributes1.InvitationEmailAttribute.Constraints[key24] = types.StringValue(string(result23))
 				}
 			}
 			if attributesItem.InvitationEmailAttribute.DefaultValue == nil {
@@ -13623,9 +13632,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.AutomationAttribute.Constraints == nil && len(attributesItem.AutomationAttribute.Constraints) > 0 {
 				attributes1.AutomationAttribute.Constraints = make(map[string]types.String)
-				for key26, value29 := range attributesItem.AutomationAttribute.Constraints {
-					result25, _ := json.Marshal(value29)
-					attributes1.AutomationAttribute.Constraints[key26] = types.StringValue(string(result25))
+				for key25, value28 := range attributesItem.AutomationAttribute.Constraints {
+					result24, _ := json.Marshal(value28)
+					attributes1.AutomationAttribute.Constraints[key25] = types.StringValue(string(result24))
 				}
 			}
 			if attributesItem.AutomationAttribute.DefaultValue == nil {
@@ -13740,9 +13749,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.InternalUserAttribute.Constraints == nil && len(attributesItem.InternalUserAttribute.Constraints) > 0 {
 				attributes1.InternalUserAttribute.Constraints = make(map[string]types.String)
-				for key27, value30 := range attributesItem.InternalUserAttribute.Constraints {
-					result26, _ := json.Marshal(value30)
-					attributes1.InternalUserAttribute.Constraints[key27] = types.StringValue(string(result26))
+				for key26, value29 := range attributesItem.InternalUserAttribute.Constraints {
+					result25, _ := json.Marshal(value29)
+					attributes1.InternalUserAttribute.Constraints[key26] = types.StringValue(string(result25))
 				}
 			}
 			if attributesItem.InternalUserAttribute.DefaultValue == nil {
@@ -13857,9 +13866,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			}
 			if attributes1.PurposeAttribute.Constraints == nil && len(attributesItem.PurposeAttribute.Constraints) > 0 {
 				attributes1.PurposeAttribute.Constraints = make(map[string]types.String)
-				for key28, value31 := range attributesItem.PurposeAttribute.Constraints {
-					result27, _ := json.Marshal(value31)
-					attributes1.PurposeAttribute.Constraints[key28] = types.StringValue(string(result27))
+				for key27, value30 := range attributesItem.PurposeAttribute.Constraints {
+					result26, _ := json.Marshal(value30)
+					attributes1.PurposeAttribute.Constraints[key27] = types.StringValue(string(result26))
 				}
 			}
 			if attributesItem.PurposeAttribute.CreatedAt != nil {
@@ -14010,9 +14019,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.TextAttribute.Constraints == nil && len(attributesItem1.TextAttribute.Constraints) > 0 {
 					attributes3.TextAttribute.Constraints = make(map[string]types.String)
-					for key29, value32 := range attributesItem1.TextAttribute.Constraints {
-						result28, _ := json.Marshal(value32)
-						attributes3.TextAttribute.Constraints[key29] = types.StringValue(string(result28))
+					for key28, value31 := range attributesItem1.TextAttribute.Constraints {
+						result27, _ := json.Marshal(value31)
+						attributes3.TextAttribute.Constraints[key28] = types.StringValue(string(result27))
 					}
 				}
 				if attributesItem1.TextAttribute.DefaultValue == nil {
@@ -14132,9 +14141,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.LinkAttribute.Constraints == nil && len(attributesItem1.LinkAttribute.Constraints) > 0 {
 					attributes3.LinkAttribute.Constraints = make(map[string]types.String)
-					for key30, value33 := range attributesItem1.LinkAttribute.Constraints {
-						result29, _ := json.Marshal(value33)
-						attributes3.LinkAttribute.Constraints[key30] = types.StringValue(string(result29))
+					for key29, value32 := range attributesItem1.LinkAttribute.Constraints {
+						result28, _ := json.Marshal(value32)
+						attributes3.LinkAttribute.Constraints[key29] = types.StringValue(string(result28))
 					}
 				}
 				if attributesItem1.LinkAttribute.DefaultValue == nil {
@@ -14249,9 +14258,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.DateAttribute.Constraints == nil && len(attributesItem1.DateAttribute.Constraints) > 0 {
 					attributes3.DateAttribute.Constraints = make(map[string]types.String)
-					for key31, value34 := range attributesItem1.DateAttribute.Constraints {
-						result30, _ := json.Marshal(value34)
-						attributes3.DateAttribute.Constraints[key31] = types.StringValue(string(result30))
+					for key30, value33 := range attributesItem1.DateAttribute.Constraints {
+						result29, _ := json.Marshal(value33)
+						attributes3.DateAttribute.Constraints[key30] = types.StringValue(string(result29))
 					}
 				}
 				if attributesItem1.DateAttribute.DefaultValue == nil {
@@ -14366,9 +14375,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.CountryAttribute.Constraints == nil && len(attributesItem1.CountryAttribute.Constraints) > 0 {
 					attributes3.CountryAttribute.Constraints = make(map[string]types.String)
-					for key32, value35 := range attributesItem1.CountryAttribute.Constraints {
-						result31, _ := json.Marshal(value35)
-						attributes3.CountryAttribute.Constraints[key32] = types.StringValue(string(result31))
+					for key31, value34 := range attributesItem1.CountryAttribute.Constraints {
+						result30, _ := json.Marshal(value34)
+						attributes3.CountryAttribute.Constraints[key31] = types.StringValue(string(result30))
 					}
 				}
 				if attributesItem1.CountryAttribute.DefaultValue == nil {
@@ -14483,9 +14492,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.BooleanAttribute.Constraints == nil && len(attributesItem1.BooleanAttribute.Constraints) > 0 {
 					attributes3.BooleanAttribute.Constraints = make(map[string]types.String)
-					for key33, value36 := range attributesItem1.BooleanAttribute.Constraints {
-						result32, _ := json.Marshal(value36)
-						attributes3.BooleanAttribute.Constraints[key33] = types.StringValue(string(result32))
+					for key32, value35 := range attributesItem1.BooleanAttribute.Constraints {
+						result31, _ := json.Marshal(value35)
+						attributes3.BooleanAttribute.Constraints[key32] = types.StringValue(string(result31))
 					}
 				}
 				if attributesItem1.BooleanAttribute.DefaultValue == nil {
@@ -14605,9 +14614,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.SelectAttribute.Constraints == nil && len(attributesItem1.SelectAttribute.Constraints) > 0 {
 					attributes3.SelectAttribute.Constraints = make(map[string]types.String)
-					for key34, value37 := range attributesItem1.SelectAttribute.Constraints {
-						result33, _ := json.Marshal(value37)
-						attributes3.SelectAttribute.Constraints[key34] = types.StringValue(string(result33))
+					for key33, value36 := range attributesItem1.SelectAttribute.Constraints {
+						result32, _ := json.Marshal(value36)
+						attributes3.SelectAttribute.Constraints[key33] = types.StringValue(string(result32))
 					}
 				}
 				if attributesItem1.SelectAttribute.DefaultValue == nil {
@@ -14753,9 +14762,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.MultiSelectAttribute.Constraints == nil && len(attributesItem1.MultiSelectAttribute.Constraints) > 0 {
 					attributes3.MultiSelectAttribute.Constraints = make(map[string]types.String)
-					for key35, value39 := range attributesItem1.MultiSelectAttribute.Constraints {
-						result34, _ := json.Marshal(value39)
-						attributes3.MultiSelectAttribute.Constraints[key35] = types.StringValue(string(result34))
+					for key34, value38 := range attributesItem1.MultiSelectAttribute.Constraints {
+						result33, _ := json.Marshal(value38)
+						attributes3.MultiSelectAttribute.Constraints[key34] = types.StringValue(string(result33))
 					}
 				}
 				if attributesItem1.MultiSelectAttribute.DefaultValue == nil {
@@ -14896,9 +14905,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.StatusAttribute.Constraints == nil && len(attributesItem1.StatusAttribute.Constraints) > 0 {
 					attributes3.StatusAttribute.Constraints = make(map[string]types.String)
-					for key36, value41 := range attributesItem1.StatusAttribute.Constraints {
-						result35, _ := json.Marshal(value41)
-						attributes3.StatusAttribute.Constraints[key36] = types.StringValue(string(result35))
+					for key35, value40 := range attributesItem1.StatusAttribute.Constraints {
+						result34, _ := json.Marshal(value40)
+						attributes3.StatusAttribute.Constraints[key35] = types.StringValue(string(result34))
 					}
 				}
 				if attributesItem1.StatusAttribute.DefaultValue == nil {
@@ -15034,9 +15043,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.SequenceAttribute.Constraints == nil && len(attributesItem1.SequenceAttribute.Constraints) > 0 {
 					attributes3.SequenceAttribute.Constraints = make(map[string]types.String)
-					for key37, value43 := range attributesItem1.SequenceAttribute.Constraints {
-						result36, _ := json.Marshal(value43)
-						attributes3.SequenceAttribute.Constraints[key37] = types.StringValue(string(result36))
+					for key36, value42 := range attributesItem1.SequenceAttribute.Constraints {
+						result35, _ := json.Marshal(value42)
+						attributes3.SequenceAttribute.Constraints[key36] = types.StringValue(string(result35))
 					}
 				}
 				if attributesItem1.SequenceAttribute.DefaultValue == nil {
@@ -15196,11 +15205,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 						}
 						actions3.NewEntityItem.Title = types.StringValue(actionsItem1.NewEntityItem.Title)
 						actions3.NewEntityItem.UpdatedAt = types.StringValue(actionsItem1.NewEntityItem.UpdatedAt.Format(time.RFC3339))
-						if actions3.NewEntityItem.Entity == nil && len(actionsItem1.NewEntityItem.Entity) > 0 {
-							actions3.NewEntityItem.Entity = make(map[string]types.String)
-							for key38, value44 := range actionsItem1.NewEntityItem.Entity {
-								result37, _ := json.Marshal(value44)
-								actions3.NewEntityItem.Entity[key38] = types.StringValue(string(result37))
+						if actions3.NewEntityItem.Entity.IsUnknown() {
+							if actionsItem1.NewEntityItem.Entity == nil {
+								actions3.NewEntityItem.Entity = types.StringNull()
+							} else {
+								entityResult1, _ := json.Marshal(actionsItem1.NewEntityItem.Entity)
+								actions3.NewEntityItem.Entity = types.StringValue(string(entityResult1))
 							}
 						}
 					}
@@ -15222,9 +15232,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.RelationAttribute.Constraints == nil && len(attributesItem1.RelationAttribute.Constraints) > 0 {
 					attributes3.RelationAttribute.Constraints = make(map[string]types.String)
-					for key39, value45 := range attributesItem1.RelationAttribute.Constraints {
-						result38, _ := json.Marshal(value45)
-						attributes3.RelationAttribute.Constraints[key39] = types.StringValue(string(result38))
+					for key37, value43 := range attributesItem1.RelationAttribute.Constraints {
+						result36, _ := json.Marshal(value43)
+						attributes3.RelationAttribute.Constraints[key37] = types.StringValue(string(result36))
 					}
 				}
 				if attributesItem1.RelationAttribute.DefaultValue == nil {
@@ -15352,8 +15362,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.RelationAttribute.ReverseAttributes == nil && len(attributesItem1.RelationAttribute.ReverseAttributes) > 0 {
 					attributes3.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-					for key40, value46 := range attributesItem1.RelationAttribute.ReverseAttributes {
-						attributes3.RelationAttribute.ReverseAttributes[key40] = types.StringValue(value46)
+					for key38, value44 := range attributesItem1.RelationAttribute.ReverseAttributes {
+						attributes3.RelationAttribute.ReverseAttributes[key38] = types.StringValue(value44)
 					}
 				}
 				if attributesItem1.RelationAttribute.SearchPlaceholder != nil {
@@ -15415,9 +15425,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.UserRelationAttribute.Constraints == nil && len(attributesItem1.UserRelationAttribute.Constraints) > 0 {
 					attributes3.UserRelationAttribute.Constraints = make(map[string]types.String)
-					for key41, value47 := range attributesItem1.UserRelationAttribute.Constraints {
-						result39, _ := json.Marshal(value47)
-						attributes3.UserRelationAttribute.Constraints[key41] = types.StringValue(string(result39))
+					for key39, value45 := range attributesItem1.UserRelationAttribute.Constraints {
+						result37, _ := json.Marshal(value45)
+						attributes3.UserRelationAttribute.Constraints[key39] = types.StringValue(string(result37))
 					}
 				}
 				if attributesItem1.UserRelationAttribute.DefaultValue == nil {
@@ -15537,9 +15547,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.AddressRelationAttribute.Constraints == nil && len(attributesItem1.AddressRelationAttribute.Constraints) > 0 {
 					attributes3.AddressRelationAttribute.Constraints = make(map[string]types.String)
-					for key42, value48 := range attributesItem1.AddressRelationAttribute.Constraints {
-						result40, _ := json.Marshal(value48)
-						attributes3.AddressRelationAttribute.Constraints[key42] = types.StringValue(string(result40))
+					for key40, value46 := range attributesItem1.AddressRelationAttribute.Constraints {
+						result38, _ := json.Marshal(value46)
+						attributes3.AddressRelationAttribute.Constraints[key40] = types.StringValue(string(result38))
 					}
 				}
 				if attributesItem1.AddressRelationAttribute.DefaultValue == nil {
@@ -15659,9 +15669,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.PaymentMethodRelationAttribute.Constraints == nil && len(attributesItem1.PaymentMethodRelationAttribute.Constraints) > 0 {
 					attributes3.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
-					for key43, value49 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
-						result41, _ := json.Marshal(value49)
-						attributes3.PaymentMethodRelationAttribute.Constraints[key43] = types.StringValue(string(result41))
+					for key41, value47 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
+						result39, _ := json.Marshal(value47)
+						attributes3.PaymentMethodRelationAttribute.Constraints[key41] = types.StringValue(string(result39))
 					}
 				}
 				if attributesItem1.PaymentMethodRelationAttribute.DefaultValue == nil {
@@ -15781,9 +15791,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.CurrencyAttribute.Constraints == nil && len(attributesItem1.CurrencyAttribute.Constraints) > 0 {
 					attributes3.CurrencyAttribute.Constraints = make(map[string]types.String)
-					for key44, value50 := range attributesItem1.CurrencyAttribute.Constraints {
-						result42, _ := json.Marshal(value50)
-						attributes3.CurrencyAttribute.Constraints[key44] = types.StringValue(string(result42))
+					for key42, value48 := range attributesItem1.CurrencyAttribute.Constraints {
+						result40, _ := json.Marshal(value48)
+						attributes3.CurrencyAttribute.Constraints[key42] = types.StringValue(string(result40))
 					}
 				}
 				attributes3.CurrencyAttribute.Currency = nil
@@ -15915,9 +15925,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.RepeatableAttribute.Constraints == nil && len(attributesItem1.RepeatableAttribute.Constraints) > 0 {
 					attributes3.RepeatableAttribute.Constraints = make(map[string]types.String)
-					for key45, value51 := range attributesItem1.RepeatableAttribute.Constraints {
-						result43, _ := json.Marshal(value51)
-						attributes3.RepeatableAttribute.Constraints[key45] = types.StringValue(string(result43))
+					for key43, value49 := range attributesItem1.RepeatableAttribute.Constraints {
+						result41, _ := json.Marshal(value49)
+						attributes3.RepeatableAttribute.Constraints[key43] = types.StringValue(string(result41))
 					}
 				}
 				if attributesItem1.RepeatableAttribute.DefaultValue == nil {
@@ -16052,9 +16062,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.TagsAttribute.Constraints == nil && len(attributesItem1.TagsAttribute.Constraints) > 0 {
 					attributes3.TagsAttribute.Constraints = make(map[string]types.String)
-					for key46, value52 := range attributesItem1.TagsAttribute.Constraints {
-						result44, _ := json.Marshal(value52)
-						attributes3.TagsAttribute.Constraints[key46] = types.StringValue(string(result44))
+					for key44, value50 := range attributesItem1.TagsAttribute.Constraints {
+						result42, _ := json.Marshal(value50)
+						attributes3.TagsAttribute.Constraints[key44] = types.StringValue(string(result42))
 					}
 				}
 				if attributesItem1.TagsAttribute.DefaultValue == nil {
@@ -16177,9 +16187,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.NumberAttribute.Constraints == nil && len(attributesItem1.NumberAttribute.Constraints) > 0 {
 					attributes3.NumberAttribute.Constraints = make(map[string]types.String)
-					for key47, value53 := range attributesItem1.NumberAttribute.Constraints {
-						result45, _ := json.Marshal(value53)
-						attributes3.NumberAttribute.Constraints[key47] = types.StringValue(string(result45))
+					for key45, value51 := range attributesItem1.NumberAttribute.Constraints {
+						result43, _ := json.Marshal(value51)
+						attributes3.NumberAttribute.Constraints[key45] = types.StringValue(string(result43))
 					}
 				}
 				if attributesItem1.NumberAttribute.DefaultValue == nil {
@@ -16299,9 +16309,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.ConsentAttribute.Constraints == nil && len(attributesItem1.ConsentAttribute.Constraints) > 0 {
 					attributes3.ConsentAttribute.Constraints = make(map[string]types.String)
-					for key48, value54 := range attributesItem1.ConsentAttribute.Constraints {
-						result46, _ := json.Marshal(value54)
-						attributes3.ConsentAttribute.Constraints[key48] = types.StringValue(string(result46))
+					for key46, value52 := range attributesItem1.ConsentAttribute.Constraints {
+						result44, _ := json.Marshal(value52)
+						attributes3.ConsentAttribute.Constraints[key46] = types.StringValue(string(result44))
 					}
 				}
 				if attributesItem1.ConsentAttribute.DefaultValue == nil {
@@ -16417,9 +16427,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.InternalAttribute.Constraints == nil && len(attributesItem1.InternalAttribute.Constraints) > 0 {
 					attributes3.InternalAttribute.Constraints = make(map[string]types.String)
-					for key49, value55 := range attributesItem1.InternalAttribute.Constraints {
-						result47, _ := json.Marshal(value55)
-						attributes3.InternalAttribute.Constraints[key49] = types.StringValue(string(result47))
+					for key47, value53 := range attributesItem1.InternalAttribute.Constraints {
+						result45, _ := json.Marshal(value53)
+						attributes3.InternalAttribute.Constraints[key47] = types.StringValue(string(result45))
 					}
 				}
 				if attributesItem1.InternalAttribute.DefaultValue == nil {
@@ -16534,9 +16544,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.OrderedListAttribute.Constraints == nil && len(attributesItem1.OrderedListAttribute.Constraints) > 0 {
 					attributes3.OrderedListAttribute.Constraints = make(map[string]types.String)
-					for key50, value56 := range attributesItem1.OrderedListAttribute.Constraints {
-						result48, _ := json.Marshal(value56)
-						attributes3.OrderedListAttribute.Constraints[key50] = types.StringValue(string(result48))
+					for key48, value54 := range attributesItem1.OrderedListAttribute.Constraints {
+						result46, _ := json.Marshal(value54)
+						attributes3.OrderedListAttribute.Constraints[key48] = types.StringValue(string(result46))
 					}
 				}
 				if attributesItem1.OrderedListAttribute.DefaultValue == nil {
@@ -16655,9 +16665,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.FileAttribute.Constraints == nil && len(attributesItem1.FileAttribute.Constraints) > 0 {
 					attributes3.FileAttribute.Constraints = make(map[string]types.String)
-					for key51, value57 := range attributesItem1.FileAttribute.Constraints {
-						result49, _ := json.Marshal(value57)
-						attributes3.FileAttribute.Constraints[key51] = types.StringValue(string(result49))
+					for key49, value55 := range attributesItem1.FileAttribute.Constraints {
+						result47, _ := json.Marshal(value55)
+						attributes3.FileAttribute.Constraints[key49] = types.StringValue(string(result47))
 					}
 				}
 				if attributesItem1.FileAttribute.DefaultAccessControl != nil {
@@ -16788,9 +16798,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.ComputedAttribute.Constraints == nil && len(attributesItem1.ComputedAttribute.Constraints) > 0 {
 					attributes3.ComputedAttribute.Constraints = make(map[string]types.String)
-					for key52, value58 := range attributesItem1.ComputedAttribute.Constraints {
-						result50, _ := json.Marshal(value58)
-						attributes3.ComputedAttribute.Constraints[key52] = types.StringValue(string(result50))
+					for key50, value56 := range attributesItem1.ComputedAttribute.Constraints {
+						result48, _ := json.Marshal(value56)
+						attributes3.ComputedAttribute.Constraints[key50] = types.StringValue(string(result48))
 					}
 				}
 				if attributesItem1.ComputedAttribute.DefaultValue == nil {
@@ -16905,9 +16915,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.PartnerStatusAttribute.Constraints == nil && len(attributesItem1.PartnerStatusAttribute.Constraints) > 0 {
 					attributes3.PartnerStatusAttribute.Constraints = make(map[string]types.String)
-					for key53, value59 := range attributesItem1.PartnerStatusAttribute.Constraints {
-						result51, _ := json.Marshal(value59)
-						attributes3.PartnerStatusAttribute.Constraints[key53] = types.StringValue(string(result51))
+					for key51, value57 := range attributesItem1.PartnerStatusAttribute.Constraints {
+						result49, _ := json.Marshal(value57)
+						attributes3.PartnerStatusAttribute.Constraints[key51] = types.StringValue(string(result49))
 					}
 				}
 				if attributesItem1.PartnerStatusAttribute.DefaultValue == nil {
@@ -17022,9 +17032,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.InvitationEmailAttribute.Constraints == nil && len(attributesItem1.InvitationEmailAttribute.Constraints) > 0 {
 					attributes3.InvitationEmailAttribute.Constraints = make(map[string]types.String)
-					for key54, value60 := range attributesItem1.InvitationEmailAttribute.Constraints {
-						result52, _ := json.Marshal(value60)
-						attributes3.InvitationEmailAttribute.Constraints[key54] = types.StringValue(string(result52))
+					for key52, value58 := range attributesItem1.InvitationEmailAttribute.Constraints {
+						result50, _ := json.Marshal(value58)
+						attributes3.InvitationEmailAttribute.Constraints[key52] = types.StringValue(string(result50))
 					}
 				}
 				if attributesItem1.InvitationEmailAttribute.DefaultValue == nil {
@@ -17139,9 +17149,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.AutomationAttribute.Constraints == nil && len(attributesItem1.AutomationAttribute.Constraints) > 0 {
 					attributes3.AutomationAttribute.Constraints = make(map[string]types.String)
-					for key55, value61 := range attributesItem1.AutomationAttribute.Constraints {
-						result53, _ := json.Marshal(value61)
-						attributes3.AutomationAttribute.Constraints[key55] = types.StringValue(string(result53))
+					for key53, value59 := range attributesItem1.AutomationAttribute.Constraints {
+						result51, _ := json.Marshal(value59)
+						attributes3.AutomationAttribute.Constraints[key53] = types.StringValue(string(result51))
 					}
 				}
 				if attributesItem1.AutomationAttribute.DefaultValue == nil {
@@ -17256,9 +17266,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.InternalUserAttribute.Constraints == nil && len(attributesItem1.InternalUserAttribute.Constraints) > 0 {
 					attributes3.InternalUserAttribute.Constraints = make(map[string]types.String)
-					for key56, value62 := range attributesItem1.InternalUserAttribute.Constraints {
-						result54, _ := json.Marshal(value62)
-						attributes3.InternalUserAttribute.Constraints[key56] = types.StringValue(string(result54))
+					for key54, value60 := range attributesItem1.InternalUserAttribute.Constraints {
+						result52, _ := json.Marshal(value60)
+						attributes3.InternalUserAttribute.Constraints[key54] = types.StringValue(string(result52))
 					}
 				}
 				if attributesItem1.InternalUserAttribute.DefaultValue == nil {
@@ -17373,9 +17383,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				}
 				if attributes3.PurposeAttribute.Constraints == nil && len(attributesItem1.PurposeAttribute.Constraints) > 0 {
 					attributes3.PurposeAttribute.Constraints = make(map[string]types.String)
-					for key57, value63 := range attributesItem1.PurposeAttribute.Constraints {
-						result55, _ := json.Marshal(value63)
-						attributes3.PurposeAttribute.Constraints[key57] = types.StringValue(string(result55))
+					for key55, value61 := range attributesItem1.PurposeAttribute.Constraints {
+						result53, _ := json.Marshal(value61)
+						attributes3.PurposeAttribute.Constraints[key55] = types.StringValue(string(result53))
 					}
 				}
 				if attributesItem1.PurposeAttribute.CreatedAt != nil {
@@ -17605,9 +17615,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	}
 	if r.DialogConfig == nil && len(resp.DialogConfig) > 0 {
 		r.DialogConfig = make(map[string]types.String)
-		for key58, value64 := range resp.DialogConfig {
-			result56, _ := json.Marshal(value64)
-			r.DialogConfig[key58] = types.StringValue(string(result56))
+		for key56, value62 := range resp.DialogConfig {
+			result54, _ := json.Marshal(value62)
+			r.DialogConfig[key56] = types.StringValue(string(result54))
 		}
 	}
 	if resp.Draft != nil {
@@ -17625,9 +17635,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 			var searchMappingsResult SearchMappings
 			if searchMappingsResult.Fields == nil && len(searchMappingsValue.Fields) > 0 {
 				searchMappingsResult.Fields = make(map[string]types.String)
-				for key59, value65 := range searchMappingsValue.Fields {
-					result57, _ := json.Marshal(value65)
-					searchMappingsResult.Fields[key59] = types.StringValue(string(result57))
+				for key57, value63 := range searchMappingsValue.Fields {
+					result55, _ := json.Marshal(value63)
+					searchMappingsResult.Fields[key57] = types.StringValue(string(result55))
 				}
 			}
 			if searchMappingsValue.Index != nil {
@@ -17723,11 +17733,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 		} else {
 			r.LayoutSettings.GridTemplateColumns = types.StringNull()
 		}
-		if r.LayoutSettings.AdditionalProperties == nil && len(resp.LayoutSettings.AdditionalProperties) > 0 {
-			r.LayoutSettings.AdditionalProperties = make(map[string]types.String)
-			for key61, value66 := range resp.LayoutSettings.AdditionalProperties {
-				result58, _ := json.Marshal(value66)
-				r.LayoutSettings.AdditionalProperties[key61] = types.StringValue(string(result58))
+		if r.LayoutSettings.AdditionalProperties.IsUnknown() {
+			if resp.LayoutSettings.AdditionalProperties == nil {
+				r.LayoutSettings.AdditionalProperties = types.StringNull()
+			} else {
+				additionalPropertiesResult, _ := json.Marshal(resp.LayoutSettings.AdditionalProperties)
+				r.LayoutSettings.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
 			}
 		}
 	}
@@ -17771,8 +17782,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				r.UIConfig.CreateView.EntityDefaultCreate = &EntityDefaultCreate{}
 				if r.UIConfig.CreateView.EntityDefaultCreate.SearchParams == nil && len(resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams) > 0 {
 					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams = make(map[string]types.String)
-					for key62, value67 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
-						r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key62] = types.StringValue(value67)
+					for key59, value64 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
+						r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key59] = types.StringValue(value64)
 					}
 				}
 				if resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions == nil {
@@ -17826,8 +17837,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				r.UIConfig.EditView.EntityDefaultEdit = &EntityDefaultCreate{}
 				if r.UIConfig.EditView.EntityDefaultEdit.SearchParams == nil && len(resp.UIConfig.EditView.EntityDefaultEdit.SearchParams) > 0 {
 					r.UIConfig.EditView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-					for key63, value68 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
-						r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key63] = types.StringValue(value68)
+					for key60, value65 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
+						r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key60] = types.StringValue(value65)
 					}
 				}
 				if resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions == nil {
@@ -17938,8 +17949,8 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 				r.UIConfig.SingleView.EntityDefaultEdit = &EntityDefaultCreate{}
 				if r.UIConfig.SingleView.EntityDefaultEdit.SearchParams == nil && len(resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams) > 0 {
 					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-					for key64, value70 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
-						r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key64] = types.StringValue(value70)
+					for key61, value67 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
+						r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key61] = types.StringValue(value67)
 					}
 				}
 				if resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions == nil {
@@ -18066,9 +18077,9 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 						options15.Label = types.StringValue(optionsItem6.Label)
 						if options15.Params == nil && len(optionsItem6.Params) > 0 {
 							options15.Params = make(map[string]types.String)
-							for key65, value71 := range optionsItem6.Params {
-								result59, _ := json.Marshal(value71)
-								options15.Params[key65] = types.StringValue(string(result59))
+							for key62, value68 := range optionsItem6.Params {
+								result56, _ := json.Marshal(value68)
+								options15.Params[key62] = types.StringValue(string(result56))
 							}
 						}
 						navbarActions1.Options = append(navbarActions1.Options, options15)
@@ -18119,5 +18130,12 @@ func (r *SchemaResourceModel) RefreshFromSDKType(resp *shared.EntitySchemaItem) 
 	} else {
 		r.Version = types.Int64Null()
 	}
+}
 
+func (r *SchemaResourceModel) RefreshFromCreateResponse(resp *shared.EntitySchemaItem) {
+	r.RefreshFromGetResponse(resp)
+}
+
+func (r *SchemaResourceModel) RefreshFromUpdateResponse(resp *shared.EntitySchemaItem) {
+	r.RefreshFromGetResponse(resp)
 }

@@ -7,18 +7,18 @@ import (
 	"fmt"
 )
 
-type SavedViewCreatedBy2SourceEnum string
+type SavedViewCreatedBy2Source string
 
 const (
-	SavedViewCreatedBy2SourceEnumSystem    SavedViewCreatedBy2SourceEnum = "SYSTEM"
-	SavedViewCreatedBy2SourceEnumBlueprint SavedViewCreatedBy2SourceEnum = "BLUEPRINT"
+	SavedViewCreatedBy2SourceSystem    SavedViewCreatedBy2Source = "SYSTEM"
+	SavedViewCreatedBy2SourceBlueprint SavedViewCreatedBy2Source = "BLUEPRINT"
 )
 
-func (e SavedViewCreatedBy2SourceEnum) ToPointer() *SavedViewCreatedBy2SourceEnum {
+func (e SavedViewCreatedBy2Source) ToPointer() *SavedViewCreatedBy2Source {
 	return &e
 }
 
-func (e *SavedViewCreatedBy2SourceEnum) UnmarshalJSON(data []byte) error {
+func (e *SavedViewCreatedBy2Source) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -27,18 +27,18 @@ func (e *SavedViewCreatedBy2SourceEnum) UnmarshalJSON(data []byte) error {
 	case "SYSTEM":
 		fallthrough
 	case "BLUEPRINT":
-		*e = SavedViewCreatedBy2SourceEnum(v)
+		*e = SavedViewCreatedBy2Source(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SavedViewCreatedBy2SourceEnum: %v", v)
+		return fmt.Errorf("invalid value for SavedViewCreatedBy2Source: %v", v)
 	}
 }
 
 // SavedViewCreatedBy2 - A system-created view
 type SavedViewCreatedBy2 struct {
-	Source *SavedViewCreatedBy2SourceEnum `json:"source,omitempty"`
+	Source *SavedViewCreatedBy2Source `json:"source,omitempty"`
 
-	AdditionalProperties map[string]interface{} `json:"-"`
+	AdditionalProperties interface{} `json:"-"`
 }
 type _SavedViewCreatedBy2 SavedViewCreatedBy2
 

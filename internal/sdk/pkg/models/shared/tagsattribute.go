@@ -7,27 +7,27 @@ import (
 	"fmt"
 )
 
-type TagsAttributeTypeEnum string
+type TagsAttributeType string
 
 const (
-	TagsAttributeTypeEnumTags TagsAttributeTypeEnum = "tags"
+	TagsAttributeTypeTags TagsAttributeType = "tags"
 )
 
-func (e TagsAttributeTypeEnum) ToPointer() *TagsAttributeTypeEnum {
+func (e TagsAttributeType) ToPointer() *TagsAttributeType {
 	return &e
 }
 
-func (e *TagsAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *TagsAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "tags":
-		*e = TagsAttributeTypeEnum(v)
+		*e = TagsAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TagsAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for TagsAttributeType: %v", v)
 	}
 }
 
@@ -74,8 +74,8 @@ type TagsAttribute struct {
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                  `json:"show_in_table,omitempty"`
-	Suggestions    []string               `json:"suggestions,omitempty"`
-	Type           *TagsAttributeTypeEnum `json:"type,omitempty"`
-	ValueFormatter *string                `json:"value_formatter,omitempty"`
+	ShowInTable    *bool              `json:"show_in_table,omitempty"`
+	Suggestions    []string           `json:"suggestions,omitempty"`
+	Type           *TagsAttributeType `json:"type,omitempty"`
+	ValueFormatter *string            `json:"value_formatter,omitempty"`
 }

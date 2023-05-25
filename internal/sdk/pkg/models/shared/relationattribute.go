@@ -10,26 +10,26 @@ import (
 	"time"
 )
 
-// RelationAttributeActionsActionTypeEnum - The action type. Currently supported actions:
+// RelationAttributeActionsActionType - The action type. Currently supported actions:
 //
 // | action | description |
 // |--------|-------------|
 // | add_existing | Enables the user to pick an existing entity to link as relation |
 // | create_new | Enables the user to create a new entity using the first/main `allowed_schemas` schema
 // | create_from_existing | Enables the user to pick an existing entity to clone from, while creating a blank new entity to link as relation |
-type RelationAttributeActionsActionTypeEnum string
+type RelationAttributeActionsActionType string
 
 const (
-	RelationAttributeActionsActionTypeEnumAddExisting        RelationAttributeActionsActionTypeEnum = "add_existing"
-	RelationAttributeActionsActionTypeEnumCreateNew          RelationAttributeActionsActionTypeEnum = "create_new"
-	RelationAttributeActionsActionTypeEnumCreateFromExisting RelationAttributeActionsActionTypeEnum = "create_from_existing"
+	RelationAttributeActionsActionTypeAddExisting        RelationAttributeActionsActionType = "add_existing"
+	RelationAttributeActionsActionTypeCreateNew          RelationAttributeActionsActionType = "create_new"
+	RelationAttributeActionsActionTypeCreateFromExisting RelationAttributeActionsActionType = "create_from_existing"
 )
 
-func (e RelationAttributeActionsActionTypeEnum) ToPointer() *RelationAttributeActionsActionTypeEnum {
+func (e RelationAttributeActionsActionType) ToPointer() *RelationAttributeActionsActionType {
 	return &e
 }
 
-func (e *RelationAttributeActionsActionTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *RelationAttributeActionsActionType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -40,10 +40,10 @@ func (e *RelationAttributeActionsActionTypeEnum) UnmarshalJSON(data []byte) erro
 	case "create_new":
 		fallthrough
 	case "create_from_existing":
-		*e = RelationAttributeActionsActionTypeEnum(v)
+		*e = RelationAttributeActionsActionType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeActionsActionTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for RelationAttributeActionsActionType: %v", v)
 	}
 }
 
@@ -59,7 +59,7 @@ type RelationAttributeActionsNewEntityItem struct {
 	Title     string    `json:"_title"`
 	UpdatedAt time.Time `json:"_updated_at"`
 
-	Entity map[string]interface{} `json:"-"`
+	Entity interface{} `json:"-"`
 }
 type _RelationAttributeActionsNewEntityItem RelationAttributeActionsNewEntityItem
 
@@ -121,7 +121,7 @@ type RelationAttributeActions struct {
 	// | create_new | Enables the user to create a new entity using the first/main `allowed_schemas` schema
 	// | create_from_existing | Enables the user to pick an existing entity to clone from, while creating a blank new entity to link as relation |
 	//
-	ActionType *RelationAttributeActionsActionTypeEnum `json:"action_type,omitempty"`
+	ActionType *RelationAttributeActionsActionType `json:"action_type,omitempty"`
 	// Sets the action as the default action, visible as the main action button.
 	Default *bool `json:"default,omitempty"`
 	// Name of the feature flag that enables this action
@@ -133,19 +133,19 @@ type RelationAttributeActions struct {
 	SettingFlag *string `json:"setting_flag,omitempty"`
 }
 
-type RelationAttributeDrawerSizeEnum string
+type RelationAttributeDrawerSize string
 
 const (
-	RelationAttributeDrawerSizeEnumSmall  RelationAttributeDrawerSizeEnum = "small"
-	RelationAttributeDrawerSizeEnumMedium RelationAttributeDrawerSizeEnum = "medium"
-	RelationAttributeDrawerSizeEnumLarge  RelationAttributeDrawerSizeEnum = "large"
+	RelationAttributeDrawerSizeSmall  RelationAttributeDrawerSize = "small"
+	RelationAttributeDrawerSizeMedium RelationAttributeDrawerSize = "medium"
+	RelationAttributeDrawerSizeLarge  RelationAttributeDrawerSize = "large"
 )
 
-func (e RelationAttributeDrawerSizeEnum) ToPointer() *RelationAttributeDrawerSizeEnum {
+func (e RelationAttributeDrawerSize) ToPointer() *RelationAttributeDrawerSize {
 	return &e
 }
 
-func (e *RelationAttributeDrawerSizeEnum) UnmarshalJSON(data []byte) error {
+func (e *RelationAttributeDrawerSize) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -156,50 +156,50 @@ func (e *RelationAttributeDrawerSizeEnum) UnmarshalJSON(data []byte) error {
 	case "medium":
 		fallthrough
 	case "large":
-		*e = RelationAttributeDrawerSizeEnum(v)
+		*e = RelationAttributeDrawerSize(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeDrawerSizeEnum: %v", v)
+		return fmt.Errorf("invalid value for RelationAttributeDrawerSize: %v", v)
 	}
 }
 
-type RelationAttributeEditModeEnum string
+type RelationAttributeEditMode string
 
 const (
-	RelationAttributeEditModeEnumListView RelationAttributeEditModeEnum = "list-view"
+	RelationAttributeEditModeListView RelationAttributeEditMode = "list-view"
 )
 
-func (e RelationAttributeEditModeEnum) ToPointer() *RelationAttributeEditModeEnum {
+func (e RelationAttributeEditMode) ToPointer() *RelationAttributeEditMode {
 	return &e
 }
 
-func (e *RelationAttributeEditModeEnum) UnmarshalJSON(data []byte) error {
+func (e *RelationAttributeEditMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "list-view":
-		*e = RelationAttributeEditModeEnum(v)
+		*e = RelationAttributeEditMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeEditModeEnum: %v", v)
+		return fmt.Errorf("invalid value for RelationAttributeEditMode: %v", v)
 	}
 }
 
-// RelationAttributeRelationAffinityModeEnum - Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.
-type RelationAttributeRelationAffinityModeEnum string
+// RelationAttributeRelationAffinityMode - Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.
+type RelationAttributeRelationAffinityMode string
 
 const (
-	RelationAttributeRelationAffinityModeEnumWeak   RelationAttributeRelationAffinityModeEnum = "weak"
-	RelationAttributeRelationAffinityModeEnumStrong RelationAttributeRelationAffinityModeEnum = "strong"
+	RelationAttributeRelationAffinityModeWeak   RelationAttributeRelationAffinityMode = "weak"
+	RelationAttributeRelationAffinityModeStrong RelationAttributeRelationAffinityMode = "strong"
 )
 
-func (e RelationAttributeRelationAffinityModeEnum) ToPointer() *RelationAttributeRelationAffinityModeEnum {
+func (e RelationAttributeRelationAffinityMode) ToPointer() *RelationAttributeRelationAffinityMode {
 	return &e
 }
 
-func (e *RelationAttributeRelationAffinityModeEnum) UnmarshalJSON(data []byte) error {
+func (e *RelationAttributeRelationAffinityMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -208,25 +208,25 @@ func (e *RelationAttributeRelationAffinityModeEnum) UnmarshalJSON(data []byte) e
 	case "weak":
 		fallthrough
 	case "strong":
-		*e = RelationAttributeRelationAffinityModeEnum(v)
+		*e = RelationAttributeRelationAffinityMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeRelationAffinityModeEnum: %v", v)
+		return fmt.Errorf("invalid value for RelationAttributeRelationAffinityMode: %v", v)
 	}
 }
 
-type RelationAttributeRelationTypeEnum string
+type RelationAttributeRelationType string
 
 const (
-	RelationAttributeRelationTypeEnumHasMany RelationAttributeRelationTypeEnum = "has_many"
-	RelationAttributeRelationTypeEnumHasOne  RelationAttributeRelationTypeEnum = "has_one"
+	RelationAttributeRelationTypeHasMany RelationAttributeRelationType = "has_many"
+	RelationAttributeRelationTypeHasOne  RelationAttributeRelationType = "has_one"
 )
 
-func (e RelationAttributeRelationTypeEnum) ToPointer() *RelationAttributeRelationTypeEnum {
+func (e RelationAttributeRelationType) ToPointer() *RelationAttributeRelationType {
 	return &e
 }
 
-func (e *RelationAttributeRelationTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *RelationAttributeRelationType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -235,10 +235,10 @@ func (e *RelationAttributeRelationTypeEnum) UnmarshalJSON(data []byte) error {
 	case "has_many":
 		fallthrough
 	case "has_one":
-		*e = RelationAttributeRelationTypeEnum(v)
+		*e = RelationAttributeRelationType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeRelationTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for RelationAttributeRelationType: %v", v)
 	}
 }
 
@@ -310,27 +310,27 @@ func (u RelationAttributeSummaryFields) MarshalJSON() ([]byte, error) {
 	return nil, nil
 }
 
-type RelationAttributeTypeEnum string
+type RelationAttributeType string
 
 const (
-	RelationAttributeTypeEnumRelation RelationAttributeTypeEnum = "relation"
+	RelationAttributeTypeRelation RelationAttributeType = "relation"
 )
 
-func (e RelationAttributeTypeEnum) ToPointer() *RelationAttributeTypeEnum {
+func (e RelationAttributeType) ToPointer() *RelationAttributeType {
 	return &e
 }
 
-func (e *RelationAttributeTypeEnum) UnmarshalJSON(data []byte) error {
+func (e *RelationAttributeType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "relation":
-		*e = RelationAttributeTypeEnum(v)
+		*e = RelationAttributeType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for RelationAttributeTypeEnum: %v", v)
+		return fmt.Errorf("invalid value for RelationAttributeType: %v", v)
 	}
 }
 
@@ -348,9 +348,9 @@ type RelationAttribute struct {
 	DefaultValue interface{}            `json:"default_value,omitempty"`
 	Deprecated   *bool                  `json:"deprecated,omitempty"`
 	// Enables the preview, edition, and creation of relation items on a Master-Details view mode.
-	DetailsViewModeEnabled *bool                            `json:"details_view_mode_enabled,omitempty"`
-	DrawerSize             *RelationAttributeDrawerSizeEnum `json:"drawer_size,omitempty"`
-	EditMode               *RelationAttributeEditModeEnum   `json:"edit_mode,omitempty"`
+	DetailsViewModeEnabled *bool                        `json:"details_view_mode_enabled,omitempty"`
+	DrawerSize             *RelationAttributeDrawerSize `json:"drawer_size,omitempty"`
+	EditMode               *RelationAttributeEditMode   `json:"edit_mode,omitempty"`
 	// When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.
 	EnableRelationPicker *bool `json:"enable_relation_picker,omitempty"`
 	// When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item.
@@ -378,8 +378,8 @@ type RelationAttribute struct {
 	Protected *bool `json:"protected,omitempty"`
 	Readonly  *bool `json:"readonly,omitempty"`
 	// Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.
-	RelationAffinityMode *RelationAttributeRelationAffinityModeEnum `json:"relation_affinity_mode,omitempty"`
-	RelationType         *RelationAttributeRelationTypeEnum         `json:"relation_type,omitempty"`
+	RelationAffinityMode *RelationAttributeRelationAffinityMode `json:"relation_affinity_mode,omitempty"`
+	RelationType         *RelationAttributeRelationType         `json:"relation_type,omitempty"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
@@ -395,6 +395,6 @@ type RelationAttribute struct {
 	// Render as a column in table views. When defined, overrides `hidden`
 	ShowInTable    *bool                            `json:"show_in_table,omitempty"`
 	SummaryFields  []RelationAttributeSummaryFields `json:"summary_fields,omitempty"`
-	Type           *RelationAttributeTypeEnum       `json:"type,omitempty"`
+	Type           *RelationAttributeType           `json:"type,omitempty"`
 	ValueFormatter *string                          `json:"value_formatter,omitempty"`
 }

@@ -19,7 +19,7 @@ type BaseEntity struct {
 	Title     string    `json:"_title"`
 	UpdatedAt time.Time `json:"_updated_at"`
 
-	Entity map[string]interface{} `json:"-"`
+	Entity interface{} `json:"-"`
 }
 type _BaseEntity BaseEntity
 
