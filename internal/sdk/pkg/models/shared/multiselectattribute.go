@@ -9,6 +9,11 @@ import (
 	"fmt"
 )
 
+// MultiSelectAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type MultiSelectAttributeConstraints struct {
+}
+
 type MultiSelectAttributeOptions2 struct {
 	Title *string `json:"title,omitempty"`
 	Value string  `json:"value"`
@@ -119,9 +124,9 @@ type MultiSelectAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	Constraints  *MultiSelectAttributeConstraints `json:"constraints,omitempty"`
+	DefaultValue interface{}                      `json:"default_value,omitempty"`
+	Deprecated   *bool                            `json:"deprecated,omitempty"`
 	// controls if the matching of values against the options is case sensitive or not
 	DisableCaseSensitive *bool `json:"disable_case_sensitive,omitempty"`
 	// Setting to `true` disables editing the attribute on the entity builder UI

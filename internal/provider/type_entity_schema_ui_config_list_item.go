@@ -3,5 +3,5 @@
 package provider
 
 type EntitySchemaUIConfigListItem struct {
-	SummaryAttributes []EntitySchemaUIConfigListItemSummaryAttributes `tfsdk:"summary_attributes"`
+	SummaryAttributes []SummaryAttribute `tfsdk:"summary_attributes"`
 }

@@ -12,13 +12,9 @@ import (
 	"time"
 
 	"epilot-entity/internal/validators"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -59,42 +55,42 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 
 		Attributes: map[string]schema.Attribute{
 			"created_at": schema.StringAttribute{
-				Computed: true,
+				Required: true,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required: true,
 			},
 			"org": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Organization Id the entity belongs to`,
 			},
 			"schema": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `URL-friendly identifier for the entity schema`,
 			},
 			"tags": schema.ListAttribute{
 				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
 			},
 			"title": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Title of entity`,
 			},
 			"updated_at": schema.StringAttribute{
-				Computed: true,
+				Required: true,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"slug": schema.StringAttribute{
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
 				Required:    true,
 				Description: `Entity Schema`,
 			},
 			"entity": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 				Validators: []validator.String{
 					validators.IsValidJSON(),
@@ -168,7 +164,7 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 	} else {
 		schema = nil
 	}
-	tags := make([]string, 0)
+	var tags []string = nil
 	for _, tagsItem := range data.Tags {
 		tags = append(tags, tagsItem.ValueString())
 	}
@@ -305,7 +301,7 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 	} else {
 		schema = nil
 	}
-	tags := make([]string, 0)
+	var tags []string = nil
 	for _, tagsItem := range data.Tags {
 		tags = append(tags, tagsItem.ValueString())
 	}
@@ -406,5 +402,5 @@ func (r *EntityResource) Delete(ctx context.Context, req resource.DeleteRequest,
 }
 
 func (r *EntityResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource entity.")
 }

@@ -7,6 +7,11 @@ import (
 	"fmt"
 )
 
+// FileAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type FileAttributeConstraints struct {
+}
+
 type FileAttributeDefaultAccessControl string
 
 const (
@@ -69,7 +74,7 @@ type FileAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints          map[string]interface{}             `json:"constraints,omitempty"`
+	Constraints          *FileAttributeConstraints          `json:"constraints,omitempty"`
 	DefaultAccessControl *FileAttributeDefaultAccessControl `json:"default_access_control,omitempty"`
 	DefaultValue         interface{}                        `json:"default_value,omitempty"`
 	Deprecated           *bool                              `json:"deprecated,omitempty"`

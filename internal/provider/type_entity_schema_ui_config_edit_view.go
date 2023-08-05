@@ -4,6 +4,6 @@ package provider
 
 type EntitySchemaUIConfigEditView struct {
 	EntityDefaultEdit  *EntityDefaultCreate `tfsdk:"entity_default_edit"`
-	RedirectEntityView *RedirectEntityView  `tfsdk:"redirect_entity_view"`
 	EntityViewDisabled *EntityViewDisabled  `tfsdk:"entity_view_disabled"`
+	RedirectEntityView *RedirectEntityView  `tfsdk:"redirect_entity_view"`
 }

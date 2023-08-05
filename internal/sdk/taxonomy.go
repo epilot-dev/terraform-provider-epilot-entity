@@ -16,29 +16,19 @@ import (
 
 // taxonomy - Entity classification with Taxonomies
 type taxonomy struct {
-	defaultClient  HTTPClient
-	securityClient HTTPClient
-	serverURL      string
-	language       string
-	sdkVersion     string
-	genVersion     string
+	sdkConfiguration sdkConfiguration
 }
 
-func newTaxonomy(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *taxonomy {
+func newTaxonomy(sdkConfig sdkConfiguration) *taxonomy {
 	return &taxonomy{
-		defaultClient:  defaultClient,
-		securityClient: securityClient,
-		serverURL:      serverURL,
-		language:       language,
-		sdkVersion:     sdkVersion,
-		genVersion:     genVersion,
+		sdkConfiguration: sdkConfig,
 	}
 }
 
 // GetTaxonomy - getTaxonomy
 // Get taxonomy by slug
 func (s *taxonomy) GetTaxonomy(ctx context.Context, request operations.GetTaxonomyRequest) (*operations.GetTaxonomyResponse, error) {
-	baseURL := s.serverURL
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/taxonomies/{taxonomySlug}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -49,9 +39,9 @@ func (s *taxonomy) GetTaxonomy(ctx context.Context, request operations.GetTaxono
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s %s", s.sdkConfiguration.Language, s.sdkConfiguration.SDKVersion, s.sdkConfiguration.GenVersion, s.sdkConfiguration.OpenAPIDocVersion))
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -94,7 +84,7 @@ func (s *taxonomy) GetTaxonomy(ctx context.Context, request operations.GetTaxono
 // ListTaxonomies - listTaxonomies
 // List taxonomies in an organisation
 func (s *taxonomy) ListTaxonomies(ctx context.Context) (*operations.ListTaxonomiesResponse, error) {
-	baseURL := s.serverURL
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/listTaxonomies"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -102,9 +92,9 @@ func (s *taxonomy) ListTaxonomies(ctx context.Context) (*operations.ListTaxonomi
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s %s", s.sdkConfiguration.Language, s.sdkConfiguration.SDKVersion, s.sdkConfiguration.GenVersion, s.sdkConfiguration.OpenAPIDocVersion))
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -147,7 +137,7 @@ func (s *taxonomy) ListTaxonomies(ctx context.Context) (*operations.ListTaxonomi
 // TaxonomiesClassificationsSearch - taxonomiesClassificationsSearch
 // List taxonomy classifications in an organisation based on taxonomy slug
 func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request operations.TaxonomiesClassificationsSearchRequest) (*operations.TaxonomiesClassificationsSearchResponse, error) {
-	baseURL := s.serverURL
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/taxonomies/classifications:search"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
@@ -160,7 +150,7 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s %s", s.sdkConfiguration.Language, s.sdkConfiguration.SDKVersion, s.sdkConfiguration.GenVersion, s.sdkConfiguration.OpenAPIDocVersion))
 
 	req.Header.Set("Content-Type", reqContentType)
 
@@ -168,7 +158,7 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -211,7 +201,7 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 // TaxonomyAutocomplete - taxonomyAutocomplete
 // Taxonomies autocomplete
 func (s *taxonomy) TaxonomyAutocomplete(ctx context.Context, request operations.TaxonomyAutocompleteRequest) (*operations.TaxonomyAutocompleteResponse, error) {
-	baseURL := s.serverURL
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/taxonomies/{taxonomySlug}:autocomplete", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -222,13 +212,13 @@ func (s *taxonomy) TaxonomyAutocomplete(ctx context.Context, request operations.
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s %s", s.sdkConfiguration.Language, s.sdkConfiguration.SDKVersion, s.sdkConfiguration.GenVersion, s.sdkConfiguration.OpenAPIDocVersion))
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -271,7 +261,7 @@ func (s *taxonomy) TaxonomyAutocomplete(ctx context.Context, request operations.
 // UpdateClassificationsForTaxonomy - updateClassificationsForTaxonomy
 // Update taxonomies in an organisation based in taxonomy slug
 func (s *taxonomy) UpdateClassificationsForTaxonomy(ctx context.Context, request operations.UpdateClassificationsForTaxonomyRequest) (*operations.UpdateClassificationsForTaxonomyResponse, error) {
-	baseURL := s.serverURL
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/taxonomies/{taxonomySlug}/classifications", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -287,11 +277,11 @@ func (s *taxonomy) UpdateClassificationsForTaxonomy(ctx context.Context, request
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s %s", s.sdkConfiguration.Language, s.sdkConfiguration.SDKVersion, s.sdkConfiguration.GenVersion, s.sdkConfiguration.OpenAPIDocVersion))
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {

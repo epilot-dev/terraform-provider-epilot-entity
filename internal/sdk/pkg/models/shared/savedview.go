@@ -3,7 +3,9 @@
 package shared
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -90,9 +92,77 @@ type SavedViewCreatedBy1 struct {
 	UserID *string `json:"user_id,omitempty"`
 }
 
+type SavedViewCreatedByType string
+
+const (
+	SavedViewCreatedByTypeSavedViewCreatedBy1 SavedViewCreatedByType = "SavedView_created_by_1"
+	SavedViewCreatedByTypeSavedViewCreatedBy2 SavedViewCreatedByType = "SavedView_created_by_2"
+)
+
+type SavedViewCreatedBy struct {
+	SavedViewCreatedBy1 *SavedViewCreatedBy1
+	SavedViewCreatedBy2 *SavedViewCreatedBy2
+
+	Type SavedViewCreatedByType
+}
+
+func CreateSavedViewCreatedBySavedViewCreatedBy1(savedViewCreatedBy1 SavedViewCreatedBy1) SavedViewCreatedBy {
+	typ := SavedViewCreatedByTypeSavedViewCreatedBy1
+
+	return SavedViewCreatedBy{
+		SavedViewCreatedBy1: &savedViewCreatedBy1,
+		Type:                typ,
+	}
+}
+
+func CreateSavedViewCreatedBySavedViewCreatedBy2(savedViewCreatedBy2 SavedViewCreatedBy2) SavedViewCreatedBy {
+	typ := SavedViewCreatedByTypeSavedViewCreatedBy2
+
+	return SavedViewCreatedBy{
+		SavedViewCreatedBy2: &savedViewCreatedBy2,
+		Type:                typ,
+	}
+}
+
+func (u *SavedViewCreatedBy) UnmarshalJSON(data []byte) error {
+	var d *json.Decoder
+
+	savedViewCreatedBy1 := new(SavedViewCreatedBy1)
+	d = json.NewDecoder(bytes.NewReader(data))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&savedViewCreatedBy1); err == nil {
+		u.SavedViewCreatedBy1 = savedViewCreatedBy1
+		u.Type = SavedViewCreatedByTypeSavedViewCreatedBy1
+		return nil
+	}
+
+	savedViewCreatedBy2 := new(SavedViewCreatedBy2)
+	d = json.NewDecoder(bytes.NewReader(data))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&savedViewCreatedBy2); err == nil {
+		u.SavedViewCreatedBy2 = savedViewCreatedBy2
+		u.Type = SavedViewCreatedByTypeSavedViewCreatedBy2
+		return nil
+	}
+
+	return errors.New("could not unmarshal into supported union types")
+}
+
+func (u SavedViewCreatedBy) MarshalJSON() ([]byte, error) {
+	if u.SavedViewCreatedBy1 != nil {
+		return json.Marshal(u.SavedViewCreatedBy1)
+	}
+
+	if u.SavedViewCreatedBy2 != nil {
+		return json.Marshal(u.SavedViewCreatedBy2)
+	}
+
+	return nil, nil
+}
+
 // SavedView - A saved entity view
 type SavedView struct {
-	CreatedBy interface{} `json:"created_by"`
+	CreatedBy SavedViewCreatedBy `json:"created_by"`
 	// User-friendly identifier for the saved view
 	Name string `json:"name"`
 	// Organisation ID a view belongs to

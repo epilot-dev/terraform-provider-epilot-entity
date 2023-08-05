@@ -6,5 +6,5 @@ import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type MultiSelectAttributeOptions struct {
 	Str                          types.String                  `tfsdk:"str"`
-	MultiSelectAttributeOptions2 *SelectAttributeOptionsOption `tfsdk:"multi_select_attribute_options_2"`
+	MultiSelectAttributeOptions2 *MultiSelectAttributeOptions2 `tfsdk:"multi_select_attribute_options_2"`
 }

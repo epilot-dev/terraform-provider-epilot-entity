@@ -16,9 +16,9 @@ variable "epilot_api_key" {
 }
 
 resource "epilot-entity_schema" "test" {
-  slug   = "contact"
-  name   = "contact from terraform"
-  plural = "contacts"
+  slug   = "tfentity"
+  name   = "Terraform Entity"
+  plural = "Terraform Entities"
   attributes = [
     {
       text_attribute = {
@@ -29,31 +29,22 @@ resource "epilot-entity_schema" "test" {
   ]
   capabilities = [
     {
-      name  = "customer_messaging"
-      title = "Messaging"
-      attributes = [
-        {
-          text_attribute = {
-            name          = "example"
-            label         = "example"
-            placeholder   = "example placeholder"
-            show_in_table = true
-          }
-        }
-      ]
+      name  = "attributes"
+      title = "Attributes"
       ui_hooks = [
         {
           hook = "EntityDetailsV2:Tab"
+
         }
       ]
     }
   ]
 }
 
-resource "epilot-entity_entity" "contact_test" {
-  slug = epilot-entity_schema.test.slug
-
-  entity = jsonencode({
-    "test" = "test"
-  })
-}
+# resource "epilot-entity_entity" "contact_test" {
+#   slug = epilot-entity_schema.test.slug
+#
+#   entity = jsonencode({
+#     "test" = "test"
+#   })
+# }

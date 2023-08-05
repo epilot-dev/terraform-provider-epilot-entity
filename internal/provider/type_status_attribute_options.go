@@ -6,5 +6,5 @@ import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type StatusAttributeOptions struct {
 	Str                     types.String                  `tfsdk:"str"`
-	StatusAttributeOptions2 *SelectAttributeOptionsOption `tfsdk:"status_attribute_options_2"`
+	StatusAttributeOptions2 *MultiSelectAttributeOptions2 `tfsdk:"status_attribute_options_2"`
 }

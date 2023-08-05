@@ -9,23 +9,23 @@ info:
 
     [Feature Documentation](https://docs.epilot.io/docs/entities/flexible-entities)
 tags:
-- name: Schemas
-  description: Model Entities
-- name: Entities
-  description: CRUD Access for Entities
-- name: Relations
-  description: Entity Relationships
-- name: Activity
-  description: Entity Events
-- name: Export
-  description: Export and Import entities via files
-- name: Saved Views
-  description: Saved Views for Entities
-- name: Taxonomy
-  description: Entity classification with Taxonomies
+  - name: Schemas
+    description: Model Entities
+  - name: Entities
+    description: CRUD Access for Entities
+  - name: Relations
+    description: Entity Relationships
+  - name: Activity
+    description: Entity Events
+  - name: Export
+    description: Export and Import entities via files
+  - name: Saved Views
+    description: Saved Views for Entities
+  - name: Taxonomy
+    description: Entity classification with Taxonomies
 security:
-- EpilotAuth: []
-- EpilotOrg: []
+  - EpilotAuth: []
+  - EpilotOrg: []
 paths:
   /v1/entity/schemas:
     get:
@@ -33,16 +33,16 @@ paths:
       summary: listSchemas
       description: Get the latest versions of all schemas
       parameters:
-      - in: query
-        name: unpublished
-        description: Return unpublished draft schemas
-        schema:
-          type: boolean
-          default: false
+        - in: query
+          name: unpublished
+          description: Return unpublished draft schemas
+          schema:
+            type: boolean
+            default: false
       tags:
-      - Schemas
+        - Schemas
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -52,7 +52,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/EntitySchemaItem'
+                      $ref: "#/components/schemas/EntitySchemaItem"
   /v1/entity/schemas/{slug}:
     get:
       x-speakeasy-entity-operation: Schema#get
@@ -60,49 +60,49 @@ paths:
       summary: getSchema
       description: By default gets the latest version of the Schema and to get the specific version of schema pass the id.
       tags:
-      - Schemas
+        - Schemas
       parameters:
-      - in: path
-        name: slug
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: query
-        name: id
-        schema:
-          $ref: '#/components/schemas/SchemaId'
+        - in: path
+          name: slug
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: query
+          name: id
+          schema:
+            $ref: "#/components/schemas/SchemaId"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntitySchemaItem'
+                $ref: "#/components/schemas/EntitySchemaItem"
     put:
       x-speakeasy-entity-operation: Schema#create,update
       operationId: putSchema
       summary: putSchema
       description: Create or update a schema with a new version
       tags:
-      - Schemas
+        - Schemas
       parameters:
-      - in: path
-        name: slug
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: query
-        name: draft
-        schema:
-          default: false
-          type: boolean
+        - in: path
+          name: slug
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: query
+          name: draft
+          schema:
+            default: false
+            type: boolean
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EntitySchema'
+              $ref: "#/components/schemas/EntitySchema"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -110,20 +110,20 @@ paths:
                 type: object
                 properties:
                   results:
-                    $ref: '#/components/schemas/EntitySchemaItem'
+                    $ref: "#/components/schemas/EntitySchemaItem"
     delete:
       x-speakeasy-entity-operation: Schema#delete
       operationId: deleteSchema
       summary: deleteSchema
       description: Delete a schema, or a specific version of a schema
       tags:
-      - Schemas
+        - Schemas
       parameters:
-      - in: path
-        name: slug
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
+        - in: path
+          name: slug
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
       responses:
         2XX:
           description: Success
@@ -133,15 +133,15 @@ paths:
       summary: getSchemaVersions
       description: Get all versions of this schema ordered by the latest versions including drafts.
       tags:
-      - Schemas
+        - Schemas
       parameters:
-      - in: path
-        name: slug
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
+        - in: path
+          name: slug
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -151,20 +151,20 @@ paths:
                   versions:
                     type: array
                     items:
-                      $ref: '#/components/schemas/EntitySchemaItem'
+                      $ref: "#/components/schemas/EntitySchemaItem"
                   drafts:
                     type: array
                     items:
-                      $ref: '#/components/schemas/EntitySchemaItem'
+                      $ref: "#/components/schemas/EntitySchemaItem"
   /v1/entity/schemas/blueprints:
     get:
       operationId: listSchemaBlueprints
       summary: listSchemaBlueprints
       description: List canonical versions of all available schemas
       tags:
-      - Schemas
+        - Schemas
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -174,35 +174,35 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/EntitySchemaItem'
+                      $ref: "#/components/schemas/EntitySchemaItem"
   /v1/entity/schemas/{slug}/taxonomy/{taxonomySlug}:
     get:
       operationId: listTaxonomyClassificationsForSchema
       summary: listTaxonomyClassificationsForSchema
       description: List taxonomy classifications for a given schema
       tags:
-      - Schemas
+        - Schemas
       parameters:
-      - in: path
-        name: slug
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: taxonomySlug
-        required: true
-        schema:
-          $ref: '#/components/schemas/TaxonomySlug'
-      - in: query
-        name: query
-        schema:
-          type: string
-      - in: query
-        name: size
-        schema:
-          type: number
+        - in: path
+          name: slug
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: path
+          name: taxonomySlug
+          required: true
+          schema:
+            $ref: "#/components/schemas/TaxonomySlug"
+        - in: query
+          name: query
+          schema:
+            type: string
+        - in: query
+          name: size
+          schema:
+            type: number
       responses:
-        '200':
+        "200":
           description: List of taxonomy classifications
           content:
             application/json:
@@ -212,7 +212,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TaxonomyClassification'
+                      $ref: "#/components/schemas/TaxonomyClassification"
   /v1/entity:search:
     post:
       operationId: searchEntities
@@ -284,19 +284,19 @@ paths:
         }
         ```
       tags:
-      - Entities
+        - Entities
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EntitySearchParams'
+              $ref: "#/components/schemas/EntitySearchParams"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntitySearchResults'
+                $ref: "#/components/schemas/EntitySearchResults"
             text/csv:
               schema:
                 type: string
@@ -332,64 +332,64 @@ paths:
         - `entity_id` - The ID of the entity to link
         - `_tags` - Tags or labels for the relation (optional)
       tags:
-      - Entities
+        - Entities
       parameters:
-      - in: path
-        name: slug
-        description: Entity Schema
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: query
-        name: activity_id
-        description: Activity to include in event feed
-        required: false
-        x-speakeasy-terraform-ignore: true
-        schema:
-          $ref: '#/components/schemas/ActivityId'
-      - in: query
-        name: async
-        description: Don't wait for updated entity to become available in Search API. Useful for large migrations
-        required: false
-        x-speakeasy-terraform-ignore: true
-        schema:
-          type: boolean
-          default: false
+        - in: path
+          name: slug
+          description: Entity Schema
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: query
+          name: activity_id
+          description: Activity to include in event feed
+          required: false
+          x-speakeasy-terraform-ignore: true
+          schema:
+            $ref: "#/components/schemas/ActivityId"
+        - in: query
+          name: async
+          description: Don't wait for updated entity to become available in Search API. Useful for large migrations
+          required: false
+          x-speakeasy-terraform-ignore: true
+          schema:
+            type: boolean
+            default: false
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: "#/components/schemas/Entity"
             examples:
               contact:
-                $ref: '#/components/examples/ContactEntity'
+                $ref: "#/components/examples/ContactEntity"
               account:
-                $ref: '#/components/examples/AccountEntity'
+                $ref: "#/components/examples/AccountEntity"
               product:
-                $ref: '#/components/examples/ProductEntity'
+                $ref: "#/components/examples/ProductEntity"
               price:
-                $ref: '#/components/examples/PriceEntity'
+                $ref: "#/components/examples/PriceEntity"
               tax:
-                $ref: '#/components/examples/TaxEntity'
+                $ref: "#/components/examples/TaxEntity"
               order:
-                $ref: '#/components/examples/OrderEntity'
+                $ref: "#/components/examples/OrderEntity"
               opportunity:
-                $ref: '#/components/examples/OpportunityEntity'
+                $ref: "#/components/examples/OpportunityEntity"
               email template:
-                $ref: '#/components/examples/EmailTemplateEntity'
+                $ref: "#/components/examples/EmailTemplateEntity"
               file:
-                $ref: '#/components/examples/FileEntity'
+                $ref: "#/components/examples/FileEntity"
               workflow step:
-                $ref: '#/components/examples/WorkflowStepEntity'
+                $ref: "#/components/examples/WorkflowStepEntity"
               submission:
-                $ref: '#/components/examples/SubmissionEntity'
+                $ref: "#/components/examples/SubmissionEntity"
       responses:
-        '201':
+        "201":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityItem'
+                $ref: "#/components/schemas/EntityItem"
   /v1/entity/{slug}:upsert:
     patch:
       operationId: upsertEntity
@@ -405,34 +405,34 @@ paths:
 
         If no `activity_id` query parameter is provided, implicitly creates Activity of type `EntityCreated` or `EntityUpdated`
       tags:
-      - Entities
+        - Entities
       parameters:
-      - in: path
-        name: slug
-        description: Entity Schema
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: query
-        name: activity_id
-        description: Activity to include in event feed
-        required: false
-        schema:
-          $ref: '#/components/schemas/ActivityId'
-      - in: query
-        name: dry_run
-        description: Dry Run mode = return matched entities but don't update them.
-        required: false
-        schema:
-          type: boolean
-          default: false
-      - in: query
-        name: async
-        description: Don't wait for updated entity to become available in Search API. Useful for large migrations
-        required: false
-        schema:
-          type: boolean
-          default: false
+        - in: path
+          name: slug
+          description: Entity Schema
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: query
+          name: activity_id
+          description: Activity to include in event feed
+          required: false
+          schema:
+            $ref: "#/components/schemas/ActivityId"
+        - in: query
+          name: dry_run
+          description: Dry Run mode = return matched entities but don't update them.
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: async
+          description: Don't wait for updated entity to become available in Search API. Useful for large migrations
+          required: false
+          schema:
+            type: boolean
+            default: false
       requestBody:
         content:
           application/json:
@@ -445,27 +445,27 @@ paths:
                     type: string
                     example: email.0.email
                   example:
-                  - _id
+                    - _id
                 entity:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: "#/components/schemas/Entity"
               required:
-              - unique_key
-              - entity
+                - unique_key
+                - entity
       responses:
-        '200':
+        "200":
           description: Entity was updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityItem'
-        '201':
+                $ref: "#/components/schemas/EntityItem"
+        "201":
           description: Entity was created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityItem'
-        '409':
-          description: 'Conflict: multiple entities were matched with `unique_key`'
+                $ref: "#/components/schemas/EntityItem"
+        "409":
+          description: "Conflict: multiple entities were matched with `unique_key`"
   /v1/entity/{slug}/{id}:
     get:
       operationId: getEntity
@@ -536,29 +536,29 @@ paths:
         }
         ```
       tags:
-      - Entities
+        - Entities
       parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: hydrate
-        x-speakeasy-terraform-ignore: true
-        description: When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
-        schema:
-          default: false
-          type: boolean
+        - in: path
+          name: slug
+          description: Entity Type
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: path
+          name: id
+          description: Entity id
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntityId"
+        - in: query
+          name: hydrate
+          x-speakeasy-terraform-ignore: true
+          description: When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
+          schema:
+            default: false
+            type: boolean
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -566,11 +566,11 @@ paths:
                 type: object
                 properties:
                   entity:
-                    $ref: '#/components/schemas/EntityItem'
+                    $ref: "#/components/schemas/EntityItem"
                   relations:
                     type: array
                     items:
-                      $ref: '#/components/schemas/EntityItem'
+                      $ref: "#/components/schemas/EntityItem"
     put:
       operationId: updateEntity
       summary: updateEntity
@@ -602,48 +602,48 @@ paths:
         - `entity_id` - The ID of the entity to link
         - `_tags` - Tags or labels for the relation (optional)
       tags:
-      - Entities
+        - Entities
       parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: activity_id
-        x-speakeasy-terraform-ignore: true
-        description: Activity to include in event feed
-        required: false
-        schema:
-          $ref: '#/components/schemas/ActivityId'
-      - in: query
-        name: async
-        x-speakeasy-terraform-ignore: true
-        description: Don't wait for updated entity to become available in Search API. Useful for large migrations
-        required: false
-        schema:
-          type: boolean
-          default: false
+        - in: path
+          name: slug
+          description: Entity Type
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: path
+          name: id
+          description: Entity id
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntityId"
+        - in: query
+          name: activity_id
+          x-speakeasy-terraform-ignore: true
+          description: Activity to include in event feed
+          required: false
+          schema:
+            $ref: "#/components/schemas/ActivityId"
+        - in: query
+          name: async
+          x-speakeasy-terraform-ignore: true
+          description: Don't wait for updated entity to become available in Search API. Useful for large migrations
+          required: false
+          schema:
+            type: boolean
+            default: false
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: "#/components/schemas/Entity"
             example: {}
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityItem'
+                $ref: "#/components/schemas/EntityItem"
     patch:
       operationId: patchEntity
       summary: patchEntity
@@ -676,55 +676,55 @@ paths:
         - `entity_id` - The ID of the entity to link
         - `_tags` - Tags or labels for the relation (optional)
       tags:
-      - Entities
+        - Entities
       parameters:
-      - in: path
-        name: slug
-        description: Entity Schema
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity Id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: activity_id
-        description: Activity to include in event feed
-        required: false
-        schema:
-          $ref: '#/components/schemas/ActivityId'
-      - in: query
-        name: dry_run
-        description: Dry Run mode = returns the patch result but doesn't perform the patch.
-        required: false
-        schema:
-          type: boolean
-          default: false
-      - in: query
-        name: async
-        description: Don't wait for the patch entity to become available in Search API. Useful for large migrations
-        required: false
-        schema:
-          type: boolean
-          default: false
+        - in: path
+          name: slug
+          description: Entity Schema
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: path
+          name: id
+          description: Entity Id
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntityId"
+        - in: query
+          name: activity_id
+          description: Activity to include in event feed
+          required: false
+          schema:
+            $ref: "#/components/schemas/ActivityId"
+        - in: query
+          name: dry_run
+          description: Dry Run mode = returns the patch result but doesn't perform the patch.
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: async
+          description: Don't wait for the patch entity to become available in Search API. Useful for large migrations
+          required: false
+          schema:
+            type: boolean
+            default: false
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: "#/components/schemas/Entity"
             example: {}
       responses:
-        '200':
+        "200":
           description: Entity was updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityItem'
-        '409':
-          description: 'Conflict: newer version exists'
+                $ref: "#/components/schemas/EntityItem"
+        "409":
+          description: "Conflict: newer version exists"
     delete:
       operationId: deleteEntity
       x-speakeasy-entity-operation: Entity#delete
@@ -736,28 +736,28 @@ paths:
 
         If no `activity_id` query parameter is provided, implicitly creates Activity of type `EntityDeleted`
       tags:
-      - Entities
+        - Entities
       parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: activity_id
-        x-speakeasy-terraform-ignore: true
-        description: Activity to include in event feed
-        required: false
-        schema:
-          $ref: '#/components/schemas/ActivityId'
+        - in: path
+          name: slug
+          description: Entity Type
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntityId"
+        - in: query
+          name: activity_id
+          x-speakeasy-terraform-ignore: true
+          description: Activity to include in event feed
+          required: false
+          schema:
+            $ref: "#/components/schemas/ActivityId"
       responses:
-        '200':
+        "200":
           description: Success
   /v1/entity:autocomplete:
     get:
@@ -766,35 +766,35 @@ paths:
       description: |
         Autocomplete entity attributes
       tags:
-      - Entities
+        - Entities
       parameters:
-      - name: input
-        in: query
-        description: Input to autocomplete
-        schema:
-          type: string
-      - name: attribute
-        in: query
-        description: Autocomplete attribute
-        schema:
-          type: string
-          example: _tags
-        required: true
-      - name: slug
-        in: query
-        description: Limit results to entity schema
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - name: size
-        in: query
-        description: Maximum number of results to return
-        schema:
-          type: integer
-          default: 10
-          minimum: 1
-          maximum: 250
+        - name: input
+          in: query
+          description: Input to autocomplete
+          schema:
+            type: string
+        - name: attribute
+          in: query
+          description: Autocomplete attribute
+          schema:
+            type: string
+            example: _tags
+          required: true
+        - name: slug
+          in: query
+          description: Limit results to entity schema
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - name: size
+          in: query
+          description: Maximum number of results to return
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 250
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -808,12 +808,12 @@ paths:
                     type: array
                     items:
                       anyOf:
-                      - type: string
-                      - type: boolean
-                      - type: object
-                        additionalProperties: true
+                        - type: string
+                        - type: boolean
+                        - type: object
+                          additionalProperties: true
                     example:
-                    - value
+                      - value
   /v1/entity/activity:
     post:
       operationId: createActivity
@@ -824,97 +824,97 @@ paths:
         - All activites are published as events on the event bus
         - Entity mutations are always part of an activity
       tags:
-      - Activity
+        - Activity
       parameters:
-      - in: query
-        name: entities
-        description: Comma-separated list of entities which the activity primarily concerns
-        style: form
-        explode: false
-        schema:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityId'
+        - in: query
+          name: entities
+          description: Comma-separated list of entities which the activity primarily concerns
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/EntityId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Activity'
+              $ref: "#/components/schemas/Activity"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActivityItem'
+                $ref: "#/components/schemas/ActivityItem"
   /v1/entity/activity/{id}:
     get:
       operationId: getActivity
       summary: getActivity
       description: Get activity by id
       tags:
-      - Activity
+        - Activity
       parameters:
-      - in: path
-        name: id
-        description: Activity Id
-        required: true
-        schema:
-          $ref: '#/components/schemas/ActivityId'
-      - in: query
-        name: operations_size
-        description: |
-          Maximum number of operations to include in response (default: 10)
-        schema:
-          type: integer
-          minimum: 0
-          maximum: 1000
-          default: 25
-      - in: query
-        name: operations_from
-        description: |
-          Pagination offset for operations
-        schema:
-          type: integer
-          minimum: 0
-          default: 0
+        - in: path
+          name: id
+          description: Activity Id
+          required: true
+          schema:
+            $ref: "#/components/schemas/ActivityId"
+        - in: query
+          name: operations_size
+          description: |
+            Maximum number of operations to include in response (default: 10)
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000
+            default: 25
+        - in: query
+          name: operations_from
+          description: |
+            Pagination offset for operations
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActivityItem'
+                $ref: "#/components/schemas/ActivityItem"
   /v1/entity/activity/{id}:attach:
     post:
       operationId: attachActivity
       summary: attachActivity
       description: Attach existing activity to entity activity feeds
       tags:
-      - Activity
+        - Activity
       parameters:
-      - in: path
-        name: id
-        description: Activity Id
-        required: true
-        schema:
-          $ref: '#/components/schemas/ActivityId'
-      - in: query
-        name: entities
-        description: Comma-separated list of entities which the activity primarily concerns
-        style: form
-        explode: false
-        schema:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityId'
+        - in: path
+          name: id
+          description: Activity Id
+          required: true
+          schema:
+            $ref: "#/components/schemas/ActivityId"
+        - in: query
+          name: entities
+          description: Comma-separated list of entities which the activity primarily concerns
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/EntityId"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActivityItem'
+                $ref: "#/components/schemas/ActivityItem"
   /v1/entity/{slug}/{id}/activity:
     get:
       operationId: getEntityActivityFeed
@@ -922,54 +922,54 @@ paths:
       description: |
         Get activity feed for an entity
       tags:
-      - Activity
+        - Activity
       parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: after
-        description: Get activities after this timestamp
-        schema:
-          type: string
-          format: date-time
-      - in: query
-        name: before
-        description: get activities before this timestamp
-        schema:
-          type: string
-          format: date-time
-      - in: query
-        name: from
-        description: start from page
-        schema:
-          type: integer
-          minimum: 0
-          default: 0
-      - in: query
-        name: size
-        description: max number of results to return
-        schema:
-          type: integer
-          minimum: 1
-          default: 25
-      - in: query
-        name: type
-        description: Activity type
-        schema:
-          type: string
-          example: SyncActivity
+        - in: path
+          name: slug
+          description: Entity Type
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntitySlug"
+        - in: path
+          name: id
+          description: Entity id
+          required: true
+          schema:
+            $ref: "#/components/schemas/EntityId"
+        - in: query
+          name: after
+          description: Get activities after this timestamp
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: before
+          description: get activities before this timestamp
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: from
+          description: start from page
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - in: query
+          name: size
+          description: max number of results to return
+          schema:
+            type: integer
+            minimum: 1
+            default: 25
+        - in: query
+          name: type
+          description: Activity type
+          schema:
+            type: string
+            example: SyncActivity
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -982,330 +982,37 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ActivityItem'
-  /v1/entity/{slug}/{id}/relations:
-    get:
-      operationId: getRelations
-      summary: getRelations
-      description: |
-        Returns 1st level direct relations for an entity.
-
-        You can control whether to return the full entity or just the relation item with the `?hydrate` query param.
-
-        Reverse relations i.e. entities referring to this entity are included with the `?include_reverse` query param.
-      tags:
-      - Relations
-      parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: hydrate
-        description: When true, expand relation items with full blown entities.
-        schema:
-          default: false
-          type: boolean
-      - in: query
-        name: include_reverse
-        description: When true, includes reverse relations in response (other entities pointing to this entity)
-        schema:
-          default: false
-          type: boolean
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetRelationsResp'
-              example:
-              - attribute: contacts
-                entity_id: ed27830b-984c-4bca-9b87-2849bb5789ca
-                _tags:
-                - primary
-                - billing
-              - attribute: contacts
-                entity_id: fadfc950-6e43-4e38-bae0-ffcf4b8b90e1
-              - _id: 9924c4de-d3ed-4752-821d-fc0b9bd57c1b
-                order_number: a34234jd
-                customer_email: johndoe@epilot.cloud
-                billing_first_name: john
-                billing_last_name: doe
-                billing_company_name: ePilot Gmbh
-                billing_vat: 234823948,
-                billing_email: johndoe@nowhere.com
-                billing_phone: 1234234545,
-                billing_address: wallstreet, 1
-                billing_contact: villy or zilly
-                $relation:
-                  attribute: orders
-                  entity_id: 9924c4de-d3ed-4752-821d-fc0b9bd57c1b
-                  _tags:
-                  - solar_panel
-                  - one_time
-    post:
-      operationId: addRelations
-      summary: addRelations
-      description: Relates one or more entities to parent entity by adding items to a relation attribute
-      tags:
-      - Relations
-      parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: async
-        description: Don't wait for updated entity to become available in Search API. Useful for large migrations
-        required: false
-        schema:
-          type: boolean
-          default: false
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/RelationItem'
-            example:
-            - attribute: contacts
-              entity_id: e8878f62-2d3d-4c86-bfe7-01a4180ff048
-              _tags:
-              - billing
-            - attribute: contacts
-              entity_id: ee8a2af9-fb36-4981-b848-4e65275851af
-            - attribute: opportunities
-              entity_id: 30990430-a53d-41a2-83db-2de072dc4dd4
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RelationItem'
-  /v2/entity/{slug}/{id}/relations:
-    get:
-      operationId: getRelationsV2
-      summary: getRelationsV2
-      description: |
-        Returns 1st level direct relations for an entity with pagination.
-
-        You can control whether to return the full entity or just the relation item with the `?hydrate` query param.
-
-        Reverse relations i.e. entities referring to this entity are included with the `?include_reverse` query param.
-      tags:
-      - Relations
-      parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: query
-        name: hydrate
-        description: When true, expand relation items with full blown entities.
-        schema:
-          default: false
-          type: boolean
-      - in: query
-        name: query
-        description: Input to filter search results
-        schema:
-          type: string
-      - in: query
-        name: include_reverse
-        description: When true, includes reverse relations in response (other entities pointing to this entity)
-        schema:
-          default: false
-          type: boolean
-      - in: query
-        name: from
-        description: Starting page number
-        schema:
-          type: integer
-          minimum: 0
-          default: 0
-      - in: query
-        name: size
-        description: Number of results to return per page
-        schema:
-          type: integer
-          minimum: 1
-          default: 50
-      - in: query
-        name: fields
-        description: List of entity fields to include in results
-        schema:
-          type: array
-          items:
-            type: string
-          example:
-          - _id
-          - _schema
-          - _title
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetRelationsRespWithPagination'
-  /v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}:
-    put:
-      operationId: updateRelation
-      summary: updateRelation
-      description: Updates an existing relation between two entities.
-      tags:
-      - Relations
-      parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: path
-        name: attribute
-        description: The attribute that express meaning
-        required: true
-        schema:
-          type: string
-      - in: path
-        name: entity_id
-        description: The attribute that express meaning
-        required: true
-        schema:
-          type: string
-      - in: query
-        name: async
-        description: Don't wait for updated entity to become available in Search API. Useful for large migrations
-        required: false
-        schema:
-          type: boolean
-          default: false
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                _tags:
-                  type: array
-                  items:
-                    type: string
-            example:
-              _tags:
-              - billing
-              - prepaid
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RelationItem'
-    delete:
-      operationId: deleteRelation
-      summary: deleteRelation
-      description: Removes relation between two entities
-      tags:
-      - Relations
-      parameters:
-      - in: path
-        name: slug
-        description: Entity Type
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntitySlug'
-      - in: path
-        name: id
-        description: Entity id
-        required: true
-        schema:
-          $ref: '#/components/schemas/EntityId'
-      - in: path
-        name: attribute
-        description: The attribute that express meaning
-        required: true
-        schema:
-          type: string
-      - in: path
-        name: entity_id
-        description: The attribute that express meaning
-        required: true
-        schema:
-          type: string
-      - in: query
-        name: async
-        description: Don't wait for updated entity to become available in Search API. Useful for large migrations
-        required: false
-        schema:
-          type: boolean
-          default: false
-      responses:
-        '204':
-          description: Relation deleted with success.
+                      $ref: "#/components/schemas/ActivityItem"
   /v1/entity:export:
     post:
       operationId: exportEntities
       summary: exportEntities
       description: create export file of entities
       tags:
-      - Export
+        - Export
       parameters:
-      - in: query
-        name: job_id
-        description: Export Job Id to get the result
-        schema:
-          $ref: '#/components/schemas/ExportJobId'
-      - in: query
-        name: is_template
-        description: Pass 'true' to generate import template
-        schema:
-          $ref: '#/components/schemas/IsTemplate'
-      - in: query
-        name: language
-        description: Export headers translation language
-        schema:
-          $ref: '#/components/schemas/Language'
+        - in: query
+          name: job_id
+          description: Export Job Id to get the result
+          schema:
+            $ref: "#/components/schemas/ExportJobId"
+        - in: query
+          name: is_template
+          description: Pass 'true' to generate import template
+          schema:
+            $ref: "#/components/schemas/IsTemplate"
+        - in: query
+          name: language
+          description: Export headers translation language
+          schema:
+            $ref: "#/components/schemas/Language"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EntitySearchParams'
+              $ref: "#/components/schemas/EntitySearchParams"
       responses:
-        '201':
+        "201":
           description: created export url and download url
   /v1/entity:import:
     post:
@@ -1313,20 +1020,20 @@ paths:
       summary: importEntities
       description: import entity data from
       tags:
-      - Export
+        - Export
       parameters:
-      - in: query
-        name: job_id
-        description: Import Job Id to get the result
-        schema:
-          $ref: '#/components/schemas/ExportJobId'
+        - in: query
+          name: job_id
+          description: Import Job Id to get the result
+          schema:
+            $ref: "#/components/schemas/ExportJobId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EntityImportParams'
+              $ref: "#/components/schemas/EntityImportParams"
       responses:
-        '201':
+        "201":
           description: created import url and download url
   /v1/entity/views:
     get:
@@ -1334,9 +1041,9 @@ paths:
       summary: listSavedViews
       description: Get the Saved Views based on the schema
       tags:
-      - Saved Views
+        - Saved Views
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -1346,42 +1053,42 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/SavedViewItem'
+                      $ref: "#/components/schemas/SavedViewItem"
   /v1/entity/view:
     post:
       operationId: createSavedView
       summary: createSavedView
       description: Creates a new saved view
       tags:
-      - Saved Views
+        - Saved Views
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SavedView'
+              $ref: "#/components/schemas/SavedView"
       responses:
-        '201':
+        "201":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SavedViewItem'
+                $ref: "#/components/schemas/SavedViewItem"
   /v1/entity/view/{id}:
     get:
       operationId: getSavedView
       summary: getSavedView
       description: Gets Saved View configuration by id.
       tags:
-      - Saved Views
+        - Saved Views
       parameters:
-      - in: path
-        name: id
-        description: View id
-        required: true
-        schema:
-          $ref: '#/components/schemas/SavedViewId'
+        - in: path
+          name: id
+          description: View id
+          required: true
+          schema:
+            $ref: "#/components/schemas/SavedViewId"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -1389,47 +1096,47 @@ paths:
                 type: object
                 properties:
                   view:
-                    $ref: '#/components/schemas/SavedViewItem'
+                    $ref: "#/components/schemas/SavedViewItem"
     put:
       operationId: updateSavedView
       summary: updateSavedView
       description: Updates a saved view
       tags:
-      - Saved Views
+        - Saved Views
       parameters:
-      - in: path
-        name: id
-        description: View id
-        required: true
-        schema:
-          $ref: '#/components/schemas/SavedViewId'
+        - in: path
+          name: id
+          description: View id
+          required: true
+          schema:
+            $ref: "#/components/schemas/SavedViewId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SavedView'
+              $ref: "#/components/schemas/SavedView"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SavedViewItem'
+                $ref: "#/components/schemas/SavedViewItem"
     delete:
       operationId: deleteSavedView
       summary: deleteSavedView
       description: Deletes a saved view
       parameters:
-      - in: path
-        name: id
-        description: View id
-        required: true
-        schema:
-          $ref: '#/components/schemas/SavedViewId'
+        - in: path
+          name: id
+          description: View id
+          required: true
+          schema:
+            $ref: "#/components/schemas/SavedViewId"
       tags:
-      - Saved Views
+        - Saved Views
       responses:
-        '200':
+        "200":
           description: List of all available saved views
   /v1/entity/listTaxonomies:
     get:
@@ -1437,9 +1144,9 @@ paths:
       summary: listTaxonomies
       description: List taxonomies in an organisation
       tags:
-      - Taxonomy
+        - Taxonomy
       responses:
-        '200':
+        "200":
           description: Returns list of taxonomies in an organisation
           content:
             application/json:
@@ -1449,54 +1156,54 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Taxonomy'
+                      $ref: "#/components/schemas/Taxonomy"
   /v1/entity/taxonomies/{taxonomySlug}:
     get:
       operationId: getTaxonomy
       summary: getTaxonomy
       description: Get taxonomy by slug
       tags:
-      - Taxonomy
+        - Taxonomy
       parameters:
-      - in: path
-        name: taxonomySlug
-        description: Taxonomy slug to return taxonomy for
-        schema:
-          $ref: '#/components/schemas/TaxonomySlug'
-        required: true
+        - in: path
+          name: taxonomySlug
+          description: Taxonomy slug to return taxonomy for
+          schema:
+            $ref: "#/components/schemas/TaxonomySlug"
+          required: true
       responses:
-        '200':
+        "200":
           description: Taxonomy
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Taxonomy'
+                $ref: "#/components/schemas/Taxonomy"
   /v1/entity/taxonomies/{taxonomySlug}:autocomplete:
     get:
       operationId: taxonomyAutocomplete
       summary: taxonomyAutocomplete
       description: Taxonomies autocomplete
       tags:
-      - Taxonomy
+        - Taxonomy
       parameters:
-      - in: path
-        name: taxonomySlug
-        description: Limit results to slug
-        schema:
-          type: string
-        required: true
-      - in: query
-        name: query
-        description: Input to autocomplete
-        schema:
-          type: string
-      - in: query
-        name: size
-        description: Minimum number of results to return
-        schema:
-          type: number
+        - in: path
+          name: taxonomySlug
+          description: Limit results to slug
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: query
+          description: Input to autocomplete
+          schema:
+            type: string
+        - in: query
+          name: size
+          description: Minimum number of results to return
+          schema:
+            type: number
       responses:
-        '200':
+        "200":
           description: Taxonomy classifications
           content:
             application/json:
@@ -1506,21 +1213,21 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TaxonomyClassification'
+                      $ref: "#/components/schemas/TaxonomyClassification"
   /v1/entity/taxonomies/classifications:search:
     post:
       operationId: taxonomiesClassificationsSearch
       summary: taxonomiesClassificationsSearch
       description: List taxonomy classifications in an organisation based on taxonomy slug
       tags:
-      - Taxonomy
+        - Taxonomy
       parameters:
-      - in: query
-        name: taxonomySlug
-        description: Taxonomy slug
-        schema:
-          type: string
-        required: true
+        - in: query
+          name: taxonomySlug
+          description: Taxonomy slug
+          schema:
+            type: string
+          required: true
       requestBody:
         content:
           application/json:
@@ -1530,9 +1237,9 @@ paths:
                 classificationIds:
                   type: array
                   items:
-                    $ref: '#/components/schemas/ClassificationId'
+                    $ref: "#/components/schemas/ClassificationId"
       responses:
-        '200':
+        "200":
           description: Returns list of taxonomy classifications
           content:
             application/json:
@@ -1542,28 +1249,28 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TaxonomyClassification'
+                      $ref: "#/components/schemas/TaxonomyClassification"
   /v1/entity/taxonomies/{taxonomySlug}/classifications:
     post:
       operationId: updateClassificationsForTaxonomy
       summary: updateClassificationsForTaxonomy
       description: Update taxonomies in an organisation based in taxonomy slug
       tags:
-      - Taxonomy
+        - Taxonomy
       parameters:
-      - in: path
-        name: taxonomySlug
-        description: Taxonomy slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: taxonomySlug
+          description: Taxonomy slug
+          schema:
+            type: string
+          required: true
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClassificationsUpdate'
+              $ref: "#/components/schemas/ClassificationsUpdate"
       responses:
-        '200':
+        "200":
           description: Taxonomies classifications
           content:
             application/json:
@@ -1573,15 +1280,15 @@ paths:
                   created:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TaxonomyClassification'
+                      $ref: "#/components/schemas/TaxonomyClassification"
                   updated:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TaxonomyClassification'
+                      $ref: "#/components/schemas/TaxonomyClassification"
                   deleted:
                     type: object
                     items:
-                      $ref: '#/components/schemas/ClassificationId'
+                      $ref: "#/components/schemas/ClassificationId"
 components:
   securitySchemes:
     EpilotAuth:
@@ -1614,12 +1321,12 @@ components:
       type: object
       properties:
         slug:
-          $ref: '#/components/schemas/EntitySlug'
+          $ref: "#/components/schemas/EntitySlug"
         version:
           type: integer
           minimum: 1
         blueprint:
-          $ref: '#/components/schemas/BlueprintEntityId'
+          $ref: "#/components/schemas/BlueprintEntityId"
         feature_flag:
           type: string
           example: FF_MY_FEATURE_FLAG
@@ -1649,41 +1356,37 @@ components:
         title_template:
           type: string
           description: Template for rendering the title field. Uses handlebars
-          example: '{{first_name}} {{last_name}}'
+          example: "{{first_name}} {{last_name}}"
         ui_config:
           type: object
           properties:
             table_view:
               oneOf:
-              - $ref: '#/components/schemas/EntityDefaultTable'
-              - $ref: '#/components/schemas/RedirectEntityView'
-              - $ref: '#/components/schemas/EntityViewDisabled'
+                - $ref: "#/components/schemas/EntityDefaultTable"
+                - $ref: "#/components/schemas/RedirectEntityView"
+                - $ref: "#/components/schemas/EntityViewDisabled"
             create_view:
               oneOf:
-              - $ref: '#/components/schemas/EntityDefaultCreate'
-              - $ref: '#/components/schemas/RedirectEntityView'
-              - $ref: '#/components/schemas/EntityViewDisabled'
+                - $ref: "#/components/schemas/EntityDefaultCreate"
+                - $ref: "#/components/schemas/RedirectEntityView"
+                - $ref: "#/components/schemas/EntityViewDisabled"
             edit_view:
               oneOf:
-              - $ref: '#/components/schemas/EntityDefaultEdit'
-              - $ref: '#/components/schemas/RedirectEntityView'
-              - $ref: '#/components/schemas/EntityViewDisabled'
+                - $ref: "#/components/schemas/EntityDefaultEdit"
+                - $ref: "#/components/schemas/RedirectEntityView"
+                - $ref: "#/components/schemas/EntityViewDisabled"
             single_view:
               oneOf:
-              - $ref: '#/components/schemas/EntityDefaultEdit'
-              - $ref: '#/components/schemas/RedirectEntityView'
-              - $ref: '#/components/schemas/EntityViewDisabled'
+                - $ref: "#/components/schemas/EntityDefaultEdit"
+                - $ref: "#/components/schemas/RedirectEntityView"
+                - $ref: "#/components/schemas/EntityViewDisabled"
             list_item:
               type: object
               properties:
                 summary_attributes:
                   type: array
                   items:
-                    oneOf:
-                    - $ref: '#/components/schemas/SummaryAttribute'
-                    - type: string
-                      description: List of attributes to show in list item
-                      example: email
+                    $ref: "#/components/schemas/SummaryAttribute"
             sharing:
               type: object
               properties:
@@ -1694,7 +1397,7 @@ components:
         capabilities:
           type: array
           items:
-            $ref: '#/components/schemas/EntityCapability'
+            $ref: "#/components/schemas/EntityCapability"
         group_settings:
           type: array
           description: A dictionary of Group Titles and associated settings if present.
@@ -1732,10 +1435,10 @@ components:
               _purpose:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ClassificationId'
+                  $ref: "#/components/schemas/ClassificationId"
             required:
-            - label
-            - id
+              - label
+              - id
           example:
             Order Info:
               expanded: true
@@ -1765,89 +1468,89 @@ components:
           description: An ordered list of attributes the entity contains
           type: array
           items:
-            $ref: '#/components/schemas/Attribute'
+            $ref: "#/components/schemas/Attribute"
           example:
-          - name: email
-            type: email
-            label: Email
-            required: true
-          - name: first_name
-            type: string
-            label: First Name
-          - name: last_name
-            type: string
-            label: Last Name
-          - name: birthdate
-            type: date
-            label: Birthdate
-          - name: salutation
-            type: select
-            label: Salutation
-            options:
-            - Mr.
-            - Ms. / Mrs.
-            - Other
-          - name: marketing_permission
-            type: boolean
-            label: Marketing permission
-          - name: image
-            type: file
-            label: Image
+            - name: email
+              type: email
+              label: Email
+              required: true
+            - name: first_name
+              type: string
+              label: First Name
+            - name: last_name
+              type: string
+              label: Last Name
+            - name: birthdate
+              type: date
+              label: Birthdate
+            - name: salutation
+              type: select
+              label: Salutation
+              options:
+                - Mr.
+                - Ms. / Mrs.
+                - Other
+            - name: marketing_permission
+              type: boolean
+              label: Marketing permission
+            - name: image
+              type: file
+              label: Image
         explicit_search_mappings:
-          $ref: '#/components/schemas/SearchMappings'
+          $ref: "#/components/schemas/SearchMappings"
       required:
-      - slug
-      - name
-      - plural
+        - slug
+        - name
+        - plural
     EntitySchemaItem:
       allOf:
-      - type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/SchemaId'
-          created_at:
-            type: string
-          updated_at:
-            type: string
-          comment:
-            type: string
-          source:
-            type: object
-            properties:
-              id:
-                type: string
-              type:
-                type: string
-      - $ref: '#/components/schemas/EntitySchema'
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/SchemaId"
+            created_at:
+              type: string
+            updated_at:
+              type: string
+            comment:
+              type: string
+            source:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+        - $ref: "#/components/schemas/EntitySchema"
     Attribute:
       oneOf:
-      - $ref: '#/components/schemas/TextAttribute'
-      - $ref: '#/components/schemas/LinkAttribute'
-      - $ref: '#/components/schemas/DateAttribute'
-      - $ref: '#/components/schemas/CountryAttribute'
-      - $ref: '#/components/schemas/BooleanAttribute'
-      - $ref: '#/components/schemas/SelectAttribute'
-      - $ref: '#/components/schemas/MultiSelectAttribute'
-      - $ref: '#/components/schemas/StatusAttribute'
-      - $ref: '#/components/schemas/SequenceAttribute'
-      - $ref: '#/components/schemas/RelationAttribute'
-      - $ref: '#/components/schemas/UserRelationAttribute'
-      - $ref: '#/components/schemas/AddressRelationAttribute'
-      - $ref: '#/components/schemas/PaymentMethodRelationAttribute'
-      - $ref: '#/components/schemas/CurrencyAttribute'
-      - $ref: '#/components/schemas/RepeatableAttribute'
-      - $ref: '#/components/schemas/TagsAttribute'
-      - $ref: '#/components/schemas/NumberAttribute'
-      - $ref: '#/components/schemas/ConsentAttribute'
-      - $ref: '#/components/schemas/InternalAttribute'
-      - $ref: '#/components/schemas/OrderedListAttribute'
-      - $ref: '#/components/schemas/FileAttribute'
-      - $ref: '#/components/schemas/ComputedAttribute'
-      - $ref: '#/components/schemas/PartnerStatusAttribute'
-      - $ref: '#/components/schemas/InvitationEmailAttribute'
-      - $ref: '#/components/schemas/AutomationAttribute'
-      - $ref: '#/components/schemas/InternalUserAttribute'
-      - $ref: '#/components/schemas/PurposeAttribute'
+        - $ref: "#/components/schemas/TextAttribute"
+        - $ref: "#/components/schemas/LinkAttribute"
+        - $ref: "#/components/schemas/DateAttribute"
+        - $ref: "#/components/schemas/CountryAttribute"
+        - $ref: "#/components/schemas/BooleanAttribute"
+        - $ref: "#/components/schemas/SelectAttribute"
+        - $ref: "#/components/schemas/MultiSelectAttribute"
+        - $ref: "#/components/schemas/StatusAttribute"
+        - $ref: "#/components/schemas/SequenceAttribute"
+        - $ref: "#/components/schemas/RelationAttribute"
+        - $ref: "#/components/schemas/UserRelationAttribute"
+        - $ref: "#/components/schemas/AddressRelationAttribute"
+        - $ref: "#/components/schemas/PaymentMethodRelationAttribute"
+        - $ref: "#/components/schemas/CurrencyAttribute"
+        - $ref: "#/components/schemas/RepeatableAttribute"
+        - $ref: "#/components/schemas/TagsAttribute"
+        - $ref: "#/components/schemas/NumberAttribute"
+        - $ref: "#/components/schemas/ConsentAttribute"
+        - $ref: "#/components/schemas/InternalAttribute"
+        - $ref: "#/components/schemas/OrderedListAttribute"
+        - $ref: "#/components/schemas/FileAttribute"
+        - $ref: "#/components/schemas/ComputedAttribute"
+        - $ref: "#/components/schemas/PartnerStatusAttribute"
+        - $ref: "#/components/schemas/InvitationEmailAttribute"
+        - $ref: "#/components/schemas/AutomationAttribute"
+        - $ref: "#/components/schemas/InternalUserAttribute"
+        - $ref: "#/components/schemas/PurposeAttribute"
     BaseAttribute:
       type: object
       properties:
@@ -1901,7 +1604,7 @@ components:
         _purpose:
           type: array
           items:
-            $ref: '#/components/schemas/ClassificationId'
+            $ref: "#/components/schemas/ClassificationId"
         constraints:
           type: object
           description: |
@@ -1930,252 +1633,252 @@ components:
           type: boolean
           default: true
       required:
-      - name
-      - label
+        - name
+        - label
     TextAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Textarea or text input
-        properties:
-          type:
-            type: string
-            enum:
-            - string
-          multiline:
-            type: boolean
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Textarea or text input
+          properties:
+            type:
+              type: string
+              enum:
+                - string
+            multiline:
+              type: boolean
     LinkAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Link with title and href
-        properties:
-          type:
-            type: string
-            enum:
-            - link
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Link with title and href
+          properties:
+            type:
+              type: string
+              enum:
+                - link
     InternalAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: No UI representation
-        properties:
-          type:
-            type: string
-            enum:
-            - internal
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: No UI representation
+          properties:
+            type:
+              type: string
+              enum:
+                - internal
     BooleanAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Yes / No Toggle
-        properties:
-          type:
-            type: string
-            enum:
-            - boolean
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Yes / No Toggle
+          properties:
+            type:
+              type: string
+              enum:
+                - boolean
     DateAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Date or Datetime picker
-        properties:
-          type:
-            type: string
-            enum:
-            - date
-            - datetime
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Date or Datetime picker
+          properties:
+            type:
+              type: string
+              enum:
+                - date
+                - datetime
     CountryAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Country picker
-        properties:
-          type:
-            type: string
-            enum:
-            - country
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Country picker
+          properties:
+            type:
+              type: string
+              enum:
+                - country
     SelectAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Dropdown select
-        properties:
-          type:
-            type: string
-            enum:
-            - select
-            - radio
-          options:
-            type: array
-            items:
-              oneOf:
-              - type: object
-                title: Option
-                properties:
-                  value:
-                    type: string
-                  title:
-                    type: string
-                required:
-                - value
-              - type: string
-                nullable: true
-          allow_any:
-            type: boolean
-            description: Allow arbitrary input values in addition to provided options
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Dropdown select
+          properties:
+            type:
+              type: string
+              enum:
+                - select
+                - radio
+            options:
+              type: array
+              items:
+                oneOf:
+                  - type: object
+                    title: Option
+                    properties:
+                      value:
+                        type: string
+                      title:
+                        type: string
+                    required:
+                      - value
+                  - type: string
+                    nullable: true
+            allow_any:
+              type: boolean
+              description: Allow arbitrary input values in addition to provided options
     MultiSelectAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Multi Choice Selection
-        properties:
-          type:
-            type: string
-            enum:
-            - multiselect
-            - checkbox
-          disable_case_sensitive:
-            type: boolean
-            nullable: true
-            description: controls if the matching of values against the options is case sensitive or not
-          allow_extra_options:
-            type: boolean
-            nullable: true
-            description: controls if the 360 ui will allow the user to enter a value which is not defined by the options
-          options:
-            type: array
-            items:
-              oneOf:
-              - type: string
-                nullable: true
-              - type: object
-                properties:
-                  value:
-                    type: string
-                  title:
-                    type: string
-                required:
-                - value
-          allow_any:
-            type: boolean
-            description: Allow arbitrary input values in addition to provided options
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Multi Choice Selection
+          properties:
+            type:
+              type: string
+              enum:
+                - multiselect
+                - checkbox
+            disable_case_sensitive:
+              type: boolean
+              nullable: true
+              description: controls if the matching of values against the options is case sensitive or not
+            allow_extra_options:
+              type: boolean
+              nullable: true
+              description: controls if the 360 ui will allow the user to enter a value which is not defined by the options
+            options:
+              type: array
+              items:
+                oneOf:
+                  - type: string
+                    nullable: true
+                  - type: object
+                    properties:
+                      value:
+                        type: string
+                      title:
+                        type: string
+                    required:
+                      - value
+            allow_any:
+              type: boolean
+              description: Allow arbitrary input values in addition to provided options
     StatusAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Status select
-        properties:
-          type:
-            type: string
-            enum:
-            - status
-          options:
-            type: array
-            items:
-              oneOf:
-              - type: string
-                nullable: true
-              - type: object
-                properties:
-                  value:
-                    type: string
-                  title:
-                    type: string
-                required:
-                - value
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Status select
+          properties:
+            type:
+              type: string
+              enum:
+                - status
+            options:
+              type: array
+              items:
+                oneOf:
+                  - type: string
+                    nullable: true
+                  - type: object
+                    properties:
+                      value:
+                        type: string
+                      title:
+                        type: string
+                    required:
+                      - value
     SequenceAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Sequence of unique identifiers
-        properties:
-          type:
-            type: string
-            enum:
-            - sequence
-          prefix:
-            description: Prefix added before the sequence number
-            type: string
-            example: OR-
-          start_number:
-            type: integer
-            minimum: 0
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Sequence of unique identifiers
+          properties:
+            type:
+              type: string
+              enum:
+                - sequence
+            prefix:
+              description: Prefix added before the sequence number
+              type: string
+              example: OR-
+            start_number:
+              type: integer
+              minimum: 0
     FileAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: File or Image Attachment
-        properties:
-          type:
-            type: string
-            enum:
-            - image
-            - file
-          multiple:
-            type: boolean
-          allowed_extensions:
-            description: List of file extensions (without the dot suffix)
-            type: array
-            items:
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: File or Image Attachment
+          properties:
+            type:
               type: string
-              example: csv
-          display_images_landscaped:
-            type: boolean
-            description: Controls how the images are presented to the user during upload on the Entity Details view.
-          enable_description:
-            type: boolean
-            description: |
-              When set to true, an i18n description will be used alongside the attribute label.
-              This description should be set through the platform locales in the form: `file.{attribute_name}.description_text`.
-          default_access_control:
-            type: string
-            enum:
-            - public-read
-            - private
-        required:
-        - type
+              enum:
+                - image
+                - file
+            multiple:
+              type: boolean
+            allowed_extensions:
+              description: List of file extensions (without the dot suffix)
+              type: array
+              items:
+                type: string
+                example: csv
+            display_images_landscaped:
+              type: boolean
+              description: Controls how the images are presented to the user during upload on the Entity Details view.
+            enable_description:
+              type: boolean
+              description: |
+                When set to true, an i18n description will be used alongside the attribute label.
+                This description should be set through the platform locales in the form: `file.{attribute_name}.description_text`.
+            default_access_control:
+              type: string
+              enum:
+                - public-read
+                - private
+          required:
+            - type
     CurrencyAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Currency input
-        properties:
-          type:
-            type: string
-            enum:
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Currency input
+          properties:
+            type:
+              type: string
+              enum:
+                - currency
+            currency_selector_only:
+              type: boolean
+              default: false
+            currency:
+              description: An array of currency configurations with a country code (ISO-4217)
+              type: array
+              items:
+                oneOf:
+                  - type: object
+                    description: A currency configuration
+                    properties:
+                      code:
+                        type: string
+                      description:
+                        type: string
+                      symbol:
+                        type: string
+                      flag:
+                        type: string
+                    required:
+                      - code
+                      - description
+                      - symbol
+                    example:
+                      code: EUR
+                      description: Euro
+                      symbol: €
+                      flag: 🇪🇺
+          required:
+            - type
             - currency
-          currency_selector_only:
-            type: boolean
-            default: false
-          currency:
-            description: An array of currency configurations with a country code (ISO-4217)
-            type: array
-            items:
-              oneOf:
-              - type: object
-                description: A currency configuration
-                properties:
-                  code:
-                    type: string
-                  description:
-                    type: string
-                  symbol:
-                    type: string
-                  flag:
-                    type: string
-                required:
-                - code
-                - description
-                - symbol
-                example:
-                  code: EUR
-                  description: Euro
-                  symbol: €
-                  flag: 🇪🇺
-        required:
-        - type
-        - currency
     SummaryField:
       type: object
       description: Summary Fields are displayed inside list view as a resume of the relation entity.
@@ -2188,309 +1891,309 @@ components:
           description: An hint on how to display the summary field
     RelationAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Entity Relationship
-        properties:
-          type:
-            type: string
-            enum:
-            - relation
-          relation_type:
-            type: string
-            enum:
-            - has_many
-            - has_one
-          reverse_attributes:
-            description: Map of schema slug to target relation attribute
-            type: object
-            additionalProperties:
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Entity Relationship
+          properties:
+            type:
               type: string
-              example: contact.account
-            example:
-              contact: account
-              opportunity: customer
-          relation_affinity_mode:
-            description: Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.
-            type: string
-            enum:
-            - weak
-            - strong
-          enable_relation_picker:
-            type: boolean
-            default: true
-            description: When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.
-          edit_mode:
-            type: string
-            enum:
-            - list-view
-          details_view_mode_enabled:
-            type: boolean
-            default: false
-            description: Enables the preview, edition, and creation of relation items on a Master-Details view mode.
-          actions:
-            type: array
-            items:
+              enum:
+                - relation
+            relation_type:
+              type: string
+              enum:
+                - has_many
+                - has_one
+            reverse_attributes:
+              description: Map of schema slug to target relation attribute
               type: object
-              properties:
-                action_type:
-                  type: string
-                  enum:
-                  - add_existing
-                  - create_new
-                  - create_from_existing
-                  description: |
-                    The action type. Currently supported actions:
+              additionalProperties:
+                type: string
+                example: contact.account
+              example:
+                contact: account
+                opportunity: customer
+            relation_affinity_mode:
+              description: Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.
+              type: string
+              enum:
+                - weak
+                - strong
+            enable_relation_picker:
+              type: boolean
+              default: true
+              description: When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.
+            edit_mode:
+              type: string
+              enum:
+                - list-view
+            details_view_mode_enabled:
+              type: boolean
+              default: false
+              description: Enables the preview, edition, and creation of relation items on a Master-Details view mode.
+            actions:
+              type: array
+              items:
+                type: object
+                properties:
+                  action_type:
+                    type: string
+                    enum:
+                      - add_existing
+                      - create_new
+                      - create_from_existing
+                    description: |
+                      The action type. Currently supported actions:
 
-                    | action | description |
-                    |--------|-------------|
-                    | add_existing | Enables the user to pick an existing entity to link as relation |
-                    | create_new | Enables the user to create a new entity using the first/main `allowed_schemas` schema
-                    | create_from_existing | Enables the user to pick an existing entity to clone from, while creating a blank new entity to link as relation |
-                label:
-                  type: string
-                  description: The action label or action translation key (i18n)
-                default:
-                  type: boolean
-                  description: Sets the action as the default action, visible as the main action button.
-                feature_flag:
-                  type: string
-                  description: Name of the feature flag that enables this action
-                setting_flag:
-                  type: string
-                  description: Name of the setting flag that enables this action
-                new_entity_item:
-                  type: object
-                  allOf:
-                  - $ref: '#/components/schemas/EntityItem'
-            example:
-              value:
-              - action_type: add_existing
-                label: entityrelation.add_existing
-                default: true
-              - action_type: create_new
-                label: entityrelation.create_new
-              - action_type: create_from_existing
-                label: entityrelation.create_from_existing
-          drawer_size:
-            type: string
-            enum:
-            - small
-            - medium
-            - large
-          icon:
-            type: string
-          summary_fields:
-            type: array
-            items:
-              oneOf:
-              - type: string
-                description: The field name from the entity attributes to display
-              - $ref: '#/components/schemas/SummaryField'
-          has_primary:
-            type: boolean
-          allowedSchemas:
-            type: array
-            items:
-              $ref: '#/components/schemas/EntitySlug'
-          enable_relation_tags:
-            type: boolean
-            default: true
-            description: When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item.
-          add_button_label:
-            type: string
-            description: Optional label for the add button. The translated value for add_button_lable is used, if found else the string is used as is.
-          search_placeholder:
-            type: string
-            description: Optional placeholder text for the relation search input. The translated value for search_placeholder is used, if found else the string is used as is.
+                      | action | description |
+                      |--------|-------------|
+                      | add_existing | Enables the user to pick an existing entity to link as relation |
+                      | create_new | Enables the user to create a new entity using the first/main `allowed_schemas` schema
+                      | create_from_existing | Enables the user to pick an existing entity to clone from, while creating a blank new entity to link as relation |
+                  label:
+                    type: string
+                    description: The action label or action translation key (i18n)
+                  default:
+                    type: boolean
+                    description: Sets the action as the default action, visible as the main action button.
+                  feature_flag:
+                    type: string
+                    description: Name of the feature flag that enables this action
+                  setting_flag:
+                    type: string
+                    description: Name of the setting flag that enables this action
+                  new_entity_item:
+                    type: object
+                    allOf:
+                      - $ref: "#/components/schemas/EntityItem"
+              example:
+                value:
+                  - action_type: add_existing
+                    label: entityrelation.add_existing
+                    default: true
+                  - action_type: create_new
+                    label: entityrelation.create_new
+                  - action_type: create_from_existing
+                    label: entityrelation.create_from_existing
+            drawer_size:
+              type: string
+              enum:
+                - small
+                - medium
+                - large
+            icon:
+              type: string
+            summary_fields:
+              type: array
+              items:
+                oneOf:
+                  - type: string
+                    description: The field name from the entity attributes to display
+                  - $ref: "#/components/schemas/SummaryField"
+            has_primary:
+              type: boolean
+            allowedSchemas:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntitySlug"
+            enable_relation_tags:
+              type: boolean
+              default: true
+              description: When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item.
+            add_button_label:
+              type: string
+              description: Optional label for the add button. The translated value for add_button_lable is used, if found else the string is used as is.
+            search_placeholder:
+              type: string
+              description: Optional placeholder text for the relation search input. The translated value for search_placeholder is used, if found else the string is used as is.
     UserRelationAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: User Relationship
-        properties:
-          type:
-            type: string
-            enum:
-            - relation_user
-          multiple:
-            type: boolean
-            default: false
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: User Relationship
+          properties:
+            type:
+              type: string
+              enum:
+                - relation_user
+            multiple:
+              type: boolean
+              default: false
     AddressRelationAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Reference to an address attribute of another entity
-        properties:
-          type:
-            type: string
-            enum:
-            - relation_address
-          has_primary:
-            type: boolean
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Reference to an address attribute of another entity
+          properties:
+            type:
+              type: string
+              enum:
+                - relation_address
+            has_primary:
+              type: boolean
     PaymentMethodRelationAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Reference to a payment method attribute of another entity
-        properties:
-          type:
-            type: string
-            enum:
-            - relation_payment_method
-          has_primary:
-            type: boolean
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Reference to a payment method attribute of another entity
+          properties:
+            type:
+              type: string
+              enum:
+                - relation_payment_method
+            has_primary:
+              type: boolean
     InvitationEmailAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Email address for send invitation
-        properties:
-          type:
-            type: string
-            enum:
-            - invitation_email
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Email address for send invitation
+          properties:
+            type:
+              type: string
+              enum:
+                - invitation_email
     AutomationAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Automation entity
-        properties:
-          type:
-            type: string
-            enum:
-            - automation
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Automation entity
+          properties:
+            type:
+              type: string
+              enum:
+                - automation
     InternalUserAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Epilot internal user info
-        properties:
-          type:
-            type: string
-            enum:
-            - internal_user
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Epilot internal user info
+          properties:
+            type:
+              type: string
+              enum:
+                - internal_user
     PurposeAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - $ref: '#/components/schemas/TaxonomyClassification'
-      - type: object
-        description: Entity Taxonomy
-        properties:
-          type:
-            type: string
-            enum:
-            - purpose
+        - $ref: "#/components/schemas/BaseAttribute"
+        - $ref: "#/components/schemas/TaxonomyClassification"
+        - type: object
+          description: Entity Taxonomy
+          properties:
+            type:
+              type: string
+              enum:
+                - purpose
     RepeatableAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Repeatable (add N number of fields)
-        properties:
-          repeatable:
-            type: boolean
-          has_primary:
-            type: boolean
-          relation_affinity_mode:
-            description: Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.
-            type: string
-            enum:
-            - weak
-            - strong
-          type:
-            type: string
-            enum:
-            - string
-            - phone
-            - email
-            - address
-            - relation
-            - payment
-            - price_component
-            - date
-          enable_relation_picker:
-            type: boolean
-            default: true
-            description: when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Repeatable (add N number of fields)
+          properties:
+            repeatable:
+              type: boolean
+            has_primary:
+              type: boolean
+            relation_affinity_mode:
+              description: Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.
+              type: string
+              enum:
+                - weak
+                - strong
+            type:
+              type: string
+              enum:
+                - string
+                - phone
+                - email
+                - address
+                - relation
+                - payment
+                - price_component
+                - date
+            enable_relation_picker:
+              type: boolean
+              default: true
+              description: when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.
     TagsAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Tags
-        properties:
-          type:
-            type: string
-            enum:
-            - tags
-          options:
-            type: array
-            items:
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Tags
+          properties:
+            type:
               type: string
-          suggestions:
-            type: array
-            items:
-              type: string
+              enum:
+                - tags
+            options:
+              type: array
+              items:
+                type: string
+            suggestions:
+              type: array
+              items:
+                type: string
     NumberAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Numeric input
-        properties:
-          type:
-            type: string
-            enum:
-            - number
-          format:
-            type: string
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Numeric input
+          properties:
+            type:
+              type: string
+              enum:
+                - number
+            format:
+              type: string
     ConsentAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Consent Management
-        properties:
-          type:
-            type: string
-            enum:
-            - consent
-          topic:
-            type: string
-          identifiers:
-            type: array
-            items:
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Consent Management
+          properties:
+            type:
               type: string
-        required:
-        - type
-        - topic
+              enum:
+                - consent
+            topic:
+              type: string
+            identifiers:
+              type: array
+              items:
+                type: string
+          required:
+            - type
+            - topic
     OrderedListAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Type of attribute to render N number of ordered fields
-        properties:
-          type:
-            type: string
-            enum:
-            - ordered_list
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Type of attribute to render N number of ordered fields
+          properties:
+            type:
+              type: string
+              enum:
+                - ordered_list
     ComputedAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: An attribute that is computed from the entity data. For more details on how to use them, check the docs [here](https://e-pilot.atlassian.net/wiki/spaces/EO/pages/5642977476/How+To+Computed+Schema+Attributes)
-        properties:
-          type:
-            type: string
-            enum:
-            - computed
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: An attribute that is computed from the entity data. For more details on how to use them, check the docs [here](https://e-pilot.atlassian.net/wiki/spaces/EO/pages/5642977476/How+To+Computed+Schema+Attributes)
+          properties:
+            type:
+              type: string
+              enum:
+                - computed
     PartnerStatusAttribute:
       allOf:
-      - $ref: '#/components/schemas/BaseAttribute'
-      - type: object
-        description: Partner Status
-        properties:
-          type:
-            type: string
-            enum:
-            - partner_status
+        - $ref: "#/components/schemas/BaseAttribute"
+        - type: object
+          description: Partner Status
+          properties:
+            type:
+              type: string
+              enum:
+                - partner_status
     SummaryAttribute:
       description: |
         Represents an expanded version of an attribute to be displayed in the list item summary.
@@ -2531,8 +2234,8 @@ components:
           type: string
           description: Binds summary field visibility to the setting flag state.
       required:
-      - label
-      - value
+        - label
+        - value
     EntitySlug:
       description: URL-friendly identifier for the entity schema
       type: string
@@ -2552,11 +2255,11 @@ components:
         attributes:
           type: array
           items:
-            $ref: '#/components/schemas/Attribute'
+            $ref: "#/components/schemas/Attribute"
         _purpose:
           type: array
           items:
-            $ref: '#/components/schemas/ClassificationId'
+            $ref: "#/components/schemas/ClassificationId"
         ui_hooks:
           type: array
           items:
@@ -2583,7 +2286,7 @@ components:
               import:
                 type: string
                 description: package to be imported
-                example: '@epilot360/notes'
+                example: "@epilot360/notes"
               component:
                 type: string
                 description: the component to be dynamically loaded
@@ -2613,9 +2316,9 @@ components:
                     type: string
                     example: 123
                 required:
-                - action
+                  - action
             required:
-            - hook
+              - hook
         feature_flag:
           type: string
           example: FF_MY_FEATURE_FLAG
@@ -2628,55 +2331,55 @@ components:
           type: boolean
           description: Only show capability for legacy tenants (ivy)
       required:
-      - name
+        - name
     EntityViewDisabled:
       type: object
       properties:
         view_type:
           type: string
           enum:
-          - disabled
+            - disabled
     EntityDefaultTable:
       type: object
       properties:
         view_type:
           type: string
           enum:
-          - default
+            - default
         dropdown_items:
           type: array
           items:
             allOf:
-            - type: object
-              properties:
-                feature_flag:
-                  type: string
-                  example: FF_MY_FEATURE_FLAG
-                  description: This dropdown item should only be active when the feature flag is enabled
-                legacy:
-                  type: boolean
-                  description: Only show item for legacy tenants (ivy)
-            - oneOf:
               - type: object
                 properties:
-                  type:
+                  feature_flag:
                     type: string
-                    enum:
-                    - entity
-                  entity:
-                    $ref: '#/components/schemas/EntitySlug'
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - link
-                  title:
-                    type: string
-                    example: Opportunities
-                  uri:
-                    type: string
-                    format: uri-reference
+                    example: FF_MY_FEATURE_FLAG
+                    description: This dropdown item should only be active when the feature flag is enabled
+                  legacy:
+                    type: boolean
+                    description: Only show item for legacy tenants (ivy)
+              - oneOf:
+                  - type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - entity
+                      entity:
+                        $ref: "#/components/schemas/EntitySlug"
+                  - type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - link
+                      title:
+                        type: string
+                        example: Opportunities
+                      uri:
+                        type: string
+                        format: uri-reference
         row_actions:
           type: array
           items:
@@ -2698,9 +2401,9 @@ components:
                     params:
                       type: object
                   required:
-                  - label
+                    - label
             required:
-            - type
+              - type
         enable_thumbnails:
           description: Enable the thumbnail column
           type: boolean
@@ -2714,7 +2417,7 @@ components:
         view_type:
           type: string
           enum:
-          - default
+            - default
         search_params:
           type: object
           additionalProperties:
@@ -2732,7 +2435,7 @@ components:
         view_type:
           type: string
           enum:
-          - default
+            - default
         search_params:
           type: object
           additionalProperties:
@@ -2750,7 +2453,7 @@ components:
         view_type:
           type: string
           enum:
-          - redirect
+            - redirect
         route:
           type: string
           example: /app/pricing-hub/product/:entityId
@@ -2763,26 +2466,26 @@ components:
     BaseEntity:
       x-speakeasy-entity: Entity
       allOf:
-      - $ref: '#/components/schemas/Entity'
-      - required:
-        - _id
-        - _title
-        - _org
-        - _schema
-        - _created_at
-        - _updated_at
+        - $ref: "#/components/schemas/Entity"
+        - required:
+            - _id
+            - _title
+            - _org
+            - _schema
+            - _created_at
+            - _updated_at
     Entity:
       type: object
       x-speakeasy-additional-properties-name: entity
       additionalProperties: true
       properties:
         _id:
-          $ref: '#/components/schemas/EntityId'
+          $ref: "#/components/schemas/EntityId"
         _org:
           type: string
           description: Organization Id the entity belongs to
         _schema:
-          $ref: '#/components/schemas/EntitySlug'
+          $ref: "#/components/schemas/EntitySlug"
         _title:
           type: string
           description: Title of entity
@@ -2802,11 +2505,11 @@ components:
           nullable: true
       example:
         _id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        _org: '123'
+        _org: "123"
         _schema: contact
         _tags:
-        - example
-        - mock
+          - example
+          - mock
         _created_at: 2021-02-09T12:41:43.662Z
         _updated_at: 2021-02-09T12:41:43.662Z
     HydratedEntity:
@@ -2818,47 +2521,47 @@ components:
         status: active
         customer_number: abc123
         email:
-        - label: work
-          email: user@example.com
+          - label: work
+            email: user@example.com
         phone:
-        - label: work
-          phone: '+49123456789'
+          - label: work
+            phone: "+49123456789"
         first_name: First Name
         middle_name: Middle Name
         last_name: Last Name
-        date_of_birth: '2019-08-24'
+        date_of_birth: "2019-08-24"
         title: Mr.
         account:
-        - status: active
-          name: Company name
-          company_email:
-          - label: Company email
-            email: company@example.com
-          company_phone:
-          - label: Support phone
-            phone: '+49123456789'
-          company_website: https://example.com
-          tax_id: DE123456789
-          tax_exemption: '2019-08-24'
-          contacts:
-            $relation:
-            - _tags:
-              - CEO
-              entity_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          - status: active
+            name: Company name
+            company_email:
+              - label: Company email
+                email: company@example.com
+            company_phone:
+              - label: Support phone
+                phone: "+49123456789"
+            company_website: https://example.com
+            tax_id: DE123456789
+            tax_exemption: "2019-08-24"
+            contacts:
+              $relation:
+                - _tags:
+                    - CEO
+                  entity_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
     EntityItem:
       allOf:
-      - $ref: '#/components/schemas/BaseEntity'
-      - $ref: '#/components/schemas/Entity'
+        - $ref: "#/components/schemas/BaseEntity"
+        - $ref: "#/components/schemas/Entity"
     HydratedEntityItem:
       allOf:
-      - $ref: '#/components/schemas/BaseEntity'
-      - $ref: '#/components/schemas/HydratedEntity'
+        - $ref: "#/components/schemas/BaseEntity"
+        - $ref: "#/components/schemas/HydratedEntity"
     GetRelationsResp:
       type: array
       items:
         anyOf:
-        - $ref: '#/components/schemas/RelationItem'
-        - $ref: '#/components/schemas/RelationEntity'
+          - $ref: "#/components/schemas/RelationItem"
+          - $ref: "#/components/schemas/RelationEntity"
     GetRelationsRespWithPagination:
       type: object
       properties:
@@ -2866,19 +2569,19 @@ components:
           type: number
           example: 1
         relations:
-          $ref: '#/components/schemas/GetRelationsResp'
+          $ref: "#/components/schemas/GetRelationsResp"
     RelationEntity:
       allOf:
-      - $ref: '#/components/schemas/BaseEntity'
-      - type: object
-        properties:
-          $relation:
-            $ref: '#/components/schemas/RelationItem'
+        - $ref: "#/components/schemas/BaseEntity"
+        - type: object
+          properties:
+            $relation:
+              $ref: "#/components/schemas/RelationItem"
     RelationItem:
       type: object
       properties:
         entity_id:
-          $ref: '#/components/schemas/EntityId'
+          $ref: "#/components/schemas/EntityId"
         attribute:
           type: string
         _tags:
@@ -2889,8 +2592,8 @@ components:
           description: Whether this is a reverse relation
           type: boolean
       required:
-      - entity_id
-      - attribute
+        - entity_id
+        - attribute
     EntitySearchParams:
       type: object
       properties:
@@ -2920,9 +2623,9 @@ components:
           items:
             type: string
           example:
-          - _id
-          - _title
-          - first_name
+            - _id
+            - _title
+            - first_name
         include_scores:
           type: boolean
           default: false
@@ -2935,7 +2638,7 @@ components:
               terms:
                 field: _tags.keyword
       required:
-      - q
+        - q
     EntityImportParams:
       type: object
       properties:
@@ -2949,14 +2652,14 @@ components:
               type: string
               example: 123/4d689aeb-1497-4410-a9fe-b36ca9ac4389/document.pdf
           required:
-          - bucket
-          - key
+            - bucket
+            - key
         schema:
           type: string
           example: contact
       required:
-      - S3Reference
-      - schema
+        - S3Reference
+        - schema
     EntitySearchResults:
       type: object
       properties:
@@ -2966,7 +2669,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/EntityItem'
+            $ref: "#/components/schemas/EntityItem"
         aggregations:
           type: object
           example:
@@ -2974,10 +2677,10 @@ components:
               doc_count_error_upper_bound: 0
               sum_other_doc_count: 23
               buckets:
-              - key: automation
-                doc_count: 108
-              - key: primary
-                doc_count: 66
+                - key: automation
+                  doc_count: 108
+                - key: primary
+                  doc_count: 66
     SearchMappings:
       description: |
         Advanced: explicit Elasticsearch index mapping definitions for entity data
@@ -2995,15 +2698,15 @@ components:
           type:
             type: string
             enum:
-            - keyword
-            - text
-            - boolean
-            - integer
-            - long
-            - float
-            - date
-            - flattened
-            - nested
+              - keyword
+              - text
+              - boolean
+              - integer
+              - long
+              - float
+              - date
+              - flattened
+              - nested
           fields:
             additionalProperties: true
     ActivityId:
@@ -3032,18 +2735,18 @@ components:
                   example: example@epilot.cloud
                 custom:ivy_user_id:
                   type: string
-                  example: '10006129'
+                  example: "10006129"
               example:
                 sub: 476e9b48-42f4-4234-a2b0-4668b34626ce
                 cognito:groups:
-                - Administrator
+                  - Administrator
                 cognito:preferred_role: arn:aws:iam::912468240823:role/base-administrator-role
                 iss: https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_6lZSgmU6D
-                custom:ivy_org_id: '739224'
+                custom:ivy_org_id: "739224"
                 cognito:username: n.ahmad@epilot.cloud
-                custom:ivy_user_id: '10006129'
+                custom:ivy_user_id: "10006129"
                 cognito:roles:
-                - arn:aws:iam::912468240823:role/base-administrator-role
+                  - arn:aws:iam::912468240823:role/base-administrator-role
                 aud: 6e0jbdnger7nmoktaaflarue1l
                 event_id: cd5f5583-d90c-4db5-8e99-5f5dd29a4d75
                 token_use: id
@@ -3064,7 +2767,7 @@ components:
         message:
           type: string
           description: Message for activity. Supports handlebars syntax.
-          example: '{{caller}} did something with {{entity payload.entity.id}}.'
+          example: "{{caller}} did something with {{entity payload.entity.id}}."
         payload:
           type: object
           properties: {}
@@ -3074,79 +2777,79 @@ components:
               id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
               schema: contact
       required:
-      - type
-      - title
-      - message
+        - type
+        - title
+        - message
     EntityOperation:
       type: object
       properties:
         entity:
-          $ref: '#/components/schemas/EntityId'
+          $ref: "#/components/schemas/EntityId"
         org:
           type: string
-          example: '123'
+          example: "123"
         activity_id:
-          $ref: '#/components/schemas/ActivityId'
+          $ref: "#/components/schemas/ActivityId"
         operation:
           type: string
           enum:
-          - createEntity
-          - updateEntity
-          - deleteEntity
+            - createEntity
+            - updateEntity
+            - deleteEntity
         params:
           type: object
           properties:
             id:
-              $ref: '#/components/schemas/EntityId'
+              $ref: "#/components/schemas/EntityId"
             slug:
-              $ref: '#/components/schemas/EntitySlug'
+              $ref: "#/components/schemas/EntitySlug"
           example:
             id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
             slug: contact
         payload:
           allOf:
-          - $ref: '#/components/schemas/Entity'
-          - example:
-              _schema: contact
-              _org: '123'
-              status: Inactive
+            - $ref: "#/components/schemas/Entity"
+            - example:
+                _schema: contact
+                _org: "123"
+                status: Inactive
         diff:
           type: object
           properties:
             added:
-              $ref: '#/components/schemas/Entity'
+              $ref: "#/components/schemas/Entity"
             updated:
-              $ref: '#/components/schemas/Entity'
+              $ref: "#/components/schemas/Entity"
             deleted:
-              $ref: '#/components/schemas/Entity'
+              $ref: "#/components/schemas/Entity"
       required:
-      - entity
-      - org
-      - operation
+        - entity
+        - org
+        - operation
     ActivityItem:
       allOf:
-      - type: object
-        properties:
-          _id:
-            $ref: '#/components/schemas/ActivityId'
-          timestamp:
-            type: string
-            format: date-time
-      - $ref: '#/components/schemas/Activity'
-      - type: object
-        properties:
-          caller:
-            $ref: '#/components/schemas/ActivityCallerContext'
-      - type: object
-        properties:
-          operations_total:
-            type: integer
-            description: Count of total operations attached to this activity
-            example: 1
-          operations:
-            type: array
-            items:
-              $ref: '#/components/schemas/EntityOperation'
+        - type: object
+          properties:
+            _id:
+              $ref: "#/components/schemas/ActivityId"
+            timestamp:
+              type: string
+              format: date-time
+        - $ref: "#/components/schemas/Activity"
+        - type: object
+          properties:
+            caller:
+              $ref: "#/components/schemas/ActivityCallerContext"
+        - type: object
+          properties:
+            operations_total:
+              type: integer
+              description: Count of total operations attached to this activity
+              example: 1
+            operations:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityOperation"
     BlueprintEntityId:
       description: Reference to blueprint
       type: string
@@ -3157,15 +2860,15 @@ components:
       format: uuid
     SavedViewItem:
       allOf:
-      - type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/SavedViewId'
-          created_at:
-            type: string
-          updated_at:
-            type: string
-      - $ref: '#/components/schemas/SavedView'
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/SavedViewId"
+            created_at:
+              type: string
+            updated_at:
+              type: string
+        - $ref: "#/components/schemas/SavedView"
     SavedView:
       description: A saved entity view
       type: object
@@ -3174,7 +2877,7 @@ components:
           type: array
           description: list of schemas a view can belong to
           items:
-            $ref: '#/components/schemas/EntitySlug'
+            $ref: "#/components/schemas/EntitySlug"
         name:
           description: User-friendly identifier for the saved view
           type: string
@@ -3182,35 +2885,35 @@ components:
         org:
           description: Organisation ID a view belongs to
           type: string
-          example: '66'
+          example: "66"
         shared:
           description: boolean property for if a view is shared with organisation
           type: boolean
           example: true
         created_by:
           anyOf:
-          - type: object
-            description: A user that created the view
-            properties:
-              user_id:
-                type: string
-                example: '10598'
-          - type: object
-            description: A system-created view
-            properties:
-              source:
-                type: string
-                enum:
-                - SYSTEM
-                - BLUEPRINT
-            additionalProperties: true
+            - type: object
+              description: A user that created the view
+              properties:
+                user_id:
+                  type: string
+                  example: "10598"
+            - type: object
+              description: A system-created view
+              properties:
+                source:
+                  type: string
+                  enum:
+                    - SYSTEM
+                    - BLUEPRINT
+              additionalProperties: true
         ui_config:
           type: object
           additionalProperties: true
           example:
             filters:
               customer_name: suresh test
-              _tags: '360'
+              _tags: "360"
             table_layout:
               opportunity:
                 page: 1
@@ -3218,15 +2921,15 @@ components:
                 pageSize: 25
                 columnSettings: []
       required:
-      - slug
-      - name
-      - created_by
-      - ui_config
+        - slug
+        - name
+        - created_by
+        - ui_config
     Taxonomy:
       type: object
       properties:
         slug:
-          $ref: '#/components/schemas/TaxonomySlug'
+          $ref: "#/components/schemas/TaxonomySlug"
         name:
           type: string
           description: A human friendly name of a Taxonomy e.g. Purpose, Product Category, Folder, Tag
@@ -3242,20 +2945,20 @@ components:
           type: string
           format: date-time
       required:
-      - slug
-      - name
+        - slug
+        - name
     TaxonomyClassification:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/ClassificationId'
+          $ref: "#/components/schemas/ClassificationId"
         name:
           type: string
           example: Wallbox PV
         parents:
           type: array
           items:
-            $ref: '#/components/schemas/ClassificationId'
+            $ref: "#/components/schemas/ClassificationId"
         created_at:
           type: string
           format: date-time
@@ -3263,7 +2966,7 @@ components:
           type: string
           format: date-time
       required:
-      - name
+        - name
     ClassificationId:
       type: string
       format: uuid
@@ -3277,15 +2980,15 @@ components:
         create:
           type: array
           items:
-            $ref: '#/components/schemas/TaxonomyClassification'
+            $ref: "#/components/schemas/TaxonomyClassification"
         update:
           type: array
           items:
-            $ref: '#/components/schemas/TaxonomyClassification'
+            $ref: "#/components/schemas/TaxonomyClassification"
         delete:
           type: array
           items:
-            $ref: '#/components/schemas/ClassificationId'
+            $ref: "#/components/schemas/ClassificationId"
   examples:
     TaxEntity:
       description: Example of a Tax Rate entity
@@ -3307,59 +3010,59 @@ components:
         last_name: Last
         title: Herr Prof. Dr.
         email:
-        - email: user@example.com
-          _tags:
-          - work
+          - email: user@example.com
+            _tags:
+              - work
         phone:
-        - phone: '+49123456789'
-          _tags:
-          - personal
-          - mobile
+          - phone: "+49123456789"
+            _tags:
+              - personal
+              - mobile
         address:
-        - country: Germany
-          city: Koln
-          postal_code: 81475
-          street: Melatengürtel
-          street_number: 71
-          additional_info: 5. Etage
-          _tags:
-          - billing
-          - delivery
-        birthdate: '2019-08-24'
+          - country: Germany
+            city: Koln
+            postal_code: 81475
+            street: Melatengürtel
+            street_number: 71
+            additional_info: 5. Etage
+            _tags:
+              - billing
+              - delivery
+        birthdate: "2019-08-24"
         account:
           $relation:
-          - entity_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            _tags:
-            - company
+            - entity_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              _tags:
+                - company
         consent_email_marketing:
           status: OPTED_IN
           events:
-          - type: OPT_IN
-            organization_id: '123'
-            created_at: 2021-07-05T09:12:29.352Z
-            topic: EMAIL_MARKETING
-            identifier: user@example.com
-            source: https://consent.sls.epilot.io/optin?token=abc123
-            meta:
-              ip_address: 1.1.1.1
-              user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
-          - type: DOUBLE_OPT_IN_REQUEST
-            organization_id: '123'
-            created_at: 2021-07-05T08:12:29.352Z
-            topic: EMAIL_MARKETING
-            identifier: user@example.com
-            source: consent-api
-            meta:
-              token: abc123
-          - type: OPT_IN
-            organization_id: '123'
-            created_at: 2021-07-04T09:12:29.352Z
-            topic: EMAIL_MARKETING
-            identifier: user@example.com
-            source: https://frontend.epilot.cloud
-            meta:
-              ip_address: 1.1.1.1
-              user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
+            - type: OPT_IN
+              organization_id: "123"
+              created_at: 2021-07-05T09:12:29.352Z
+              topic: EMAIL_MARKETING
+              identifier: user@example.com
+              source: https://consent.sls.epilot.io/optin?token=abc123
+              meta:
+                ip_address: 1.1.1.1
+                user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
+            - type: DOUBLE_OPT_IN_REQUEST
+              organization_id: "123"
+              created_at: 2021-07-05T08:12:29.352Z
+              topic: EMAIL_MARKETING
+              identifier: user@example.com
+              source: consent-api
+              meta:
+                token: abc123
+            - type: OPT_IN
+              organization_id: "123"
+              created_at: 2021-07-04T09:12:29.352Z
+              topic: EMAIL_MARKETING
+              identifier: user@example.com
+              source: https://frontend.epilot.cloud
+              meta:
+                ip_address: 1.1.1.1
+                user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
     AccountEntity:
       description: Example of an account entity
       value:
@@ -3367,38 +3070,38 @@ components:
         name: Example Company
         tax_id: DE123456789
         email:
-        - email: user@example.com
-          _tags:
-          - work
+          - email: user@example.com
+            _tags:
+              - work
         phone:
-        - phone: '+49123456789'
-          _tags:
-          - personal
-          - mobile
+          - phone: "+49123456789"
+            _tags:
+              - personal
+              - mobile
         address:
-        - country: Germany
-          city: Koln
-          postal_code: 81475
-          street: Melatengürtel
-          street_number: 71
-          additional_info: 5. Etage
-          _tags:
-          - billing
-          - delivery
+          - country: Germany
+            city: Koln
+            postal_code: 81475
+            street: Melatengürtel
+            street_number: 71
+            additional_info: 5. Etage
+            _tags:
+              - billing
+              - delivery
         website: http://company.com
-        tax_exemption: '2021-02-23T09:08:57.320Z'
+        tax_exemption: "2021-02-23T09:08:57.320Z"
         registry_court: Amtsgericht Köln
         registry_number: HRB 95505
         company_size: 50-99
         industry:
-        - ecommerce
-        - tech
-        annual_revenue: '5000000'
+          - ecommerce
+          - tech
+        annual_revenue: "5000000"
         contact:
           $relation:
-          - entity_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-            _tags:
-            - CEO
+            - entity_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              _tags:
+                - CEO
     ProductEntity:
       description: Example of a product entity
       value:
@@ -3410,29 +3113,29 @@ components:
         _files:
           type: file
           attachments:
-          - key: f001-32123-asdasd-23213
-            mime: application/pdf
-            name: wallbox-premium.pdf
-            size: 6933430
-            image_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
-            download_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
+            - key: f001-32123-asdasd-23213
+              mime: application/pdf
+              name: wallbox-premium.pdf
+              size: 6933430
+              image_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
+              download_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
         _images:
           type: image
           attachments:
-          - key: i001-32123-asdasd-23213
-            mime: application/pdf
-            name: wallbox-premium.pdf
-            size: 6933430
-            image_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
-            download_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
+            - key: i001-32123-asdasd-23213
+              mime: application/pdf
+              name: wallbox-premium.pdf
+              size: 6933430
+              image_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
+              download_url: https://s3-bucket.epilot.cloud/uid/f001-32123-asdasd-23213
         prices:
           $relation:
-          - entity_id: a38cca03-18a2-4e9c-8516-0918d81e7830
-            _tags:
-            - price
-          - entity_id: 3d10c912-c419-42d7-9270-02b7d05294e5
-            _tags:
-            - price
+            - entity_id: a38cca03-18a2-4e9c-8516-0918d81e7830
+              _tags:
+                - price
+            - entity_id: 3d10c912-c419-42d7-9270-02b7d05294e5
+              _tags:
+                - price
     PriceEntity:
       description: Example of a price entity
       value:
@@ -3448,112 +3151,112 @@ components:
         amount_subtotal: 23045
         amount_total: 27424
         billing_address:
-        - additional_info: ''
-          city: City
-          country: DE
-          postal_code: '123'
-          street: Street 1
-          street_number: '2'
-          _tags: []
+          - additional_info: ""
+            city: City
+            country: DE
+            postal_code: "123"
+            street: Street 1
+            street_number: "2"
+            _tags: []
         billing_company_name: Epilot
         billing_contact:
           $relation:
-          - entity_id: 0691f503-5a3c-4e9e-b036-ffb21ea1d284
-            relationText: Daniel Test
-            _schema: contact
-            _tags: []
+            - entity_id: 0691f503-5a3c-4e9e-b036-ffb21ea1d284
+              relationText: Daniel Test
+              _schema: contact
+              _tags: []
         billing_email: x@email.xyz
         billing_first_name: Paulo
         billing_last_name: Henriques
-        billing_phone: '00351912611099'
-        billing_vat: '123456789'
+        billing_phone: "00351912611099"
+        billing_vat: "123456789"
         currency: EUR
         delivery_address:
-        - additional_info: ''
-          city: City
-          country: DE
-          postal_code: '123'
-          street: Street 1
-          street_number: '2'
-          _tags: []
+          - additional_info: ""
+            city: City
+            country: DE
+            postal_code: "123"
+            street: Street 1
+            street_number: "2"
+            _tags: []
         footer_notes: Footer
         line_items:
-        - amount_subtotal: 23045
-          amount_total: 27424
-          currency: EUR
-          description: Basic Model - No Wifi
-          price_id: efe9ff76-865c-4287-8de9-422cfc741ff9
-          product_id: beefa9f1-29a8-448e-94d5-ebf1963428f8
-          quantity: 1
-          taxes:
-          - amount: 4379
-            rate: standard
-          unit_amount: 23045
-          _price:
-            active: false
-            billing_duration_amount: '2'
-            billing_duration_unit: years
-            billing_period: monthly
+          - amount_subtotal: 23045
+            amount_total: 27424
+            currency: EUR
             description: Basic Model - No Wifi
-            notice_time_amount: '1'
-            notice_time_unit: months
-            price_display_in_journeys: show_price
-            renewal_duration_amount: '1'
-            renewal_duration_unit: years
-            sales_tax: standard
-            tax_behavior: exclusive
-            termination_time_amount: '1'
-            termination_time_unit: months
-            type: recurring
+            price_id: efe9ff76-865c-4287-8de9-422cfc741ff9
+            product_id: beefa9f1-29a8-448e-94d5-ebf1963428f8
+            quantity: 1
+            taxes:
+              - amount: 4379
+                rate: standard
             unit_amount: 23045
-            unit_amount_currency: EUR
-            unit_amount_decimal: '230.4524'
-            _created_at: '2021-12-15T12:34:59.579Z'
-            _id: efe9ff76-865c-4287-8de9-422cfc741ff9
-            _org: '739224'
-            _schema: price
-            _tags:
-            - basic-model
-            - wifi
-            _title: Basic Model - No Wifi
-            _updated_at: '2021-12-31T13:07:51.392Z'
-          _product:
-            active: true
-            code: PWB
-            feature:
-            - _tags: []
-              feature: Pure Energon Fueled
-            - _tags: []
-              feature: Mobile App Available
-            name: Pinho Walls in a Box
-            price_options:
-              $relation:
-              - entity_id: efe9ff76-865c-4287-8de9-422cfc741ff9
-            type: product
-            _created_at: '2021-12-15T12:35:08.438Z'
-            _id: beefa9f1-29a8-448e-94d5-ebf1963428f8
-            _org: '739224'
-            _schema: product
-            _tags:
-            - energon
-            - eco-friendly
-            - wallbox
-            _title: Pinho Walls in a Box
-            _updated_at: '2022-01-03T17:14:41.042Z'
+            _price:
+              active: false
+              billing_duration_amount: "2"
+              billing_duration_unit: years
+              billing_period: monthly
+              description: Basic Model - No Wifi
+              notice_time_amount: "1"
+              notice_time_unit: months
+              price_display_in_journeys: show_price
+              renewal_duration_amount: "1"
+              renewal_duration_unit: years
+              sales_tax: standard
+              tax_behavior: exclusive
+              termination_time_amount: "1"
+              termination_time_unit: months
+              type: recurring
+              unit_amount: 23045
+              unit_amount_currency: EUR
+              unit_amount_decimal: "230.4524"
+              _created_at: "2021-12-15T12:34:59.579Z"
+              _id: efe9ff76-865c-4287-8de9-422cfc741ff9
+              _org: "739224"
+              _schema: price
+              _tags:
+                - basic-model
+                - wifi
+              _title: Basic Model - No Wifi
+              _updated_at: "2021-12-31T13:07:51.392Z"
+            _product:
+              active: true
+              code: PWB
+              feature:
+                - _tags: []
+                  feature: Pure Energon Fueled
+                - _tags: []
+                  feature: Mobile App Available
+              name: Pinho Walls in a Box
+              price_options:
+                $relation:
+                  - entity_id: efe9ff76-865c-4287-8de9-422cfc741ff9
+              type: product
+              _created_at: "2021-12-15T12:35:08.438Z"
+              _id: beefa9f1-29a8-448e-94d5-ebf1963428f8
+              _org: "739224"
+              _schema: product
+              _tags:
+                - energon
+                - eco-friendly
+                - wallbox
+              _title: Pinho Walls in a Box
+              _updated_at: "2022-01-03T17:14:41.042Z"
         memo: Memo
         status: Paid
         total_details:
           amount_tax: 4379
           breakdown:
             recurrences:
-            - amount_subtotal: 23045
-              amount_tax: 4379
-              amount_total: 27424
-              billing_period: monthly
-              type: recurring
+              - amount_subtotal: 23045
+                amount_tax: 4379
+                amount_total: 27424
+                billing_period: monthly
+                type: recurring
             taxes:
-            - amount: 4379
-              rate: standard
+              - amount: 4379
+                rate: standard
     OpportunityEntity:
       description: Example of an Opportunity entity
       value:
@@ -3561,122 +3264,122 @@ components:
         amount_total: 27424
         assignees:
           $relation:
-          - entity_id: 66a1a6a3-38ee-4ffe-b68d-ee90e3bb1a77
-            relationText: Claudius Iohannis
-            _schema: contact
-            _tags: []
+            - entity_id: 66a1a6a3-38ee-4ffe-b68d-ee90e3bb1a77
+              relationText: Claudius Iohannis
+              _schema: contact
+              _tags: []
         billing_address:
-        - additional_info: ''
-          city: City
-          country: DE
-          postal_code: '123'
-          street: Street 1
-          street_number: '2'
-          _tags: []
+          - additional_info: ""
+            city: City
+            country: DE
+            postal_code: "123"
+            street: Street 1
+            street_number: "2"
+            _tags: []
         billing_company_name: Epilot
         billing_contact:
           $relation:
-          - entity_id: 0691f503-5a3c-4e9e-b036-ffb21ea1d284
-            relationText: Daniel Test
-            _schema: contact
-            _tags: []
+            - entity_id: 0691f503-5a3c-4e9e-b036-ffb21ea1d284
+              relationText: Daniel Test
+              _schema: contact
+              _tags: []
         billing_email: customer@email.xyz
         billing_first_name: Customer First Name
         billing_last_name: Customer Last Name
-        billing_phone: '00351912611098'
-        billing_vat: '123456789'
+        billing_phone: "00351912611098"
+        billing_vat: "123456789"
         currency: EUR
         delivery_address:
-        - additional_info: ''
-          city: City
-          country: DE
-          postal_code: '123'
-          street: Street 1
-          street_number: '2'
-          _tags: []
+          - additional_info: ""
+            city: City
+            country: DE
+            postal_code: "123"
+            street: Street 1
+            street_number: "2"
+            _tags: []
         line_items:
-        - amount_subtotal: 23045
-          amount_total: 27424
-          currency: EUR
-          description: Basic Model - No Wifi
-          price_id: efe9ff76-865c-4287-8de9-422cfc741ff9
-          product_id: beefa9f1-29a8-448e-94d5-ebf1963428f8
-          quantity: 1
-          taxes:
-          - amount: 4379
-            rate: standard
-          unit_amount: 23045
-          _price:
-            active: false
-            billing_duration_amount: '2'
-            billing_duration_unit: years
-            billing_period: monthly
+          - amount_subtotal: 23045
+            amount_total: 27424
+            currency: EUR
             description: Basic Model - No Wifi
-            notice_time_amount: '1'
-            notice_time_unit: months
-            price_display_in_journeys: show_price
-            renewal_duration_amount: '1'
-            renewal_duration_unit: years
-            sales_tax: standard
-            tax_behavior: exclusive
-            termination_time_amount: '1'
-            termination_time_unit: months
-            type: recurring
+            price_id: efe9ff76-865c-4287-8de9-422cfc741ff9
+            product_id: beefa9f1-29a8-448e-94d5-ebf1963428f8
+            quantity: 1
+            taxes:
+              - amount: 4379
+                rate: standard
             unit_amount: 23045
-            unit_amount_currency: EUR
-            unit_amount_decimal: '230.4524'
-            _created_at: '2021-12-15T12:34:59.579Z'
-            _id: efe9ff76-865c-4287-8de9-422cfc741ff9
-            _org: '739224'
-            _schema: price
-            _tags:
-            - basic-model
-            - wifi
-            _title: Basic Model - No Wifi
-            _updated_at: '2021-12-31T13:07:51.392Z'
-          _product:
-            active: true
-            code: PWB
-            feature:
-            - _tags: []
-              feature: Pure Energon Fueled
-            - _tags: []
-              feature: Mobile App Available
-            name: Pinho Walls in a Box
-            price_options:
-              $relation:
-              - entity_id: efe9ff76-865c-4287-8de9-422cfc741ff9
-            type: product
-            _created_at: '2021-12-15T12:35:08.438Z'
-            _id: beefa9f1-29a8-448e-94d5-ebf1963428f8
-            _org: '739224'
-            _schema: product
-            _tags:
-            - energon
-            - eco-friendly
-            - wallbox
-            _title: Pinho Walls in a Box
-            _updated_at: '2022-01-03T17:14:41.042Z'
+            _price:
+              active: false
+              billing_duration_amount: "2"
+              billing_duration_unit: years
+              billing_period: monthly
+              description: Basic Model - No Wifi
+              notice_time_amount: "1"
+              notice_time_unit: months
+              price_display_in_journeys: show_price
+              renewal_duration_amount: "1"
+              renewal_duration_unit: years
+              sales_tax: standard
+              tax_behavior: exclusive
+              termination_time_amount: "1"
+              termination_time_unit: months
+              type: recurring
+              unit_amount: 23045
+              unit_amount_currency: EUR
+              unit_amount_decimal: "230.4524"
+              _created_at: "2021-12-15T12:34:59.579Z"
+              _id: efe9ff76-865c-4287-8de9-422cfc741ff9
+              _org: "739224"
+              _schema: price
+              _tags:
+                - basic-model
+                - wifi
+              _title: Basic Model - No Wifi
+              _updated_at: "2021-12-31T13:07:51.392Z"
+            _product:
+              active: true
+              code: PWB
+              feature:
+                - _tags: []
+                  feature: Pure Energon Fueled
+                - _tags: []
+                  feature: Mobile App Available
+              name: Pinho Walls in a Box
+              price_options:
+                $relation:
+                  - entity_id: efe9ff76-865c-4287-8de9-422cfc741ff9
+              type: product
+              _created_at: "2021-12-15T12:35:08.438Z"
+              _id: beefa9f1-29a8-448e-94d5-ebf1963428f8
+              _org: "739224"
+              _schema: product
+              _tags:
+                - energon
+                - eco-friendly
+                - wallbox
+              _title: Pinho Walls in a Box
+              _updated_at: "2022-01-03T17:14:41.042Z"
         opportunity_number: 20220105-768854819
         participants:
           $relation:
-          - entity_id: 9bbfdaa9-22b2-4100-a256-67600202e3f4
-            relationText: Alex Marques
-            _schema: contact
-            _tags: []
+            - entity_id: 9bbfdaa9-22b2-4100-a256-67600202e3f4
+              relationText: Alex Marques
+              _schema: contact
+              _tags: []
         status: Lead
         total_details:
           amount_tax: 4379
           breakdown:
             recurrences:
-            - amount_subtotal: 23045
-              amount_tax: 4379
-              amount_total: 27424
-              billing_period: monthly
-              type: recurring
+              - amount_subtotal: 23045
+                amount_tax: 4379
+                amount_total: 27424
+                billing_period: monthly
+                type: recurring
             taxes:
-            - amount: 4379
-              rate: standard
+              - amount: 4379
+                rate: standard
     EmailTemplateEntity:
       description: Example of an email template entity
       value:
@@ -3693,11 +3396,11 @@ components:
         subject: Example Subject
         system_template: false
         to:
-        - id: '1'
-          name: Contact Name
-          email: Contact email
+          - id: "1"
+            name: Contact Name
+            email: Contact email
         _tags:
-        - Bestellung
+          - Bestellung
     FileEntity:
       description: Example of a file template entity
       value:
@@ -3711,20 +3414,19 @@ components:
       value:
         name: Name
         assigned_to":
-        - '10000563'
+          - "10000563"
         status: Unassigned
         order: 123
         tags:
-        - tag1
+          - tag1
     SubmissionEntity:
       description: Example of a submission step template entity
       value:
         mapped_entities:
           $relation:
-          - entity_id: 4ffb071c-2821-4505-86d0-09b801ffd97a
-            relationText: 4ffb071c-2821-4505-86d0-09b801ffd97a
-            _schema: price
-            _tags: []
+            - entity_id: 4ffb071c-2821-4505-86d0-09b801ffd97a
+              relationText: 4ffb071c-2821-4505-86d0-09b801ffd97a
+              _schema: price
+              _tags: []
 servers:
-- url: https://entity.sls.epilot.io
-
+  - url: https://entity.sls.epilot.io

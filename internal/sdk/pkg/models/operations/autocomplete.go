@@ -3,6 +3,9 @@
 package operations
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -17,10 +20,102 @@ type AutocompleteRequest struct {
 	Slug *string `queryParam:"style=form,explode=true,name=slug"`
 }
 
+type Autocomplete200ApplicationJSONResultsType string
+
+const (
+	Autocomplete200ApplicationJSONResultsTypeStr      Autocomplete200ApplicationJSONResultsType = "str"
+	Autocomplete200ApplicationJSONResultsTypeBoolean  Autocomplete200ApplicationJSONResultsType = "boolean"
+	Autocomplete200ApplicationJSONResultsTypeMapOfany Autocomplete200ApplicationJSONResultsType = "mapOfany"
+)
+
+type Autocomplete200ApplicationJSONResults struct {
+	Str      *string
+	Boolean  *bool
+	MapOfany map[string]interface{}
+
+	Type Autocomplete200ApplicationJSONResultsType
+}
+
+func CreateAutocomplete200ApplicationJSONResultsStr(str string) Autocomplete200ApplicationJSONResults {
+	typ := Autocomplete200ApplicationJSONResultsTypeStr
+
+	return Autocomplete200ApplicationJSONResults{
+		Str:  &str,
+		Type: typ,
+	}
+}
+
+func CreateAutocomplete200ApplicationJSONResultsBoolean(boolean bool) Autocomplete200ApplicationJSONResults {
+	typ := Autocomplete200ApplicationJSONResultsTypeBoolean
+
+	return Autocomplete200ApplicationJSONResults{
+		Boolean: &boolean,
+		Type:    typ,
+	}
+}
+
+func CreateAutocomplete200ApplicationJSONResultsMapOfany(mapOfany map[string]interface{}) Autocomplete200ApplicationJSONResults {
+	typ := Autocomplete200ApplicationJSONResultsTypeMapOfany
+
+	return Autocomplete200ApplicationJSONResults{
+		MapOfany: mapOfany,
+		Type:     typ,
+	}
+}
+
+func (u *Autocomplete200ApplicationJSONResults) UnmarshalJSON(data []byte) error {
+	var d *json.Decoder
+
+	str := new(string)
+	d = json.NewDecoder(bytes.NewReader(data))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&str); err == nil {
+		u.Str = str
+		u.Type = Autocomplete200ApplicationJSONResultsTypeStr
+		return nil
+	}
+
+	boolean := new(bool)
+	d = json.NewDecoder(bytes.NewReader(data))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&boolean); err == nil {
+		u.Boolean = boolean
+		u.Type = Autocomplete200ApplicationJSONResultsTypeBoolean
+		return nil
+	}
+
+	mapOfany := map[string]interface{}{}
+	d = json.NewDecoder(bytes.NewReader(data))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&mapOfany); err == nil {
+		u.MapOfany = mapOfany
+		u.Type = Autocomplete200ApplicationJSONResultsTypeMapOfany
+		return nil
+	}
+
+	return errors.New("could not unmarshal into supported union types")
+}
+
+func (u Autocomplete200ApplicationJSONResults) MarshalJSON() ([]byte, error) {
+	if u.Str != nil {
+		return json.Marshal(u.Str)
+	}
+
+	if u.Boolean != nil {
+		return json.Marshal(u.Boolean)
+	}
+
+	if u.MapOfany != nil {
+		return json.Marshal(u.MapOfany)
+	}
+
+	return nil, nil
+}
+
 // Autocomplete200ApplicationJSON - Success
 type Autocomplete200ApplicationJSON struct {
-	Hits    *float64      `json:"hits,omitempty"`
-	Results []interface{} `json:"results,omitempty"`
+	Hits    *float64                                `json:"hits,omitempty"`
+	Results []Autocomplete200ApplicationJSONResults `json:"results,omitempty"`
 }
 
 type AutocompleteResponse struct {

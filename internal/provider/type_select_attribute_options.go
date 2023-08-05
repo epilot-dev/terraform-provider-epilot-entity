@@ -5,6 +5,6 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type SelectAttributeOptions struct {
-	SelectAttributeOptionsOption *SelectAttributeOptionsOption `tfsdk:"select_attribute_options_option"`
 	Str                          types.String                  `tfsdk:"str"`
+	SelectAttributeOptionsOption *MultiSelectAttributeOptions2 `tfsdk:"select_attribute_options_option"`
 }

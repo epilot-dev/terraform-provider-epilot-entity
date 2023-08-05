@@ -13,11 +13,14 @@ type UpdateClassificationsForTaxonomyRequest struct {
 	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
 }
 
+type UpdateClassificationsForTaxonomy200ApplicationJSONDeleted struct {
+}
+
 // UpdateClassificationsForTaxonomy200ApplicationJSON - Taxonomies classifications
 type UpdateClassificationsForTaxonomy200ApplicationJSON struct {
-	Created []shared.TaxonomyClassification `json:"created,omitempty"`
-	Deleted map[string]interface{}          `json:"deleted,omitempty"`
-	Updated []shared.TaxonomyClassification `json:"updated,omitempty"`
+	Created []shared.TaxonomyClassification                            `json:"created,omitempty"`
+	Deleted *UpdateClassificationsForTaxonomy200ApplicationJSONDeleted `json:"deleted,omitempty"`
+	Updated []shared.TaxonomyClassification                            `json:"updated,omitempty"`
 }
 
 type UpdateClassificationsForTaxonomyResponse struct {

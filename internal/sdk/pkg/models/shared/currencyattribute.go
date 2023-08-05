@@ -9,6 +9,11 @@ import (
 	"fmt"
 )
 
+// CurrencyAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type CurrencyAttributeConstraints struct {
+}
+
 // CurrencyAttributeCurrency1 - A currency configuration
 type CurrencyAttributeCurrency1 struct {
 	Code        string  `json:"code"`
@@ -91,7 +96,7 @@ type CurrencyAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints map[string]interface{} `json:"constraints,omitempty"`
+	Constraints *CurrencyAttributeConstraints `json:"constraints,omitempty"`
 	// An array of currency configurations with a country code (ISO-4217)
 	Currency             []CurrencyAttributeCurrency `json:"currency"`
 	CurrencySelectorOnly *bool                       `json:"currency_selector_only,omitempty"`

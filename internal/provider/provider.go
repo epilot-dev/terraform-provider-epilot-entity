@@ -37,6 +37,12 @@ func (p *EpilotEntityProvider) Metadata(ctx context.Context, req provider.Metada
 
 func (p *EpilotEntityProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		MarkdownDescription: `Entity API: Flexible data layer for epilot Entities.` + "\n" +
+			`` + "\n" +
+			`Use this API configure and access your business objects like Contacts, Opportunities and Products.` + "\n" +
+			`` + "\n" +
+			`[Feature Documentation](https://docs.epilot.io/docs/entities/flexible-entities)` + "\n" +
+			``,
 		Attributes: map[string]schema.Attribute{
 			"server_url": schema.StringAttribute{
 				MarkdownDescription: "Server URL (defaults to https://entity.sls.epilot.io)",
@@ -105,7 +111,10 @@ func (p *EpilotEntityProvider) Resources(ctx context.Context) []func() resource.
 }
 
 func (p *EpilotEntityProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewEntityDataSource,
+		NewSchemaDataSource,
+	}
 }
 
 func New(version string) func() provider.Provider {

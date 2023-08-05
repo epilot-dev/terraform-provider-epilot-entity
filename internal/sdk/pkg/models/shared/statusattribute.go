@@ -9,6 +9,11 @@ import (
 	"fmt"
 )
 
+// StatusAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type StatusAttributeConstraints struct {
+}
+
 type StatusAttributeOptions2 struct {
 	Title *string `json:"title,omitempty"`
 	Value string  `json:"value"`
@@ -112,9 +117,9 @@ type StatusAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	Constraints  *StatusAttributeConstraints `json:"constraints,omitempty"`
+	DefaultValue interface{}                 `json:"default_value,omitempty"`
+	Deprecated   *bool                       `json:"deprecated,omitempty"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
 	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
 	// This attribute should only be active when the feature flag is enabled

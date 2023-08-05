@@ -269,76 +269,8 @@ func (u EntitySchemaUIConfigEditView) MarshalJSON() ([]byte, error) {
 	return nil, nil
 }
 
-type EntitySchemaUIConfigListItemSummaryAttributesType string
-
-const (
-	EntitySchemaUIConfigListItemSummaryAttributesTypeSummaryAttribute EntitySchemaUIConfigListItemSummaryAttributesType = "SummaryAttribute"
-	EntitySchemaUIConfigListItemSummaryAttributesTypeStr              EntitySchemaUIConfigListItemSummaryAttributesType = "str"
-)
-
-type EntitySchemaUIConfigListItemSummaryAttributes struct {
-	SummaryAttribute *SummaryAttribute
-	Str              *string
-
-	Type EntitySchemaUIConfigListItemSummaryAttributesType
-}
-
-func CreateEntitySchemaUIConfigListItemSummaryAttributesSummaryAttribute(summaryAttribute SummaryAttribute) EntitySchemaUIConfigListItemSummaryAttributes {
-	typ := EntitySchemaUIConfigListItemSummaryAttributesTypeSummaryAttribute
-
-	return EntitySchemaUIConfigListItemSummaryAttributes{
-		SummaryAttribute: &summaryAttribute,
-		Type:             typ,
-	}
-}
-
-func CreateEntitySchemaUIConfigListItemSummaryAttributesStr(str string) EntitySchemaUIConfigListItemSummaryAttributes {
-	typ := EntitySchemaUIConfigListItemSummaryAttributesTypeStr
-
-	return EntitySchemaUIConfigListItemSummaryAttributes{
-		Str:  &str,
-		Type: typ,
-	}
-}
-
-func (u *EntitySchemaUIConfigListItemSummaryAttributes) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
-
-	summaryAttribute := new(SummaryAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&summaryAttribute); err == nil {
-		u.SummaryAttribute = summaryAttribute
-		u.Type = EntitySchemaUIConfigListItemSummaryAttributesTypeSummaryAttribute
-		return nil
-	}
-
-	str := new(string)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&str); err == nil {
-		u.Str = str
-		u.Type = EntitySchemaUIConfigListItemSummaryAttributesTypeStr
-		return nil
-	}
-
-	return errors.New("could not unmarshal into supported union types")
-}
-
-func (u EntitySchemaUIConfigListItemSummaryAttributes) MarshalJSON() ([]byte, error) {
-	if u.SummaryAttribute != nil {
-		return json.Marshal(u.SummaryAttribute)
-	}
-
-	if u.Str != nil {
-		return json.Marshal(u.Str)
-	}
-
-	return nil, nil
-}
-
 type EntitySchemaUIConfigListItem struct {
-	SummaryAttributes []EntitySchemaUIConfigListItemSummaryAttributes `json:"summary_attributes,omitempty"`
+	SummaryAttributes []SummaryAttribute `json:"summary_attributes,omitempty"`
 }
 
 type EntitySchemaUIConfigSharing struct {

@@ -4,7 +4,7 @@ package provider
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
-type SelectAttributeOptionsOption struct {
+type MultiSelectAttributeOptions2 struct {
 	Title types.String `tfsdk:"title"`
 	Value types.String `tfsdk:"value"`
 }
