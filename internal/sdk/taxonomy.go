@@ -71,7 +71,7 @@ func (s *taxonomy) GetTaxonomy(ctx context.Context, request operations.GetTaxono
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.Taxonomy
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.Taxonomy = out
@@ -124,7 +124,7 @@ func (s *taxonomy) ListTaxonomies(ctx context.Context) (*operations.ListTaxonomi
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.ListTaxonomies200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ListTaxonomies200ApplicationJSONObject = out
@@ -145,7 +145,10 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -172,6 +175,7 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -188,7 +192,7 @@ func (s *taxonomy) TaxonomiesClassificationsSearch(ctx context.Context, request 
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.TaxonomiesClassificationsSearch200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.TaxonomiesClassificationsSearch200ApplicationJSONObject = out
@@ -248,7 +252,7 @@ func (s *taxonomy) TaxonomyAutocomplete(ctx context.Context, request operations.
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.TaxonomyAutocomplete200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.TaxonomyAutocomplete200ApplicationJSONObject = out
@@ -272,7 +276,10 @@ func (s *taxonomy) UpdateClassificationsForTaxonomy(ctx context.Context, request
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -295,6 +302,7 @@ func (s *taxonomy) UpdateClassificationsForTaxonomy(ctx context.Context, request
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -311,7 +319,7 @@ func (s *taxonomy) UpdateClassificationsForTaxonomy(ctx context.Context, request
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.UpdateClassificationsForTaxonomy200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.UpdateClassificationsForTaxonomy200ApplicationJSONObject = out

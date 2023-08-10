@@ -72,7 +72,7 @@ func (s *entities) Autocomplete(ctx context.Context, request operations.Autocomp
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.Autocomplete200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.Autocomplete200ApplicationJSONObject = out
@@ -122,7 +122,10 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -149,6 +152,7 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -165,7 +169,7 @@ func (s *entities) CreateEntity(ctx context.Context, request operations.CreateEn
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.EntityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.EntityItem = out
@@ -346,7 +350,7 @@ func (s *entities) GetEntity(ctx context.Context, request operations.GetEntityRe
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.GetEntity200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.GetEntity200ApplicationJSONObject = out
@@ -398,7 +402,10 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PATCH", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "PATCH", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -425,6 +432,7 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -441,7 +449,7 @@ func (s *entities) PatchEntity(ctx context.Context, request operations.PatchEnti
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.EntityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.EntityItem = out
@@ -531,7 +539,10 @@ func (s *entities) SearchEntities(ctx context.Context, request shared.EntitySear
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -554,6 +565,7 @@ func (s *entities) SearchEntities(ctx context.Context, request shared.EntitySear
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -570,7 +582,7 @@ func (s *entities) SearchEntities(ctx context.Context, request shared.EntitySear
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.EntitySearchResults
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.EntitySearchResults = out
@@ -623,7 +635,10 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "PUT", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -650,6 +665,7 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -666,7 +682,7 @@ func (s *entities) UpdateEntity(ctx context.Context, request operations.UpdateEn
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.EntityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.EntityItem = out
@@ -698,7 +714,10 @@ func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEn
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PATCH", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "PATCH", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -725,6 +744,7 @@ func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEn
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -743,7 +763,7 @@ func (s *entities) UpsertEntity(ctx context.Context, request operations.UpsertEn
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.EntityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.EntityItem = out

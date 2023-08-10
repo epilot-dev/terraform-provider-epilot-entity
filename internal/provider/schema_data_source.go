@@ -173,7 +173,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"string",
 										),
 									},
-									Description: `must be one of [string]`,
+									Description: `must be one of ["string"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -282,7 +282,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"link",
 										),
 									},
-									Description: `must be one of [link]`,
+									Description: `must be one of ["link"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -392,7 +392,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"datetime",
 										),
 									},
-									Description: `must be one of [date, datetime]`,
+									Description: `must be one of ["date", "datetime"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -501,7 +501,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"country",
 										),
 									},
-									Description: `must be one of [country]`,
+									Description: `must be one of ["country"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -610,7 +610,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"boolean",
 										),
 									},
-									Description: `must be one of [boolean]`,
+									Description: `must be one of ["boolean"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -748,7 +748,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"radio",
 										),
 									},
-									Description: `must be one of [select, radio]`,
+									Description: `must be one of ["select", "radio"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -894,7 +894,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"checkbox",
 										),
 									},
-									Description: `must be one of [multiselect, checkbox]`,
+									Description: `must be one of ["multiselect", "checkbox"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1027,7 +1027,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"status",
 										),
 									},
-									Description: `must be one of [status]`,
+									Description: `must be one of ["status"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1143,7 +1143,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"sequence",
 										),
 									},
-									Description: `must be one of [sequence]`,
+									Description: `must be one of ["sequence"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1171,7 +1171,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"create_from_existing",
 													),
 												},
-												MarkdownDescription: `must be one of [add_existing, create_new, create_from_existing]` + "\n" +
+												MarkdownDescription: `must be one of ["add_existing", "create_new", "create_from_existing"]` + "\n" +
 													`The action type. Currently supported actions:` + "\n" +
 													`` + "\n" +
 													`| action | description |` + "\n" +
@@ -1281,7 +1281,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"large",
 										),
 									},
-									Description: `must be one of [small, medium, large]`,
+									Description: `must be one of ["small", "medium", "large"]`,
 								},
 								"edit_mode": schema.StringAttribute{
 									Computed: true,
@@ -1290,7 +1290,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"list-view",
 										),
 									},
-									Description: `must be one of [list-view]`,
+									Description: `must be one of ["list-view"]`,
 								},
 								"enable_relation_picker": schema.BoolAttribute{
 									Computed:    true,
@@ -1360,7 +1360,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"strong",
 										),
 									},
-									MarkdownDescription: `must be one of [weak, strong]` + "\n" +
+									MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
 										`Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.`,
 								},
 								"relation_type": schema.StringAttribute{
@@ -1371,7 +1371,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"has_one",
 										),
 									},
-									Description: `must be one of [has_many, has_one]`,
+									Description: `must be one of ["has_many", "has_one"]`,
 								},
 								"render_condition": schema.StringAttribute{
 									Computed: true,
@@ -1434,7 +1434,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"relation",
 										),
 									},
-									Description: `must be one of [relation]`,
+									Description: `must be one of ["relation"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1546,7 +1546,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"relation_user",
 										),
 									},
-									Description: `must be one of [relation_user]`,
+									Description: `must be one of ["relation_user"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1658,7 +1658,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"relation_address",
 										),
 									},
-									Description: `must be one of [relation_address]`,
+									Description: `must be one of ["relation_address"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1770,7 +1770,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"relation_payment_method",
 										),
 									},
-									Description: `must be one of [relation_payment_method]`,
+									Description: `must be one of ["relation_payment_method"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -1911,7 +1911,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"currency",
 										),
 									},
-									Description: `must be one of [currency]`,
+									Description: `must be one of ["currency"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2010,7 +2010,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"strong",
 										),
 									},
-									MarkdownDescription: `must be one of [weak, strong]` + "\n" +
+									MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
 										`Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.`,
 								},
 								"render_condition": schema.StringAttribute{
@@ -2048,7 +2048,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"date",
 										),
 									},
-									Description: `must be one of [string, phone, email, address, relation, payment, price_component, date]`,
+									Description: `must be one of ["string", "phone", "email", "address", "relation", "payment", "price_component", "date"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2165,7 +2165,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"tags",
 										),
 									},
-									Description: `must be one of [tags]`,
+									Description: `must be one of ["tags"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2277,7 +2277,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"number",
 										),
 									},
-									Description: `must be one of [number]`,
+									Description: `must be one of ["number"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2393,7 +2393,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"consent",
 										),
 									},
-									Description: `must be one of [consent]`,
+									Description: `must be one of ["consent"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2502,7 +2502,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"internal",
 										),
 									},
-									Description: `must be one of [internal]`,
+									Description: `must be one of ["internal"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2611,7 +2611,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"ordered_list",
 										),
 									},
-									Description: `must be one of [ordered_list]`,
+									Description: `must be one of ["ordered_list"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2646,7 +2646,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"private",
 										),
 									},
-									Description: `must be one of [public-read, private]`,
+									Description: `must be one of ["public-read", "private"]`,
 								},
 								"default_value": schema.StringAttribute{
 									Computed: true,
@@ -2749,7 +2749,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"file",
 										),
 									},
-									Description: `must be one of [image, file]`,
+									Description: `must be one of ["image", "file"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2858,7 +2858,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"computed",
 										),
 									},
-									Description: `must be one of [computed]`,
+									Description: `must be one of ["computed"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -2967,7 +2967,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"partner_status",
 										),
 									},
-									Description: `must be one of [partner_status]`,
+									Description: `must be one of ["partner_status"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -3076,7 +3076,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"invitation_email",
 										),
 									},
-									Description: `must be one of [invitation_email]`,
+									Description: `must be one of ["invitation_email"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -3185,7 +3185,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"automation",
 										),
 									},
-									Description: `must be one of [automation]`,
+									Description: `must be one of ["automation"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -3294,7 +3294,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"internal_user",
 										),
 									},
-									Description: `must be one of [internal_user]`,
+									Description: `must be one of ["internal_user"]`,
 								},
 								"value_formatter": schema.StringAttribute{
 									Computed: true,
@@ -3416,7 +3416,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											"purpose",
 										),
 									},
-									Description: `must be one of [purpose]`,
+									Description: `must be one of ["purpose"]`,
 								},
 								"updated_at": schema.StringAttribute{
 									Computed: true,
@@ -3557,7 +3557,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"string",
 													),
 												},
-												Description: `must be one of [string]`,
+												Description: `must be one of ["string"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -3666,7 +3666,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"link",
 													),
 												},
-												Description: `must be one of [link]`,
+												Description: `must be one of ["link"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -3776,7 +3776,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"datetime",
 													),
 												},
-												Description: `must be one of [date, datetime]`,
+												Description: `must be one of ["date", "datetime"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -3885,7 +3885,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"country",
 													),
 												},
-												Description: `must be one of [country]`,
+												Description: `must be one of ["country"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -3994,7 +3994,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"boolean",
 													),
 												},
-												Description: `must be one of [boolean]`,
+												Description: `must be one of ["boolean"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -4132,7 +4132,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"radio",
 													),
 												},
-												Description: `must be one of [select, radio]`,
+												Description: `must be one of ["select", "radio"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -4278,7 +4278,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"checkbox",
 													),
 												},
-												Description: `must be one of [multiselect, checkbox]`,
+												Description: `must be one of ["multiselect", "checkbox"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -4411,7 +4411,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"status",
 													),
 												},
-												Description: `must be one of [status]`,
+												Description: `must be one of ["status"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -4527,7 +4527,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"sequence",
 													),
 												},
-												Description: `must be one of [sequence]`,
+												Description: `must be one of ["sequence"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -4555,7 +4555,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																	"create_from_existing",
 																),
 															},
-															MarkdownDescription: `must be one of [add_existing, create_new, create_from_existing]` + "\n" +
+															MarkdownDescription: `must be one of ["add_existing", "create_new", "create_from_existing"]` + "\n" +
 																`The action type. Currently supported actions:` + "\n" +
 																`` + "\n" +
 																`| action | description |` + "\n" +
@@ -4665,7 +4665,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"large",
 													),
 												},
-												Description: `must be one of [small, medium, large]`,
+												Description: `must be one of ["small", "medium", "large"]`,
 											},
 											"edit_mode": schema.StringAttribute{
 												Computed: true,
@@ -4674,7 +4674,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"list-view",
 													),
 												},
-												Description: `must be one of [list-view]`,
+												Description: `must be one of ["list-view"]`,
 											},
 											"enable_relation_picker": schema.BoolAttribute{
 												Computed:    true,
@@ -4744,7 +4744,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"strong",
 													),
 												},
-												MarkdownDescription: `must be one of [weak, strong]` + "\n" +
+												MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
 													`Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.`,
 											},
 											"relation_type": schema.StringAttribute{
@@ -4755,7 +4755,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"has_one",
 													),
 												},
-												Description: `must be one of [has_many, has_one]`,
+												Description: `must be one of ["has_many", "has_one"]`,
 											},
 											"render_condition": schema.StringAttribute{
 												Computed: true,
@@ -4818,7 +4818,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"relation",
 													),
 												},
-												Description: `must be one of [relation]`,
+												Description: `must be one of ["relation"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -4930,7 +4930,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"relation_user",
 													),
 												},
-												Description: `must be one of [relation_user]`,
+												Description: `must be one of ["relation_user"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5042,7 +5042,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"relation_address",
 													),
 												},
-												Description: `must be one of [relation_address]`,
+												Description: `must be one of ["relation_address"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5154,7 +5154,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"relation_payment_method",
 													),
 												},
-												Description: `must be one of [relation_payment_method]`,
+												Description: `must be one of ["relation_payment_method"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5295,7 +5295,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"currency",
 													),
 												},
-												Description: `must be one of [currency]`,
+												Description: `must be one of ["currency"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5394,7 +5394,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"strong",
 													),
 												},
-												MarkdownDescription: `must be one of [weak, strong]` + "\n" +
+												MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
 													`Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.`,
 											},
 											"render_condition": schema.StringAttribute{
@@ -5432,7 +5432,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"date",
 													),
 												},
-												Description: `must be one of [string, phone, email, address, relation, payment, price_component, date]`,
+												Description: `must be one of ["string", "phone", "email", "address", "relation", "payment", "price_component", "date"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5549,7 +5549,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"tags",
 													),
 												},
-												Description: `must be one of [tags]`,
+												Description: `must be one of ["tags"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5661,7 +5661,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"number",
 													),
 												},
-												Description: `must be one of [number]`,
+												Description: `must be one of ["number"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5777,7 +5777,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"consent",
 													),
 												},
-												Description: `must be one of [consent]`,
+												Description: `must be one of ["consent"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5886,7 +5886,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"internal",
 													),
 												},
-												Description: `must be one of [internal]`,
+												Description: `must be one of ["internal"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -5995,7 +5995,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"ordered_list",
 													),
 												},
-												Description: `must be one of [ordered_list]`,
+												Description: `must be one of ["ordered_list"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6030,7 +6030,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"private",
 													),
 												},
-												Description: `must be one of [public-read, private]`,
+												Description: `must be one of ["public-read", "private"]`,
 											},
 											"default_value": schema.StringAttribute{
 												Computed: true,
@@ -6133,7 +6133,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"file",
 													),
 												},
-												Description: `must be one of [image, file]`,
+												Description: `must be one of ["image", "file"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6242,7 +6242,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"computed",
 													),
 												},
-												Description: `must be one of [computed]`,
+												Description: `must be one of ["computed"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6351,7 +6351,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"partner_status",
 													),
 												},
-												Description: `must be one of [partner_status]`,
+												Description: `must be one of ["partner_status"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6460,7 +6460,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"invitation_email",
 													),
 												},
-												Description: `must be one of [invitation_email]`,
+												Description: `must be one of ["invitation_email"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6569,7 +6569,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"automation",
 													),
 												},
-												Description: `must be one of [automation]`,
+												Description: `must be one of ["automation"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6678,7 +6678,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"internal_user",
 													),
 												},
-												Description: `must be one of [internal_user]`,
+												Description: `must be one of ["internal_user"]`,
 											},
 											"value_formatter": schema.StringAttribute{
 												Computed: true,
@@ -6800,7 +6800,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														"purpose",
 													),
 												},
-												Description: `must be one of [purpose]`,
+												Description: `must be one of ["purpose"]`,
 											},
 											"updated_at": schema.StringAttribute{
 												Computed: true,
@@ -6948,7 +6948,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									"nested",
 								),
 							},
-							Description: `must be one of [keyword, text, boolean, integer, long, float, date, flattened, nested]`,
+							Description: `must be one of ["keyword", "text", "boolean", "integer", "long", "float", "date", "flattened", "nested"]`,
 						},
 					},
 				},
@@ -7085,7 +7085,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"default",
 											),
 										},
-										Description: `must be one of [default]`,
+										Description: `must be one of ["default"]`,
 									},
 								},
 							},
@@ -7102,7 +7102,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"redirect",
 											),
 										},
-										Description: `must be one of [redirect]`,
+										Description: `must be one of ["redirect"]`,
 									},
 								},
 							},
@@ -7116,7 +7116,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"disabled",
 											),
 										},
-										Description: `must be one of [disabled]`,
+										Description: `must be one of ["disabled"]`,
 									},
 								},
 							},
@@ -7153,7 +7153,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"default",
 											),
 										},
-										Description: `must be one of [default]`,
+										Description: `must be one of ["default"]`,
 									},
 								},
 							},
@@ -7170,7 +7170,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"redirect",
 											),
 										},
-										Description: `must be one of [redirect]`,
+										Description: `must be one of ["redirect"]`,
 									},
 								},
 							},
@@ -7184,7 +7184,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"disabled",
 											),
 										},
-										Description: `must be one of [disabled]`,
+										Description: `must be one of ["disabled"]`,
 									},
 								},
 							},
@@ -7273,7 +7273,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"default",
 											),
 										},
-										Description: `must be one of [default]`,
+										Description: `must be one of ["default"]`,
 									},
 								},
 							},
@@ -7290,7 +7290,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"redirect",
 											),
 										},
-										Description: `must be one of [redirect]`,
+										Description: `must be one of ["redirect"]`,
 									},
 								},
 							},
@@ -7304,7 +7304,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"disabled",
 											),
 										},
-										Description: `must be one of [disabled]`,
+										Description: `must be one of ["disabled"]`,
 									},
 								},
 							},
@@ -7348,7 +7348,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																	"entity",
 																),
 															},
-															Description: `must be one of [entity]`,
+															Description: `must be one of ["entity"]`,
 														},
 													},
 												},
@@ -7373,7 +7373,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																	"link",
 																),
 															},
-															Description: `must be one of [link]`,
+															Description: `must be one of ["link"]`,
 														},
 														"uri": schema.StringAttribute{
 															Computed: true,
@@ -7425,7 +7425,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"default",
 											),
 										},
-										Description: `must be one of [default]`,
+										Description: `must be one of ["default"]`,
 									},
 								},
 							},
@@ -7442,7 +7442,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"redirect",
 											),
 										},
-										Description: `must be one of [redirect]`,
+										Description: `must be one of ["redirect"]`,
 									},
 								},
 							},
@@ -7456,7 +7456,7 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												"disabled",
 											),
 										},
-										Description: `must be one of [disabled]`,
+										Description: `must be one of ["disabled"]`,
 									},
 								},
 							},
@@ -7526,6 +7526,9 @@ func (r *SchemaDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	res, err := r.client.Schemas.GetSchema(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {

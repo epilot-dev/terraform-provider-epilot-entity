@@ -36,7 +36,10 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -59,6 +62,7 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -75,7 +79,7 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.SavedViewItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.SavedViewItem = out
@@ -178,7 +182,7 @@ func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSav
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.GetSavedView200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.GetSavedView200ApplicationJSONObject = out
@@ -231,7 +235,7 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.ListSavedViews200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ListSavedViews200ApplicationJSONObject = out
@@ -255,7 +259,10 @@ func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.Upd
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "PUT", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -278,6 +285,7 @@ func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.Upd
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -294,7 +302,7 @@ func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.Upd
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.SavedViewItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.SavedViewItem = out

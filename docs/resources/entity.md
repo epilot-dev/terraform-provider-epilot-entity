@@ -17,20 +17,20 @@ Entity Resource
 
 ### Required
 
+- `created_at` (String)
+- `org` (String) Organization Id the entity belongs to
+- `schema` (String) URL-friendly identifier for the entity schema
 - `slug` (String) Entity Schema
+- `title` (String) Title of entity
+- `updated_at` (String)
 
 ### Optional
 
 - `entity` (String) Parsed as JSON.
+- `tags` (List of String)
 
 ### Read-Only
 
-- `created_at` (String)
 - `id` (String) The ID of this resource.
-- `org` (String)
-- `schema` (String)
-- `tags` (List of String)
-- `title` (String)
-- `updated_at` (String)
 
 

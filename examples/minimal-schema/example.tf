@@ -16,9 +16,9 @@ variable "epilot_api_key" {
 }
 
 resource "epilot-entity_schema" "test" {
-  slug   = "tfentity"
-  name   = "Terraform Entity"
-  plural = "Terraform Entities"
+  slug           = "tfentity"
+  name           = "Terraform Entity"
+  plural         = "Terraform Entities"
   title_template = "{{ test }}"
   attributes = [
     {
@@ -36,9 +36,9 @@ resource "epilot-entity_schema" "test" {
       title = "Attributes"
       ui_hooks = [
         {
-          hook = "EntityDetailsV2:Tab"
+          hook      = "EntityDetailsV2:Tab"
           component = "EntityOverview"
-          title = "Overview"
+          title     = "Overview"
         }
       ]
     }

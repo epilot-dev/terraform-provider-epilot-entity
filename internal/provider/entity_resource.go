@@ -202,6 +202,9 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 	res, err := r.client.Entities.CreateEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -249,6 +252,9 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 	res, err := r.client.Entities.GetEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -341,6 +347,9 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 	res, err := r.client.Entities.UpdateEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -388,6 +397,9 @@ func (r *EntityResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	res, err := r.client.Entities.DeleteEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {

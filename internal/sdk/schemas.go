@@ -122,7 +122,7 @@ func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.EntitySchemaItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.EntitySchemaItem = out
@@ -178,7 +178,7 @@ func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetS
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.GetSchemaVersions200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.GetSchemaVersions200ApplicationJSONObject = out
@@ -231,7 +231,7 @@ func (s *schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSch
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.ListSchemaBlueprints200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ListSchemaBlueprints200ApplicationJSONObject = out
@@ -288,7 +288,7 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.ListSchemas200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ListSchemas200ApplicationJSONObject = out
@@ -348,7 +348,7 @@ func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, requ
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.ListTaxonomyClassificationsForSchema200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ListTaxonomyClassificationsForSchema200ApplicationJSONObject = out
@@ -372,7 +372,10 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "PUT", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -399,6 +402,7 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -415,7 +419,7 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.PutSchema200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.PutSchema200ApplicationJSONObject = out

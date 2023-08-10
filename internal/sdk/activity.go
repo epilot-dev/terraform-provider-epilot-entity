@@ -75,7 +75,7 @@ func (s *activity) AttachActivity(ctx context.Context, request operations.Attach
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.ActivityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ActivityItem = out
@@ -99,7 +99,10 @@ func (s *activity) CreateActivity(ctx context.Context, request operations.Create
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -126,6 +129,7 @@ func (s *activity) CreateActivity(ctx context.Context, request operations.Create
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -142,7 +146,7 @@ func (s *activity) CreateActivity(ctx context.Context, request operations.Create
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.ActivityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ActivityItem = out
@@ -202,7 +206,7 @@ func (s *activity) GetActivity(ctx context.Context, request operations.GetActivi
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.ActivityItem
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.ActivityItem = out
@@ -262,7 +266,7 @@ func (s *activity) GetEntityActivityFeed(ctx context.Context, request operations
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.GetEntityActivityFeed200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return nil, err
+				return res, err
 			}
 
 			res.GetEntityActivityFeed200ApplicationJSONObject = out
