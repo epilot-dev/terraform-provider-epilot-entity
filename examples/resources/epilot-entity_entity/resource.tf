@@ -1,4 +1,4 @@
-resource "epilot_entity_entity" "my_entity" {
+resource "epilot-entity_entity" "my_entity" {
   created_at = "2021-10-25T05:21:43.948Z"
   id         = "bd9d8d69-a674-4e0f-867c-c8796ed151a0"
   org        = "...my_org..."

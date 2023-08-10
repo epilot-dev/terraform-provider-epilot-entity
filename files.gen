@@ -222,13 +222,13 @@ internal/provider/provider.go
 examples/provider/provider.tf
 internal/provider/entity_resource.go
 internal/provider/entity_resource_sdk.go
-examples/resources/epilot_entity_entity/resource.tf
+examples/resources/epilot-entity_entity/resource.tf
 internal/provider/schema_resource.go
 internal/provider/schema_resource_sdk.go
-examples/resources/epilot_entity_schema/resource.tf
+examples/resources/epilot-entity_schema/resource.tf
 internal/provider/entity_data_source.go
 internal/provider/entity_data_source_sdk.go
-examples/data-sources/epilot_entity_entity/data-source.tf
+examples/data-sources/epilot-entity_entity/data-source.tf
 internal/provider/schema_data_source.go
 internal/provider/schema_data_source_sdk.go
-examples/data-sources/epilot_entity_schema/data-source.tf
+examples/data-sources/epilot-entity_schema/data-source.tf

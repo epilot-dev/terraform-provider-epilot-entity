@@ -1,4 +1,4 @@
-resource "epilot_entity_schema" "my_schema" {
+resource "epilot-entity_schema" "my_schema" {
   attributes = [
     {
       purpose = [
