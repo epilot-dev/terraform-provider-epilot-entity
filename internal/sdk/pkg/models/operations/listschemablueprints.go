@@ -3,19 +3,57 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
-// ListSchemaBlueprints200ApplicationJSON - Success
-type ListSchemaBlueprints200ApplicationJSON struct {
+// ListSchemaBlueprintsResponseBody - Success
+type ListSchemaBlueprintsResponseBody struct {
 	Results []shared.EntitySchemaItem `json:"results,omitempty"`
 }
 
+func (o *ListSchemaBlueprintsResponseBody) GetResults() []shared.EntitySchemaItem {
+	if o == nil {
+		return nil
+	}
+	return o.Results
+}
+
 type ListSchemaBlueprintsResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	ListSchemaBlueprints200ApplicationJSONObject *ListSchemaBlueprints200ApplicationJSON
+	Object *ListSchemaBlueprintsResponseBody
+}
+
+func (o *ListSchemaBlueprintsResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *ListSchemaBlueprintsResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *ListSchemaBlueprintsResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *ListSchemaBlueprintsResponse) GetObject() *ListSchemaBlueprintsResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

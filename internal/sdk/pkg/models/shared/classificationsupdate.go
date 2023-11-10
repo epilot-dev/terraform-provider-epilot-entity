@@ -7,3 +7,24 @@ type ClassificationsUpdate struct {
 	Delete []string                 `json:"delete,omitempty"`
 	Update []TaxonomyClassification `json:"update,omitempty"`
 }
+
+func (o *ClassificationsUpdate) GetCreate() []TaxonomyClassification {
+	if o == nil {
+		return nil
+	}
+	return o.Create
+}
+
+func (o *ClassificationsUpdate) GetDelete() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Delete
+}
+
+func (o *ClassificationsUpdate) GetUpdate() []TaxonomyClassification {
+	if o == nil {
+		return nil
+	}
+	return o.Update
+}

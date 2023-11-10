@@ -3,7 +3,8 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
@@ -12,19 +13,103 @@ type PatchEntityRequest struct {
 	// Activity to include in event feed
 	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
 	// Don't wait for the patch entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
+	Async *bool `default:"false" queryParam:"style=form,explode=true,name=async"`
 	// Dry Run mode = returns the patch result but doesn't perform the patch.
-	DryRun *bool `queryParam:"style=form,explode=true,name=dry_run"`
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dry_run"`
 	// Entity Id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Entity Schema
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (p PatchEntityRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PatchEntityRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *PatchEntityRequest) GetEntity() *shared.Entity {
+	if o == nil {
+		return nil
+	}
+	return o.Entity
+}
+
+func (o *PatchEntityRequest) GetActivityID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ActivityID
+}
+
+func (o *PatchEntityRequest) GetAsync() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Async
+}
+
+func (o *PatchEntityRequest) GetDryRun() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.DryRun
+}
+
+func (o *PatchEntityRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *PatchEntityRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type PatchEntityResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Entity was updated
-	EntityItem  *shared.EntityItem
-	StatusCode  int
+	EntityItem *shared.EntityItem
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+}
+
+func (o *PatchEntityResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *PatchEntityResponse) GetEntityItem() *shared.EntityItem {
+	if o == nil {
+		return nil
+	}
+	return o.EntityItem
+}
+
+func (o *PatchEntityResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *PatchEntityResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

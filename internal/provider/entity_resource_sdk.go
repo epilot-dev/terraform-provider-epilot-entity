@@ -4,13 +4,90 @@ package provider
 
 import (
 	"encoding/json"
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
 )
 
+func (r *EntityResourceModel) ToCreateSDKType() *shared.Entity {
+	createdAt := new(time.Time)
+	if !r.CreatedAt.IsUnknown() && !r.CreatedAt.IsNull() {
+		*createdAt, _ = time.Parse(time.RFC3339Nano, r.CreatedAt.ValueString())
+	} else {
+		createdAt = nil
+	}
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
+	org := new(string)
+	if !r.Org.IsUnknown() && !r.Org.IsNull() {
+		*org = r.Org.ValueString()
+	} else {
+		org = nil
+	}
+	schema := new(string)
+	if !r.Schema.IsUnknown() && !r.Schema.IsNull() {
+		*schema = r.Schema.ValueString()
+	} else {
+		schema = nil
+	}
+	var tags []string = nil
+	for _, tagsItem := range r.Tags {
+		tags = append(tags, tagsItem.ValueString())
+	}
+	title := new(string)
+	if !r.Title.IsUnknown() && !r.Title.IsNull() {
+		*title = r.Title.ValueString()
+	} else {
+		title = nil
+	}
+	updatedAt := new(time.Time)
+	if !r.UpdatedAt.IsUnknown() && !r.UpdatedAt.IsNull() {
+		*updatedAt, _ = time.Parse(time.RFC3339Nano, r.UpdatedAt.ValueString())
+	} else {
+		updatedAt = nil
+	}
+	var entity interface{}
+	if !r.Entity.IsUnknown() && !r.Entity.IsNull() {
+		_ = json.Unmarshal([]byte(r.Entity.ValueString()), &entity)
+	}
+	out := shared.Entity{
+		CreatedAt: createdAt,
+		ID:        id,
+		Org:       org,
+		Schema:    schema,
+		Tags:      tags,
+		Title:     title,
+		UpdatedAt: updatedAt,
+		Entity:    entity,
+	}
+	return &out
+}
+
+func (r *EntityResourceModel) ToGetSDKType() *shared.Entity {
+	out := r.ToCreateSDKType()
+	return out
+}
+
+func (r *EntityResourceModel) ToUpdateSDKType() *shared.Entity {
+	out := r.ToCreateSDKType()
+	return out
+}
+
+func (r *EntityResourceModel) ToDeleteSDKType() *shared.Entity {
+	out := r.ToCreateSDKType()
+	return out
+}
+
 func (r *EntityResourceModel) RefreshFromGetResponse(resp *shared.EntityItem) {
-	r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339))
+	if resp.CreatedAt != nil {
+		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
+	} else {
+		r.CreatedAt = types.StringNull()
+	}
 	r.ID = types.StringValue(resp.ID)
 	r.Org = types.StringValue(resp.Org)
 	r.Schema = types.StringValue(resp.Schema)
@@ -18,15 +95,21 @@ func (r *EntityResourceModel) RefreshFromGetResponse(resp *shared.EntityItem) {
 	for _, v := range resp.Tags {
 		r.Tags = append(r.Tags, types.StringValue(v))
 	}
-	r.Title = types.StringValue(resp.Title)
-	r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339))
-	if r.Entity.IsUnknown() {
-		if resp.Entity == nil {
-			r.Entity = types.StringNull()
-		} else {
-			entityResult, _ := json.Marshal(resp.Entity)
-			r.Entity = types.StringValue(string(entityResult))
-		}
+	if resp.Title != nil {
+		r.Title = types.StringValue(*resp.Title)
+	} else {
+		r.Title = types.StringNull()
+	}
+	if resp.UpdatedAt != nil {
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339Nano))
+	} else {
+		r.UpdatedAt = types.StringNull()
+	}
+	if resp.Entity == nil {
+		r.Entity = types.StringNull()
+	} else {
+		entityResult, _ := json.Marshal(resp.Entity)
+		r.Entity = types.StringValue(string(entityResult))
 	}
 }
 

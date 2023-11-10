@@ -5,40 +5,31 @@ package sdk
 import (
 	"bytes"
 	"context"
-	"epilot-entity/internal/sdk/pkg/models/operations"
-	"epilot-entity/internal/sdk/pkg/models/shared"
-	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/sdkerrors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"io"
 	"net/http"
 	"strings"
 )
 
-// schemas - Model Entities
-type schemas struct {
-	defaultClient  HTTPClient
-	securityClient HTTPClient
-	serverURL      string
-	language       string
-	sdkVersion     string
-	genVersion     string
+// Schemas - Model Entities
+type Schemas struct {
+	sdkConfiguration sdkConfiguration
 }
 
-func newSchemas(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *schemas {
-	return &schemas{
-		defaultClient:  defaultClient,
-		securityClient: securityClient,
-		serverURL:      serverURL,
-		language:       language,
-		sdkVersion:     sdkVersion,
-		genVersion:     genVersion,
+func newSchemas(sdkConfig sdkConfiguration) *Schemas {
+	return &Schemas{
+		sdkConfiguration: sdkConfig,
 	}
 }
 
 // DeleteSchema - deleteSchema
 // Delete a schema, or a specific version of a schema
-func (s *schemas) DeleteSchema(ctx context.Context, request operations.DeleteSchemaRequest) (*operations.DeleteSchemaResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) DeleteSchema(ctx context.Context, request operations.DeleteSchemaRequest) (*operations.DeleteSchemaResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -49,9 +40,9 @@ func (s *schemas) DeleteSchema(ctx context.Context, request operations.DeleteSch
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "*/*")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -84,8 +75,8 @@ func (s *schemas) DeleteSchema(ctx context.Context, request operations.DeleteSch
 
 // GetSchema - getSchema
 // By default gets the latest version of the Schema and to get the specific version of schema pass the id.
-func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaRequest) (*operations.GetSchemaResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) GetSchema(ctx context.Context, request operations.GetSchemaRequest) (*operations.GetSchemaResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -96,13 +87,13 @@ func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -130,12 +121,14 @@ func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.EntitySchemaItem
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out shared.EntitySchemaItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.EntitySchemaItem = out
+			res.EntitySchemaItem = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -144,8 +137,8 @@ func (s *schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 
 // GetSchemaVersions - getSchemaVersions
 // Get all versions of this schema ordered by the latest versions including drafts.
-func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetSchemaVersionsRequest) (*operations.GetSchemaVersionsResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) GetSchemaVersions(ctx context.Context, request operations.GetSchemaVersionsRequest) (*operations.GetSchemaVersionsResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}/versions", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -156,9 +149,9 @@ func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetS
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -186,12 +179,14 @@ func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetS
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.GetSchemaVersions200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.GetSchemaVersionsResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.GetSchemaVersions200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -200,8 +195,8 @@ func (s *schemas) GetSchemaVersions(ctx context.Context, request operations.GetS
 
 // ListSchemaBlueprints - listSchemaBlueprints
 // List canonical versions of all available schemas
-func (s *schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSchemaBlueprintsResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSchemaBlueprintsResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/schemas/blueprints"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -209,9 +204,9 @@ func (s *schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSch
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -239,12 +234,14 @@ func (s *schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSch
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.ListSchemaBlueprints200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.ListSchemaBlueprintsResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListSchemaBlueprints200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -253,8 +250,8 @@ func (s *schemas) ListSchemaBlueprints(ctx context.Context) (*operations.ListSch
 
 // ListSchemas - listSchemas
 // Get the latest versions of all schemas
-func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchemasRequest) (*operations.ListSchemasResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) ListSchemas(ctx context.Context, request operations.ListSchemasRequest) (*operations.ListSchemasResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/schemas"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -262,13 +259,13 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -296,12 +293,14 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.ListSchemas200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.ListSchemasResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListSchemas200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -310,8 +309,8 @@ func (s *schemas) ListSchemas(ctx context.Context, request operations.ListSchema
 
 // ListTaxonomyClassificationsForSchema - listTaxonomyClassificationsForSchema
 // List taxonomy classifications for a given schema
-func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, request operations.ListTaxonomyClassificationsForSchemaRequest) (*operations.ListTaxonomyClassificationsForSchemaResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, request operations.ListTaxonomyClassificationsForSchemaRequest) (*operations.ListTaxonomyClassificationsForSchemaResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}/taxonomy/{taxonomySlug}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -322,13 +321,13 @@ func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, requ
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -356,12 +355,14 @@ func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, requ
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.ListTaxonomyClassificationsForSchema200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.ListTaxonomyClassificationsForSchemaResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListTaxonomyClassificationsForSchema200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -370,24 +371,26 @@ func (s *schemas) ListTaxonomyClassificationsForSchema(ctx context.Context, requ
 
 // PutSchema - putSchema
 // Create or update a schema with a new version
-func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaRequest) (*operations.PutSchemaResponse, error) {
-	baseURL := s.serverURL
+func (s *Schemas) PutSchema(ctx context.Context, request operations.PutSchemaRequest) (*operations.PutSchemaResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/schemas/{slug}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "EntitySchema", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EntitySchema", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "PUT", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	req.Header.Set("Content-Type", reqContentType)
 
@@ -395,7 +398,7 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -409,6 +412,7 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -423,12 +427,14 @@ func (s *schemas) PutSchema(ctx context.Context, request operations.PutSchemaReq
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.PutSchema200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.PutSchemaResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.PutSchema200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 

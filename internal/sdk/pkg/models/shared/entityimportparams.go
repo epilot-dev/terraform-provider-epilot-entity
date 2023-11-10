@@ -2,12 +2,40 @@
 
 package shared
 
-type EntityImportParamsS3Reference struct {
+type S3Reference struct {
 	Bucket string `json:"bucket"`
 	Key    string `json:"key"`
 }
 
+func (o *S3Reference) GetBucket() string {
+	if o == nil {
+		return ""
+	}
+	return o.Bucket
+}
+
+func (o *S3Reference) GetKey() string {
+	if o == nil {
+		return ""
+	}
+	return o.Key
+}
+
 type EntityImportParams struct {
-	S3Reference EntityImportParamsS3Reference `json:"S3Reference"`
-	Schema      string                        `json:"schema"`
+	S3Reference S3Reference `json:"S3Reference"`
+	Schema      string      `json:"schema"`
+}
+
+func (o *EntityImportParams) GetS3Reference() S3Reference {
+	if o == nil {
+		return S3Reference{}
+	}
+	return o.S3Reference
+}
+
+func (o *EntityImportParams) GetSchema() string {
+	if o == nil {
+		return ""
+	}
+	return o.Schema
 }

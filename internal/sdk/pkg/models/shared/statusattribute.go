@@ -3,27 +3,46 @@
 package shared
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type StatusAttributeOptions2 struct {
+// StatusAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type StatusAttributeConstraints struct {
+}
+
+type StatusAttribute2 struct {
 	Title *string `json:"title,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o *StatusAttribute2) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
+}
+
+func (o *StatusAttribute2) GetValue() string {
+	if o == nil {
+		return ""
+	}
+	return o.Value
 }
 
 type StatusAttributeOptionsType string
 
 const (
-	StatusAttributeOptionsTypeStr                     StatusAttributeOptionsType = "str"
-	StatusAttributeOptionsTypeStatusAttributeOptions2 StatusAttributeOptionsType = "StatusAttribute_options_2"
+	StatusAttributeOptionsTypeStr              StatusAttributeOptionsType = "str"
+	StatusAttributeOptionsTypeStatusAttribute2 StatusAttributeOptionsType = "StatusAttribute_2"
 )
 
 type StatusAttributeOptions struct {
-	Str                     *string
-	StatusAttributeOptions2 *StatusAttributeOptions2
+	Str              *string
+	StatusAttribute2 *StatusAttribute2
 
 	Type StatusAttributeOptionsType
 }
@@ -37,33 +56,28 @@ func CreateStatusAttributeOptionsStr(str string) StatusAttributeOptions {
 	}
 }
 
-func CreateStatusAttributeOptionsStatusAttributeOptions2(statusAttributeOptions2 StatusAttributeOptions2) StatusAttributeOptions {
-	typ := StatusAttributeOptionsTypeStatusAttributeOptions2
+func CreateStatusAttributeOptionsStatusAttribute2(statusAttribute2 StatusAttribute2) StatusAttributeOptions {
+	typ := StatusAttributeOptionsTypeStatusAttribute2
 
 	return StatusAttributeOptions{
-		StatusAttributeOptions2: &statusAttributeOptions2,
-		Type:                    typ,
+		StatusAttribute2: &statusAttribute2,
+		Type:             typ,
 	}
 }
 
 func (u *StatusAttributeOptions) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
 
-	str := new(string)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&str); err == nil {
-		u.Str = str
-		u.Type = StatusAttributeOptionsTypeStr
+	statusAttribute2 := new(StatusAttribute2)
+	if err := utils.UnmarshalJSON(data, &statusAttribute2, "", true, true); err == nil {
+		u.StatusAttribute2 = statusAttribute2
+		u.Type = StatusAttributeOptionsTypeStatusAttribute2
 		return nil
 	}
 
-	statusAttributeOptions2 := new(StatusAttributeOptions2)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&statusAttributeOptions2); err == nil {
-		u.StatusAttributeOptions2 = statusAttributeOptions2
-		u.Type = StatusAttributeOptionsTypeStatusAttributeOptions2
+	str := new(string)
+	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+		u.Str = str
+		u.Type = StatusAttributeOptionsTypeStr
 		return nil
 	}
 
@@ -72,14 +86,14 @@ func (u *StatusAttributeOptions) UnmarshalJSON(data []byte) error {
 
 func (u StatusAttributeOptions) MarshalJSON() ([]byte, error) {
 	if u.Str != nil {
-		return json.Marshal(u.Str)
+		return utils.MarshalJSON(u.Str, "", true)
 	}
 
-	if u.StatusAttributeOptions2 != nil {
-		return json.Marshal(u.StatusAttributeOptions2)
+	if u.StatusAttribute2 != nil {
+		return utils.MarshalJSON(u.StatusAttribute2, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
 type StatusAttributeType string
@@ -112,17 +126,17 @@ type StatusAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	Constraints  *StatusAttributeConstraints `json:"constraints,omitempty"`
+	DefaultValue interface{}                 `json:"default_value,omitempty"`
+	Deprecated   *bool                       `default:"false" json:"deprecated"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
-	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
+	EntityBuilderDisableEdit *bool `default:"false" json:"entity_builder_disable_edit"`
 	// This attribute should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Which group the attribute should appear in. Accepts group ID or group name
 	Group *string `json:"group,omitempty"`
 	// Do not render attribute in entity views
-	Hidden *bool `json:"hidden,omitempty"`
+	Hidden *bool `default:"false" json:"hidden"`
 	// When set to true, will hide the label of the field.
 	HideLabel *bool `json:"hide_label,omitempty"`
 	// Code name of the icon to used to represent this attribute.
@@ -138,18 +152,204 @@ type StatusAttribute struct {
 	Placeholder           *string `json:"placeholder,omitempty"`
 	PreviewValueFormatter *string `json:"preview_value_formatter,omitempty"`
 	// Setting to `true` prevents the attribute from being modified / deleted
-	Protected *bool `json:"protected,omitempty"`
-	Readonly  *bool `json:"readonly,omitempty"`
+	Protected *bool `default:"true" json:"protected"`
+	Readonly  *bool `default:"false" json:"readonly"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
 	//
 	RenderCondition *string `json:"render_condition,omitempty"`
-	Required        *bool   `json:"required,omitempty"`
+	Required        *bool   `default:"false" json:"required"`
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
 	ShowInTable    *bool                `json:"show_in_table,omitempty"`
 	Type           *StatusAttributeType `json:"type,omitempty"`
 	ValueFormatter *string              `json:"value_formatter,omitempty"`
+}
+
+func (s StatusAttribute) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *StatusAttribute) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *StatusAttribute) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *StatusAttribute) GetConstraints() *StatusAttributeConstraints {
+	if o == nil {
+		return nil
+	}
+	return o.Constraints
+}
+
+func (o *StatusAttribute) GetDefaultValue() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultValue
+}
+
+func (o *StatusAttribute) GetDeprecated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deprecated
+}
+
+func (o *StatusAttribute) GetEntityBuilderDisableEdit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EntityBuilderDisableEdit
+}
+
+func (o *StatusAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *StatusAttribute) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
+}
+
+func (o *StatusAttribute) GetHidden() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hidden
+}
+
+func (o *StatusAttribute) GetHideLabel() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HideLabel
+}
+
+func (o *StatusAttribute) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *StatusAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *StatusAttribute) GetLayout() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Layout
+}
+
+func (o *StatusAttribute) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *StatusAttribute) GetOptions() []StatusAttributeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.Options
+}
+
+func (o *StatusAttribute) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *StatusAttribute) GetPlaceholder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Placeholder
+}
+
+func (o *StatusAttribute) GetPreviewValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PreviewValueFormatter
+}
+
+func (o *StatusAttribute) GetProtected() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Protected
+}
+
+func (o *StatusAttribute) GetReadonly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Readonly
+}
+
+func (o *StatusAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *StatusAttribute) GetRequired() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Required
+}
+
+func (o *StatusAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *StatusAttribute) GetShowInTable() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowInTable
+}
+
+func (o *StatusAttribute) GetType() *StatusAttributeType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *StatusAttribute) GetValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ValueFormatter
 }

@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -12,15 +12,60 @@ type GetSavedViewRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-// GetSavedView200ApplicationJSON - Success
-type GetSavedView200ApplicationJSON struct {
+func (o *GetSavedViewRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+// GetSavedViewResponseBody - Success
+type GetSavedViewResponseBody struct {
 	View *shared.SavedViewItem `json:"view,omitempty"`
 }
 
+func (o *GetSavedViewResponseBody) GetView() *shared.SavedViewItem {
+	if o == nil {
+		return nil
+	}
+	return o.View
+}
+
 type GetSavedViewResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	GetSavedView200ApplicationJSONObject *GetSavedView200ApplicationJSON
+	Object *GetSavedViewResponseBody
+}
+
+func (o *GetSavedViewResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetSavedViewResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetSavedViewResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *GetSavedViewResponse) GetObject() *GetSavedViewResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

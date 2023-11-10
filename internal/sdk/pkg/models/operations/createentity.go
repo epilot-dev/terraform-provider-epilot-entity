@@ -3,7 +3,8 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
@@ -12,15 +13,85 @@ type CreateEntityRequest struct {
 	// Activity to include in event feed
 	ActivityID *string `queryParam:"style=form,explode=true,name=activity_id"`
 	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
+	Async *bool `default:"false" queryParam:"style=form,explode=true,name=async"`
 	// Entity Schema
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (c CreateEntityRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateEntityRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *CreateEntityRequest) GetEntity() *shared.Entity {
+	if o == nil {
+		return nil
+	}
+	return o.Entity
+}
+
+func (o *CreateEntityRequest) GetActivityID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ActivityID
+}
+
+func (o *CreateEntityRequest) GetAsync() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Async
+}
+
+func (o *CreateEntityRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type CreateEntityResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Success
-	EntityItem  *shared.EntityItem
-	StatusCode  int
+	EntityItem *shared.EntityItem
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+}
+
+func (o *CreateEntityResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *CreateEntityResponse) GetEntityItem() *shared.EntityItem {
+	if o == nil {
+		return nil
+	}
+	return o.EntityItem
+}
+
+func (o *CreateEntityResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *CreateEntityResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

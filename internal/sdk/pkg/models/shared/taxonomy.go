@@ -3,10 +3,10 @@
 package shared
 
 import (
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"time"
 )
 
-// Taxonomy - Taxonomy
 type Taxonomy struct {
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// A human friendly name of a Taxonomy e.g. Purpose, Product Category, Folder, Tag
@@ -16,4 +16,50 @@ type Taxonomy struct {
 	// URL-friendly name for taxonomy
 	Slug      string     `json:"slug"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+}
+
+func (t Taxonomy) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *Taxonomy) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *Taxonomy) GetCreatedAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *Taxonomy) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *Taxonomy) GetPlural() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Plural
+}
+
+func (o *Taxonomy) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+func (o *Taxonomy) GetUpdatedAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
 }

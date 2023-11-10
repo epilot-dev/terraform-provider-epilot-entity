@@ -3,540 +3,636 @@
 package shared
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type EntitySchemaGroupSettingsInfoTooltipTitle struct {
+type InfoTooltipTitle struct {
 	Default *string `json:"default,omitempty"`
 	Key     *string `json:"key,omitempty"`
 }
 
-type EntitySchemaGroupSettings struct {
+func (o *InfoTooltipTitle) GetDefault() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Default
+}
+
+func (o *InfoTooltipTitle) GetKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Key
+}
+
+type GroupSettings struct {
 	Purpose  []string `json:"_purpose,omitempty"`
 	Expanded *bool    `json:"expanded,omitempty"`
 	// This group should only be active when the feature flag is enabled
-	FeatureFlag      *string                                    `json:"feature_flag,omitempty"`
-	ID               string                                     `json:"id"`
-	InfoTooltipTitle *EntitySchemaGroupSettingsInfoTooltipTitle `json:"info_tooltip_title,omitempty"`
-	Label            string                                     `json:"label"`
+	FeatureFlag      *string           `json:"feature_flag,omitempty"`
+	ID               string            `json:"id"`
+	InfoTooltipTitle *InfoTooltipTitle `json:"info_tooltip_title,omitempty"`
+	Label            string            `json:"label"`
 	// Render order of the group
-	Order           *int64  `json:"order,omitempty"`
+	Order           *int64  `default:"0" json:"order"`
 	RenderCondition *string `json:"render_condition,omitempty"`
 	// This group should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 }
 
-// EntitySchemaLayoutSettings - Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:
+func (g GroupSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GroupSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GroupSettings) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *GroupSettings) GetExpanded() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Expanded
+}
+
+func (o *GroupSettings) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *GroupSettings) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GroupSettings) GetInfoTooltipTitle() *InfoTooltipTitle {
+	if o == nil {
+		return nil
+	}
+	return o.InfoTooltipTitle
+}
+
+func (o *GroupSettings) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *GroupSettings) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *GroupSettings) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *GroupSettings) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+// LayoutSettings - Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:
 // - Managed Properties: are interpreted and transformed into layout styles
 // - Un-managed Properties: are appended as styles into the attribute mounting node
-type EntitySchemaLayoutSettings struct {
+type LayoutSettings struct {
+	AdditionalProperties interface{} `additionalProperties:"true" json:"-"`
 	// Defines the grid gap for the mounting node of the attribute.
 	GridGap *string `json:"grid_gap,omitempty"`
 	// Defines the grid column template for the mounting node of the attribute.
 	GridTemplateColumns *string `json:"grid_template_columns,omitempty"`
-
-	AdditionalProperties interface{} `json:"-"`
 }
-type _EntitySchemaLayoutSettings EntitySchemaLayoutSettings
 
-func (c *EntitySchemaLayoutSettings) UnmarshalJSON(bs []byte) error {
-	data := _EntitySchemaLayoutSettings{}
+func (l LayoutSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
 
-	if err := json.Unmarshal(bs, &data); err != nil {
+func (l *LayoutSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
 		return err
 	}
-	*c = EntitySchemaLayoutSettings(data)
-
-	additionalFields := make(map[string]interface{})
-
-	if err := json.Unmarshal(bs, &additionalFields); err != nil {
-		return err
-	}
-	delete(additionalFields, "grid_gap")
-	delete(additionalFields, "grid_template_columns")
-
-	c.AdditionalProperties = additionalFields
-
 	return nil
 }
 
-func (c EntitySchemaLayoutSettings) MarshalJSON() ([]byte, error) {
-	out := map[string]interface{}{}
-	bs, err := json.Marshal(_EntitySchemaLayoutSettings(c))
-	if err != nil {
-		return nil, err
+func (o *LayoutSettings) GetAdditionalProperties() interface{} {
+	if o == nil {
+		return nil
 	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	bs, err = json.Marshal(c.AdditionalProperties)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	return json.Marshal(out)
+	return o.AdditionalProperties
 }
 
-type EntitySchemaUIConfigCreateViewType string
+func (o *LayoutSettings) GetGridGap() *string {
+	if o == nil {
+		return nil
+	}
+	return o.GridGap
+}
+
+func (o *LayoutSettings) GetGridTemplateColumns() *string {
+	if o == nil {
+		return nil
+	}
+	return o.GridTemplateColumns
+}
+
+type CreateViewType string
 
 const (
-	EntitySchemaUIConfigCreateViewTypeEntityDefaultCreate EntitySchemaUIConfigCreateViewType = "EntityDefaultCreate"
-	EntitySchemaUIConfigCreateViewTypeRedirectEntityView  EntitySchemaUIConfigCreateViewType = "RedirectEntityView"
-	EntitySchemaUIConfigCreateViewTypeEntityViewDisabled  EntitySchemaUIConfigCreateViewType = "EntityViewDisabled"
+	CreateViewTypeEntityDefaultCreate CreateViewType = "EntityDefaultCreate"
+	CreateViewTypeRedirectEntityView  CreateViewType = "RedirectEntityView"
+	CreateViewTypeEntityViewDisabled  CreateViewType = "EntityViewDisabled"
 )
 
-type EntitySchemaUIConfigCreateView struct {
+type CreateView struct {
 	EntityDefaultCreate *EntityDefaultCreate
 	RedirectEntityView  *RedirectEntityView
 	EntityViewDisabled  *EntityViewDisabled
 
-	Type EntitySchemaUIConfigCreateViewType
+	Type CreateViewType
 }
 
-func CreateEntitySchemaUIConfigCreateViewEntityDefaultCreate(entityDefaultCreate EntityDefaultCreate) EntitySchemaUIConfigCreateView {
-	typ := EntitySchemaUIConfigCreateViewTypeEntityDefaultCreate
+func CreateCreateViewEntityDefaultCreate(entityDefaultCreate EntityDefaultCreate) CreateView {
+	typ := CreateViewTypeEntityDefaultCreate
 
-	return EntitySchemaUIConfigCreateView{
+	return CreateView{
 		EntityDefaultCreate: &entityDefaultCreate,
 		Type:                typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigCreateViewRedirectEntityView(redirectEntityView RedirectEntityView) EntitySchemaUIConfigCreateView {
-	typ := EntitySchemaUIConfigCreateViewTypeRedirectEntityView
+func CreateCreateViewRedirectEntityView(redirectEntityView RedirectEntityView) CreateView {
+	typ := CreateViewTypeRedirectEntityView
 
-	return EntitySchemaUIConfigCreateView{
+	return CreateView{
 		RedirectEntityView: &redirectEntityView,
 		Type:               typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigCreateViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) EntitySchemaUIConfigCreateView {
-	typ := EntitySchemaUIConfigCreateViewTypeEntityViewDisabled
+func CreateCreateViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) CreateView {
+	typ := CreateViewTypeEntityViewDisabled
 
-	return EntitySchemaUIConfigCreateView{
+	return CreateView{
 		EntityViewDisabled: &entityViewDisabled,
 		Type:               typ,
 	}
 }
 
-func (u *EntitySchemaUIConfigCreateView) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *CreateView) UnmarshalJSON(data []byte) error {
 
-	entityDefaultCreate := new(EntityDefaultCreate)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityDefaultCreate); err == nil {
-		u.EntityDefaultCreate = entityDefaultCreate
-		u.Type = EntitySchemaUIConfigCreateViewTypeEntityDefaultCreate
+	entityViewDisabled := new(EntityViewDisabled)
+	if err := utils.UnmarshalJSON(data, &entityViewDisabled, "", true, true); err == nil {
+		u.EntityViewDisabled = entityViewDisabled
+		u.Type = CreateViewTypeEntityViewDisabled
 		return nil
 	}
 
 	redirectEntityView := new(RedirectEntityView)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&redirectEntityView); err == nil {
+	if err := utils.UnmarshalJSON(data, &redirectEntityView, "", true, true); err == nil {
 		u.RedirectEntityView = redirectEntityView
-		u.Type = EntitySchemaUIConfigCreateViewTypeRedirectEntityView
+		u.Type = CreateViewTypeRedirectEntityView
 		return nil
 	}
 
-	entityViewDisabled := new(EntityViewDisabled)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityViewDisabled); err == nil {
-		u.EntityViewDisabled = entityViewDisabled
-		u.Type = EntitySchemaUIConfigCreateViewTypeEntityViewDisabled
+	entityDefaultCreate := new(EntityDefaultCreate)
+	if err := utils.UnmarshalJSON(data, &entityDefaultCreate, "", true, true); err == nil {
+		u.EntityDefaultCreate = entityDefaultCreate
+		u.Type = CreateViewTypeEntityDefaultCreate
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u EntitySchemaUIConfigCreateView) MarshalJSON() ([]byte, error) {
+func (u CreateView) MarshalJSON() ([]byte, error) {
 	if u.EntityDefaultCreate != nil {
-		return json.Marshal(u.EntityDefaultCreate)
+		return utils.MarshalJSON(u.EntityDefaultCreate, "", true)
 	}
 
 	if u.RedirectEntityView != nil {
-		return json.Marshal(u.RedirectEntityView)
+		return utils.MarshalJSON(u.RedirectEntityView, "", true)
 	}
 
 	if u.EntityViewDisabled != nil {
-		return json.Marshal(u.EntityViewDisabled)
+		return utils.MarshalJSON(u.EntityViewDisabled, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
-type EntitySchemaUIConfigEditViewType string
+type EditViewType string
 
 const (
-	EntitySchemaUIConfigEditViewTypeEntityDefaultEdit  EntitySchemaUIConfigEditViewType = "EntityDefaultEdit"
-	EntitySchemaUIConfigEditViewTypeRedirectEntityView EntitySchemaUIConfigEditViewType = "RedirectEntityView"
-	EntitySchemaUIConfigEditViewTypeEntityViewDisabled EntitySchemaUIConfigEditViewType = "EntityViewDisabled"
+	EditViewTypeEntityDefaultEdit  EditViewType = "EntityDefaultEdit"
+	EditViewTypeRedirectEntityView EditViewType = "RedirectEntityView"
+	EditViewTypeEntityViewDisabled EditViewType = "EntityViewDisabled"
 )
 
-type EntitySchemaUIConfigEditView struct {
+type EditView struct {
 	EntityDefaultEdit  *EntityDefaultEdit
 	RedirectEntityView *RedirectEntityView
 	EntityViewDisabled *EntityViewDisabled
 
-	Type EntitySchemaUIConfigEditViewType
+	Type EditViewType
 }
 
-func CreateEntitySchemaUIConfigEditViewEntityDefaultEdit(entityDefaultEdit EntityDefaultEdit) EntitySchemaUIConfigEditView {
-	typ := EntitySchemaUIConfigEditViewTypeEntityDefaultEdit
+func CreateEditViewEntityDefaultEdit(entityDefaultEdit EntityDefaultEdit) EditView {
+	typ := EditViewTypeEntityDefaultEdit
 
-	return EntitySchemaUIConfigEditView{
+	return EditView{
 		EntityDefaultEdit: &entityDefaultEdit,
 		Type:              typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigEditViewRedirectEntityView(redirectEntityView RedirectEntityView) EntitySchemaUIConfigEditView {
-	typ := EntitySchemaUIConfigEditViewTypeRedirectEntityView
+func CreateEditViewRedirectEntityView(redirectEntityView RedirectEntityView) EditView {
+	typ := EditViewTypeRedirectEntityView
 
-	return EntitySchemaUIConfigEditView{
+	return EditView{
 		RedirectEntityView: &redirectEntityView,
 		Type:               typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigEditViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) EntitySchemaUIConfigEditView {
-	typ := EntitySchemaUIConfigEditViewTypeEntityViewDisabled
+func CreateEditViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) EditView {
+	typ := EditViewTypeEntityViewDisabled
 
-	return EntitySchemaUIConfigEditView{
+	return EditView{
 		EntityViewDisabled: &entityViewDisabled,
 		Type:               typ,
 	}
 }
 
-func (u *EntitySchemaUIConfigEditView) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *EditView) UnmarshalJSON(data []byte) error {
 
-	entityDefaultEdit := new(EntityDefaultEdit)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityDefaultEdit); err == nil {
-		u.EntityDefaultEdit = entityDefaultEdit
-		u.Type = EntitySchemaUIConfigEditViewTypeEntityDefaultEdit
+	entityViewDisabled := new(EntityViewDisabled)
+	if err := utils.UnmarshalJSON(data, &entityViewDisabled, "", true, true); err == nil {
+		u.EntityViewDisabled = entityViewDisabled
+		u.Type = EditViewTypeEntityViewDisabled
 		return nil
 	}
 
 	redirectEntityView := new(RedirectEntityView)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&redirectEntityView); err == nil {
+	if err := utils.UnmarshalJSON(data, &redirectEntityView, "", true, true); err == nil {
 		u.RedirectEntityView = redirectEntityView
-		u.Type = EntitySchemaUIConfigEditViewTypeRedirectEntityView
+		u.Type = EditViewTypeRedirectEntityView
 		return nil
 	}
 
-	entityViewDisabled := new(EntityViewDisabled)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityViewDisabled); err == nil {
-		u.EntityViewDisabled = entityViewDisabled
-		u.Type = EntitySchemaUIConfigEditViewTypeEntityViewDisabled
+	entityDefaultEdit := new(EntityDefaultEdit)
+	if err := utils.UnmarshalJSON(data, &entityDefaultEdit, "", true, true); err == nil {
+		u.EntityDefaultEdit = entityDefaultEdit
+		u.Type = EditViewTypeEntityDefaultEdit
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u EntitySchemaUIConfigEditView) MarshalJSON() ([]byte, error) {
+func (u EditView) MarshalJSON() ([]byte, error) {
 	if u.EntityDefaultEdit != nil {
-		return json.Marshal(u.EntityDefaultEdit)
+		return utils.MarshalJSON(u.EntityDefaultEdit, "", true)
 	}
 
 	if u.RedirectEntityView != nil {
-		return json.Marshal(u.RedirectEntityView)
+		return utils.MarshalJSON(u.RedirectEntityView, "", true)
 	}
 
 	if u.EntityViewDisabled != nil {
-		return json.Marshal(u.EntityViewDisabled)
+		return utils.MarshalJSON(u.EntityViewDisabled, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
-type EntitySchemaUIConfigListItemSummaryAttributesType string
+type SummaryAttributesType string
 
 const (
-	EntitySchemaUIConfigListItemSummaryAttributesTypeSummaryAttribute EntitySchemaUIConfigListItemSummaryAttributesType = "SummaryAttribute"
-	EntitySchemaUIConfigListItemSummaryAttributesTypeStr              EntitySchemaUIConfigListItemSummaryAttributesType = "str"
+	SummaryAttributesTypeSummaryAttribute SummaryAttributesType = "SummaryAttribute"
+	SummaryAttributesTypeStr              SummaryAttributesType = "str"
 )
 
-type EntitySchemaUIConfigListItemSummaryAttributes struct {
+type SummaryAttributes struct {
 	SummaryAttribute *SummaryAttribute
 	Str              *string
 
-	Type EntitySchemaUIConfigListItemSummaryAttributesType
+	Type SummaryAttributesType
 }
 
-func CreateEntitySchemaUIConfigListItemSummaryAttributesSummaryAttribute(summaryAttribute SummaryAttribute) EntitySchemaUIConfigListItemSummaryAttributes {
-	typ := EntitySchemaUIConfigListItemSummaryAttributesTypeSummaryAttribute
+func CreateSummaryAttributesSummaryAttribute(summaryAttribute SummaryAttribute) SummaryAttributes {
+	typ := SummaryAttributesTypeSummaryAttribute
 
-	return EntitySchemaUIConfigListItemSummaryAttributes{
+	return SummaryAttributes{
 		SummaryAttribute: &summaryAttribute,
 		Type:             typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigListItemSummaryAttributesStr(str string) EntitySchemaUIConfigListItemSummaryAttributes {
-	typ := EntitySchemaUIConfigListItemSummaryAttributesTypeStr
+func CreateSummaryAttributesStr(str string) SummaryAttributes {
+	typ := SummaryAttributesTypeStr
 
-	return EntitySchemaUIConfigListItemSummaryAttributes{
+	return SummaryAttributes{
 		Str:  &str,
 		Type: typ,
 	}
 }
 
-func (u *EntitySchemaUIConfigListItemSummaryAttributes) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *SummaryAttributes) UnmarshalJSON(data []byte) error {
 
 	summaryAttribute := new(SummaryAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&summaryAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &summaryAttribute, "", true, true); err == nil {
 		u.SummaryAttribute = summaryAttribute
-		u.Type = EntitySchemaUIConfigListItemSummaryAttributesTypeSummaryAttribute
+		u.Type = SummaryAttributesTypeSummaryAttribute
 		return nil
 	}
 
 	str := new(string)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&str); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
 		u.Str = str
-		u.Type = EntitySchemaUIConfigListItemSummaryAttributesTypeStr
+		u.Type = SummaryAttributesTypeStr
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u EntitySchemaUIConfigListItemSummaryAttributes) MarshalJSON() ([]byte, error) {
+func (u SummaryAttributes) MarshalJSON() ([]byte, error) {
 	if u.SummaryAttribute != nil {
-		return json.Marshal(u.SummaryAttribute)
+		return utils.MarshalJSON(u.SummaryAttribute, "", true)
 	}
 
 	if u.Str != nil {
-		return json.Marshal(u.Str)
+		return utils.MarshalJSON(u.Str, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
-type EntitySchemaUIConfigListItem struct {
-	SummaryAttributes []EntitySchemaUIConfigListItemSummaryAttributes `json:"summary_attributes,omitempty"`
+type ListItem struct {
+	SummaryAttributes []SummaryAttributes `json:"summary_attributes,omitempty"`
 }
 
-type EntitySchemaUIConfigSharing struct {
+func (o *ListItem) GetSummaryAttributes() []SummaryAttributes {
+	if o == nil {
+		return nil
+	}
+	return o.SummaryAttributes
+}
+
+type Sharing struct {
 	// Show the sharing button in entity detail view
 	ShowSharingButton *bool `json:"show_sharing_button,omitempty"`
 }
 
-type EntitySchemaUIConfigSingleViewType string
+func (o *Sharing) GetShowSharingButton() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowSharingButton
+}
+
+type SingleViewType string
 
 const (
-	EntitySchemaUIConfigSingleViewTypeEntityDefaultEdit  EntitySchemaUIConfigSingleViewType = "EntityDefaultEdit"
-	EntitySchemaUIConfigSingleViewTypeRedirectEntityView EntitySchemaUIConfigSingleViewType = "RedirectEntityView"
-	EntitySchemaUIConfigSingleViewTypeEntityViewDisabled EntitySchemaUIConfigSingleViewType = "EntityViewDisabled"
+	SingleViewTypeEntityDefaultEdit  SingleViewType = "EntityDefaultEdit"
+	SingleViewTypeRedirectEntityView SingleViewType = "RedirectEntityView"
+	SingleViewTypeEntityViewDisabled SingleViewType = "EntityViewDisabled"
 )
 
-type EntitySchemaUIConfigSingleView struct {
+type SingleView struct {
 	EntityDefaultEdit  *EntityDefaultEdit
 	RedirectEntityView *RedirectEntityView
 	EntityViewDisabled *EntityViewDisabled
 
-	Type EntitySchemaUIConfigSingleViewType
+	Type SingleViewType
 }
 
-func CreateEntitySchemaUIConfigSingleViewEntityDefaultEdit(entityDefaultEdit EntityDefaultEdit) EntitySchemaUIConfigSingleView {
-	typ := EntitySchemaUIConfigSingleViewTypeEntityDefaultEdit
+func CreateSingleViewEntityDefaultEdit(entityDefaultEdit EntityDefaultEdit) SingleView {
+	typ := SingleViewTypeEntityDefaultEdit
 
-	return EntitySchemaUIConfigSingleView{
+	return SingleView{
 		EntityDefaultEdit: &entityDefaultEdit,
 		Type:              typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigSingleViewRedirectEntityView(redirectEntityView RedirectEntityView) EntitySchemaUIConfigSingleView {
-	typ := EntitySchemaUIConfigSingleViewTypeRedirectEntityView
+func CreateSingleViewRedirectEntityView(redirectEntityView RedirectEntityView) SingleView {
+	typ := SingleViewTypeRedirectEntityView
 
-	return EntitySchemaUIConfigSingleView{
+	return SingleView{
 		RedirectEntityView: &redirectEntityView,
 		Type:               typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigSingleViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) EntitySchemaUIConfigSingleView {
-	typ := EntitySchemaUIConfigSingleViewTypeEntityViewDisabled
+func CreateSingleViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) SingleView {
+	typ := SingleViewTypeEntityViewDisabled
 
-	return EntitySchemaUIConfigSingleView{
+	return SingleView{
 		EntityViewDisabled: &entityViewDisabled,
 		Type:               typ,
 	}
 }
 
-func (u *EntitySchemaUIConfigSingleView) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *SingleView) UnmarshalJSON(data []byte) error {
 
-	entityDefaultEdit := new(EntityDefaultEdit)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityDefaultEdit); err == nil {
-		u.EntityDefaultEdit = entityDefaultEdit
-		u.Type = EntitySchemaUIConfigSingleViewTypeEntityDefaultEdit
+	entityViewDisabled := new(EntityViewDisabled)
+	if err := utils.UnmarshalJSON(data, &entityViewDisabled, "", true, true); err == nil {
+		u.EntityViewDisabled = entityViewDisabled
+		u.Type = SingleViewTypeEntityViewDisabled
 		return nil
 	}
 
 	redirectEntityView := new(RedirectEntityView)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&redirectEntityView); err == nil {
+	if err := utils.UnmarshalJSON(data, &redirectEntityView, "", true, true); err == nil {
 		u.RedirectEntityView = redirectEntityView
-		u.Type = EntitySchemaUIConfigSingleViewTypeRedirectEntityView
+		u.Type = SingleViewTypeRedirectEntityView
 		return nil
 	}
 
-	entityViewDisabled := new(EntityViewDisabled)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityViewDisabled); err == nil {
-		u.EntityViewDisabled = entityViewDisabled
-		u.Type = EntitySchemaUIConfigSingleViewTypeEntityViewDisabled
+	entityDefaultEdit := new(EntityDefaultEdit)
+	if err := utils.UnmarshalJSON(data, &entityDefaultEdit, "", true, true); err == nil {
+		u.EntityDefaultEdit = entityDefaultEdit
+		u.Type = SingleViewTypeEntityDefaultEdit
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u EntitySchemaUIConfigSingleView) MarshalJSON() ([]byte, error) {
+func (u SingleView) MarshalJSON() ([]byte, error) {
 	if u.EntityDefaultEdit != nil {
-		return json.Marshal(u.EntityDefaultEdit)
+		return utils.MarshalJSON(u.EntityDefaultEdit, "", true)
 	}
 
 	if u.RedirectEntityView != nil {
-		return json.Marshal(u.RedirectEntityView)
+		return utils.MarshalJSON(u.RedirectEntityView, "", true)
 	}
 
 	if u.EntityViewDisabled != nil {
-		return json.Marshal(u.EntityViewDisabled)
+		return utils.MarshalJSON(u.EntityViewDisabled, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
-type EntitySchemaUIConfigTableViewType string
+type TableViewType string
 
 const (
-	EntitySchemaUIConfigTableViewTypeEntityDefaultTable EntitySchemaUIConfigTableViewType = "EntityDefaultTable"
-	EntitySchemaUIConfigTableViewTypeRedirectEntityView EntitySchemaUIConfigTableViewType = "RedirectEntityView"
-	EntitySchemaUIConfigTableViewTypeEntityViewDisabled EntitySchemaUIConfigTableViewType = "EntityViewDisabled"
+	TableViewTypeEntityDefaultTable TableViewType = "EntityDefaultTable"
+	TableViewTypeRedirectEntityView TableViewType = "RedirectEntityView"
+	TableViewTypeEntityViewDisabled TableViewType = "EntityViewDisabled"
 )
 
-type EntitySchemaUIConfigTableView struct {
+type TableView struct {
 	EntityDefaultTable *EntityDefaultTable
 	RedirectEntityView *RedirectEntityView
 	EntityViewDisabled *EntityViewDisabled
 
-	Type EntitySchemaUIConfigTableViewType
+	Type TableViewType
 }
 
-func CreateEntitySchemaUIConfigTableViewEntityDefaultTable(entityDefaultTable EntityDefaultTable) EntitySchemaUIConfigTableView {
-	typ := EntitySchemaUIConfigTableViewTypeEntityDefaultTable
+func CreateTableViewEntityDefaultTable(entityDefaultTable EntityDefaultTable) TableView {
+	typ := TableViewTypeEntityDefaultTable
 
-	return EntitySchemaUIConfigTableView{
+	return TableView{
 		EntityDefaultTable: &entityDefaultTable,
 		Type:               typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigTableViewRedirectEntityView(redirectEntityView RedirectEntityView) EntitySchemaUIConfigTableView {
-	typ := EntitySchemaUIConfigTableViewTypeRedirectEntityView
+func CreateTableViewRedirectEntityView(redirectEntityView RedirectEntityView) TableView {
+	typ := TableViewTypeRedirectEntityView
 
-	return EntitySchemaUIConfigTableView{
+	return TableView{
 		RedirectEntityView: &redirectEntityView,
 		Type:               typ,
 	}
 }
 
-func CreateEntitySchemaUIConfigTableViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) EntitySchemaUIConfigTableView {
-	typ := EntitySchemaUIConfigTableViewTypeEntityViewDisabled
+func CreateTableViewEntityViewDisabled(entityViewDisabled EntityViewDisabled) TableView {
+	typ := TableViewTypeEntityViewDisabled
 
-	return EntitySchemaUIConfigTableView{
+	return TableView{
 		EntityViewDisabled: &entityViewDisabled,
 		Type:               typ,
 	}
 }
 
-func (u *EntitySchemaUIConfigTableView) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *TableView) UnmarshalJSON(data []byte) error {
 
-	entityDefaultTable := new(EntityDefaultTable)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityDefaultTable); err == nil {
-		u.EntityDefaultTable = entityDefaultTable
-		u.Type = EntitySchemaUIConfigTableViewTypeEntityDefaultTable
+	entityViewDisabled := new(EntityViewDisabled)
+	if err := utils.UnmarshalJSON(data, &entityViewDisabled, "", true, true); err == nil {
+		u.EntityViewDisabled = entityViewDisabled
+		u.Type = TableViewTypeEntityViewDisabled
 		return nil
 	}
 
 	redirectEntityView := new(RedirectEntityView)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&redirectEntityView); err == nil {
+	if err := utils.UnmarshalJSON(data, &redirectEntityView, "", true, true); err == nil {
 		u.RedirectEntityView = redirectEntityView
-		u.Type = EntitySchemaUIConfigTableViewTypeRedirectEntityView
+		u.Type = TableViewTypeRedirectEntityView
 		return nil
 	}
 
-	entityViewDisabled := new(EntityViewDisabled)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityViewDisabled); err == nil {
-		u.EntityViewDisabled = entityViewDisabled
-		u.Type = EntitySchemaUIConfigTableViewTypeEntityViewDisabled
+	entityDefaultTable := new(EntityDefaultTable)
+	if err := utils.UnmarshalJSON(data, &entityDefaultTable, "", true, true); err == nil {
+		u.EntityDefaultTable = entityDefaultTable
+		u.Type = TableViewTypeEntityDefaultTable
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u EntitySchemaUIConfigTableView) MarshalJSON() ([]byte, error) {
+func (u TableView) MarshalJSON() ([]byte, error) {
 	if u.EntityDefaultTable != nil {
-		return json.Marshal(u.EntityDefaultTable)
+		return utils.MarshalJSON(u.EntityDefaultTable, "", true)
 	}
 
 	if u.RedirectEntityView != nil {
-		return json.Marshal(u.RedirectEntityView)
+		return utils.MarshalJSON(u.RedirectEntityView, "", true)
 	}
 
 	if u.EntityViewDisabled != nil {
-		return json.Marshal(u.EntityViewDisabled)
+		return utils.MarshalJSON(u.EntityViewDisabled, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
-type EntitySchemaUIConfig struct {
-	CreateView *EntitySchemaUIConfigCreateView `json:"create_view,omitempty"`
-	EditView   *EntitySchemaUIConfigEditView   `json:"edit_view,omitempty"`
-	ListItem   *EntitySchemaUIConfigListItem   `json:"list_item,omitempty"`
-	Sharing    *EntitySchemaUIConfigSharing    `json:"sharing,omitempty"`
-	SingleView *EntitySchemaUIConfigSingleView `json:"single_view,omitempty"`
-	TableView  *EntitySchemaUIConfigTableView  `json:"table_view,omitempty"`
+type UIConfig struct {
+	CreateView *CreateView `json:"create_view,omitempty"`
+	EditView   *EditView   `json:"edit_view,omitempty"`
+	ListItem   *ListItem   `json:"list_item,omitempty"`
+	Sharing    *Sharing    `json:"sharing,omitempty"`
+	SingleView *SingleView `json:"single_view,omitempty"`
+	TableView  *TableView  `json:"table_view,omitempty"`
+}
+
+func (o *UIConfig) GetCreateView() *CreateView {
+	if o == nil {
+		return nil
+	}
+	return o.CreateView
+}
+
+func (o *UIConfig) GetEditView() *EditView {
+	if o == nil {
+		return nil
+	}
+	return o.EditView
+}
+
+func (o *UIConfig) GetListItem() *ListItem {
+	if o == nil {
+		return nil
+	}
+	return o.ListItem
+}
+
+func (o *UIConfig) GetSharing() *Sharing {
+	if o == nil {
+		return nil
+	}
+	return o.Sharing
+}
+
+func (o *UIConfig) GetSingleView() *SingleView {
+	if o == nil {
+		return nil
+	}
+	return o.SingleView
+}
+
+func (o *UIConfig) GetTableView() *TableView {
+	if o == nil {
+		return nil
+	}
+	return o.TableView
 }
 
 // EntitySchema - The "type" of an Entity. Describes the shape. Includes Entity Attributes, Relations and Capabilities.
@@ -556,13 +652,13 @@ type EntitySchema struct {
 	// This schema should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// A dictionary of Group Titles and associated settings if present.
-	GroupSettings []EntitySchemaGroupSettings `json:"group_settings,omitempty"`
-	Icon          *string                     `json:"icon,omitempty"`
+	GroupSettings []GroupSettings `json:"group_settings,omitempty"`
+	Icon          *string         `json:"icon,omitempty"`
 	// Custom grid definitions for the layout. These settings are composed by managed and un-managed properties:
 	// - Managed Properties: are interpreted and transformed into layout styles
 	// - Un-managed Properties: are appended as styles into the attribute mounting node
 	//
-	LayoutSettings *EntitySchemaLayoutSettings `json:"layout_settings,omitempty"`
+	LayoutSettings *LayoutSettings `json:"layout_settings,omitempty"`
 	// User-friendly identifier for the entity schema
 	Name      string `json:"name"`
 	Plural    string `json:"plural"`
@@ -570,7 +666,133 @@ type EntitySchema struct {
 	// URL-friendly identifier for the entity schema
 	Slug string `json:"slug"`
 	// Template for rendering the title field. Uses handlebars
-	TitleTemplate *string               `json:"title_template,omitempty"`
-	UIConfig      *EntitySchemaUIConfig `json:"ui_config,omitempty"`
-	Version       *int64                `json:"version,omitempty"`
+	TitleTemplate *string   `json:"title_template,omitempty"`
+	UIConfig      *UIConfig `json:"ui_config,omitempty"`
+	Version       *int64    `json:"version,omitempty"`
+}
+
+func (o *EntitySchema) GetAttributes() []Attribute {
+	if o == nil {
+		return nil
+	}
+	return o.Attributes
+}
+
+func (o *EntitySchema) GetBlueprint() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Blueprint
+}
+
+func (o *EntitySchema) GetCapabilities() []EntityCapability {
+	if o == nil {
+		return nil
+	}
+	return o.Capabilities
+}
+
+func (o *EntitySchema) GetDialogConfig() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DialogConfig
+}
+
+func (o *EntitySchema) GetDraft() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Draft
+}
+
+func (o *EntitySchema) GetEnableSetting() []string {
+	if o == nil {
+		return nil
+	}
+	return o.EnableSetting
+}
+
+func (o *EntitySchema) GetExplicitSearchMappings() map[string]SearchMappings {
+	if o == nil {
+		return nil
+	}
+	return o.ExplicitSearchMappings
+}
+
+func (o *EntitySchema) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *EntitySchema) GetGroupSettings() []GroupSettings {
+	if o == nil {
+		return nil
+	}
+	return o.GroupSettings
+}
+
+func (o *EntitySchema) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *EntitySchema) GetLayoutSettings() *LayoutSettings {
+	if o == nil {
+		return nil
+	}
+	return o.LayoutSettings
+}
+
+func (o *EntitySchema) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *EntitySchema) GetPlural() string {
+	if o == nil {
+		return ""
+	}
+	return o.Plural
+}
+
+func (o *EntitySchema) GetPublished() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Published
+}
+
+func (o *EntitySchema) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+func (o *EntitySchema) GetTitleTemplate() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TitleTemplate
+}
+
+func (o *EntitySchema) GetUIConfig() *UIConfig {
+	if o == nil {
+		return nil
+	}
+	return o.UIConfig
+}
+
+func (o *EntitySchema) GetVersion() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Version
 }

@@ -5,57 +5,50 @@ package sdk
 import (
 	"bytes"
 	"context"
-	"epilot-entity/internal/sdk/pkg/models/operations"
-	"epilot-entity/internal/sdk/pkg/models/shared"
-	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/sdkerrors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"io"
 	"net/http"
 	"strings"
 )
 
-// savedViews - Saved Views for Entities
-type savedViews struct {
-	defaultClient  HTTPClient
-	securityClient HTTPClient
-	serverURL      string
-	language       string
-	sdkVersion     string
-	genVersion     string
+// SavedViews - Saved Views for Entities
+type SavedViews struct {
+	sdkConfiguration sdkConfiguration
 }
 
-func newSavedViews(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *savedViews {
-	return &savedViews{
-		defaultClient:  defaultClient,
-		securityClient: securityClient,
-		serverURL:      serverURL,
-		language:       language,
-		sdkVersion:     sdkVersion,
-		genVersion:     genVersion,
+func newSavedViews(sdkConfig sdkConfiguration) *SavedViews {
+	return &SavedViews{
+		sdkConfiguration: sdkConfig,
 	}
 }
 
 // CreateSavedView - createSavedView
 // Creates a new saved view
-func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedView) (*operations.CreateSavedViewResponse, error) {
-	baseURL := s.serverURL
+func (s *SavedViews) CreateSavedView(ctx context.Context, request *shared.SavedView) (*operations.CreateSavedViewResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/view"
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Request", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -69,6 +62,7 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -83,12 +77,14 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 	case httpRes.StatusCode == 201:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.SavedViewItem
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out shared.SavedViewItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.SavedViewItem = out
+			res.SavedViewItem = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -97,8 +93,8 @@ func (s *savedViews) CreateSavedView(ctx context.Context, request shared.SavedVi
 
 // DeleteSavedView - deleteSavedView
 // Deletes a saved view
-func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.DeleteSavedViewRequest) (*operations.DeleteSavedViewResponse, error) {
-	baseURL := s.serverURL
+func (s *SavedViews) DeleteSavedView(ctx context.Context, request operations.DeleteSavedViewRequest) (*operations.DeleteSavedViewResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -109,9 +105,9 @@ func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.Del
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "*/*")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -144,8 +140,8 @@ func (s *savedViews) DeleteSavedView(ctx context.Context, request operations.Del
 
 // GetSavedView - getSavedView
 // Gets Saved View configuration by id.
-func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSavedViewRequest) (*operations.GetSavedViewResponse, error) {
-	baseURL := s.serverURL
+func (s *SavedViews) GetSavedView(ctx context.Context, request operations.GetSavedViewRequest) (*operations.GetSavedViewResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -156,9 +152,9 @@ func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSav
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -186,12 +182,14 @@ func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSav
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.GetSavedView200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.GetSavedViewResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.GetSavedView200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -200,8 +198,8 @@ func (s *savedViews) GetSavedView(ctx context.Context, request operations.GetSav
 
 // ListSavedViews - listSavedViews
 // Get the Saved Views based on the schema
-func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedViewsResponse, error) {
-	baseURL := s.serverURL
+func (s *SavedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedViewsResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/v1/entity/views"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -209,9 +207,9 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -239,12 +237,14 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *operations.ListSavedViews200ApplicationJSON
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out operations.ListSavedViewsResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListSavedViews200ApplicationJSONObject = out
+			res.Object = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -253,28 +253,30 @@ func (s *savedViews) ListSavedViews(ctx context.Context) (*operations.ListSavedV
 
 // UpdateSavedView - updateSavedView
 // Updates a saved view
-func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.UpdateSavedViewRequest) (*operations.UpdateSavedViewResponse, error) {
-	baseURL := s.serverURL
+func (s *SavedViews) UpdateSavedView(ctx context.Context, request operations.UpdateSavedViewRequest) (*operations.UpdateSavedViewResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/view/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "SavedView", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "SavedView", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "PUT", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -288,6 +290,7 @@ func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.Upd
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -302,12 +305,14 @@ func (s *savedViews) UpdateSavedView(ctx context.Context, request operations.Upd
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.SavedViewItem
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out shared.SavedViewItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.SavedViewItem = out
+			res.SavedViewItem = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 

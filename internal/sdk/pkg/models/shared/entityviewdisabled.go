@@ -34,3 +34,10 @@ func (e *EntityViewDisabledViewType) UnmarshalJSON(data []byte) error {
 type EntityViewDisabled struct {
 	ViewType *EntityViewDisabledViewType `json:"view_type,omitempty"`
 }
+
+func (o *EntityViewDisabled) GetViewType() *EntityViewDisabledViewType {
+	if o == nil {
+		return nil
+	}
+	return o.ViewType
+}

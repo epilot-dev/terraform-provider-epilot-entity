@@ -3,29 +3,107 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
 type GetEntityRequest struct {
 	// When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
-	Hydrate *bool `queryParam:"style=form,explode=true,name=hydrate"`
+	Hydrate *bool `default:"false" queryParam:"style=form,explode=true,name=hydrate"`
 	// Entity id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
-// GetEntity200ApplicationJSON - Success
-type GetEntity200ApplicationJSON struct {
+func (g GetEntityRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GetEntityRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GetEntityRequest) GetHydrate() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hydrate
+}
+
+func (o *GetEntityRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GetEntityRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+// GetEntityResponseBody - Success
+type GetEntityResponseBody struct {
 	Entity    *shared.EntityItem  `json:"entity,omitempty"`
 	Relations []shared.EntityItem `json:"relations,omitempty"`
 }
 
+func (o *GetEntityResponseBody) GetEntity() *shared.EntityItem {
+	if o == nil {
+		return nil
+	}
+	return o.Entity
+}
+
+func (o *GetEntityResponseBody) GetRelations() []shared.EntityItem {
+	if o == nil {
+		return nil
+	}
+	return o.Relations
+}
+
 type GetEntityResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	GetEntity200ApplicationJSONObject *GetEntity200ApplicationJSON
+	Object *GetEntityResponseBody
+}
+
+func (o *GetEntityResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetEntityResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetEntityResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *GetEntityResponse) GetObject() *GetEntityResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

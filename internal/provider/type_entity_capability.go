@@ -5,12 +5,12 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type EntityCapability struct {
-	Purpose     []types.String            `tfsdk:"purpose"`
-	Attributes  []Attribute1              `tfsdk:"attributes"`
-	FeatureFlag types.String              `tfsdk:"feature_flag"`
-	Legacy      types.Bool                `tfsdk:"legacy"`
-	Name        types.String              `tfsdk:"name"`
-	SettingFlag types.String              `tfsdk:"setting_flag"`
-	Title       types.String              `tfsdk:"title"`
-	UIHooks     []EntityCapabilityUIHooks `tfsdk:"ui_hooks"`
+	Purpose     []types.String `tfsdk:"purpose"`
+	Attributes  []Attribute    `tfsdk:"attributes"`
+	FeatureFlag types.String   `tfsdk:"feature_flag"`
+	Legacy      types.Bool     `tfsdk:"legacy"`
+	Name        types.String   `tfsdk:"name"`
+	SettingFlag types.String   `tfsdk:"setting_flag"`
+	Title       types.String   `tfsdk:"title"`
+	UIHooks     []UIHooks      `tfsdk:"ui_hooks"`
 }

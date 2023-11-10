@@ -3,37 +3,56 @@
 package shared
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type SelectAttributeOptionsOption struct {
+// SelectAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type SelectAttributeConstraints struct {
+}
+
+type Option struct {
 	Title *string `json:"title,omitempty"`
 	Value string  `json:"value"`
+}
+
+func (o *Option) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
+}
+
+func (o *Option) GetValue() string {
+	if o == nil {
+		return ""
+	}
+	return o.Value
 }
 
 type SelectAttributeOptionsType string
 
 const (
-	SelectAttributeOptionsTypeSelectAttributeOptionsOption SelectAttributeOptionsType = "SelectAttribute_options_Option"
-	SelectAttributeOptionsTypeStr                          SelectAttributeOptionsType = "str"
+	SelectAttributeOptionsTypeOption SelectAttributeOptionsType = "Option"
+	SelectAttributeOptionsTypeStr    SelectAttributeOptionsType = "str"
 )
 
 type SelectAttributeOptions struct {
-	SelectAttributeOptionsOption *SelectAttributeOptionsOption
-	Str                          *string
+	Option *Option
+	Str    *string
 
 	Type SelectAttributeOptionsType
 }
 
-func CreateSelectAttributeOptionsSelectAttributeOptionsOption(selectAttributeOptionsOption SelectAttributeOptionsOption) SelectAttributeOptions {
-	typ := SelectAttributeOptionsTypeSelectAttributeOptionsOption
+func CreateSelectAttributeOptionsOption(option Option) SelectAttributeOptions {
+	typ := SelectAttributeOptionsTypeOption
 
 	return SelectAttributeOptions{
-		SelectAttributeOptionsOption: &selectAttributeOptionsOption,
-		Type:                         typ,
+		Option: &option,
+		Type:   typ,
 	}
 }
 
@@ -47,21 +66,16 @@ func CreateSelectAttributeOptionsStr(str string) SelectAttributeOptions {
 }
 
 func (u *SelectAttributeOptions) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
 
-	selectAttributeOptionsOption := new(SelectAttributeOptionsOption)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&selectAttributeOptionsOption); err == nil {
-		u.SelectAttributeOptionsOption = selectAttributeOptionsOption
-		u.Type = SelectAttributeOptionsTypeSelectAttributeOptionsOption
+	option := new(Option)
+	if err := utils.UnmarshalJSON(data, &option, "", true, true); err == nil {
+		u.Option = option
+		u.Type = SelectAttributeOptionsTypeOption
 		return nil
 	}
 
 	str := new(string)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&str); err == nil {
+	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
 		u.Str = str
 		u.Type = SelectAttributeOptionsTypeStr
 		return nil
@@ -71,15 +85,15 @@ func (u *SelectAttributeOptions) UnmarshalJSON(data []byte) error {
 }
 
 func (u SelectAttributeOptions) MarshalJSON() ([]byte, error) {
-	if u.SelectAttributeOptionsOption != nil {
-		return json.Marshal(u.SelectAttributeOptionsOption)
+	if u.Option != nil {
+		return utils.MarshalJSON(u.Option, "", true)
 	}
 
 	if u.Str != nil {
-		return json.Marshal(u.Str)
+		return utils.MarshalJSON(u.Str, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
 type SelectAttributeType string
@@ -117,17 +131,17 @@ type SelectAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	Constraints  *SelectAttributeConstraints `json:"constraints,omitempty"`
+	DefaultValue interface{}                 `json:"default_value,omitempty"`
+	Deprecated   *bool                       `default:"false" json:"deprecated"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
-	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
+	EntityBuilderDisableEdit *bool `default:"false" json:"entity_builder_disable_edit"`
 	// This attribute should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Which group the attribute should appear in. Accepts group ID or group name
 	Group *string `json:"group,omitempty"`
 	// Do not render attribute in entity views
-	Hidden *bool `json:"hidden,omitempty"`
+	Hidden *bool `default:"false" json:"hidden"`
 	// When set to true, will hide the label of the field.
 	HideLabel *bool `json:"hide_label,omitempty"`
 	// Code name of the icon to used to represent this attribute.
@@ -143,18 +157,211 @@ type SelectAttribute struct {
 	Placeholder           *string `json:"placeholder,omitempty"`
 	PreviewValueFormatter *string `json:"preview_value_formatter,omitempty"`
 	// Setting to `true` prevents the attribute from being modified / deleted
-	Protected *bool `json:"protected,omitempty"`
-	Readonly  *bool `json:"readonly,omitempty"`
+	Protected *bool `default:"true" json:"protected"`
+	Readonly  *bool `default:"false" json:"readonly"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
 	//
 	RenderCondition *string `json:"render_condition,omitempty"`
-	Required        *bool   `json:"required,omitempty"`
+	Required        *bool   `default:"false" json:"required"`
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
 	ShowInTable    *bool                `json:"show_in_table,omitempty"`
 	Type           *SelectAttributeType `json:"type,omitempty"`
 	ValueFormatter *string              `json:"value_formatter,omitempty"`
+}
+
+func (s SelectAttribute) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SelectAttribute) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *SelectAttribute) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *SelectAttribute) GetAllowAny() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.AllowAny
+}
+
+func (o *SelectAttribute) GetConstraints() *SelectAttributeConstraints {
+	if o == nil {
+		return nil
+	}
+	return o.Constraints
+}
+
+func (o *SelectAttribute) GetDefaultValue() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultValue
+}
+
+func (o *SelectAttribute) GetDeprecated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deprecated
+}
+
+func (o *SelectAttribute) GetEntityBuilderDisableEdit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EntityBuilderDisableEdit
+}
+
+func (o *SelectAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *SelectAttribute) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
+}
+
+func (o *SelectAttribute) GetHidden() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hidden
+}
+
+func (o *SelectAttribute) GetHideLabel() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HideLabel
+}
+
+func (o *SelectAttribute) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *SelectAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *SelectAttribute) GetLayout() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Layout
+}
+
+func (o *SelectAttribute) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *SelectAttribute) GetOptions() []SelectAttributeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.Options
+}
+
+func (o *SelectAttribute) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *SelectAttribute) GetPlaceholder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Placeholder
+}
+
+func (o *SelectAttribute) GetPreviewValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PreviewValueFormatter
+}
+
+func (o *SelectAttribute) GetProtected() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Protected
+}
+
+func (o *SelectAttribute) GetReadonly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Readonly
+}
+
+func (o *SelectAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *SelectAttribute) GetRequired() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Required
+}
+
+func (o *SelectAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *SelectAttribute) GetShowInTable() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowInTable
+}
+
+func (o *SelectAttribute) GetType() *SelectAttributeType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *SelectAttribute) GetValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ValueFormatter
 }

@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -11,16 +11,68 @@ type GetSchemaVersionsRequest struct {
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
-// GetSchemaVersions200ApplicationJSON - Success
-type GetSchemaVersions200ApplicationJSON struct {
+func (o *GetSchemaVersionsRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+// GetSchemaVersionsResponseBody - Success
+type GetSchemaVersionsResponseBody struct {
 	Drafts   []shared.EntitySchemaItem `json:"drafts,omitempty"`
 	Versions []shared.EntitySchemaItem `json:"versions,omitempty"`
 }
 
+func (o *GetSchemaVersionsResponseBody) GetDrafts() []shared.EntitySchemaItem {
+	if o == nil {
+		return nil
+	}
+	return o.Drafts
+}
+
+func (o *GetSchemaVersionsResponseBody) GetVersions() []shared.EntitySchemaItem {
+	if o == nil {
+		return nil
+	}
+	return o.Versions
+}
+
 type GetSchemaVersionsResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	GetSchemaVersions200ApplicationJSONObject *GetSchemaVersions200ApplicationJSON
+	Object *GetSchemaVersionsResponseBody
+}
+
+func (o *GetSchemaVersionsResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetSchemaVersionsResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetSchemaVersionsResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *GetSchemaVersionsResponse) GetObject() *GetSchemaVersionsResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

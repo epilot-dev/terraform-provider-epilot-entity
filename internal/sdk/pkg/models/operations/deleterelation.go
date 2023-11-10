@@ -3,12 +3,13 @@
 package operations
 
 import (
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
 type DeleteRelationRequest struct {
 	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
+	Async *bool `default:"false" queryParam:"style=form,explode=true,name=async"`
 	// The attribute that express meaning
 	Attribute string `pathParam:"style=simple,explode=false,name=attribute"`
 	// The attribute that express meaning
@@ -19,8 +20,78 @@ type DeleteRelationRequest struct {
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (d DeleteRelationRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DeleteRelationRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *DeleteRelationRequest) GetAsync() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Async
+}
+
+func (o *DeleteRelationRequest) GetAttribute() string {
+	if o == nil {
+		return ""
+	}
+	return o.Attribute
+}
+
+func (o *DeleteRelationRequest) GetEntityID() string {
+	if o == nil {
+		return ""
+	}
+	return o.EntityID
+}
+
+func (o *DeleteRelationRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *DeleteRelationRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type DeleteRelationResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+}
+
+func (o *DeleteRelationResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *DeleteRelationResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *DeleteRelationResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

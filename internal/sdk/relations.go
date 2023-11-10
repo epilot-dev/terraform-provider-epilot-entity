@@ -5,55 +5,48 @@ package sdk
 import (
 	"bytes"
 	"context"
-	"epilot-entity/internal/sdk/pkg/models/operations"
-	"epilot-entity/internal/sdk/pkg/models/shared"
-	"epilot-entity/internal/sdk/pkg/utils"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/sdkerrors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"io"
 	"net/http"
 )
 
-// relations - Entity Relationships
-type relations struct {
-	defaultClient  HTTPClient
-	securityClient HTTPClient
-	serverURL      string
-	language       string
-	sdkVersion     string
-	genVersion     string
+// Relations - Entity Relationships
+type Relations struct {
+	sdkConfiguration sdkConfiguration
 }
 
-func newRelations(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *relations {
-	return &relations{
-		defaultClient:  defaultClient,
-		securityClient: securityClient,
-		serverURL:      serverURL,
-		language:       language,
-		sdkVersion:     sdkVersion,
-		genVersion:     genVersion,
+func newRelations(sdkConfig sdkConfiguration) *Relations {
+	return &Relations{
+		sdkConfiguration: sdkConfig,
 	}
 }
 
 // AddRelations - addRelations
 // Relates one or more entities to parent entity by adding items to a relation attribute
-func (s *relations) AddRelations(ctx context.Context, request operations.AddRelationsRequest) (*operations.AddRelationsResponse, error) {
-	baseURL := s.serverURL
+func (s *Relations) AddRelations(ctx context.Context, request operations.AddRelationsRequest) (*operations.AddRelationsResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "RequestBody", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	req.Header.Set("Content-Type", reqContentType)
 
@@ -61,7 +54,7 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -75,6 +68,7 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -89,12 +83,14 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.RelationItem
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out shared.RelationItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.RelationItem = out
+			res.RelationItem = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -103,8 +99,8 @@ func (s *relations) AddRelations(ctx context.Context, request operations.AddRela
 
 // DeleteRelation - deleteRelation
 // Removes relation between two entities
-func (s *relations) DeleteRelation(ctx context.Context, request operations.DeleteRelationRequest) (*operations.DeleteRelationResponse, error) {
-	baseURL := s.serverURL
+func (s *Relations) DeleteRelation(ctx context.Context, request operations.DeleteRelationRequest) (*operations.DeleteRelationResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -115,13 +111,13 @@ func (s *relations) DeleteRelation(ctx context.Context, request operations.Delet
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "*/*")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -158,8 +154,8 @@ func (s *relations) DeleteRelation(ctx context.Context, request operations.Delet
 // You can control whether to return the full entity or just the relation item with the `?hydrate` query param.
 //
 // Reverse relations i.e. entities referring to this entity are included with the `?include_reverse` query param.
-func (s *relations) GetRelations(ctx context.Context, request operations.GetRelationsRequest) (*operations.GetRelationsResponse, error) {
-	baseURL := s.serverURL
+func (s *Relations) GetRelations(ctx context.Context, request operations.GetRelationsRequest) (*operations.GetRelationsResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -170,13 +166,13 @@ func (s *relations) GetRelations(ctx context.Context, request operations.GetRela
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -204,12 +200,14 @@ func (s *relations) GetRelations(ctx context.Context, request operations.GetRela
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out []interface{}
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out []shared.GetRelationsResp
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
 			res.GetRelationsResp = out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -222,8 +220,8 @@ func (s *relations) GetRelations(ctx context.Context, request operations.GetRela
 // You can control whether to return the full entity or just the relation item with the `?hydrate` query param.
 //
 // Reverse relations i.e. entities referring to this entity are included with the `?include_reverse` query param.
-func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRelationsV2Request) (*operations.GetRelationsV2Response, error) {
-	baseURL := s.serverURL
+func (s *Relations) GetRelationsV2(ctx context.Context, request operations.GetRelationsV2Request) (*operations.GetRelationsV2Response, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v2/entity/{slug}/{id}/relations", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
@@ -234,13 +232,13 @@ func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRe
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -268,12 +266,14 @@ func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRe
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.GetRelationsRespWithPagination
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out shared.GetRelationsRespWithPagination
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.GetRelationsRespWithPagination = out
+			res.GetRelationsRespWithPagination = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 
@@ -282,24 +282,26 @@ func (s *relations) GetRelationsV2(ctx context.Context, request operations.GetRe
 
 // UpdateRelation - updateRelation
 // Updates an existing relation between two entities.
-func (s *relations) UpdateRelation(ctx context.Context, request operations.UpdateRelationRequest) (*operations.UpdateRelationResponse, error) {
-	baseURL := s.serverURL
+func (s *Relations) UpdateRelation(ctx context.Context, request operations.UpdateRelationRequest) (*operations.UpdateRelationResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url, err := utils.GenerateURL(ctx, baseURL, "/v1/entity/{slug}/{id}/relations/{attribute}/{entity_id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "RequestBody", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "RequestBody", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", url, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "PUT", url, debugReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s", s.language, s.sdkVersion, s.genVersion))
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
 
 	req.Header.Set("Content-Type", reqContentType)
 
@@ -307,7 +309,7 @@ func (s *relations) UpdateRelation(ctx context.Context, request operations.Updat
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	client := s.securityClient
+	client := s.sdkConfiguration.SecurityClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
@@ -321,6 +323,7 @@ func (s *relations) UpdateRelation(ctx context.Context, request operations.Updat
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
@@ -335,12 +338,14 @@ func (s *relations) UpdateRelation(ctx context.Context, request operations.Updat
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.RelationItem
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+			var out shared.RelationItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.RelationItem = out
+			res.RelationItem = &out
+		default:
+			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	}
 

@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -14,10 +14,55 @@ type AttachActivityRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
+func (o *AttachActivityRequest) GetEntities() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Entities
+}
+
+func (o *AttachActivityRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
 type AttachActivityResponse struct {
 	// Success
 	ActivityItem *shared.ActivityItem
-	ContentType  string
-	StatusCode   int
-	RawResponse  *http.Response
+	// HTTP response content type for this operation
+	ContentType string
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *AttachActivityResponse) GetActivityItem() *shared.ActivityItem {
+	if o == nil {
+		return nil
+	}
+	return o.ActivityItem
+}
+
+func (o *AttachActivityResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *AttachActivityResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *AttachActivityResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

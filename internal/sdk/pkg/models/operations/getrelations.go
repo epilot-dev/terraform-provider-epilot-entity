@@ -3,24 +3,96 @@
 package operations
 
 import (
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
 type GetRelationsRequest struct {
 	// When true, expand relation items with full blown entities.
-	Hydrate *bool `queryParam:"style=form,explode=true,name=hydrate"`
+	Hydrate *bool `default:"false" queryParam:"style=form,explode=true,name=hydrate"`
 	// Entity id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// When true, includes reverse relations in response (other entities pointing to this entity)
-	IncludeReverse *bool `queryParam:"style=form,explode=true,name=include_reverse"`
+	IncludeReverse *bool `default:"false" queryParam:"style=form,explode=true,name=include_reverse"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (g GetRelationsRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GetRelationsRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GetRelationsRequest) GetHydrate() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hydrate
+}
+
+func (o *GetRelationsRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GetRelationsRequest) GetIncludeReverse() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IncludeReverse
+}
+
+func (o *GetRelationsRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type GetRelationsResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Success
-	GetRelationsResp []interface{}
-	StatusCode       int
-	RawResponse      *http.Response
+	GetRelationsResp []shared.GetRelationsResp
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *GetRelationsResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetRelationsResponse) GetGetRelationsResp() []shared.GetRelationsResp {
+	if o == nil {
+		return nil
+	}
+	return o.GetRelationsResp
+}
+
+func (o *GetRelationsResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetRelationsResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

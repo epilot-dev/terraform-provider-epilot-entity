@@ -34,3 +34,52 @@ type SummaryAttribute struct {
 	// A static value or an handlebar expression.
 	Value string `json:"value"`
 }
+
+func (o *SummaryAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *SummaryAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *SummaryAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *SummaryAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *SummaryAttribute) GetShowAsTag() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowAsTag
+}
+
+func (o *SummaryAttribute) GetTagColor() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TagColor
+}
+
+func (o *SummaryAttribute) GetValue() string {
+	if o == nil {
+		return ""
+	}
+	return o.Value
+}

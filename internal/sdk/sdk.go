@@ -3,8 +3,10 @@
 package sdk
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
-	"epilot-entity/internal/sdk/pkg/utils"
+	"context"
+	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 	"time"
 )
@@ -37,35 +39,50 @@ func Float32(f float32) *float32 { return &f }
 // Float64 provides a helper function to return a pointer to a float64
 func Float64(f float64) *float64 { return &f }
 
-// SDK - Flexible data layer for epilot Entities.
+type sdkConfiguration struct {
+	DefaultClient     HTTPClient
+	SecurityClient    HTTPClient
+	Security          func(context.Context) (interface{}, error)
+	ServerURL         string
+	ServerIndex       int
+	Language          string
+	OpenAPIDocVersion string
+	SDKVersion        string
+	GenVersion        string
+	UserAgent         string
+	RetryConfig       *utils.RetryConfig
+}
+
+func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
+	if c.ServerURL != "" {
+		return c.ServerURL, nil
+	}
+
+	return ServerList[c.ServerIndex], nil
+}
+
+// SDK - Entity API: Flexible data layer for epilot Entities.
 //
 // Use this API configure and access your business objects like Contacts, Opportunities and Products.
 //
 // [Feature Documentation](https://docs.epilot.io/docs/entities/flexible-entities)
 type SDK struct {
-	// Activity - Entity Events
-	Activity *activity
-	// Entities - CRUD Access for Entities
-	Entities *entities
-	// Export - Export and Import entities via files
-	Export *export
-	// Relations - Entity Relationships
-	Relations *relations
-	// SavedViews - Saved Views for Entities
-	SavedViews *savedViews
-	// Schemas - Model Entities
-	Schemas *schemas
-	// Taxonomy - Entity classification with Taxonomies
-	Taxonomy *taxonomy
+	// Entity Events
+	Activity *Activity
+	// Entity classification with Taxonomies
+	Taxonomy *Taxonomy
+	// Model Entities
+	Schemas *Schemas
+	// Saved Views for Entities
+	SavedViews *SavedViews
+	// CRUD Access for Entities
+	Entities *Entities
+	// Entity Relationships
+	Relations *Relations
+	// Export and Import entities via files
+	Export *Export
 
-	// Non-idiomatic field names below are to namespace fields from the fields names above to avoid name conflicts
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_security       *shared.Security
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+	sdkConfiguration sdkConfiguration
 }
 
 type SDKOption func(*SDK)
@@ -73,7 +90,7 @@ type SDKOption func(*SDK)
 // WithServerURL allows the overriding of the default server URL
 func WithServerURL(serverURL string) SDKOption {
 	return func(sdk *SDK) {
-		sdk._serverURL = serverURL
+		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 }
 
@@ -84,113 +101,96 @@ func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOptio
 			serverURL = utils.ReplaceParameters(serverURL, params)
 		}
 
-		sdk._serverURL = serverURL
+		sdk.sdkConfiguration.ServerURL = serverURL
+	}
+}
+
+// WithServerIndex allows the overriding of the default server by index
+func WithServerIndex(serverIndex int) SDKOption {
+	return func(sdk *SDK) {
+		if serverIndex < 0 || serverIndex >= len(ServerList) {
+			panic(fmt.Errorf("server index %d out of range", serverIndex))
+		}
+
+		sdk.sdkConfiguration.ServerIndex = serverIndex
 	}
 }
 
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
 	return func(sdk *SDK) {
-		sdk._defaultClient = client
+		sdk.sdkConfiguration.DefaultClient = client
+	}
+}
+
+func withSecurity(security interface{}) func(context.Context) (interface{}, error) {
+	return func(context.Context) (interface{}, error) {
+		return &security, nil
 	}
 }
 
 // WithSecurity configures the SDK to use the provided security details
 func WithSecurity(security shared.Security) SDKOption {
 	return func(sdk *SDK) {
-		sdk._security = &security
+		sdk.sdkConfiguration.Security = withSecurity(security)
+	}
+}
+
+// WithSecuritySource configures the SDK to invoke the Security Source function on each method call to determine authentication
+func WithSecuritySource(security func(context.Context) (shared.Security, error)) SDKOption {
+	return func(sdk *SDK) {
+		sdk.sdkConfiguration.Security = func(ctx context.Context) (interface{}, error) {
+			return security(ctx)
+		}
+	}
+}
+
+func WithRetryConfig(retryConfig utils.RetryConfig) SDKOption {
+	return func(sdk *SDK) {
+		sdk.sdkConfiguration.RetryConfig = &retryConfig
 	}
 }
 
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
-		_language:   "terraform",
-		_sdkVersion: "0.2.0",
-		_genVersion: "internal",
+		sdkConfiguration: sdkConfiguration{
+			Language:          "go",
+			OpenAPIDocVersion: "1.0.0",
+			SDKVersion:        "0.2.0",
+			GenVersion:        "internal",
+			UserAgent:         "speakeasy-sdk/go 0.2.0 internal 1.0.0 epilot-entity",
+		},
 	}
 	for _, opt := range opts {
 		opt(sdk)
 	}
 
 	// Use WithClient to override the default client if you would like to customize the timeout
-	if sdk._defaultClient == nil {
-		sdk._defaultClient = &http.Client{Timeout: 60 * time.Second}
+	if sdk.sdkConfiguration.DefaultClient == nil {
+		sdk.sdkConfiguration.DefaultClient = &http.Client{Timeout: 60 * time.Second}
 	}
-	if sdk._securityClient == nil {
-		if sdk._security != nil {
-			sdk._securityClient = utils.ConfigureSecurityClient(sdk._defaultClient, sdk._security)
+	if sdk.sdkConfiguration.SecurityClient == nil {
+		if sdk.sdkConfiguration.Security != nil {
+			sdk.sdkConfiguration.SecurityClient = utils.ConfigureSecurityClient(sdk.sdkConfiguration.DefaultClient, sdk.sdkConfiguration.Security)
 		} else {
-			sdk._securityClient = sdk._defaultClient
+			sdk.sdkConfiguration.SecurityClient = sdk.sdkConfiguration.DefaultClient
 		}
 	}
 
-	if sdk._serverURL == "" {
-		sdk._serverURL = ServerList[0]
-	}
+	sdk.Activity = newActivity(sdk.sdkConfiguration)
 
-	sdk.Activity = newActivity(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
+	sdk.Taxonomy = newTaxonomy(sdk.sdkConfiguration)
 
-	sdk.Entities = newEntities(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
+	sdk.Schemas = newSchemas(sdk.sdkConfiguration)
 
-	sdk.Export = newExport(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
+	sdk.SavedViews = newSavedViews(sdk.sdkConfiguration)
 
-	sdk.Relations = newRelations(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
+	sdk.Entities = newEntities(sdk.sdkConfiguration)
 
-	sdk.SavedViews = newSavedViews(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
+	sdk.Relations = newRelations(sdk.sdkConfiguration)
 
-	sdk.Schemas = newSchemas(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
-
-	sdk.Taxonomy = newTaxonomy(
-		sdk._defaultClient,
-		sdk._securityClient,
-		sdk._serverURL,
-		sdk._language,
-		sdk._sdkVersion,
-		sdk._genVersion,
-	)
+	sdk.Export = newExport(sdk.sdkConfiguration)
 
 	return sdk
 }

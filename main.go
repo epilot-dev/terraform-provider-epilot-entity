@@ -7,7 +7,7 @@ import (
 	"flag"
 	"log"
 
-	"epilot-entity/internal/provider"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 

@@ -4,21 +4,14 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
-	"epilot-entity/internal/sdk"
-	"epilot-entity/internal/sdk/pkg/models/operations"
-	"epilot-entity/internal/sdk/pkg/models/shared"
 	"fmt"
-	"time"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
 
-	"epilot-entity/internal/validators"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-
-	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -45,8 +38,8 @@ type EntityResourceModel struct {
 	Tags      []types.String `tfsdk:"tags"`
 	Title     types.String   `tfsdk:"title"`
 	UpdatedAt types.String   `tfsdk:"updated_at"`
-	Slug      types.String   `tfsdk:"slug"`
 	Entity    types.String   `tfsdk:"entity"`
+	Slug      types.String   `tfsdk:"slug"`
 }
 
 func (r *EntityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -60,46 +53,50 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		Attributes: map[string]schema.Attribute{
 			"created_at": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required: true,
 			},
 			"org": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Organization Id the entity belongs to`,
 			},
 			"schema": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `URL-friendly identifier for the entity schema`,
 			},
 			"tags": schema.ListAttribute{
 				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
 			},
 			"title": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Title of entity`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
-			"slug": schema.StringAttribute{
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-				Required:    true,
-				Description: `Entity Schema`,
-			},
 			"entity": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Parsed as JSON.`,
 				Validators: []validator.String{
 					validators.IsValidJSON(),
 				},
-				Description: `Parsed as JSON.`,
+			},
+			"slug": schema.StringAttribute{
+				Required:    true,
+				Description: `Entity Schema`,
 			},
 		},
 	}
@@ -143,61 +140,7 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	var entity *shared.Entity
-	createdAt := new(time.Time)
-	if !data.CreatedAt.IsUnknown() && !data.CreatedAt.IsNull() {
-		*createdAt, _ = time.Parse(time.RFC3339Nano, data.CreatedAt.ValueString())
-	} else {
-		createdAt = nil
-	}
-	id := new(string)
-	if !data.ID.IsUnknown() && !data.ID.IsNull() {
-		*id = data.ID.ValueString()
-	} else {
-		id = nil
-	}
-	org := new(string)
-	if !data.Org.IsUnknown() && !data.Org.IsNull() {
-		*org = data.Org.ValueString()
-	} else {
-		org = nil
-	}
-	schema := new(string)
-	if !data.Schema.IsUnknown() && !data.Schema.IsNull() {
-		*schema = data.Schema.ValueString()
-	} else {
-		schema = nil
-	}
-	tags := make([]string, 0)
-	for _, tagsItem := range data.Tags {
-		tags = append(tags, tagsItem.ValueString())
-	}
-	title := new(string)
-	if !data.Title.IsUnknown() && !data.Title.IsNull() {
-		*title = data.Title.ValueString()
-	} else {
-		title = nil
-	}
-	updatedAt := new(time.Time)
-	if !data.UpdatedAt.IsUnknown() && !data.UpdatedAt.IsNull() {
-		*updatedAt, _ = time.Parse(time.RFC3339Nano, data.UpdatedAt.ValueString())
-	} else {
-		updatedAt = nil
-	}
-	var entity1 interface{}
-	if !data.Entity.IsUnknown() && !data.Entity.IsNull() {
-		_ = json.Unmarshal([]byte(data.Entity.ValueString()), &entity1)
-	}
-	entity = &shared.Entity{
-		CreatedAt: createdAt,
-		ID:        id,
-		Org:       org,
-		Schema:    schema,
-		Tags:      tags,
-		Title:     title,
-		UpdatedAt: updatedAt,
-		Entity:    entity1,
-	}
+	entity := data.ToCreateSDKType()
 	slug := data.Slug.ValueString()
 	request := operations.CreateEntityRequest{
 		Entity: entity,
@@ -206,6 +149,9 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 	res, err := r.client.Entities.CreateEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -253,6 +199,9 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 	res, err := r.client.Entities.GetEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -263,11 +212,11 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.GetEntity200ApplicationJSONObject.Entity == nil {
+	if res.Object == nil || res.Object.Entity == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromGetResponse(res.GetEntity200ApplicationJSONObject.Entity)
+	data.RefreshFromGetResponse(res.Object.Entity)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -280,71 +229,20 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	var entity *shared.Entity
-	createdAt := new(time.Time)
-	if !data.CreatedAt.IsUnknown() && !data.CreatedAt.IsNull() {
-		*createdAt, _ = time.Parse(time.RFC3339Nano, data.CreatedAt.ValueString())
-	} else {
-		createdAt = nil
-	}
-	id := new(string)
-	if !data.ID.IsUnknown() && !data.ID.IsNull() {
-		*id = data.ID.ValueString()
-	} else {
-		id = nil
-	}
-	org := new(string)
-	if !data.Org.IsUnknown() && !data.Org.IsNull() {
-		*org = data.Org.ValueString()
-	} else {
-		org = nil
-	}
-	schema := new(string)
-	if !data.Schema.IsUnknown() && !data.Schema.IsNull() {
-		*schema = data.Schema.ValueString()
-	} else {
-		schema = nil
-	}
-	tags := make([]string, 0)
-	for _, tagsItem := range data.Tags {
-		tags = append(tags, tagsItem.ValueString())
-	}
-	title := new(string)
-	if !data.Title.IsUnknown() && !data.Title.IsNull() {
-		*title = data.Title.ValueString()
-	} else {
-		title = nil
-	}
-	updatedAt := new(time.Time)
-	if !data.UpdatedAt.IsUnknown() && !data.UpdatedAt.IsNull() {
-		*updatedAt, _ = time.Parse(time.RFC3339Nano, data.UpdatedAt.ValueString())
-	} else {
-		updatedAt = nil
-	}
-	var entity1 interface{}
-	if !data.Entity.IsUnknown() && !data.Entity.IsNull() {
-		_ = json.Unmarshal([]byte(data.Entity.ValueString()), &entity1)
-	}
-	entity = &shared.Entity{
-		CreatedAt: createdAt,
-		ID:        id,
-		Org:       org,
-		Schema:    schema,
-		Tags:      tags,
-		Title:     title,
-		UpdatedAt: updatedAt,
-		Entity:    entity1,
-	}
-	id1 := data.ID.ValueString()
+	entity := data.ToUpdateSDKType()
+	id := data.ID.ValueString()
 	slug := data.Slug.ValueString()
 	request := operations.UpdateEntityRequest{
 		Entity: entity,
-		ID:     id1,
+		ID:     id,
 		Slug:   slug,
 	}
 	res, err := r.client.Entities.UpdateEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -392,6 +290,9 @@ func (r *EntityResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	res, err := r.client.Entities.DeleteEntity(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
 		return
 	}
 	if res == nil {
@@ -406,5 +307,5 @@ func (r *EntityResource) Delete(ctx context.Context, req resource.DeleteRequest,
 }
 
 func (r *EntityResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource entity. Reason: composite imports strings not supported.")
 }

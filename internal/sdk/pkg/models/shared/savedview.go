@@ -4,21 +4,23 @@ package shared
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type SavedViewCreatedBy2Source string
+type SavedViewSource string
 
 const (
-	SavedViewCreatedBy2SourceSystem    SavedViewCreatedBy2Source = "SYSTEM"
-	SavedViewCreatedBy2SourceBlueprint SavedViewCreatedBy2Source = "BLUEPRINT"
+	SavedViewSourceSystem    SavedViewSource = "SYSTEM"
+	SavedViewSourceBlueprint SavedViewSource = "BLUEPRINT"
 )
 
-func (e SavedViewCreatedBy2Source) ToPointer() *SavedViewCreatedBy2Source {
+func (e SavedViewSource) ToPointer() *SavedViewSource {
 	return &e
 }
 
-func (e *SavedViewCreatedBy2Source) UnmarshalJSON(data []byte) error {
+func (e *SavedViewSource) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -27,72 +29,122 @@ func (e *SavedViewCreatedBy2Source) UnmarshalJSON(data []byte) error {
 	case "SYSTEM":
 		fallthrough
 	case "BLUEPRINT":
-		*e = SavedViewCreatedBy2Source(v)
+		*e = SavedViewSource(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SavedViewCreatedBy2Source: %v", v)
+		return fmt.Errorf("invalid value for SavedViewSource: %v", v)
 	}
 }
 
-// SavedViewCreatedBy2 - A system-created view
-type SavedViewCreatedBy2 struct {
-	Source *SavedViewCreatedBy2Source `json:"source,omitempty"`
-
-	AdditionalProperties interface{} `json:"-"`
+// SavedView2 - A system-created view
+type SavedView2 struct {
+	AdditionalProperties interface{}      `additionalProperties:"true" json:"-"`
+	Source               *SavedViewSource `json:"source,omitempty"`
 }
-type _SavedViewCreatedBy2 SavedViewCreatedBy2
 
-func (c *SavedViewCreatedBy2) UnmarshalJSON(bs []byte) error {
-	data := _SavedViewCreatedBy2{}
+func (s SavedView2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
 
-	if err := json.Unmarshal(bs, &data); err != nil {
+func (s *SavedView2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
 		return err
 	}
-	*c = SavedViewCreatedBy2(data)
-
-	additionalFields := make(map[string]interface{})
-
-	if err := json.Unmarshal(bs, &additionalFields); err != nil {
-		return err
-	}
-	delete(additionalFields, "source")
-
-	c.AdditionalProperties = additionalFields
-
 	return nil
 }
 
-func (c SavedViewCreatedBy2) MarshalJSON() ([]byte, error) {
-	out := map[string]interface{}{}
-	bs, err := json.Marshal(_SavedViewCreatedBy2(c))
-	if err != nil {
-		return nil, err
+func (o *SavedView2) GetAdditionalProperties() interface{} {
+	if o == nil {
+		return nil
 	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	bs, err = json.Marshal(c.AdditionalProperties)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	return json.Marshal(out)
+	return o.AdditionalProperties
 }
 
-// SavedViewCreatedBy1 - A user that created the view
-type SavedViewCreatedBy1 struct {
+func (o *SavedView2) GetSource() *SavedViewSource {
+	if o == nil {
+		return nil
+	}
+	return o.Source
+}
+
+// SavedView1 - A user that created the view
+type SavedView1 struct {
 	UserID *string `json:"user_id,omitempty"`
+}
+
+func (o *SavedView1) GetUserID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UserID
+}
+
+type CreatedByType string
+
+const (
+	CreatedByTypeSavedView1 CreatedByType = "SavedView_1"
+	CreatedByTypeSavedView2 CreatedByType = "SavedView_2"
+)
+
+type CreatedBy struct {
+	SavedView1 *SavedView1
+	SavedView2 *SavedView2
+
+	Type CreatedByType
+}
+
+func CreateCreatedBySavedView1(savedView1 SavedView1) CreatedBy {
+	typ := CreatedByTypeSavedView1
+
+	return CreatedBy{
+		SavedView1: &savedView1,
+		Type:       typ,
+	}
+}
+
+func CreateCreatedBySavedView2(savedView2 SavedView2) CreatedBy {
+	typ := CreatedByTypeSavedView2
+
+	return CreatedBy{
+		SavedView2: &savedView2,
+		Type:       typ,
+	}
+}
+
+func (u *CreatedBy) UnmarshalJSON(data []byte) error {
+
+	savedView1 := new(SavedView1)
+	if err := utils.UnmarshalJSON(data, &savedView1, "", true, true); err == nil {
+		u.SavedView1 = savedView1
+		u.Type = CreatedByTypeSavedView1
+		return nil
+	}
+
+	savedView2 := new(SavedView2)
+	if err := utils.UnmarshalJSON(data, &savedView2, "", true, true); err == nil {
+		u.SavedView2 = savedView2
+		u.Type = CreatedByTypeSavedView2
+		return nil
+	}
+
+	return errors.New("could not unmarshal into supported union types")
+}
+
+func (u CreatedBy) MarshalJSON() ([]byte, error) {
+	if u.SavedView1 != nil {
+		return utils.MarshalJSON(u.SavedView1, "", true)
+	}
+
+	if u.SavedView2 != nil {
+		return utils.MarshalJSON(u.SavedView2, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
 // SavedView - A saved entity view
 type SavedView struct {
-	CreatedBy interface{} `json:"created_by"`
+	CreatedBy CreatedBy `json:"created_by"`
 	// User-friendly identifier for the saved view
 	Name string `json:"name"`
 	// Organisation ID a view belongs to
@@ -102,4 +154,46 @@ type SavedView struct {
 	// list of schemas a view can belong to
 	Slug     []string               `json:"slug"`
 	UIConfig map[string]interface{} `json:"ui_config"`
+}
+
+func (o *SavedView) GetCreatedBy() CreatedBy {
+	if o == nil {
+		return CreatedBy{}
+	}
+	return o.CreatedBy
+}
+
+func (o *SavedView) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *SavedView) GetOrg() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Org
+}
+
+func (o *SavedView) GetShared() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Shared
+}
+
+func (o *SavedView) GetSlug() []string {
+	if o == nil {
+		return []string{}
+	}
+	return o.Slug
+}
+
+func (o *SavedView) GetUIConfig() map[string]interface{} {
+	if o == nil {
+		return map[string]interface{}{}
+	}
+	return o.UIConfig
 }

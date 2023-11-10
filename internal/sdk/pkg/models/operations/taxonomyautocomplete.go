@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -16,15 +16,74 @@ type TaxonomyAutocompleteRequest struct {
 	TaxonomySlug string `pathParam:"style=simple,explode=false,name=taxonomySlug"`
 }
 
-// TaxonomyAutocomplete200ApplicationJSON - Taxonomy classifications
-type TaxonomyAutocomplete200ApplicationJSON struct {
+func (o *TaxonomyAutocompleteRequest) GetQuery() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Query
+}
+
+func (o *TaxonomyAutocompleteRequest) GetSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *TaxonomyAutocompleteRequest) GetTaxonomySlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.TaxonomySlug
+}
+
+// TaxonomyAutocompleteResponseBody - Taxonomy classifications
+type TaxonomyAutocompleteResponseBody struct {
 	Results []shared.TaxonomyClassification `json:"results,omitempty"`
 }
 
+func (o *TaxonomyAutocompleteResponseBody) GetResults() []shared.TaxonomyClassification {
+	if o == nil {
+		return nil
+	}
+	return o.Results
+}
+
 type TaxonomyAutocompleteResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Taxonomy classifications
-	TaxonomyAutocomplete200ApplicationJSONObject *TaxonomyAutocomplete200ApplicationJSON
+	Object *TaxonomyAutocompleteResponseBody
+}
+
+func (o *TaxonomyAutocompleteResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *TaxonomyAutocompleteResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *TaxonomyAutocompleteResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *TaxonomyAutocompleteResponse) GetObject() *TaxonomyAutocompleteResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

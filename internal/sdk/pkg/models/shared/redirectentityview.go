@@ -35,3 +35,17 @@ type RedirectEntityView struct {
 	Route    *string                     `json:"route,omitempty"`
 	ViewType *RedirectEntityViewViewType `json:"view_type,omitempty"`
 }
+
+func (o *RedirectEntityView) GetRoute() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Route
+}
+
+func (o *RedirectEntityView) GetViewType() *RedirectEntityViewViewType {
+	if o == nil {
+		return nil
+	}
+	return o.ViewType
+}

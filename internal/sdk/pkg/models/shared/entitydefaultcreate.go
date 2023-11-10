@@ -7,37 +7,72 @@ import (
 	"fmt"
 )
 
-type EntityDefaultCreateTableMenuOptions struct {
+type TableMenuOptions struct {
 	Icon  *string `json:"icon,omitempty"`
 	Label *string `json:"label,omitempty"`
 }
 
-type EntityDefaultCreateViewType string
+func (o *TableMenuOptions) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *TableMenuOptions) GetLabel() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Label
+}
+
+type ViewType string
 
 const (
-	EntityDefaultCreateViewTypeDefault EntityDefaultCreateViewType = "default"
+	ViewTypeDefault ViewType = "default"
 )
 
-func (e EntityDefaultCreateViewType) ToPointer() *EntityDefaultCreateViewType {
+func (e ViewType) ToPointer() *ViewType {
 	return &e
 }
 
-func (e *EntityDefaultCreateViewType) UnmarshalJSON(data []byte) error {
+func (e *ViewType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "default":
-		*e = EntityDefaultCreateViewType(v)
+		*e = ViewType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultCreateViewType: %v", v)
+		return fmt.Errorf("invalid value for ViewType: %v", v)
 	}
 }
 
 type EntityDefaultCreate struct {
-	SearchParams     map[string]string                    `json:"search_params,omitempty"`
-	TableMenuOptions *EntityDefaultCreateTableMenuOptions `json:"table_menu_options,omitempty"`
-	ViewType         *EntityDefaultCreateViewType         `json:"view_type,omitempty"`
+	SearchParams     map[string]string `json:"search_params,omitempty"`
+	TableMenuOptions *TableMenuOptions `json:"table_menu_options,omitempty"`
+	ViewType         *ViewType         `json:"view_type,omitempty"`
+}
+
+func (o *EntityDefaultCreate) GetSearchParams() map[string]string {
+	if o == nil {
+		return nil
+	}
+	return o.SearchParams
+}
+
+func (o *EntityDefaultCreate) GetTableMenuOptions() *TableMenuOptions {
+	if o == nil {
+		return nil
+	}
+	return o.TableMenuOptions
+}
+
+func (o *EntityDefaultCreate) GetViewType() *ViewType {
+	if o == nil {
+		return nil
+	}
+	return o.ViewType
 }

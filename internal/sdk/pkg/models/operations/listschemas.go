@@ -3,24 +3,81 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
 type ListSchemasRequest struct {
 	// Return unpublished draft schemas
-	Unpublished *bool `queryParam:"style=form,explode=true,name=unpublished"`
+	Unpublished *bool `default:"false" queryParam:"style=form,explode=true,name=unpublished"`
 }
 
-// ListSchemas200ApplicationJSON - Success
-type ListSchemas200ApplicationJSON struct {
+func (l ListSchemasRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *ListSchemasRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *ListSchemasRequest) GetUnpublished() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Unpublished
+}
+
+// ListSchemasResponseBody - Success
+type ListSchemasResponseBody struct {
 	Results []shared.EntitySchemaItem `json:"results,omitempty"`
 }
 
+func (o *ListSchemasResponseBody) GetResults() []shared.EntitySchemaItem {
+	if o == nil {
+		return nil
+	}
+	return o.Results
+}
+
 type ListSchemasResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	ListSchemas200ApplicationJSONObject *ListSchemas200ApplicationJSON
+	Object *ListSchemasResponseBody
+}
+
+func (o *ListSchemasResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *ListSchemasResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *ListSchemasResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *ListSchemasResponse) GetObject() *ListSchemasResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

@@ -3,72 +3,87 @@
 package shared
 
 import (
-	"encoding/json"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"time"
 )
 
-// EntityItem - Success
 type EntityItem struct {
-	CreatedAt time.Time `json:"_created_at"`
-	ID        string    `json:"_id"`
+	CreatedAt *time.Time `json:"_created_at"`
+	ID        string     `json:"_id"`
 	// Organization Id the entity belongs to
 	Org string `json:"_org"`
 	// URL-friendly identifier for the entity schema
 	Schema string   `json:"_schema"`
 	Tags   []string `json:"_tags,omitempty"`
 	// Title of entity
-	Title     string    `json:"_title"`
-	UpdatedAt time.Time `json:"_updated_at"`
-
-	Entity interface{} `json:"-"`
+	Title     *string     `json:"_title"`
+	UpdatedAt *time.Time  `json:"_updated_at"`
+	Entity    interface{} `additionalProperties:"true" json:"-"`
 }
-type _EntityItem EntityItem
 
-func (c *EntityItem) UnmarshalJSON(bs []byte) error {
-	data := _EntityItem{}
+func (e EntityItem) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
 
-	if err := json.Unmarshal(bs, &data); err != nil {
+func (e *EntityItem) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
 		return err
 	}
-	*c = EntityItem(data)
-
-	additionalFields := make(map[string]interface{})
-
-	if err := json.Unmarshal(bs, &additionalFields); err != nil {
-		return err
-	}
-	delete(additionalFields, "_created_at")
-	delete(additionalFields, "_id")
-	delete(additionalFields, "_org")
-	delete(additionalFields, "_schema")
-	delete(additionalFields, "_tags")
-	delete(additionalFields, "_title")
-	delete(additionalFields, "_updated_at")
-
-	c.Entity = additionalFields
-
 	return nil
 }
 
-func (c EntityItem) MarshalJSON() ([]byte, error) {
-	out := map[string]interface{}{}
-	bs, err := json.Marshal(_EntityItem(c))
-	if err != nil {
-		return nil, err
+func (o *EntityItem) GetCreatedAt() *time.Time {
+	if o == nil {
+		return nil
 	}
+	return o.CreatedAt
+}
 
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
+func (o *EntityItem) GetID() string {
+	if o == nil {
+		return ""
 	}
+	return o.ID
+}
 
-	bs, err = json.Marshal(c.Entity)
-	if err != nil {
-		return nil, err
+func (o *EntityItem) GetOrg() string {
+	if o == nil {
+		return ""
 	}
+	return o.Org
+}
 
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
+func (o *EntityItem) GetSchema() string {
+	if o == nil {
+		return ""
 	}
+	return o.Schema
+}
 
-	return json.Marshal(out)
+func (o *EntityItem) GetTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *EntityItem) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
+}
+
+func (o *EntityItem) GetUpdatedAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
+}
+
+func (o *EntityItem) GetEntity() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.Entity
 }

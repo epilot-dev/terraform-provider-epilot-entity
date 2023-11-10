@@ -3,14 +3,45 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
 type CreateSavedViewResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Success
 	SavedViewItem *shared.SavedViewItem
-	StatusCode    int
-	RawResponse   *http.Response
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *CreateSavedViewResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *CreateSavedViewResponse) GetSavedViewItem() *shared.SavedViewItem {
+	if o == nil {
+		return nil
+	}
+	return o.SavedViewItem
+}
+
+func (o *CreateSavedViewResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *CreateSavedViewResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

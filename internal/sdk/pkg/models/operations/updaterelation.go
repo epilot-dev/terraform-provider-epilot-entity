@@ -3,7 +3,8 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
@@ -11,10 +12,17 @@ type UpdateRelationRequestBody struct {
 	Tags []string `json:"_tags,omitempty"`
 }
 
+func (o *UpdateRelationRequestBody) GetTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
 type UpdateRelationRequest struct {
 	RequestBody *UpdateRelationRequestBody `request:"mediaType=application/json"`
 	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
+	Async *bool `default:"false" queryParam:"style=form,explode=true,name=async"`
 	// The attribute that express meaning
 	Attribute string `pathParam:"style=simple,explode=false,name=attribute"`
 	// The attribute that express meaning
@@ -25,10 +33,94 @@ type UpdateRelationRequest struct {
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (u UpdateRelationRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateRelationRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *UpdateRelationRequest) GetRequestBody() *UpdateRelationRequestBody {
+	if o == nil {
+		return nil
+	}
+	return o.RequestBody
+}
+
+func (o *UpdateRelationRequest) GetAsync() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Async
+}
+
+func (o *UpdateRelationRequest) GetAttribute() string {
+	if o == nil {
+		return ""
+	}
+	return o.Attribute
+}
+
+func (o *UpdateRelationRequest) GetEntityID() string {
+	if o == nil {
+		return ""
+	}
+	return o.EntityID
+}
+
+func (o *UpdateRelationRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *UpdateRelationRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type UpdateRelationResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Success
 	RelationItem *shared.RelationItem
-	StatusCode   int
-	RawResponse  *http.Response
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *UpdateRelationResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *UpdateRelationResponse) GetRelationItem() *shared.RelationItem {
+	if o == nil {
+		return nil
+	}
+	return o.RelationItem
+}
+
+func (o *UpdateRelationResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *UpdateRelationResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }
