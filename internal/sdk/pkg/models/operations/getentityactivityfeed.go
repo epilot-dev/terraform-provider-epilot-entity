@@ -3,7 +3,8 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 	"time"
 )
@@ -14,27 +15,132 @@ type GetEntityActivityFeedRequest struct {
 	// get activities before this timestamp
 	Before *time.Time `queryParam:"style=form,explode=true,name=before"`
 	// start from page
-	From *int64 `queryParam:"style=form,explode=true,name=from"`
+	From *int64 `default:"0" queryParam:"style=form,explode=true,name=from"`
 	// Entity id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// max number of results to return
-	Size *int64 `queryParam:"style=form,explode=true,name=size"`
+	Size *int64 `default:"25" queryParam:"style=form,explode=true,name=size"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 	// Activity type
 	Type *string `queryParam:"style=form,explode=true,name=type"`
 }
 
-// GetEntityActivityFeed200ApplicationJSON - Success
-type GetEntityActivityFeed200ApplicationJSON struct {
+func (g GetEntityActivityFeedRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GetEntityActivityFeedRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GetEntityActivityFeedRequest) GetAfter() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.After
+}
+
+func (o *GetEntityActivityFeedRequest) GetBefore() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.Before
+}
+
+func (o *GetEntityActivityFeedRequest) GetFrom() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.From
+}
+
+func (o *GetEntityActivityFeedRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GetEntityActivityFeedRequest) GetSize() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *GetEntityActivityFeedRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+func (o *GetEntityActivityFeedRequest) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+// GetEntityActivityFeedResponseBody - Success
+type GetEntityActivityFeedResponseBody struct {
 	Results []shared.ActivityItem `json:"results,omitempty"`
 	Total   *int64                `json:"total,omitempty"`
 }
 
+func (o *GetEntityActivityFeedResponseBody) GetResults() []shared.ActivityItem {
+	if o == nil {
+		return nil
+	}
+	return o.Results
+}
+
+func (o *GetEntityActivityFeedResponseBody) GetTotal() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Total
+}
+
 type GetEntityActivityFeedResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	GetEntityActivityFeed200ApplicationJSONObject *GetEntityActivityFeed200ApplicationJSON
+	Object *GetEntityActivityFeedResponseBody
+}
+
+func (o *GetEntityActivityFeedResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetEntityActivityFeedResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetEntityActivityFeedResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *GetEntityActivityFeedResponse) GetObject() *GetEntityActivityFeedResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

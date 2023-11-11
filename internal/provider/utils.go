@@ -5,8 +5,8 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	tfReflect "epilot-entity/internal/provider/reflect"
 	"fmt"
+	tfReflect "github.com/epilot-dev/terraform-provider-epilot-entity/internal/provider/reflect"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -18,9 +18,12 @@ import (
 )
 
 func debugResponse(response *http.Response) string {
-	dumpReq, err := httputil.DumpRequest(response.Request, false)
+	dumpReq, err := httputil.DumpRequest(response.Request, true)
 	if err != nil {
-		return err.Error()
+		dumpReq, err = httputil.DumpRequest(response.Request, false)
+		if err != nil {
+			return err.Error()
+		}
 	}
 	dumpRes, err := httputil.DumpResponse(response, true)
 	if err != nil {

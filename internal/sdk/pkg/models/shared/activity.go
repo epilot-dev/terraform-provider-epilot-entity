@@ -10,3 +10,31 @@ type Activity struct {
 	Title string `json:"title"`
 	Type  string `json:"type"`
 }
+
+func (o *Activity) GetMessage() string {
+	if o == nil {
+		return ""
+	}
+	return o.Message
+}
+
+func (o *Activity) GetPayload() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.Payload
+}
+
+func (o *Activity) GetTitle() string {
+	if o == nil {
+		return ""
+	}
+	return o.Title
+}
+
+func (o *Activity) GetType() string {
+	if o == nil {
+		return ""
+	}
+	return o.Type
+}

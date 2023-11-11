@@ -2,10 +2,70 @@
 
 package shared
 
+import (
+	"errors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
+)
+
+type GetRelationsRespType string
+
+const (
+	GetRelationsRespTypeRelationItem   GetRelationsRespType = "RelationItem"
+	GetRelationsRespTypeRelationEntity GetRelationsRespType = "RelationEntity"
+)
+
 type GetRelationsResp struct {
-	Tags      []string `json:"_tags,omitempty"`
-	Attribute string   `json:"attribute"`
-	EntityID  string   `json:"entity_id"`
-	// Whether this is a reverse relation
-	Reverse *bool `json:"reverse,omitempty"`
+	RelationItem   *RelationItem
+	RelationEntity *RelationEntity
+
+	Type GetRelationsRespType
+}
+
+func CreateGetRelationsRespRelationItem(relationItem RelationItem) GetRelationsResp {
+	typ := GetRelationsRespTypeRelationItem
+
+	return GetRelationsResp{
+		RelationItem: &relationItem,
+		Type:         typ,
+	}
+}
+
+func CreateGetRelationsRespRelationEntity(relationEntity RelationEntity) GetRelationsResp {
+	typ := GetRelationsRespTypeRelationEntity
+
+	return GetRelationsResp{
+		RelationEntity: &relationEntity,
+		Type:           typ,
+	}
+}
+
+func (u *GetRelationsResp) UnmarshalJSON(data []byte) error {
+
+	relationItem := new(RelationItem)
+	if err := utils.UnmarshalJSON(data, &relationItem, "", true, true); err == nil {
+		u.RelationItem = relationItem
+		u.Type = GetRelationsRespTypeRelationItem
+		return nil
+	}
+
+	relationEntity := new(RelationEntity)
+	if err := utils.UnmarshalJSON(data, &relationEntity, "", true, true); err == nil {
+		u.RelationEntity = relationEntity
+		u.Type = GetRelationsRespTypeRelationEntity
+		return nil
+	}
+
+	return errors.New("could not unmarshal into supported union types")
+}
+
+func (u GetRelationsResp) MarshalJSON() ([]byte, error) {
+	if u.RelationItem != nil {
+		return utils.MarshalJSON(u.RelationItem, "", true)
+	}
+
+	if u.RelationEntity != nil {
+		return utils.MarshalJSON(u.RelationEntity, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type: all fields are null")
 }

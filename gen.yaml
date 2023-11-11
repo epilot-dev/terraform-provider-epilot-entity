@@ -1,9 +1,29 @@
 configVersion: 1.0.0
 generation:
+  comments: {}
   sdkClassName: SDK
-  singleTagPerOp: false
+  usageSnippets:
+    optionalPropertyRendering: withExample
   telemetryEnabled: false
+features:
+  terraform:
+    additionalProperties: 0.1.1
+    constsAndDefaults: 0.1.1
+    core: 3.4.3
+    globalSecurity: 2.81.1
+    globalServerURLs: 2.82.0
+    unions: 2.81.5
 terraform:
   version: 0.2.0
   author: epilot-dev
+  imports:
+    option: openapi
+    paths:
+      callbacks: callbacks
+      errors: sdkerrors
+      operations: operations
+      shared: shared
+      webhooks: webhooks
+  inputModelSuffix: input
+  outputModelSuffix: output
   packageName: epilot-entity

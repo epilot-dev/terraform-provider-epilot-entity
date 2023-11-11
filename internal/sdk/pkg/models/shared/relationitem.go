@@ -2,11 +2,38 @@
 
 package shared
 
-// RelationItem - Success
 type RelationItem struct {
 	Tags      []string `json:"_tags,omitempty"`
 	Attribute string   `json:"attribute"`
 	EntityID  string   `json:"entity_id"`
 	// Whether this is a reverse relation
 	Reverse *bool `json:"reverse,omitempty"`
+}
+
+func (o *RelationItem) GetTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *RelationItem) GetAttribute() string {
+	if o == nil {
+		return ""
+	}
+	return o.Attribute
+}
+
+func (o *RelationItem) GetEntityID() string {
+	if o == nil {
+		return ""
+	}
+	return o.EntityID
+}
+
+func (o *RelationItem) GetReverse() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Reverse
 }

@@ -3,62 +3,92 @@
 package shared
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-// CurrencyAttributeCurrency1 - A currency configuration
-type CurrencyAttributeCurrency1 struct {
+// CurrencyAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type CurrencyAttributeConstraints struct {
+}
+
+// One - A currency configuration
+type One struct {
 	Code        string  `json:"code"`
 	Description string  `json:"description"`
 	Flag        *string `json:"flag,omitempty"`
 	Symbol      string  `json:"symbol"`
 }
 
-type CurrencyAttributeCurrencyType string
-
-const (
-	CurrencyAttributeCurrencyTypeCurrencyAttributeCurrency1 CurrencyAttributeCurrencyType = "CurrencyAttribute_currency_1"
-)
-
-type CurrencyAttributeCurrency struct {
-	CurrencyAttributeCurrency1 *CurrencyAttributeCurrency1
-
-	Type CurrencyAttributeCurrencyType
+func (o *One) GetCode() string {
+	if o == nil {
+		return ""
+	}
+	return o.Code
 }
 
-func CreateCurrencyAttributeCurrencyCurrencyAttributeCurrency1(currencyAttributeCurrency1 CurrencyAttributeCurrency1) CurrencyAttributeCurrency {
-	typ := CurrencyAttributeCurrencyTypeCurrencyAttributeCurrency1
+func (o *One) GetDescription() string {
+	if o == nil {
+		return ""
+	}
+	return o.Description
+}
 
-	return CurrencyAttributeCurrency{
-		CurrencyAttributeCurrency1: &currencyAttributeCurrency1,
-		Type:                       typ,
+func (o *One) GetFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Flag
+}
+
+func (o *One) GetSymbol() string {
+	if o == nil {
+		return ""
+	}
+	return o.Symbol
+}
+
+type CurrencyType string
+
+const (
+	CurrencyTypeOne CurrencyType = "1"
+)
+
+type Currency struct {
+	One *One
+
+	Type CurrencyType
+}
+
+func CreateCurrencyOne(one One) Currency {
+	typ := CurrencyTypeOne
+
+	return Currency{
+		One:  &one,
+		Type: typ,
 	}
 }
 
-func (u *CurrencyAttributeCurrency) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *Currency) UnmarshalJSON(data []byte) error {
 
-	currencyAttributeCurrency1 := new(CurrencyAttributeCurrency1)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&currencyAttributeCurrency1); err == nil {
-		u.CurrencyAttributeCurrency1 = currencyAttributeCurrency1
-		u.Type = CurrencyAttributeCurrencyTypeCurrencyAttributeCurrency1
+	one := new(One)
+	if err := utils.UnmarshalJSON(data, &one, "", true, true); err == nil {
+		u.One = one
+		u.Type = CurrencyTypeOne
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u CurrencyAttributeCurrency) MarshalJSON() ([]byte, error) {
-	if u.CurrencyAttributeCurrency1 != nil {
-		return json.Marshal(u.CurrencyAttributeCurrency1)
+func (u Currency) MarshalJSON() ([]byte, error) {
+	if u.One != nil {
+		return utils.MarshalJSON(u.One, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
 type CurrencyAttributeType string
@@ -91,20 +121,20 @@ type CurrencyAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints map[string]interface{} `json:"constraints,omitempty"`
+	Constraints *CurrencyAttributeConstraints `json:"constraints,omitempty"`
 	// An array of currency configurations with a country code (ISO-4217)
-	Currency             []CurrencyAttributeCurrency `json:"currency"`
-	CurrencySelectorOnly *bool                       `json:"currency_selector_only,omitempty"`
-	DefaultValue         interface{}                 `json:"default_value,omitempty"`
-	Deprecated           *bool                       `json:"deprecated,omitempty"`
+	Currency             []Currency  `json:"currency"`
+	CurrencySelectorOnly *bool       `default:"false" json:"currency_selector_only"`
+	DefaultValue         interface{} `json:"default_value,omitempty"`
+	Deprecated           *bool       `default:"false" json:"deprecated"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
-	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
+	EntityBuilderDisableEdit *bool `default:"false" json:"entity_builder_disable_edit"`
 	// This attribute should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Which group the attribute should appear in. Accepts group ID or group name
 	Group *string `json:"group,omitempty"`
 	// Do not render attribute in entity views
-	Hidden *bool `json:"hidden,omitempty"`
+	Hidden *bool `default:"false" json:"hidden"`
 	// When set to true, will hide the label of the field.
 	HideLabel *bool `json:"hide_label,omitempty"`
 	// Code name of the icon to used to represent this attribute.
@@ -119,18 +149,211 @@ type CurrencyAttribute struct {
 	Placeholder           *string `json:"placeholder,omitempty"`
 	PreviewValueFormatter *string `json:"preview_value_formatter,omitempty"`
 	// Setting to `true` prevents the attribute from being modified / deleted
-	Protected *bool `json:"protected,omitempty"`
-	Readonly  *bool `json:"readonly,omitempty"`
+	Protected *bool `default:"true" json:"protected"`
+	Readonly  *bool `default:"false" json:"readonly"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
 	//
 	RenderCondition *string `json:"render_condition,omitempty"`
-	Required        *bool   `json:"required,omitempty"`
+	Required        *bool   `default:"false" json:"required"`
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
 	ShowInTable    *bool                 `json:"show_in_table,omitempty"`
 	Type           CurrencyAttributeType `json:"type"`
 	ValueFormatter *string               `json:"value_formatter,omitempty"`
+}
+
+func (c CurrencyAttribute) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CurrencyAttribute) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *CurrencyAttribute) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *CurrencyAttribute) GetConstraints() *CurrencyAttributeConstraints {
+	if o == nil {
+		return nil
+	}
+	return o.Constraints
+}
+
+func (o *CurrencyAttribute) GetCurrency() []Currency {
+	if o == nil {
+		return []Currency{}
+	}
+	return o.Currency
+}
+
+func (o *CurrencyAttribute) GetCurrencySelectorOnly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.CurrencySelectorOnly
+}
+
+func (o *CurrencyAttribute) GetDefaultValue() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultValue
+}
+
+func (o *CurrencyAttribute) GetDeprecated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deprecated
+}
+
+func (o *CurrencyAttribute) GetEntityBuilderDisableEdit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EntityBuilderDisableEdit
+}
+
+func (o *CurrencyAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *CurrencyAttribute) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
+}
+
+func (o *CurrencyAttribute) GetHidden() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hidden
+}
+
+func (o *CurrencyAttribute) GetHideLabel() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HideLabel
+}
+
+func (o *CurrencyAttribute) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *CurrencyAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *CurrencyAttribute) GetLayout() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Layout
+}
+
+func (o *CurrencyAttribute) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *CurrencyAttribute) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *CurrencyAttribute) GetPlaceholder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Placeholder
+}
+
+func (o *CurrencyAttribute) GetPreviewValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PreviewValueFormatter
+}
+
+func (o *CurrencyAttribute) GetProtected() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Protected
+}
+
+func (o *CurrencyAttribute) GetReadonly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Readonly
+}
+
+func (o *CurrencyAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *CurrencyAttribute) GetRequired() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Required
+}
+
+func (o *CurrencyAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *CurrencyAttribute) GetShowInTable() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowInTable
+}
+
+func (o *CurrencyAttribute) GetType() CurrencyAttributeType {
+	if o == nil {
+		return CurrencyAttributeType("")
+	}
+	return o.Type
+}
+
+func (o *CurrencyAttribute) GetValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ValueFormatter
 }

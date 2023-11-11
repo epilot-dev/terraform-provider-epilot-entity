@@ -5,10 +5,10 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type EntityDefaultTable struct {
-	ClassicView      types.String                      `tfsdk:"classic_view"`
-	DropdownItems    []EntityDefaultTableDropdownItems `tfsdk:"dropdown_items"`
-	EnableThumbnails types.Bool                        `tfsdk:"enable_thumbnails"`
-	NavbarActions    []EntityDefaultTableNavbarActions `tfsdk:"navbar_actions"`
-	RowActions       []types.String                    `tfsdk:"row_actions"`
-	ViewType         types.String                      `tfsdk:"view_type"`
+	ClassicView      types.String    `tfsdk:"classic_view"`
+	DropdownItems    []DropdownItems `tfsdk:"dropdown_items"`
+	EnableThumbnails types.Bool      `tfsdk:"enable_thumbnails"`
+	NavbarActions    []NavbarActions `tfsdk:"navbar_actions"`
+	RowActions       []types.String  `tfsdk:"row_actions"`
+	ViewType         types.String    `tfsdk:"view_type"`
 }

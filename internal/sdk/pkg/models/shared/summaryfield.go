@@ -9,3 +9,17 @@ type SummaryField struct {
 	// The field from the entity attributes to display
 	Field *string `json:"field,omitempty"`
 }
+
+func (o *SummaryField) GetDisplayAs() *string {
+	if o == nil {
+		return nil
+	}
+	return o.DisplayAs
+}
+
+func (o *SummaryField) GetField() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Field
+}

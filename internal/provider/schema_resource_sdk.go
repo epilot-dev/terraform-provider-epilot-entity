@@ -4,24 +4,22 @@ package provider
 
 import (
 	"encoding/json"
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
 )
 
 func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
-	attributes := make([]shared.Attribute, 0)
+	var attributes []shared.Attribute = nil
 	for _, attributesItem := range r.Attributes {
 		if attributesItem.TextAttribute != nil {
-			purpose := make([]string, 0)
+			var purpose []string = nil
 			for _, purposeItem := range attributesItem.TextAttribute.Purpose {
 				purpose = append(purpose, purposeItem.ValueString())
 			}
-			constraints := make(map[string]interface{})
-			for constraintsKey, constraintsValue := range attributesItem.TextAttribute.Constraints {
-				var constraintsInst interface{}
-				_ = json.Unmarshal([]byte(constraintsValue.ValueString()), &constraintsInst)
-				constraints[constraintsKey] = constraintsInst
+			var constraints *shared.TextAttributeConstraints
+			if attributesItem.TextAttribute.Constraints != nil {
+				constraints = &shared.TextAttributeConstraints{}
 			}
 			var defaultValue interface{}
 			if !attributesItem.TextAttribute.DefaultValue.IsUnknown() && !attributesItem.TextAttribute.DefaultValue.IsNull() {
@@ -137,11 +135,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable = nil
 			}
-			type1 := new(shared.TextAttributeType)
+			typeVar := new(shared.TextAttributeType)
 			if !attributesItem.TextAttribute.Type.IsUnknown() && !attributesItem.TextAttribute.Type.IsNull() {
-				*type1 = shared.TextAttributeType(attributesItem.TextAttribute.Type.ValueString())
+				*typeVar = shared.TextAttributeType(attributesItem.TextAttribute.Type.ValueString())
 			} else {
-				type1 = nil
+				typeVar = nil
 			}
 			valueFormatter := new(string)
 			if !attributesItem.TextAttribute.ValueFormatter.IsUnknown() && !attributesItem.TextAttribute.ValueFormatter.IsNull() {
@@ -173,7 +171,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required,
 				SettingFlag:              settingFlag,
 				ShowInTable:              showInTable,
-				Type:                     type1,
+				Type:                     typeVar,
 				ValueFormatter:           valueFormatter,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -181,15 +179,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.LinkAttribute != nil {
-			purpose1 := make([]string, 0)
+			var purpose1 []string = nil
 			for _, purposeItem1 := range attributesItem.LinkAttribute.Purpose {
 				purpose1 = append(purpose1, purposeItem1.ValueString())
 			}
-			constraints1 := make(map[string]interface{})
-			for constraintsKey1, constraintsValue1 := range attributesItem.LinkAttribute.Constraints {
-				var constraintsInst1 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue1.ValueString()), &constraintsInst1)
-				constraints1[constraintsKey1] = constraintsInst1
+			var constraints1 *shared.LinkAttributeConstraints
+			if attributesItem.LinkAttribute.Constraints != nil {
+				constraints1 = &shared.LinkAttributeConstraints{}
 			}
 			var defaultValue1 interface{}
 			if !attributesItem.LinkAttribute.DefaultValue.IsUnknown() && !attributesItem.LinkAttribute.DefaultValue.IsNull() {
@@ -299,11 +295,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable1 = nil
 			}
-			type2 := new(shared.LinkAttributeType)
+			typeVar1 := new(shared.LinkAttributeType)
 			if !attributesItem.LinkAttribute.Type.IsUnknown() && !attributesItem.LinkAttribute.Type.IsNull() {
-				*type2 = shared.LinkAttributeType(attributesItem.LinkAttribute.Type.ValueString())
+				*typeVar1 = shared.LinkAttributeType(attributesItem.LinkAttribute.Type.ValueString())
 			} else {
-				type2 = nil
+				typeVar1 = nil
 			}
 			valueFormatter1 := new(string)
 			if !attributesItem.LinkAttribute.ValueFormatter.IsUnknown() && !attributesItem.LinkAttribute.ValueFormatter.IsNull() {
@@ -334,7 +330,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required1,
 				SettingFlag:              settingFlag1,
 				ShowInTable:              showInTable1,
-				Type:                     type2,
+				Type:                     typeVar1,
 				ValueFormatter:           valueFormatter1,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -342,15 +338,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.DateAttribute != nil {
-			purpose2 := make([]string, 0)
+			var purpose2 []string = nil
 			for _, purposeItem2 := range attributesItem.DateAttribute.Purpose {
 				purpose2 = append(purpose2, purposeItem2.ValueString())
 			}
-			constraints2 := make(map[string]interface{})
-			for constraintsKey2, constraintsValue2 := range attributesItem.DateAttribute.Constraints {
-				var constraintsInst2 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue2.ValueString()), &constraintsInst2)
-				constraints2[constraintsKey2] = constraintsInst2
+			var constraints2 *shared.DateAttributeConstraints
+			if attributesItem.DateAttribute.Constraints != nil {
+				constraints2 = &shared.DateAttributeConstraints{}
 			}
 			var defaultValue2 interface{}
 			if !attributesItem.DateAttribute.DefaultValue.IsUnknown() && !attributesItem.DateAttribute.DefaultValue.IsNull() {
@@ -460,11 +454,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable2 = nil
 			}
-			type3 := new(shared.DateAttributeType)
+			typeVar2 := new(shared.DateAttributeType)
 			if !attributesItem.DateAttribute.Type.IsUnknown() && !attributesItem.DateAttribute.Type.IsNull() {
-				*type3 = shared.DateAttributeType(attributesItem.DateAttribute.Type.ValueString())
+				*typeVar2 = shared.DateAttributeType(attributesItem.DateAttribute.Type.ValueString())
 			} else {
-				type3 = nil
+				typeVar2 = nil
 			}
 			valueFormatter2 := new(string)
 			if !attributesItem.DateAttribute.ValueFormatter.IsUnknown() && !attributesItem.DateAttribute.ValueFormatter.IsNull() {
@@ -495,7 +489,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required2,
 				SettingFlag:              settingFlag2,
 				ShowInTable:              showInTable2,
-				Type:                     type3,
+				Type:                     typeVar2,
 				ValueFormatter:           valueFormatter2,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -503,15 +497,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.CountryAttribute != nil {
-			purpose3 := make([]string, 0)
+			var purpose3 []string = nil
 			for _, purposeItem3 := range attributesItem.CountryAttribute.Purpose {
 				purpose3 = append(purpose3, purposeItem3.ValueString())
 			}
-			constraints3 := make(map[string]interface{})
-			for constraintsKey3, constraintsValue3 := range attributesItem.CountryAttribute.Constraints {
-				var constraintsInst3 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue3.ValueString()), &constraintsInst3)
-				constraints3[constraintsKey3] = constraintsInst3
+			var constraints3 *shared.CountryAttributeConstraints
+			if attributesItem.CountryAttribute.Constraints != nil {
+				constraints3 = &shared.CountryAttributeConstraints{}
 			}
 			var defaultValue3 interface{}
 			if !attributesItem.CountryAttribute.DefaultValue.IsUnknown() && !attributesItem.CountryAttribute.DefaultValue.IsNull() {
@@ -621,11 +613,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable3 = nil
 			}
-			type4 := new(shared.CountryAttributeType)
+			typeVar3 := new(shared.CountryAttributeType)
 			if !attributesItem.CountryAttribute.Type.IsUnknown() && !attributesItem.CountryAttribute.Type.IsNull() {
-				*type4 = shared.CountryAttributeType(attributesItem.CountryAttribute.Type.ValueString())
+				*typeVar3 = shared.CountryAttributeType(attributesItem.CountryAttribute.Type.ValueString())
 			} else {
-				type4 = nil
+				typeVar3 = nil
 			}
 			valueFormatter3 := new(string)
 			if !attributesItem.CountryAttribute.ValueFormatter.IsUnknown() && !attributesItem.CountryAttribute.ValueFormatter.IsNull() {
@@ -656,7 +648,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required3,
 				SettingFlag:              settingFlag3,
 				ShowInTable:              showInTable3,
-				Type:                     type4,
+				Type:                     typeVar3,
 				ValueFormatter:           valueFormatter3,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -664,15 +656,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.BooleanAttribute != nil {
-			purpose4 := make([]string, 0)
+			var purpose4 []string = nil
 			for _, purposeItem4 := range attributesItem.BooleanAttribute.Purpose {
 				purpose4 = append(purpose4, purposeItem4.ValueString())
 			}
-			constraints4 := make(map[string]interface{})
-			for constraintsKey4, constraintsValue4 := range attributesItem.BooleanAttribute.Constraints {
-				var constraintsInst4 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue4.ValueString()), &constraintsInst4)
-				constraints4[constraintsKey4] = constraintsInst4
+			var constraints4 *shared.BooleanAttributeConstraints
+			if attributesItem.BooleanAttribute.Constraints != nil {
+				constraints4 = &shared.BooleanAttributeConstraints{}
 			}
 			var defaultValue4 interface{}
 			if !attributesItem.BooleanAttribute.DefaultValue.IsUnknown() && !attributesItem.BooleanAttribute.DefaultValue.IsNull() {
@@ -782,11 +772,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable4 = nil
 			}
-			type5 := new(shared.BooleanAttributeType)
+			typeVar4 := new(shared.BooleanAttributeType)
 			if !attributesItem.BooleanAttribute.Type.IsUnknown() && !attributesItem.BooleanAttribute.Type.IsNull() {
-				*type5 = shared.BooleanAttributeType(attributesItem.BooleanAttribute.Type.ValueString())
+				*typeVar4 = shared.BooleanAttributeType(attributesItem.BooleanAttribute.Type.ValueString())
 			} else {
-				type5 = nil
+				typeVar4 = nil
 			}
 			valueFormatter4 := new(string)
 			if !attributesItem.BooleanAttribute.ValueFormatter.IsUnknown() && !attributesItem.BooleanAttribute.ValueFormatter.IsNull() {
@@ -817,7 +807,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required4,
 				SettingFlag:              settingFlag4,
 				ShowInTable:              showInTable4,
-				Type:                     type5,
+				Type:                     typeVar4,
 				ValueFormatter:           valueFormatter4,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -825,7 +815,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.SelectAttribute != nil {
-			purpose5 := make([]string, 0)
+			var purpose5 []string = nil
 			for _, purposeItem5 := range attributesItem.SelectAttribute.Purpose {
 				purpose5 = append(purpose5, purposeItem5.ValueString())
 			}
@@ -835,11 +825,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				allowAny = nil
 			}
-			constraints5 := make(map[string]interface{})
-			for constraintsKey5, constraintsValue5 := range attributesItem.SelectAttribute.Constraints {
-				var constraintsInst5 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue5.ValueString()), &constraintsInst5)
-				constraints5[constraintsKey5] = constraintsInst5
+			var constraints5 *shared.SelectAttributeConstraints
+			if attributesItem.SelectAttribute.Constraints != nil {
+				constraints5 = &shared.SelectAttributeConstraints{}
 			}
 			var defaultValue5 interface{}
 			if !attributesItem.SelectAttribute.DefaultValue.IsUnknown() && !attributesItem.SelectAttribute.DefaultValue.IsNull() {
@@ -895,22 +883,22 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				layout5 = nil
 			}
 			name5 := attributesItem.SelectAttribute.Name.ValueString()
-			options := make([]shared.SelectAttributeOptions, 0)
+			var options []shared.SelectAttributeOptions = nil
 			for _, optionsItem := range attributesItem.SelectAttribute.Options {
-				if optionsItem.SelectAttributeOptionsOption != nil {
+				if optionsItem.Option != nil {
 					title := new(string)
-					if !optionsItem.SelectAttributeOptionsOption.Title.IsUnknown() && !optionsItem.SelectAttributeOptionsOption.Title.IsNull() {
-						*title = optionsItem.SelectAttributeOptionsOption.Title.ValueString()
+					if !optionsItem.Option.Title.IsUnknown() && !optionsItem.Option.Title.IsNull() {
+						*title = optionsItem.Option.Title.ValueString()
 					} else {
 						title = nil
 					}
-					value := optionsItem.SelectAttributeOptionsOption.Value.ValueString()
-					selectAttributeOptionsOption := shared.SelectAttributeOptionsOption{
+					value := optionsItem.Option.Value.ValueString()
+					option := shared.Option{
 						Title: title,
 						Value: value,
 					}
 					options = append(options, shared.SelectAttributeOptions{
-						SelectAttributeOptionsOption: &selectAttributeOptionsOption,
+						Option: &option,
 					})
 				}
 				if !optionsItem.Str.IsUnknown() && !optionsItem.Str.IsNull() {
@@ -974,11 +962,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable5 = nil
 			}
-			type6 := new(shared.SelectAttributeType)
+			typeVar5 := new(shared.SelectAttributeType)
 			if !attributesItem.SelectAttribute.Type.IsUnknown() && !attributesItem.SelectAttribute.Type.IsNull() {
-				*type6 = shared.SelectAttributeType(attributesItem.SelectAttribute.Type.ValueString())
+				*typeVar5 = shared.SelectAttributeType(attributesItem.SelectAttribute.Type.ValueString())
 			} else {
-				type6 = nil
+				typeVar5 = nil
 			}
 			valueFormatter5 := new(string)
 			if !attributesItem.SelectAttribute.ValueFormatter.IsUnknown() && !attributesItem.SelectAttribute.ValueFormatter.IsNull() {
@@ -1011,7 +999,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required5,
 				SettingFlag:              settingFlag5,
 				ShowInTable:              showInTable5,
-				Type:                     type6,
+				Type:                     typeVar5,
 				ValueFormatter:           valueFormatter5,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -1019,7 +1007,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.MultiSelectAttribute != nil {
-			purpose6 := make([]string, 0)
+			var purpose6 []string = nil
 			for _, purposeItem6 := range attributesItem.MultiSelectAttribute.Purpose {
 				purpose6 = append(purpose6, purposeItem6.ValueString())
 			}
@@ -1035,11 +1023,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				allowExtraOptions = nil
 			}
-			constraints6 := make(map[string]interface{})
-			for constraintsKey6, constraintsValue6 := range attributesItem.MultiSelectAttribute.Constraints {
-				var constraintsInst6 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue6.ValueString()), &constraintsInst6)
-				constraints6[constraintsKey6] = constraintsInst6
+			var constraints6 *shared.MultiSelectAttributeConstraints
+			if attributesItem.MultiSelectAttribute.Constraints != nil {
+				constraints6 = &shared.MultiSelectAttributeConstraints{}
 			}
 			var defaultValue6 interface{}
 			if !attributesItem.MultiSelectAttribute.DefaultValue.IsUnknown() && !attributesItem.MultiSelectAttribute.DefaultValue.IsNull() {
@@ -1101,28 +1087,28 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				layout6 = nil
 			}
 			name6 := attributesItem.MultiSelectAttribute.Name.ValueString()
-			options1 := make([]shared.MultiSelectAttributeOptions, 0)
+			var options1 []shared.Options = nil
 			for _, optionsItem1 := range attributesItem.MultiSelectAttribute.Options {
 				if !optionsItem1.Str.IsUnknown() && !optionsItem1.Str.IsNull() {
 					str1 := optionsItem1.Str.ValueString()
-					options1 = append(options1, shared.MultiSelectAttributeOptions{
+					options1 = append(options1, shared.Options{
 						Str: &str1,
 					})
 				}
-				if optionsItem1.MultiSelectAttributeOptions2 != nil {
+				if optionsItem1.Two != nil {
 					title1 := new(string)
-					if !optionsItem1.MultiSelectAttributeOptions2.Title.IsUnknown() && !optionsItem1.MultiSelectAttributeOptions2.Title.IsNull() {
-						*title1 = optionsItem1.MultiSelectAttributeOptions2.Title.ValueString()
+					if !optionsItem1.Two.Title.IsUnknown() && !optionsItem1.Two.Title.IsNull() {
+						*title1 = optionsItem1.Two.Title.ValueString()
 					} else {
 						title1 = nil
 					}
-					value1 := optionsItem1.MultiSelectAttributeOptions2.Value.ValueString()
-					multiSelectAttributeOptions2 := shared.MultiSelectAttributeOptions2{
+					value1 := optionsItem1.Two.Value.ValueString()
+					multiSelectAttribute2 := shared.MultiSelectAttribute2{
 						Title: title1,
 						Value: value1,
 					}
-					options1 = append(options1, shared.MultiSelectAttributeOptions{
-						MultiSelectAttributeOptions2: &multiSelectAttributeOptions2,
+					options1 = append(options1, shared.Options{
+						MultiSelectAttribute2: &multiSelectAttribute2,
 					})
 				}
 			}
@@ -1180,11 +1166,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable6 = nil
 			}
-			type7 := new(shared.MultiSelectAttributeType)
+			typeVar6 := new(shared.MultiSelectAttributeType)
 			if !attributesItem.MultiSelectAttribute.Type.IsUnknown() && !attributesItem.MultiSelectAttribute.Type.IsNull() {
-				*type7 = shared.MultiSelectAttributeType(attributesItem.MultiSelectAttribute.Type.ValueString())
+				*typeVar6 = shared.MultiSelectAttributeType(attributesItem.MultiSelectAttribute.Type.ValueString())
 			} else {
-				type7 = nil
+				typeVar6 = nil
 			}
 			valueFormatter6 := new(string)
 			if !attributesItem.MultiSelectAttribute.ValueFormatter.IsUnknown() && !attributesItem.MultiSelectAttribute.ValueFormatter.IsNull() {
@@ -1219,7 +1205,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required6,
 				SettingFlag:              settingFlag6,
 				ShowInTable:              showInTable6,
-				Type:                     type7,
+				Type:                     typeVar6,
 				ValueFormatter:           valueFormatter6,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -1227,15 +1213,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.StatusAttribute != nil {
-			purpose7 := make([]string, 0)
+			var purpose7 []string = nil
 			for _, purposeItem7 := range attributesItem.StatusAttribute.Purpose {
 				purpose7 = append(purpose7, purposeItem7.ValueString())
 			}
-			constraints7 := make(map[string]interface{})
-			for constraintsKey7, constraintsValue7 := range attributesItem.StatusAttribute.Constraints {
-				var constraintsInst7 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue7.ValueString()), &constraintsInst7)
-				constraints7[constraintsKey7] = constraintsInst7
+			var constraints7 *shared.StatusAttributeConstraints
+			if attributesItem.StatusAttribute.Constraints != nil {
+				constraints7 = &shared.StatusAttributeConstraints{}
 			}
 			var defaultValue7 interface{}
 			if !attributesItem.StatusAttribute.DefaultValue.IsUnknown() && !attributesItem.StatusAttribute.DefaultValue.IsNull() {
@@ -1291,7 +1275,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				layout7 = nil
 			}
 			name7 := attributesItem.StatusAttribute.Name.ValueString()
-			options2 := make([]shared.StatusAttributeOptions, 0)
+			var options2 []shared.StatusAttributeOptions = nil
 			for _, optionsItem2 := range attributesItem.StatusAttribute.Options {
 				if !optionsItem2.Str.IsUnknown() && !optionsItem2.Str.IsNull() {
 					str2 := optionsItem2.Str.ValueString()
@@ -1299,20 +1283,20 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 						Str: &str2,
 					})
 				}
-				if optionsItem2.StatusAttributeOptions2 != nil {
+				if optionsItem2.Two != nil {
 					title2 := new(string)
-					if !optionsItem2.StatusAttributeOptions2.Title.IsUnknown() && !optionsItem2.StatusAttributeOptions2.Title.IsNull() {
-						*title2 = optionsItem2.StatusAttributeOptions2.Title.ValueString()
+					if !optionsItem2.Two.Title.IsUnknown() && !optionsItem2.Two.Title.IsNull() {
+						*title2 = optionsItem2.Two.Title.ValueString()
 					} else {
 						title2 = nil
 					}
-					value2 := optionsItem2.StatusAttributeOptions2.Value.ValueString()
-					statusAttributeOptions2 := shared.StatusAttributeOptions2{
+					value2 := optionsItem2.Two.Value.ValueString()
+					statusAttribute2 := shared.StatusAttribute2{
 						Title: title2,
 						Value: value2,
 					}
 					options2 = append(options2, shared.StatusAttributeOptions{
-						StatusAttributeOptions2: &statusAttributeOptions2,
+						StatusAttribute2: &statusAttribute2,
 					})
 				}
 			}
@@ -1370,11 +1354,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable7 = nil
 			}
-			type8 := new(shared.StatusAttributeType)
+			typeVar7 := new(shared.StatusAttributeType)
 			if !attributesItem.StatusAttribute.Type.IsUnknown() && !attributesItem.StatusAttribute.Type.IsNull() {
-				*type8 = shared.StatusAttributeType(attributesItem.StatusAttribute.Type.ValueString())
+				*typeVar7 = shared.StatusAttributeType(attributesItem.StatusAttribute.Type.ValueString())
 			} else {
-				type8 = nil
+				typeVar7 = nil
 			}
 			valueFormatter7 := new(string)
 			if !attributesItem.StatusAttribute.ValueFormatter.IsUnknown() && !attributesItem.StatusAttribute.ValueFormatter.IsNull() {
@@ -1406,7 +1390,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required7,
 				SettingFlag:              settingFlag7,
 				ShowInTable:              showInTable7,
-				Type:                     type8,
+				Type:                     typeVar7,
 				ValueFormatter:           valueFormatter7,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -1414,15 +1398,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.SequenceAttribute != nil {
-			purpose8 := make([]string, 0)
+			var purpose8 []string = nil
 			for _, purposeItem8 := range attributesItem.SequenceAttribute.Purpose {
 				purpose8 = append(purpose8, purposeItem8.ValueString())
 			}
-			constraints8 := make(map[string]interface{})
-			for constraintsKey8, constraintsValue8 := range attributesItem.SequenceAttribute.Constraints {
-				var constraintsInst8 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue8.ValueString()), &constraintsInst8)
-				constraints8[constraintsKey8] = constraintsInst8
+			var constraints8 *shared.SequenceAttributeConstraints
+			if attributesItem.SequenceAttribute.Constraints != nil {
+				constraints8 = &shared.SequenceAttributeConstraints{}
 			}
 			var defaultValue8 interface{}
 			if !attributesItem.SequenceAttribute.DefaultValue.IsUnknown() && !attributesItem.SequenceAttribute.DefaultValue.IsNull() {
@@ -1544,11 +1526,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				startNumber = nil
 			}
-			type9 := new(shared.SequenceAttributeType)
+			typeVar8 := new(shared.SequenceAttributeType)
 			if !attributesItem.SequenceAttribute.Type.IsUnknown() && !attributesItem.SequenceAttribute.Type.IsNull() {
-				*type9 = shared.SequenceAttributeType(attributesItem.SequenceAttribute.Type.ValueString())
+				*typeVar8 = shared.SequenceAttributeType(attributesItem.SequenceAttribute.Type.ValueString())
 			} else {
-				type9 = nil
+				typeVar8 = nil
 			}
 			valueFormatter8 := new(string)
 			if !attributesItem.SequenceAttribute.ValueFormatter.IsUnknown() && !attributesItem.SequenceAttribute.ValueFormatter.IsNull() {
@@ -1581,7 +1563,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				SettingFlag:              settingFlag8,
 				ShowInTable:              showInTable8,
 				StartNumber:              startNumber,
-				Type:                     type9,
+				Type:                     typeVar8,
 				ValueFormatter:           valueFormatter8,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -1589,23 +1571,23 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.RelationAttribute != nil {
-			purpose9 := make([]string, 0)
+			var purpose9 []string = nil
 			for _, purposeItem9 := range attributesItem.RelationAttribute.Purpose {
 				purpose9 = append(purpose9, purposeItem9.ValueString())
 			}
-			actions := make([]shared.RelationAttributeActions, 0)
+			var actions []shared.Actions = nil
 			for _, actionsItem := range attributesItem.RelationAttribute.Actions {
-				actionType := new(shared.RelationAttributeActionsActionType)
+				actionType := new(shared.ActionType)
 				if !actionsItem.ActionType.IsUnknown() && !actionsItem.ActionType.IsNull() {
-					*actionType = shared.RelationAttributeActionsActionType(actionsItem.ActionType.ValueString())
+					*actionType = shared.ActionType(actionsItem.ActionType.ValueString())
 				} else {
 					actionType = nil
 				}
-				default1 := new(bool)
+				defaultVar := new(bool)
 				if !actionsItem.Default.IsUnknown() && !actionsItem.Default.IsNull() {
-					*default1 = actionsItem.Default.ValueBool()
+					*defaultVar = actionsItem.Default.ValueBool()
 				} else {
-					default1 = nil
+					defaultVar = nil
 				}
 				featureFlag9 := new(string)
 				if !actionsItem.FeatureFlag.IsUnknown() && !actionsItem.FeatureFlag.IsNull() {
@@ -1619,23 +1601,38 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					label9 = nil
 				}
-				var newEntityItem *shared.RelationAttributeActionsNewEntityItem
+				var newEntityItem *shared.NewEntityItem
 				if actionsItem.NewEntityItem != nil {
-					createdAt, _ := time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.CreatedAt.ValueString())
+					createdAt := new(time.Time)
+					if !actionsItem.NewEntityItem.CreatedAt.IsUnknown() && !actionsItem.NewEntityItem.CreatedAt.IsNull() {
+						*createdAt, _ = time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.CreatedAt.ValueString())
+					} else {
+						createdAt = nil
+					}
 					id := actionsItem.NewEntityItem.ID.ValueString()
 					org := actionsItem.NewEntityItem.Org.ValueString()
 					schema := actionsItem.NewEntityItem.Schema.ValueString()
-					tags := make([]string, 0)
+					var tags []string = nil
 					for _, tagsItem := range actionsItem.NewEntityItem.Tags {
 						tags = append(tags, tagsItem.ValueString())
 					}
-					title3 := actionsItem.NewEntityItem.Title.ValueString()
-					updatedAt, _ := time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.UpdatedAt.ValueString())
+					title3 := new(string)
+					if !actionsItem.NewEntityItem.Title.IsUnknown() && !actionsItem.NewEntityItem.Title.IsNull() {
+						*title3 = actionsItem.NewEntityItem.Title.ValueString()
+					} else {
+						title3 = nil
+					}
+					updatedAt := new(time.Time)
+					if !actionsItem.NewEntityItem.UpdatedAt.IsUnknown() && !actionsItem.NewEntityItem.UpdatedAt.IsNull() {
+						*updatedAt, _ = time.Parse(time.RFC3339Nano, actionsItem.NewEntityItem.UpdatedAt.ValueString())
+					} else {
+						updatedAt = nil
+					}
 					var entity interface{}
 					if !actionsItem.NewEntityItem.Entity.IsUnknown() && !actionsItem.NewEntityItem.Entity.IsNull() {
 						_ = json.Unmarshal([]byte(actionsItem.NewEntityItem.Entity.ValueString()), &entity)
 					}
-					newEntityItem = &shared.RelationAttributeActionsNewEntityItem{
+					newEntityItem = &shared.NewEntityItem{
 						CreatedAt: createdAt,
 						ID:        id,
 						Org:       org,
@@ -1652,9 +1649,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					settingFlag9 = nil
 				}
-				actions = append(actions, shared.RelationAttributeActions{
+				actions = append(actions, shared.Actions{
 					ActionType:    actionType,
-					Default:       default1,
+					Default:       defaultVar,
 					FeatureFlag:   featureFlag9,
 					Label:         label9,
 					NewEntityItem: newEntityItem,
@@ -1667,15 +1664,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				addButtonLabel = nil
 			}
-			allowedSchemas := make([]string, 0)
+			var allowedSchemas []string = nil
 			for _, allowedSchemasItem := range attributesItem.RelationAttribute.AllowedSchemas {
 				allowedSchemas = append(allowedSchemas, allowedSchemasItem.ValueString())
 			}
-			constraints9 := make(map[string]interface{})
-			for constraintsKey9, constraintsValue9 := range attributesItem.RelationAttribute.Constraints {
-				var constraintsInst9 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue9.ValueString()), &constraintsInst9)
-				constraints9[constraintsKey9] = constraintsInst9
+			var constraints9 *shared.RelationAttributeConstraints
+			if attributesItem.RelationAttribute.Constraints != nil {
+				constraints9 = &shared.RelationAttributeConstraints{}
 			}
 			var defaultValue9 interface{}
 			if !attributesItem.RelationAttribute.DefaultValue.IsUnknown() && !attributesItem.RelationAttribute.DefaultValue.IsNull() {
@@ -1693,15 +1688,15 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				detailsViewModeEnabled = nil
 			}
-			drawerSize := new(shared.RelationAttributeDrawerSize)
+			drawerSize := new(shared.DrawerSize)
 			if !attributesItem.RelationAttribute.DrawerSize.IsUnknown() && !attributesItem.RelationAttribute.DrawerSize.IsNull() {
-				*drawerSize = shared.RelationAttributeDrawerSize(attributesItem.RelationAttribute.DrawerSize.ValueString())
+				*drawerSize = shared.DrawerSize(attributesItem.RelationAttribute.DrawerSize.ValueString())
 			} else {
 				drawerSize = nil
 			}
-			editMode := new(shared.RelationAttributeEditMode)
+			editMode := new(shared.EditMode)
 			if !attributesItem.RelationAttribute.EditMode.IsUnknown() && !attributesItem.RelationAttribute.EditMode.IsNull() {
-				*editMode = shared.RelationAttributeEditMode(attributesItem.RelationAttribute.EditMode.ValueString())
+				*editMode = shared.EditMode(attributesItem.RelationAttribute.EditMode.ValueString())
 			} else {
 				editMode = nil
 			}
@@ -1797,15 +1792,15 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				readonly9 = nil
 			}
-			relationAffinityMode := new(shared.RelationAttributeRelationAffinityMode)
+			relationAffinityMode := new(shared.RelationAffinityMode)
 			if !attributesItem.RelationAttribute.RelationAffinityMode.IsUnknown() && !attributesItem.RelationAttribute.RelationAffinityMode.IsNull() {
-				*relationAffinityMode = shared.RelationAttributeRelationAffinityMode(attributesItem.RelationAttribute.RelationAffinityMode.ValueString())
+				*relationAffinityMode = shared.RelationAffinityMode(attributesItem.RelationAttribute.RelationAffinityMode.ValueString())
 			} else {
 				relationAffinityMode = nil
 			}
-			relationType := new(shared.RelationAttributeRelationType)
+			relationType := new(shared.RelationType)
 			if !attributesItem.RelationAttribute.RelationType.IsUnknown() && !attributesItem.RelationAttribute.RelationType.IsNull() {
-				*relationType = shared.RelationAttributeRelationType(attributesItem.RelationAttribute.RelationType.ValueString())
+				*relationType = shared.RelationType(attributesItem.RelationAttribute.RelationType.ValueString())
 			} else {
 				relationType = nil
 			}
@@ -1844,11 +1839,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable9 = nil
 			}
-			summaryFields := make([]shared.RelationAttributeSummaryFields, 0)
+			var summaryFields []shared.SummaryFields = nil
 			for _, summaryFieldsItem := range attributesItem.RelationAttribute.SummaryFields {
 				if !summaryFieldsItem.Str.IsUnknown() && !summaryFieldsItem.Str.IsNull() {
 					str3 := summaryFieldsItem.Str.ValueString()
-					summaryFields = append(summaryFields, shared.RelationAttributeSummaryFields{
+					summaryFields = append(summaryFields, shared.SummaryFields{
 						Str: &str3,
 					})
 				}
@@ -1869,16 +1864,16 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 						DisplayAs: displayAs,
 						Field:     field,
 					}
-					summaryFields = append(summaryFields, shared.RelationAttributeSummaryFields{
+					summaryFields = append(summaryFields, shared.SummaryFields{
 						SummaryField: &summaryField,
 					})
 				}
 			}
-			type10 := new(shared.RelationAttributeType)
+			typeVar9 := new(shared.RelationAttributeType)
 			if !attributesItem.RelationAttribute.Type.IsUnknown() && !attributesItem.RelationAttribute.Type.IsNull() {
-				*type10 = shared.RelationAttributeType(attributesItem.RelationAttribute.Type.ValueString())
+				*typeVar9 = shared.RelationAttributeType(attributesItem.RelationAttribute.Type.ValueString())
 			} else {
-				type10 = nil
+				typeVar9 = nil
 			}
 			valueFormatter9 := new(string)
 			if !attributesItem.RelationAttribute.ValueFormatter.IsUnknown() && !attributesItem.RelationAttribute.ValueFormatter.IsNull() {
@@ -1923,7 +1918,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				SettingFlag:              settingFlag10,
 				ShowInTable:              showInTable9,
 				SummaryFields:            summaryFields,
-				Type:                     type10,
+				Type:                     typeVar9,
 				ValueFormatter:           valueFormatter9,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -1931,15 +1926,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.UserRelationAttribute != nil {
-			purpose10 := make([]string, 0)
+			var purpose10 []string = nil
 			for _, purposeItem10 := range attributesItem.UserRelationAttribute.Purpose {
 				purpose10 = append(purpose10, purposeItem10.ValueString())
 			}
-			constraints10 := make(map[string]interface{})
-			for constraintsKey10, constraintsValue10 := range attributesItem.UserRelationAttribute.Constraints {
-				var constraintsInst10 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue10.ValueString()), &constraintsInst10)
-				constraints10[constraintsKey10] = constraintsInst10
+			var constraints10 *shared.UserRelationAttributeConstraints
+			if attributesItem.UserRelationAttribute.Constraints != nil {
+				constraints10 = &shared.UserRelationAttributeConstraints{}
 			}
 			var defaultValue10 interface{}
 			if !attributesItem.UserRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.UserRelationAttribute.DefaultValue.IsNull() {
@@ -2055,11 +2048,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable10 = nil
 			}
-			type11 := new(shared.UserRelationAttributeType)
+			typeVar10 := new(shared.UserRelationAttributeType)
 			if !attributesItem.UserRelationAttribute.Type.IsUnknown() && !attributesItem.UserRelationAttribute.Type.IsNull() {
-				*type11 = shared.UserRelationAttributeType(attributesItem.UserRelationAttribute.Type.ValueString())
+				*typeVar10 = shared.UserRelationAttributeType(attributesItem.UserRelationAttribute.Type.ValueString())
 			} else {
-				type11 = nil
+				typeVar10 = nil
 			}
 			valueFormatter10 := new(string)
 			if !attributesItem.UserRelationAttribute.ValueFormatter.IsUnknown() && !attributesItem.UserRelationAttribute.ValueFormatter.IsNull() {
@@ -2091,7 +2084,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required10,
 				SettingFlag:              settingFlag11,
 				ShowInTable:              showInTable10,
-				Type:                     type11,
+				Type:                     typeVar10,
 				ValueFormatter:           valueFormatter10,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -2099,15 +2092,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.AddressRelationAttribute != nil {
-			purpose11 := make([]string, 0)
+			var purpose11 []string = nil
 			for _, purposeItem11 := range attributesItem.AddressRelationAttribute.Purpose {
 				purpose11 = append(purpose11, purposeItem11.ValueString())
 			}
-			constraints11 := make(map[string]interface{})
-			for constraintsKey11, constraintsValue11 := range attributesItem.AddressRelationAttribute.Constraints {
-				var constraintsInst11 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue11.ValueString()), &constraintsInst11)
-				constraints11[constraintsKey11] = constraintsInst11
+			var constraints11 *shared.Constraints
+			if attributesItem.AddressRelationAttribute.Constraints != nil {
+				constraints11 = &shared.Constraints{}
 			}
 			var defaultValue11 interface{}
 			if !attributesItem.AddressRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.AddressRelationAttribute.DefaultValue.IsNull() {
@@ -2223,11 +2214,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable11 = nil
 			}
-			type12 := new(shared.AddressRelationAttributeType)
+			typeVar11 := new(shared.Type)
 			if !attributesItem.AddressRelationAttribute.Type.IsUnknown() && !attributesItem.AddressRelationAttribute.Type.IsNull() {
-				*type12 = shared.AddressRelationAttributeType(attributesItem.AddressRelationAttribute.Type.ValueString())
+				*typeVar11 = shared.Type(attributesItem.AddressRelationAttribute.Type.ValueString())
 			} else {
-				type12 = nil
+				typeVar11 = nil
 			}
 			valueFormatter11 := new(string)
 			if !attributesItem.AddressRelationAttribute.ValueFormatter.IsUnknown() && !attributesItem.AddressRelationAttribute.ValueFormatter.IsNull() {
@@ -2259,7 +2250,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required11,
 				SettingFlag:              settingFlag12,
 				ShowInTable:              showInTable11,
-				Type:                     type12,
+				Type:                     typeVar11,
 				ValueFormatter:           valueFormatter11,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -2267,15 +2258,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.PaymentMethodRelationAttribute != nil {
-			purpose12 := make([]string, 0)
+			var purpose12 []string = nil
 			for _, purposeItem12 := range attributesItem.PaymentMethodRelationAttribute.Purpose {
 				purpose12 = append(purpose12, purposeItem12.ValueString())
 			}
-			constraints12 := make(map[string]interface{})
-			for constraintsKey12, constraintsValue12 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
-				var constraintsInst12 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue12.ValueString()), &constraintsInst12)
-				constraints12[constraintsKey12] = constraintsInst12
+			var constraints12 *shared.PaymentMethodRelationAttributeConstraints
+			if attributesItem.PaymentMethodRelationAttribute.Constraints != nil {
+				constraints12 = &shared.PaymentMethodRelationAttributeConstraints{}
 			}
 			var defaultValue12 interface{}
 			if !attributesItem.PaymentMethodRelationAttribute.DefaultValue.IsUnknown() && !attributesItem.PaymentMethodRelationAttribute.DefaultValue.IsNull() {
@@ -2391,11 +2380,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable12 = nil
 			}
-			type13 := new(shared.PaymentMethodRelationAttributeType)
+			typeVar12 := new(shared.PaymentMethodRelationAttributeType)
 			if !attributesItem.PaymentMethodRelationAttribute.Type.IsUnknown() && !attributesItem.PaymentMethodRelationAttribute.Type.IsNull() {
-				*type13 = shared.PaymentMethodRelationAttributeType(attributesItem.PaymentMethodRelationAttribute.Type.ValueString())
+				*typeVar12 = shared.PaymentMethodRelationAttributeType(attributesItem.PaymentMethodRelationAttribute.Type.ValueString())
 			} else {
-				type13 = nil
+				typeVar12 = nil
 			}
 			valueFormatter12 := new(string)
 			if !attributesItem.PaymentMethodRelationAttribute.ValueFormatter.IsUnknown() && !attributesItem.PaymentMethodRelationAttribute.ValueFormatter.IsNull() {
@@ -2427,7 +2416,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required12,
 				SettingFlag:              settingFlag13,
 				ShowInTable:              showInTable12,
-				Type:                     type13,
+				Type:                     typeVar12,
 				ValueFormatter:           valueFormatter12,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -2435,36 +2424,34 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.CurrencyAttribute != nil {
-			purpose13 := make([]string, 0)
+			var purpose13 []string = nil
 			for _, purposeItem13 := range attributesItem.CurrencyAttribute.Purpose {
 				purpose13 = append(purpose13, purposeItem13.ValueString())
 			}
-			constraints13 := make(map[string]interface{})
-			for constraintsKey13, constraintsValue13 := range attributesItem.CurrencyAttribute.Constraints {
-				var constraintsInst13 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue13.ValueString()), &constraintsInst13)
-				constraints13[constraintsKey13] = constraintsInst13
+			var constraints13 *shared.CurrencyAttributeConstraints
+			if attributesItem.CurrencyAttribute.Constraints != nil {
+				constraints13 = &shared.CurrencyAttributeConstraints{}
 			}
-			currency := make([]shared.CurrencyAttributeCurrency, 0)
+			var currency []shared.Currency = nil
 			for _, currencyItem := range attributesItem.CurrencyAttribute.Currency {
-				if currencyItem.CurrencyAttributeCurrency1 != nil {
-					code := currencyItem.CurrencyAttributeCurrency1.Code.ValueString()
-					description := currencyItem.CurrencyAttributeCurrency1.Description.ValueString()
+				if currencyItem.One != nil {
+					code := currencyItem.One.Code.ValueString()
+					description := currencyItem.One.Description.ValueString()
 					flag := new(string)
-					if !currencyItem.CurrencyAttributeCurrency1.Flag.IsUnknown() && !currencyItem.CurrencyAttributeCurrency1.Flag.IsNull() {
-						*flag = currencyItem.CurrencyAttributeCurrency1.Flag.ValueString()
+					if !currencyItem.One.Flag.IsUnknown() && !currencyItem.One.Flag.IsNull() {
+						*flag = currencyItem.One.Flag.ValueString()
 					} else {
 						flag = nil
 					}
-					symbol := currencyItem.CurrencyAttributeCurrency1.Symbol.ValueString()
-					currencyAttributeCurrency1 := shared.CurrencyAttributeCurrency1{
+					symbol := currencyItem.One.Symbol.ValueString()
+					one := shared.One{
 						Code:        code,
 						Description: description,
 						Flag:        flag,
 						Symbol:      symbol,
 					}
-					currency = append(currency, shared.CurrencyAttributeCurrency{
-						CurrencyAttributeCurrency1: &currencyAttributeCurrency1,
+					currency = append(currency, shared.Currency{
+						One: &one,
 					})
 				}
 			}
@@ -2582,7 +2569,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable13 = nil
 			}
-			type14 := shared.CurrencyAttributeType(attributesItem.CurrencyAttribute.Type.ValueString())
+			typeVar13 := shared.CurrencyAttributeType(attributesItem.CurrencyAttribute.Type.ValueString())
 			valueFormatter13 := new(string)
 			if !attributesItem.CurrencyAttribute.ValueFormatter.IsUnknown() && !attributesItem.CurrencyAttribute.ValueFormatter.IsNull() {
 				*valueFormatter13 = attributesItem.CurrencyAttribute.ValueFormatter.ValueString()
@@ -2614,7 +2601,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required13,
 				SettingFlag:              settingFlag14,
 				ShowInTable:              showInTable13,
-				Type:                     type14,
+				Type:                     typeVar13,
 				ValueFormatter:           valueFormatter13,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -2622,15 +2609,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.RepeatableAttribute != nil {
-			purpose14 := make([]string, 0)
+			var purpose14 []string = nil
 			for _, purposeItem14 := range attributesItem.RepeatableAttribute.Purpose {
 				purpose14 = append(purpose14, purposeItem14.ValueString())
 			}
-			constraints14 := make(map[string]interface{})
-			for constraintsKey14, constraintsValue14 := range attributesItem.RepeatableAttribute.Constraints {
-				var constraintsInst14 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue14.ValueString()), &constraintsInst14)
-				constraints14[constraintsKey14] = constraintsInst14
+			var constraints14 *shared.RepeatableAttributeConstraints
+			if attributesItem.RepeatableAttribute.Constraints != nil {
+				constraints14 = &shared.RepeatableAttributeConstraints{}
 			}
 			var defaultValue14 interface{}
 			if !attributesItem.RepeatableAttribute.DefaultValue.IsUnknown() && !attributesItem.RepeatableAttribute.DefaultValue.IsNull() {
@@ -2764,11 +2749,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable14 = nil
 			}
-			type15 := new(shared.RepeatableAttributeType)
+			typeVar14 := new(shared.RepeatableAttributeType)
 			if !attributesItem.RepeatableAttribute.Type.IsUnknown() && !attributesItem.RepeatableAttribute.Type.IsNull() {
-				*type15 = shared.RepeatableAttributeType(attributesItem.RepeatableAttribute.Type.ValueString())
+				*typeVar14 = shared.RepeatableAttributeType(attributesItem.RepeatableAttribute.Type.ValueString())
 			} else {
-				type15 = nil
+				typeVar14 = nil
 			}
 			valueFormatter14 := new(string)
 			if !attributesItem.RepeatableAttribute.ValueFormatter.IsUnknown() && !attributesItem.RepeatableAttribute.ValueFormatter.IsNull() {
@@ -2803,7 +2788,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required14,
 				SettingFlag:              settingFlag15,
 				ShowInTable:              showInTable14,
-				Type:                     type15,
+				Type:                     typeVar14,
 				ValueFormatter:           valueFormatter14,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -2811,15 +2796,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.TagsAttribute != nil {
-			purpose15 := make([]string, 0)
+			var purpose15 []string = nil
 			for _, purposeItem15 := range attributesItem.TagsAttribute.Purpose {
 				purpose15 = append(purpose15, purposeItem15.ValueString())
 			}
-			constraints15 := make(map[string]interface{})
-			for constraintsKey15, constraintsValue15 := range attributesItem.TagsAttribute.Constraints {
-				var constraintsInst15 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue15.ValueString()), &constraintsInst15)
-				constraints15[constraintsKey15] = constraintsInst15
+			var constraints15 *shared.TagsAttributeConstraints
+			if attributesItem.TagsAttribute.Constraints != nil {
+				constraints15 = &shared.TagsAttributeConstraints{}
 			}
 			var defaultValue15 interface{}
 			if !attributesItem.TagsAttribute.DefaultValue.IsUnknown() && !attributesItem.TagsAttribute.DefaultValue.IsNull() {
@@ -2875,7 +2858,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				layout15 = nil
 			}
 			name15 := attributesItem.TagsAttribute.Name.ValueString()
-			options3 := make([]string, 0)
+			var options3 []string = nil
 			for _, optionsItem3 := range attributesItem.TagsAttribute.Options {
 				options3 = append(options3, optionsItem3.ValueString())
 			}
@@ -2933,15 +2916,15 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable15 = nil
 			}
-			suggestions := make([]string, 0)
+			var suggestions []string = nil
 			for _, suggestionsItem := range attributesItem.TagsAttribute.Suggestions {
 				suggestions = append(suggestions, suggestionsItem.ValueString())
 			}
-			type16 := new(shared.TagsAttributeType)
+			typeVar15 := new(shared.TagsAttributeType)
 			if !attributesItem.TagsAttribute.Type.IsUnknown() && !attributesItem.TagsAttribute.Type.IsNull() {
-				*type16 = shared.TagsAttributeType(attributesItem.TagsAttribute.Type.ValueString())
+				*typeVar15 = shared.TagsAttributeType(attributesItem.TagsAttribute.Type.ValueString())
 			} else {
-				type16 = nil
+				typeVar15 = nil
 			}
 			valueFormatter15 := new(string)
 			if !attributesItem.TagsAttribute.ValueFormatter.IsUnknown() && !attributesItem.TagsAttribute.ValueFormatter.IsNull() {
@@ -2974,7 +2957,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				SettingFlag:              settingFlag16,
 				ShowInTable:              showInTable15,
 				Suggestions:              suggestions,
-				Type:                     type16,
+				Type:                     typeVar15,
 				ValueFormatter:           valueFormatter15,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -2982,15 +2965,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.NumberAttribute != nil {
-			purpose16 := make([]string, 0)
+			var purpose16 []string = nil
 			for _, purposeItem16 := range attributesItem.NumberAttribute.Purpose {
 				purpose16 = append(purpose16, purposeItem16.ValueString())
 			}
-			constraints16 := make(map[string]interface{})
-			for constraintsKey16, constraintsValue16 := range attributesItem.NumberAttribute.Constraints {
-				var constraintsInst16 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue16.ValueString()), &constraintsInst16)
-				constraints16[constraintsKey16] = constraintsInst16
+			var constraints16 *shared.NumberAttributeConstraints
+			if attributesItem.NumberAttribute.Constraints != nil {
+				constraints16 = &shared.NumberAttributeConstraints{}
 			}
 			var defaultValue16 interface{}
 			if !attributesItem.NumberAttribute.DefaultValue.IsUnknown() && !attributesItem.NumberAttribute.DefaultValue.IsNull() {
@@ -3106,11 +3087,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable16 = nil
 			}
-			type17 := new(shared.NumberAttributeType)
+			typeVar16 := new(shared.NumberAttributeType)
 			if !attributesItem.NumberAttribute.Type.IsUnknown() && !attributesItem.NumberAttribute.Type.IsNull() {
-				*type17 = shared.NumberAttributeType(attributesItem.NumberAttribute.Type.ValueString())
+				*typeVar16 = shared.NumberAttributeType(attributesItem.NumberAttribute.Type.ValueString())
 			} else {
-				type17 = nil
+				typeVar16 = nil
 			}
 			valueFormatter16 := new(string)
 			if !attributesItem.NumberAttribute.ValueFormatter.IsUnknown() && !attributesItem.NumberAttribute.ValueFormatter.IsNull() {
@@ -3142,7 +3123,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required16,
 				SettingFlag:              settingFlag17,
 				ShowInTable:              showInTable16,
-				Type:                     type17,
+				Type:                     typeVar16,
 				ValueFormatter:           valueFormatter16,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -3150,15 +3131,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.ConsentAttribute != nil {
-			purpose17 := make([]string, 0)
+			var purpose17 []string = nil
 			for _, purposeItem17 := range attributesItem.ConsentAttribute.Purpose {
 				purpose17 = append(purpose17, purposeItem17.ValueString())
 			}
-			constraints17 := make(map[string]interface{})
-			for constraintsKey17, constraintsValue17 := range attributesItem.ConsentAttribute.Constraints {
-				var constraintsInst17 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue17.ValueString()), &constraintsInst17)
-				constraints17[constraintsKey17] = constraintsInst17
+			var constraints17 *shared.ConsentAttributeConstraints
+			if attributesItem.ConsentAttribute.Constraints != nil {
+				constraints17 = &shared.ConsentAttributeConstraints{}
 			}
 			var defaultValue17 interface{}
 			if !attributesItem.ConsentAttribute.DefaultValue.IsUnknown() && !attributesItem.ConsentAttribute.DefaultValue.IsNull() {
@@ -3206,7 +3185,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				icon17 = nil
 			}
-			identifiers := make([]string, 0)
+			var identifiers []string = nil
 			for _, identifiersItem := range attributesItem.ConsentAttribute.Identifiers {
 				identifiers = append(identifiers, identifiersItem.ValueString())
 			}
@@ -3273,7 +3252,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				showInTable17 = nil
 			}
 			topic := attributesItem.ConsentAttribute.Topic.ValueString()
-			type18 := shared.ConsentAttributeType(attributesItem.ConsentAttribute.Type.ValueString())
+			typeVar17 := shared.ConsentAttributeType(attributesItem.ConsentAttribute.Type.ValueString())
 			valueFormatter17 := new(string)
 			if !attributesItem.ConsentAttribute.ValueFormatter.IsUnknown() && !attributesItem.ConsentAttribute.ValueFormatter.IsNull() {
 				*valueFormatter17 = attributesItem.ConsentAttribute.ValueFormatter.ValueString()
@@ -3305,7 +3284,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				SettingFlag:              settingFlag18,
 				ShowInTable:              showInTable17,
 				Topic:                    topic,
-				Type:                     type18,
+				Type:                     typeVar17,
 				ValueFormatter:           valueFormatter17,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -3313,15 +3292,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.InternalAttribute != nil {
-			purpose18 := make([]string, 0)
+			var purpose18 []string = nil
 			for _, purposeItem18 := range attributesItem.InternalAttribute.Purpose {
 				purpose18 = append(purpose18, purposeItem18.ValueString())
 			}
-			constraints18 := make(map[string]interface{})
-			for constraintsKey18, constraintsValue18 := range attributesItem.InternalAttribute.Constraints {
-				var constraintsInst18 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue18.ValueString()), &constraintsInst18)
-				constraints18[constraintsKey18] = constraintsInst18
+			var constraints18 *shared.InternalAttributeConstraints
+			if attributesItem.InternalAttribute.Constraints != nil {
+				constraints18 = &shared.InternalAttributeConstraints{}
 			}
 			var defaultValue18 interface{}
 			if !attributesItem.InternalAttribute.DefaultValue.IsUnknown() && !attributesItem.InternalAttribute.DefaultValue.IsNull() {
@@ -3431,11 +3408,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable18 = nil
 			}
-			type19 := new(shared.InternalAttributeType)
+			typeVar18 := new(shared.InternalAttributeType)
 			if !attributesItem.InternalAttribute.Type.IsUnknown() && !attributesItem.InternalAttribute.Type.IsNull() {
-				*type19 = shared.InternalAttributeType(attributesItem.InternalAttribute.Type.ValueString())
+				*typeVar18 = shared.InternalAttributeType(attributesItem.InternalAttribute.Type.ValueString())
 			} else {
-				type19 = nil
+				typeVar18 = nil
 			}
 			valueFormatter18 := new(string)
 			if !attributesItem.InternalAttribute.ValueFormatter.IsUnknown() && !attributesItem.InternalAttribute.ValueFormatter.IsNull() {
@@ -3466,7 +3443,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required18,
 				SettingFlag:              settingFlag19,
 				ShowInTable:              showInTable18,
-				Type:                     type19,
+				Type:                     typeVar18,
 				ValueFormatter:           valueFormatter18,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -3474,15 +3451,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.OrderedListAttribute != nil {
-			purpose19 := make([]string, 0)
+			var purpose19 []string = nil
 			for _, purposeItem19 := range attributesItem.OrderedListAttribute.Purpose {
 				purpose19 = append(purpose19, purposeItem19.ValueString())
 			}
-			constraints19 := make(map[string]interface{})
-			for constraintsKey19, constraintsValue19 := range attributesItem.OrderedListAttribute.Constraints {
-				var constraintsInst19 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue19.ValueString()), &constraintsInst19)
-				constraints19[constraintsKey19] = constraintsInst19
+			var constraints19 *shared.OrderedListAttributeConstraints
+			if attributesItem.OrderedListAttribute.Constraints != nil {
+				constraints19 = &shared.OrderedListAttributeConstraints{}
 			}
 			var defaultValue19 interface{}
 			if !attributesItem.OrderedListAttribute.DefaultValue.IsUnknown() && !attributesItem.OrderedListAttribute.DefaultValue.IsNull() {
@@ -3592,11 +3567,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable19 = nil
 			}
-			type20 := new(shared.OrderedListAttributeType)
+			typeVar19 := new(shared.OrderedListAttributeType)
 			if !attributesItem.OrderedListAttribute.Type.IsUnknown() && !attributesItem.OrderedListAttribute.Type.IsNull() {
-				*type20 = shared.OrderedListAttributeType(attributesItem.OrderedListAttribute.Type.ValueString())
+				*typeVar19 = shared.OrderedListAttributeType(attributesItem.OrderedListAttribute.Type.ValueString())
 			} else {
-				type20 = nil
+				typeVar19 = nil
 			}
 			valueFormatter19 := new(string)
 			if !attributesItem.OrderedListAttribute.ValueFormatter.IsUnknown() && !attributesItem.OrderedListAttribute.ValueFormatter.IsNull() {
@@ -3627,7 +3602,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required19,
 				SettingFlag:              settingFlag20,
 				ShowInTable:              showInTable19,
-				Type:                     type20,
+				Type:                     typeVar19,
 				ValueFormatter:           valueFormatter19,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -3635,23 +3610,21 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.FileAttribute != nil {
-			purpose20 := make([]string, 0)
+			var purpose20 []string = nil
 			for _, purposeItem20 := range attributesItem.FileAttribute.Purpose {
 				purpose20 = append(purpose20, purposeItem20.ValueString())
 			}
-			allowedExtensions := make([]string, 0)
+			var allowedExtensions []string = nil
 			for _, allowedExtensionsItem := range attributesItem.FileAttribute.AllowedExtensions {
 				allowedExtensions = append(allowedExtensions, allowedExtensionsItem.ValueString())
 			}
-			constraints20 := make(map[string]interface{})
-			for constraintsKey20, constraintsValue20 := range attributesItem.FileAttribute.Constraints {
-				var constraintsInst20 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue20.ValueString()), &constraintsInst20)
-				constraints20[constraintsKey20] = constraintsInst20
+			var constraints20 *shared.FileAttributeConstraints
+			if attributesItem.FileAttribute.Constraints != nil {
+				constraints20 = &shared.FileAttributeConstraints{}
 			}
-			defaultAccessControl := new(shared.FileAttributeDefaultAccessControl)
+			defaultAccessControl := new(shared.DefaultAccessControl)
 			if !attributesItem.FileAttribute.DefaultAccessControl.IsUnknown() && !attributesItem.FileAttribute.DefaultAccessControl.IsNull() {
-				*defaultAccessControl = shared.FileAttributeDefaultAccessControl(attributesItem.FileAttribute.DefaultAccessControl.ValueString())
+				*defaultAccessControl = shared.DefaultAccessControl(attributesItem.FileAttribute.DefaultAccessControl.ValueString())
 			} else {
 				defaultAccessControl = nil
 			}
@@ -3781,7 +3754,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable20 = nil
 			}
-			type21 := shared.FileAttributeType(attributesItem.FileAttribute.Type.ValueString())
+			typeVar20 := shared.FileAttributeType(attributesItem.FileAttribute.Type.ValueString())
 			valueFormatter20 := new(string)
 			if !attributesItem.FileAttribute.ValueFormatter.IsUnknown() && !attributesItem.FileAttribute.ValueFormatter.IsNull() {
 				*valueFormatter20 = attributesItem.FileAttribute.ValueFormatter.ValueString()
@@ -3816,7 +3789,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required20,
 				SettingFlag:              settingFlag21,
 				ShowInTable:              showInTable20,
-				Type:                     type21,
+				Type:                     typeVar20,
 				ValueFormatter:           valueFormatter20,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -3824,15 +3797,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.ComputedAttribute != nil {
-			purpose21 := make([]string, 0)
+			var purpose21 []string = nil
 			for _, purposeItem21 := range attributesItem.ComputedAttribute.Purpose {
 				purpose21 = append(purpose21, purposeItem21.ValueString())
 			}
-			constraints21 := make(map[string]interface{})
-			for constraintsKey21, constraintsValue21 := range attributesItem.ComputedAttribute.Constraints {
-				var constraintsInst21 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue21.ValueString()), &constraintsInst21)
-				constraints21[constraintsKey21] = constraintsInst21
+			var constraints21 *shared.ComputedAttributeConstraints
+			if attributesItem.ComputedAttribute.Constraints != nil {
+				constraints21 = &shared.ComputedAttributeConstraints{}
 			}
 			var defaultValue21 interface{}
 			if !attributesItem.ComputedAttribute.DefaultValue.IsUnknown() && !attributesItem.ComputedAttribute.DefaultValue.IsNull() {
@@ -3942,11 +3913,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable21 = nil
 			}
-			type22 := new(shared.ComputedAttributeType)
+			typeVar21 := new(shared.ComputedAttributeType)
 			if !attributesItem.ComputedAttribute.Type.IsUnknown() && !attributesItem.ComputedAttribute.Type.IsNull() {
-				*type22 = shared.ComputedAttributeType(attributesItem.ComputedAttribute.Type.ValueString())
+				*typeVar21 = shared.ComputedAttributeType(attributesItem.ComputedAttribute.Type.ValueString())
 			} else {
-				type22 = nil
+				typeVar21 = nil
 			}
 			valueFormatter21 := new(string)
 			if !attributesItem.ComputedAttribute.ValueFormatter.IsUnknown() && !attributesItem.ComputedAttribute.ValueFormatter.IsNull() {
@@ -3977,7 +3948,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required21,
 				SettingFlag:              settingFlag22,
 				ShowInTable:              showInTable21,
-				Type:                     type22,
+				Type:                     typeVar21,
 				ValueFormatter:           valueFormatter21,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -3985,15 +3956,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.PartnerStatusAttribute != nil {
-			purpose22 := make([]string, 0)
+			var purpose22 []string = nil
 			for _, purposeItem22 := range attributesItem.PartnerStatusAttribute.Purpose {
 				purpose22 = append(purpose22, purposeItem22.ValueString())
 			}
-			constraints22 := make(map[string]interface{})
-			for constraintsKey22, constraintsValue22 := range attributesItem.PartnerStatusAttribute.Constraints {
-				var constraintsInst22 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue22.ValueString()), &constraintsInst22)
-				constraints22[constraintsKey22] = constraintsInst22
+			var constraints22 *shared.PartnerStatusAttributeConstraints
+			if attributesItem.PartnerStatusAttribute.Constraints != nil {
+				constraints22 = &shared.PartnerStatusAttributeConstraints{}
 			}
 			var defaultValue22 interface{}
 			if !attributesItem.PartnerStatusAttribute.DefaultValue.IsUnknown() && !attributesItem.PartnerStatusAttribute.DefaultValue.IsNull() {
@@ -4103,11 +4072,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable22 = nil
 			}
-			type23 := new(shared.PartnerStatusAttributeType)
+			typeVar22 := new(shared.PartnerStatusAttributeType)
 			if !attributesItem.PartnerStatusAttribute.Type.IsUnknown() && !attributesItem.PartnerStatusAttribute.Type.IsNull() {
-				*type23 = shared.PartnerStatusAttributeType(attributesItem.PartnerStatusAttribute.Type.ValueString())
+				*typeVar22 = shared.PartnerStatusAttributeType(attributesItem.PartnerStatusAttribute.Type.ValueString())
 			} else {
-				type23 = nil
+				typeVar22 = nil
 			}
 			valueFormatter22 := new(string)
 			if !attributesItem.PartnerStatusAttribute.ValueFormatter.IsUnknown() && !attributesItem.PartnerStatusAttribute.ValueFormatter.IsNull() {
@@ -4138,7 +4107,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required22,
 				SettingFlag:              settingFlag23,
 				ShowInTable:              showInTable22,
-				Type:                     type23,
+				Type:                     typeVar22,
 				ValueFormatter:           valueFormatter22,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -4146,15 +4115,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.InvitationEmailAttribute != nil {
-			purpose23 := make([]string, 0)
+			var purpose23 []string = nil
 			for _, purposeItem23 := range attributesItem.InvitationEmailAttribute.Purpose {
 				purpose23 = append(purpose23, purposeItem23.ValueString())
 			}
-			constraints23 := make(map[string]interface{})
-			for constraintsKey23, constraintsValue23 := range attributesItem.InvitationEmailAttribute.Constraints {
-				var constraintsInst23 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue23.ValueString()), &constraintsInst23)
-				constraints23[constraintsKey23] = constraintsInst23
+			var constraints23 *shared.InvitationEmailAttributeConstraints
+			if attributesItem.InvitationEmailAttribute.Constraints != nil {
+				constraints23 = &shared.InvitationEmailAttributeConstraints{}
 			}
 			var defaultValue23 interface{}
 			if !attributesItem.InvitationEmailAttribute.DefaultValue.IsUnknown() && !attributesItem.InvitationEmailAttribute.DefaultValue.IsNull() {
@@ -4264,11 +4231,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable23 = nil
 			}
-			type24 := new(shared.InvitationEmailAttributeType)
+			typeVar23 := new(shared.InvitationEmailAttributeType)
 			if !attributesItem.InvitationEmailAttribute.Type.IsUnknown() && !attributesItem.InvitationEmailAttribute.Type.IsNull() {
-				*type24 = shared.InvitationEmailAttributeType(attributesItem.InvitationEmailAttribute.Type.ValueString())
+				*typeVar23 = shared.InvitationEmailAttributeType(attributesItem.InvitationEmailAttribute.Type.ValueString())
 			} else {
-				type24 = nil
+				typeVar23 = nil
 			}
 			valueFormatter23 := new(string)
 			if !attributesItem.InvitationEmailAttribute.ValueFormatter.IsUnknown() && !attributesItem.InvitationEmailAttribute.ValueFormatter.IsNull() {
@@ -4299,7 +4266,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required23,
 				SettingFlag:              settingFlag24,
 				ShowInTable:              showInTable23,
-				Type:                     type24,
+				Type:                     typeVar23,
 				ValueFormatter:           valueFormatter23,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -4307,15 +4274,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.AutomationAttribute != nil {
-			purpose24 := make([]string, 0)
+			var purpose24 []string = nil
 			for _, purposeItem24 := range attributesItem.AutomationAttribute.Purpose {
 				purpose24 = append(purpose24, purposeItem24.ValueString())
 			}
-			constraints24 := make(map[string]interface{})
-			for constraintsKey24, constraintsValue24 := range attributesItem.AutomationAttribute.Constraints {
-				var constraintsInst24 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue24.ValueString()), &constraintsInst24)
-				constraints24[constraintsKey24] = constraintsInst24
+			var constraints24 *shared.AutomationAttributeConstraints
+			if attributesItem.AutomationAttribute.Constraints != nil {
+				constraints24 = &shared.AutomationAttributeConstraints{}
 			}
 			var defaultValue24 interface{}
 			if !attributesItem.AutomationAttribute.DefaultValue.IsUnknown() && !attributesItem.AutomationAttribute.DefaultValue.IsNull() {
@@ -4425,11 +4390,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable24 = nil
 			}
-			type25 := new(shared.AutomationAttributeType)
+			typeVar24 := new(shared.AutomationAttributeType)
 			if !attributesItem.AutomationAttribute.Type.IsUnknown() && !attributesItem.AutomationAttribute.Type.IsNull() {
-				*type25 = shared.AutomationAttributeType(attributesItem.AutomationAttribute.Type.ValueString())
+				*typeVar24 = shared.AutomationAttributeType(attributesItem.AutomationAttribute.Type.ValueString())
 			} else {
-				type25 = nil
+				typeVar24 = nil
 			}
 			valueFormatter24 := new(string)
 			if !attributesItem.AutomationAttribute.ValueFormatter.IsUnknown() && !attributesItem.AutomationAttribute.ValueFormatter.IsNull() {
@@ -4460,7 +4425,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required24,
 				SettingFlag:              settingFlag25,
 				ShowInTable:              showInTable24,
-				Type:                     type25,
+				Type:                     typeVar24,
 				ValueFormatter:           valueFormatter24,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -4468,15 +4433,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.InternalUserAttribute != nil {
-			purpose25 := make([]string, 0)
+			var purpose25 []string = nil
 			for _, purposeItem25 := range attributesItem.InternalUserAttribute.Purpose {
 				purpose25 = append(purpose25, purposeItem25.ValueString())
 			}
-			constraints25 := make(map[string]interface{})
-			for constraintsKey25, constraintsValue25 := range attributesItem.InternalUserAttribute.Constraints {
-				var constraintsInst25 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue25.ValueString()), &constraintsInst25)
-				constraints25[constraintsKey25] = constraintsInst25
+			var constraints25 *shared.InternalUserAttributeConstraints
+			if attributesItem.InternalUserAttribute.Constraints != nil {
+				constraints25 = &shared.InternalUserAttributeConstraints{}
 			}
 			var defaultValue25 interface{}
 			if !attributesItem.InternalUserAttribute.DefaultValue.IsUnknown() && !attributesItem.InternalUserAttribute.DefaultValue.IsNull() {
@@ -4586,11 +4549,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable25 = nil
 			}
-			type26 := new(shared.InternalUserAttributeType)
+			typeVar25 := new(shared.InternalUserAttributeType)
 			if !attributesItem.InternalUserAttribute.Type.IsUnknown() && !attributesItem.InternalUserAttribute.Type.IsNull() {
-				*type26 = shared.InternalUserAttributeType(attributesItem.InternalUserAttribute.Type.ValueString())
+				*typeVar25 = shared.InternalUserAttributeType(attributesItem.InternalUserAttribute.Type.ValueString())
 			} else {
-				type26 = nil
+				typeVar25 = nil
 			}
 			valueFormatter25 := new(string)
 			if !attributesItem.InternalUserAttribute.ValueFormatter.IsUnknown() && !attributesItem.InternalUserAttribute.ValueFormatter.IsNull() {
@@ -4621,7 +4584,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required25,
 				SettingFlag:              settingFlag26,
 				ShowInTable:              showInTable25,
-				Type:                     type26,
+				Type:                     typeVar25,
 				ValueFormatter:           valueFormatter25,
 			}
 			attributes = append(attributes, shared.Attribute{
@@ -4629,15 +4592,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			})
 		}
 		if attributesItem.PurposeAttribute != nil {
-			purpose26 := make([]string, 0)
+			var purpose26 []string = nil
 			for _, purposeItem26 := range attributesItem.PurposeAttribute.Purpose {
 				purpose26 = append(purpose26, purposeItem26.ValueString())
 			}
-			constraints26 := make(map[string]interface{})
-			for constraintsKey26, constraintsValue26 := range attributesItem.PurposeAttribute.Constraints {
-				var constraintsInst26 interface{}
-				_ = json.Unmarshal([]byte(constraintsValue26.ValueString()), &constraintsInst26)
-				constraints26[constraintsKey26] = constraintsInst26
+			var constraints26 *shared.PurposeAttributeConstraints
+			if attributesItem.PurposeAttribute.Constraints != nil {
+				constraints26 = &shared.PurposeAttributeConstraints{}
 			}
 			createdAt1 := new(time.Time)
 			if !attributesItem.PurposeAttribute.CreatedAt.IsUnknown() && !attributesItem.PurposeAttribute.CreatedAt.IsNull() {
@@ -4711,7 +4672,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				order26 = nil
 			}
-			parents := make([]string, 0)
+			var parents []string = nil
 			for _, parentsItem := range attributesItem.PurposeAttribute.Parents {
 				parents = append(parents, parentsItem.ValueString())
 			}
@@ -4763,11 +4724,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showInTable26 = nil
 			}
-			type27 := new(shared.PurposeAttributeType)
+			typeVar26 := new(shared.PurposeAttributeType)
 			if !attributesItem.PurposeAttribute.Type.IsUnknown() && !attributesItem.PurposeAttribute.Type.IsNull() {
-				*type27 = shared.PurposeAttributeType(attributesItem.PurposeAttribute.Type.ValueString())
+				*typeVar26 = shared.PurposeAttributeType(attributesItem.PurposeAttribute.Type.ValueString())
 			} else {
-				type27 = nil
+				typeVar26 = nil
 			}
 			updatedAt1 := new(time.Time)
 			if !attributesItem.PurposeAttribute.UpdatedAt.IsUnknown() && !attributesItem.PurposeAttribute.UpdatedAt.IsNull() {
@@ -4807,7 +4768,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				Required:                 required26,
 				SettingFlag:              settingFlag27,
 				ShowInTable:              showInTable26,
-				Type:                     type27,
+				Type:                     typeVar26,
 				UpdatedAt:                updatedAt1,
 				ValueFormatter:           valueFormatter26,
 			}
@@ -4822,24 +4783,22 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 	} else {
 		blueprint = nil
 	}
-	capabilities := make([]shared.EntityCapability, 0)
+	var capabilities []shared.EntityCapability = nil
 	for _, capabilitiesItem := range r.Capabilities {
-		purpose27 := make([]string, 0)
+		var purpose27 []string = nil
 		for _, purposeItem27 := range capabilitiesItem.Purpose {
 			purpose27 = append(purpose27, purposeItem27.ValueString())
 		}
-		attributes1 := make([]shared.Attribute, 0)
+		var attributes1 []shared.Attribute = nil
 		for _, attributesItem1 := range capabilitiesItem.Attributes {
 			if attributesItem1.TextAttribute != nil {
-				purpose28 := make([]string, 0)
+				var purpose28 []string = nil
 				for _, purposeItem28 := range attributesItem1.TextAttribute.Purpose {
 					purpose28 = append(purpose28, purposeItem28.ValueString())
 				}
-				constraints27 := make(map[string]interface{})
-				for constraintsKey27, constraintsValue27 := range attributesItem1.TextAttribute.Constraints {
-					var constraintsInst27 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue27.ValueString()), &constraintsInst27)
-					constraints27[constraintsKey27] = constraintsInst27
+				var constraints27 *shared.TextAttributeConstraints
+				if attributesItem1.TextAttribute.Constraints != nil {
+					constraints27 = &shared.TextAttributeConstraints{}
 				}
 				var defaultValue27 interface{}
 				if !attributesItem1.TextAttribute.DefaultValue.IsUnknown() && !attributesItem1.TextAttribute.DefaultValue.IsNull() {
@@ -4955,11 +4914,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable27 = nil
 				}
-				type28 := new(shared.TextAttributeType)
+				typeVar27 := new(shared.TextAttributeType)
 				if !attributesItem1.TextAttribute.Type.IsUnknown() && !attributesItem1.TextAttribute.Type.IsNull() {
-					*type28 = shared.TextAttributeType(attributesItem1.TextAttribute.Type.ValueString())
+					*typeVar27 = shared.TextAttributeType(attributesItem1.TextAttribute.Type.ValueString())
 				} else {
-					type28 = nil
+					typeVar27 = nil
 				}
 				valueFormatter27 := new(string)
 				if !attributesItem1.TextAttribute.ValueFormatter.IsUnknown() && !attributesItem1.TextAttribute.ValueFormatter.IsNull() {
@@ -4991,7 +4950,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required27,
 					SettingFlag:              settingFlag28,
 					ShowInTable:              showInTable27,
-					Type:                     type28,
+					Type:                     typeVar27,
 					ValueFormatter:           valueFormatter27,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -4999,15 +4958,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.LinkAttribute != nil {
-				purpose29 := make([]string, 0)
+				var purpose29 []string = nil
 				for _, purposeItem29 := range attributesItem1.LinkAttribute.Purpose {
 					purpose29 = append(purpose29, purposeItem29.ValueString())
 				}
-				constraints28 := make(map[string]interface{})
-				for constraintsKey28, constraintsValue28 := range attributesItem1.LinkAttribute.Constraints {
-					var constraintsInst28 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue28.ValueString()), &constraintsInst28)
-					constraints28[constraintsKey28] = constraintsInst28
+				var constraints28 *shared.LinkAttributeConstraints
+				if attributesItem1.LinkAttribute.Constraints != nil {
+					constraints28 = &shared.LinkAttributeConstraints{}
 				}
 				var defaultValue28 interface{}
 				if !attributesItem1.LinkAttribute.DefaultValue.IsUnknown() && !attributesItem1.LinkAttribute.DefaultValue.IsNull() {
@@ -5117,11 +5074,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable28 = nil
 				}
-				type29 := new(shared.LinkAttributeType)
+				typeVar28 := new(shared.LinkAttributeType)
 				if !attributesItem1.LinkAttribute.Type.IsUnknown() && !attributesItem1.LinkAttribute.Type.IsNull() {
-					*type29 = shared.LinkAttributeType(attributesItem1.LinkAttribute.Type.ValueString())
+					*typeVar28 = shared.LinkAttributeType(attributesItem1.LinkAttribute.Type.ValueString())
 				} else {
-					type29 = nil
+					typeVar28 = nil
 				}
 				valueFormatter28 := new(string)
 				if !attributesItem1.LinkAttribute.ValueFormatter.IsUnknown() && !attributesItem1.LinkAttribute.ValueFormatter.IsNull() {
@@ -5152,7 +5109,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required28,
 					SettingFlag:              settingFlag29,
 					ShowInTable:              showInTable28,
-					Type:                     type29,
+					Type:                     typeVar28,
 					ValueFormatter:           valueFormatter28,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -5160,15 +5117,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.DateAttribute != nil {
-				purpose30 := make([]string, 0)
+				var purpose30 []string = nil
 				for _, purposeItem30 := range attributesItem1.DateAttribute.Purpose {
 					purpose30 = append(purpose30, purposeItem30.ValueString())
 				}
-				constraints29 := make(map[string]interface{})
-				for constraintsKey29, constraintsValue29 := range attributesItem1.DateAttribute.Constraints {
-					var constraintsInst29 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue29.ValueString()), &constraintsInst29)
-					constraints29[constraintsKey29] = constraintsInst29
+				var constraints29 *shared.DateAttributeConstraints
+				if attributesItem1.DateAttribute.Constraints != nil {
+					constraints29 = &shared.DateAttributeConstraints{}
 				}
 				var defaultValue29 interface{}
 				if !attributesItem1.DateAttribute.DefaultValue.IsUnknown() && !attributesItem1.DateAttribute.DefaultValue.IsNull() {
@@ -5278,11 +5233,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable29 = nil
 				}
-				type30 := new(shared.DateAttributeType)
+				typeVar29 := new(shared.DateAttributeType)
 				if !attributesItem1.DateAttribute.Type.IsUnknown() && !attributesItem1.DateAttribute.Type.IsNull() {
-					*type30 = shared.DateAttributeType(attributesItem1.DateAttribute.Type.ValueString())
+					*typeVar29 = shared.DateAttributeType(attributesItem1.DateAttribute.Type.ValueString())
 				} else {
-					type30 = nil
+					typeVar29 = nil
 				}
 				valueFormatter29 := new(string)
 				if !attributesItem1.DateAttribute.ValueFormatter.IsUnknown() && !attributesItem1.DateAttribute.ValueFormatter.IsNull() {
@@ -5313,7 +5268,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required29,
 					SettingFlag:              settingFlag30,
 					ShowInTable:              showInTable29,
-					Type:                     type30,
+					Type:                     typeVar29,
 					ValueFormatter:           valueFormatter29,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -5321,15 +5276,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.CountryAttribute != nil {
-				purpose31 := make([]string, 0)
+				var purpose31 []string = nil
 				for _, purposeItem31 := range attributesItem1.CountryAttribute.Purpose {
 					purpose31 = append(purpose31, purposeItem31.ValueString())
 				}
-				constraints30 := make(map[string]interface{})
-				for constraintsKey30, constraintsValue30 := range attributesItem1.CountryAttribute.Constraints {
-					var constraintsInst30 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue30.ValueString()), &constraintsInst30)
-					constraints30[constraintsKey30] = constraintsInst30
+				var constraints30 *shared.CountryAttributeConstraints
+				if attributesItem1.CountryAttribute.Constraints != nil {
+					constraints30 = &shared.CountryAttributeConstraints{}
 				}
 				var defaultValue30 interface{}
 				if !attributesItem1.CountryAttribute.DefaultValue.IsUnknown() && !attributesItem1.CountryAttribute.DefaultValue.IsNull() {
@@ -5439,11 +5392,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable30 = nil
 				}
-				type31 := new(shared.CountryAttributeType)
+				typeVar30 := new(shared.CountryAttributeType)
 				if !attributesItem1.CountryAttribute.Type.IsUnknown() && !attributesItem1.CountryAttribute.Type.IsNull() {
-					*type31 = shared.CountryAttributeType(attributesItem1.CountryAttribute.Type.ValueString())
+					*typeVar30 = shared.CountryAttributeType(attributesItem1.CountryAttribute.Type.ValueString())
 				} else {
-					type31 = nil
+					typeVar30 = nil
 				}
 				valueFormatter30 := new(string)
 				if !attributesItem1.CountryAttribute.ValueFormatter.IsUnknown() && !attributesItem1.CountryAttribute.ValueFormatter.IsNull() {
@@ -5474,7 +5427,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required30,
 					SettingFlag:              settingFlag31,
 					ShowInTable:              showInTable30,
-					Type:                     type31,
+					Type:                     typeVar30,
 					ValueFormatter:           valueFormatter30,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -5482,15 +5435,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.BooleanAttribute != nil {
-				purpose32 := make([]string, 0)
+				var purpose32 []string = nil
 				for _, purposeItem32 := range attributesItem1.BooleanAttribute.Purpose {
 					purpose32 = append(purpose32, purposeItem32.ValueString())
 				}
-				constraints31 := make(map[string]interface{})
-				for constraintsKey31, constraintsValue31 := range attributesItem1.BooleanAttribute.Constraints {
-					var constraintsInst31 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue31.ValueString()), &constraintsInst31)
-					constraints31[constraintsKey31] = constraintsInst31
+				var constraints31 *shared.BooleanAttributeConstraints
+				if attributesItem1.BooleanAttribute.Constraints != nil {
+					constraints31 = &shared.BooleanAttributeConstraints{}
 				}
 				var defaultValue31 interface{}
 				if !attributesItem1.BooleanAttribute.DefaultValue.IsUnknown() && !attributesItem1.BooleanAttribute.DefaultValue.IsNull() {
@@ -5600,11 +5551,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable31 = nil
 				}
-				type32 := new(shared.BooleanAttributeType)
+				typeVar31 := new(shared.BooleanAttributeType)
 				if !attributesItem1.BooleanAttribute.Type.IsUnknown() && !attributesItem1.BooleanAttribute.Type.IsNull() {
-					*type32 = shared.BooleanAttributeType(attributesItem1.BooleanAttribute.Type.ValueString())
+					*typeVar31 = shared.BooleanAttributeType(attributesItem1.BooleanAttribute.Type.ValueString())
 				} else {
-					type32 = nil
+					typeVar31 = nil
 				}
 				valueFormatter31 := new(string)
 				if !attributesItem1.BooleanAttribute.ValueFormatter.IsUnknown() && !attributesItem1.BooleanAttribute.ValueFormatter.IsNull() {
@@ -5635,7 +5586,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required31,
 					SettingFlag:              settingFlag32,
 					ShowInTable:              showInTable31,
-					Type:                     type32,
+					Type:                     typeVar31,
 					ValueFormatter:           valueFormatter31,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -5643,7 +5594,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.SelectAttribute != nil {
-				purpose33 := make([]string, 0)
+				var purpose33 []string = nil
 				for _, purposeItem33 := range attributesItem1.SelectAttribute.Purpose {
 					purpose33 = append(purpose33, purposeItem33.ValueString())
 				}
@@ -5653,11 +5604,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					allowAny2 = nil
 				}
-				constraints32 := make(map[string]interface{})
-				for constraintsKey32, constraintsValue32 := range attributesItem1.SelectAttribute.Constraints {
-					var constraintsInst32 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue32.ValueString()), &constraintsInst32)
-					constraints32[constraintsKey32] = constraintsInst32
+				var constraints32 *shared.SelectAttributeConstraints
+				if attributesItem1.SelectAttribute.Constraints != nil {
+					constraints32 = &shared.SelectAttributeConstraints{}
 				}
 				var defaultValue32 interface{}
 				if !attributesItem1.SelectAttribute.DefaultValue.IsUnknown() && !attributesItem1.SelectAttribute.DefaultValue.IsNull() {
@@ -5713,22 +5662,22 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					layout32 = nil
 				}
 				name32 := attributesItem1.SelectAttribute.Name.ValueString()
-				options4 := make([]shared.SelectAttributeOptions, 0)
+				var options4 []shared.SelectAttributeOptions = nil
 				for _, optionsItem4 := range attributesItem1.SelectAttribute.Options {
-					if optionsItem4.SelectAttributeOptionsOption != nil {
+					if optionsItem4.Option != nil {
 						title4 := new(string)
-						if !optionsItem4.SelectAttributeOptionsOption.Title.IsUnknown() && !optionsItem4.SelectAttributeOptionsOption.Title.IsNull() {
-							*title4 = optionsItem4.SelectAttributeOptionsOption.Title.ValueString()
+						if !optionsItem4.Option.Title.IsUnknown() && !optionsItem4.Option.Title.IsNull() {
+							*title4 = optionsItem4.Option.Title.ValueString()
 						} else {
 							title4 = nil
 						}
-						value3 := optionsItem4.SelectAttributeOptionsOption.Value.ValueString()
-						selectAttributeOptionsOption1 := shared.SelectAttributeOptionsOption{
+						value3 := optionsItem4.Option.Value.ValueString()
+						option1 := shared.Option{
 							Title: title4,
 							Value: value3,
 						}
 						options4 = append(options4, shared.SelectAttributeOptions{
-							SelectAttributeOptionsOption: &selectAttributeOptionsOption1,
+							Option: &option1,
 						})
 					}
 					if !optionsItem4.Str.IsUnknown() && !optionsItem4.Str.IsNull() {
@@ -5792,11 +5741,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable32 = nil
 				}
-				type33 := new(shared.SelectAttributeType)
+				typeVar32 := new(shared.SelectAttributeType)
 				if !attributesItem1.SelectAttribute.Type.IsUnknown() && !attributesItem1.SelectAttribute.Type.IsNull() {
-					*type33 = shared.SelectAttributeType(attributesItem1.SelectAttribute.Type.ValueString())
+					*typeVar32 = shared.SelectAttributeType(attributesItem1.SelectAttribute.Type.ValueString())
 				} else {
-					type33 = nil
+					typeVar32 = nil
 				}
 				valueFormatter32 := new(string)
 				if !attributesItem1.SelectAttribute.ValueFormatter.IsUnknown() && !attributesItem1.SelectAttribute.ValueFormatter.IsNull() {
@@ -5829,7 +5778,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required32,
 					SettingFlag:              settingFlag33,
 					ShowInTable:              showInTable32,
-					Type:                     type33,
+					Type:                     typeVar32,
 					ValueFormatter:           valueFormatter32,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -5837,7 +5786,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.MultiSelectAttribute != nil {
-				purpose34 := make([]string, 0)
+				var purpose34 []string = nil
 				for _, purposeItem34 := range attributesItem1.MultiSelectAttribute.Purpose {
 					purpose34 = append(purpose34, purposeItem34.ValueString())
 				}
@@ -5853,11 +5802,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					allowExtraOptions1 = nil
 				}
-				constraints33 := make(map[string]interface{})
-				for constraintsKey33, constraintsValue33 := range attributesItem1.MultiSelectAttribute.Constraints {
-					var constraintsInst33 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue33.ValueString()), &constraintsInst33)
-					constraints33[constraintsKey33] = constraintsInst33
+				var constraints33 *shared.MultiSelectAttributeConstraints
+				if attributesItem1.MultiSelectAttribute.Constraints != nil {
+					constraints33 = &shared.MultiSelectAttributeConstraints{}
 				}
 				var defaultValue33 interface{}
 				if !attributesItem1.MultiSelectAttribute.DefaultValue.IsUnknown() && !attributesItem1.MultiSelectAttribute.DefaultValue.IsNull() {
@@ -5919,28 +5866,28 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					layout33 = nil
 				}
 				name33 := attributesItem1.MultiSelectAttribute.Name.ValueString()
-				options5 := make([]shared.MultiSelectAttributeOptions, 0)
+				var options5 []shared.Options = nil
 				for _, optionsItem5 := range attributesItem1.MultiSelectAttribute.Options {
 					if !optionsItem5.Str.IsUnknown() && !optionsItem5.Str.IsNull() {
 						str5 := optionsItem5.Str.ValueString()
-						options5 = append(options5, shared.MultiSelectAttributeOptions{
+						options5 = append(options5, shared.Options{
 							Str: &str5,
 						})
 					}
-					if optionsItem5.MultiSelectAttributeOptions2 != nil {
+					if optionsItem5.Two != nil {
 						title5 := new(string)
-						if !optionsItem5.MultiSelectAttributeOptions2.Title.IsUnknown() && !optionsItem5.MultiSelectAttributeOptions2.Title.IsNull() {
-							*title5 = optionsItem5.MultiSelectAttributeOptions2.Title.ValueString()
+						if !optionsItem5.Two.Title.IsUnknown() && !optionsItem5.Two.Title.IsNull() {
+							*title5 = optionsItem5.Two.Title.ValueString()
 						} else {
 							title5 = nil
 						}
-						value4 := optionsItem5.MultiSelectAttributeOptions2.Value.ValueString()
-						multiSelectAttributeOptions21 := shared.MultiSelectAttributeOptions2{
+						value4 := optionsItem5.Two.Value.ValueString()
+						multiSelectAttribute21 := shared.MultiSelectAttribute2{
 							Title: title5,
 							Value: value4,
 						}
-						options5 = append(options5, shared.MultiSelectAttributeOptions{
-							MultiSelectAttributeOptions2: &multiSelectAttributeOptions21,
+						options5 = append(options5, shared.Options{
+							MultiSelectAttribute2: &multiSelectAttribute21,
 						})
 					}
 				}
@@ -5998,11 +5945,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable33 = nil
 				}
-				type34 := new(shared.MultiSelectAttributeType)
+				typeVar33 := new(shared.MultiSelectAttributeType)
 				if !attributesItem1.MultiSelectAttribute.Type.IsUnknown() && !attributesItem1.MultiSelectAttribute.Type.IsNull() {
-					*type34 = shared.MultiSelectAttributeType(attributesItem1.MultiSelectAttribute.Type.ValueString())
+					*typeVar33 = shared.MultiSelectAttributeType(attributesItem1.MultiSelectAttribute.Type.ValueString())
 				} else {
-					type34 = nil
+					typeVar33 = nil
 				}
 				valueFormatter33 := new(string)
 				if !attributesItem1.MultiSelectAttribute.ValueFormatter.IsUnknown() && !attributesItem1.MultiSelectAttribute.ValueFormatter.IsNull() {
@@ -6037,7 +5984,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required33,
 					SettingFlag:              settingFlag34,
 					ShowInTable:              showInTable33,
-					Type:                     type34,
+					Type:                     typeVar33,
 					ValueFormatter:           valueFormatter33,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -6045,15 +5992,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.StatusAttribute != nil {
-				purpose35 := make([]string, 0)
+				var purpose35 []string = nil
 				for _, purposeItem35 := range attributesItem1.StatusAttribute.Purpose {
 					purpose35 = append(purpose35, purposeItem35.ValueString())
 				}
-				constraints34 := make(map[string]interface{})
-				for constraintsKey34, constraintsValue34 := range attributesItem1.StatusAttribute.Constraints {
-					var constraintsInst34 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue34.ValueString()), &constraintsInst34)
-					constraints34[constraintsKey34] = constraintsInst34
+				var constraints34 *shared.StatusAttributeConstraints
+				if attributesItem1.StatusAttribute.Constraints != nil {
+					constraints34 = &shared.StatusAttributeConstraints{}
 				}
 				var defaultValue34 interface{}
 				if !attributesItem1.StatusAttribute.DefaultValue.IsUnknown() && !attributesItem1.StatusAttribute.DefaultValue.IsNull() {
@@ -6109,7 +6054,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					layout34 = nil
 				}
 				name34 := attributesItem1.StatusAttribute.Name.ValueString()
-				options6 := make([]shared.StatusAttributeOptions, 0)
+				var options6 []shared.StatusAttributeOptions = nil
 				for _, optionsItem6 := range attributesItem1.StatusAttribute.Options {
 					if !optionsItem6.Str.IsUnknown() && !optionsItem6.Str.IsNull() {
 						str6 := optionsItem6.Str.ValueString()
@@ -6117,20 +6062,20 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 							Str: &str6,
 						})
 					}
-					if optionsItem6.StatusAttributeOptions2 != nil {
+					if optionsItem6.Two != nil {
 						title6 := new(string)
-						if !optionsItem6.StatusAttributeOptions2.Title.IsUnknown() && !optionsItem6.StatusAttributeOptions2.Title.IsNull() {
-							*title6 = optionsItem6.StatusAttributeOptions2.Title.ValueString()
+						if !optionsItem6.Two.Title.IsUnknown() && !optionsItem6.Two.Title.IsNull() {
+							*title6 = optionsItem6.Two.Title.ValueString()
 						} else {
 							title6 = nil
 						}
-						value5 := optionsItem6.StatusAttributeOptions2.Value.ValueString()
-						statusAttributeOptions21 := shared.StatusAttributeOptions2{
+						value5 := optionsItem6.Two.Value.ValueString()
+						statusAttribute21 := shared.StatusAttribute2{
 							Title: title6,
 							Value: value5,
 						}
 						options6 = append(options6, shared.StatusAttributeOptions{
-							StatusAttributeOptions2: &statusAttributeOptions21,
+							StatusAttribute2: &statusAttribute21,
 						})
 					}
 				}
@@ -6188,11 +6133,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable34 = nil
 				}
-				type35 := new(shared.StatusAttributeType)
+				typeVar34 := new(shared.StatusAttributeType)
 				if !attributesItem1.StatusAttribute.Type.IsUnknown() && !attributesItem1.StatusAttribute.Type.IsNull() {
-					*type35 = shared.StatusAttributeType(attributesItem1.StatusAttribute.Type.ValueString())
+					*typeVar34 = shared.StatusAttributeType(attributesItem1.StatusAttribute.Type.ValueString())
 				} else {
-					type35 = nil
+					typeVar34 = nil
 				}
 				valueFormatter34 := new(string)
 				if !attributesItem1.StatusAttribute.ValueFormatter.IsUnknown() && !attributesItem1.StatusAttribute.ValueFormatter.IsNull() {
@@ -6224,7 +6169,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required34,
 					SettingFlag:              settingFlag35,
 					ShowInTable:              showInTable34,
-					Type:                     type35,
+					Type:                     typeVar34,
 					ValueFormatter:           valueFormatter34,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -6232,15 +6177,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.SequenceAttribute != nil {
-				purpose36 := make([]string, 0)
+				var purpose36 []string = nil
 				for _, purposeItem36 := range attributesItem1.SequenceAttribute.Purpose {
 					purpose36 = append(purpose36, purposeItem36.ValueString())
 				}
-				constraints35 := make(map[string]interface{})
-				for constraintsKey35, constraintsValue35 := range attributesItem1.SequenceAttribute.Constraints {
-					var constraintsInst35 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue35.ValueString()), &constraintsInst35)
-					constraints35[constraintsKey35] = constraintsInst35
+				var constraints35 *shared.SequenceAttributeConstraints
+				if attributesItem1.SequenceAttribute.Constraints != nil {
+					constraints35 = &shared.SequenceAttributeConstraints{}
 				}
 				var defaultValue35 interface{}
 				if !attributesItem1.SequenceAttribute.DefaultValue.IsUnknown() && !attributesItem1.SequenceAttribute.DefaultValue.IsNull() {
@@ -6362,11 +6305,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					startNumber1 = nil
 				}
-				type36 := new(shared.SequenceAttributeType)
+				typeVar35 := new(shared.SequenceAttributeType)
 				if !attributesItem1.SequenceAttribute.Type.IsUnknown() && !attributesItem1.SequenceAttribute.Type.IsNull() {
-					*type36 = shared.SequenceAttributeType(attributesItem1.SequenceAttribute.Type.ValueString())
+					*typeVar35 = shared.SequenceAttributeType(attributesItem1.SequenceAttribute.Type.ValueString())
 				} else {
-					type36 = nil
+					typeVar35 = nil
 				}
 				valueFormatter35 := new(string)
 				if !attributesItem1.SequenceAttribute.ValueFormatter.IsUnknown() && !attributesItem1.SequenceAttribute.ValueFormatter.IsNull() {
@@ -6399,7 +6342,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					SettingFlag:              settingFlag36,
 					ShowInTable:              showInTable35,
 					StartNumber:              startNumber1,
-					Type:                     type36,
+					Type:                     typeVar35,
 					ValueFormatter:           valueFormatter35,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -6407,23 +6350,23 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.RelationAttribute != nil {
-				purpose37 := make([]string, 0)
+				var purpose37 []string = nil
 				for _, purposeItem37 := range attributesItem1.RelationAttribute.Purpose {
 					purpose37 = append(purpose37, purposeItem37.ValueString())
 				}
-				actions1 := make([]shared.RelationAttributeActions, 0)
+				var actions1 []shared.Actions = nil
 				for _, actionsItem1 := range attributesItem1.RelationAttribute.Actions {
-					actionType1 := new(shared.RelationAttributeActionsActionType)
+					actionType1 := new(shared.ActionType)
 					if !actionsItem1.ActionType.IsUnknown() && !actionsItem1.ActionType.IsNull() {
-						*actionType1 = shared.RelationAttributeActionsActionType(actionsItem1.ActionType.ValueString())
+						*actionType1 = shared.ActionType(actionsItem1.ActionType.ValueString())
 					} else {
 						actionType1 = nil
 					}
-					default2 := new(bool)
+					default1 := new(bool)
 					if !actionsItem1.Default.IsUnknown() && !actionsItem1.Default.IsNull() {
-						*default2 = actionsItem1.Default.ValueBool()
+						*default1 = actionsItem1.Default.ValueBool()
 					} else {
-						default2 = nil
+						default1 = nil
 					}
 					featureFlag37 := new(string)
 					if !actionsItem1.FeatureFlag.IsUnknown() && !actionsItem1.FeatureFlag.IsNull() {
@@ -6437,23 +6380,38 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					} else {
 						label37 = nil
 					}
-					var newEntityItem1 *shared.RelationAttributeActionsNewEntityItem
+					var newEntityItem1 *shared.NewEntityItem
 					if actionsItem1.NewEntityItem != nil {
-						createdAt2, _ := time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.CreatedAt.ValueString())
+						createdAt2 := new(time.Time)
+						if !actionsItem1.NewEntityItem.CreatedAt.IsUnknown() && !actionsItem1.NewEntityItem.CreatedAt.IsNull() {
+							*createdAt2, _ = time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.CreatedAt.ValueString())
+						} else {
+							createdAt2 = nil
+						}
 						id2 := actionsItem1.NewEntityItem.ID.ValueString()
 						org1 := actionsItem1.NewEntityItem.Org.ValueString()
 						schema1 := actionsItem1.NewEntityItem.Schema.ValueString()
-						tags1 := make([]string, 0)
+						var tags1 []string = nil
 						for _, tagsItem1 := range actionsItem1.NewEntityItem.Tags {
 							tags1 = append(tags1, tagsItem1.ValueString())
 						}
-						title7 := actionsItem1.NewEntityItem.Title.ValueString()
-						updatedAt2, _ := time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.UpdatedAt.ValueString())
+						title7 := new(string)
+						if !actionsItem1.NewEntityItem.Title.IsUnknown() && !actionsItem1.NewEntityItem.Title.IsNull() {
+							*title7 = actionsItem1.NewEntityItem.Title.ValueString()
+						} else {
+							title7 = nil
+						}
+						updatedAt2 := new(time.Time)
+						if !actionsItem1.NewEntityItem.UpdatedAt.IsUnknown() && !actionsItem1.NewEntityItem.UpdatedAt.IsNull() {
+							*updatedAt2, _ = time.Parse(time.RFC3339Nano, actionsItem1.NewEntityItem.UpdatedAt.ValueString())
+						} else {
+							updatedAt2 = nil
+						}
 						var entity1 interface{}
 						if !actionsItem1.NewEntityItem.Entity.IsUnknown() && !actionsItem1.NewEntityItem.Entity.IsNull() {
 							_ = json.Unmarshal([]byte(actionsItem1.NewEntityItem.Entity.ValueString()), &entity1)
 						}
-						newEntityItem1 = &shared.RelationAttributeActionsNewEntityItem{
+						newEntityItem1 = &shared.NewEntityItem{
 							CreatedAt: createdAt2,
 							ID:        id2,
 							Org:       org1,
@@ -6470,9 +6428,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					} else {
 						settingFlag37 = nil
 					}
-					actions1 = append(actions1, shared.RelationAttributeActions{
+					actions1 = append(actions1, shared.Actions{
 						ActionType:    actionType1,
-						Default:       default2,
+						Default:       default1,
 						FeatureFlag:   featureFlag37,
 						Label:         label37,
 						NewEntityItem: newEntityItem1,
@@ -6485,15 +6443,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					addButtonLabel1 = nil
 				}
-				allowedSchemas1 := make([]string, 0)
+				var allowedSchemas1 []string = nil
 				for _, allowedSchemasItem1 := range attributesItem1.RelationAttribute.AllowedSchemas {
 					allowedSchemas1 = append(allowedSchemas1, allowedSchemasItem1.ValueString())
 				}
-				constraints36 := make(map[string]interface{})
-				for constraintsKey36, constraintsValue36 := range attributesItem1.RelationAttribute.Constraints {
-					var constraintsInst36 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue36.ValueString()), &constraintsInst36)
-					constraints36[constraintsKey36] = constraintsInst36
+				var constraints36 *shared.RelationAttributeConstraints
+				if attributesItem1.RelationAttribute.Constraints != nil {
+					constraints36 = &shared.RelationAttributeConstraints{}
 				}
 				var defaultValue36 interface{}
 				if !attributesItem1.RelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.RelationAttribute.DefaultValue.IsNull() {
@@ -6511,15 +6467,15 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					detailsViewModeEnabled1 = nil
 				}
-				drawerSize1 := new(shared.RelationAttributeDrawerSize)
+				drawerSize1 := new(shared.DrawerSize)
 				if !attributesItem1.RelationAttribute.DrawerSize.IsUnknown() && !attributesItem1.RelationAttribute.DrawerSize.IsNull() {
-					*drawerSize1 = shared.RelationAttributeDrawerSize(attributesItem1.RelationAttribute.DrawerSize.ValueString())
+					*drawerSize1 = shared.DrawerSize(attributesItem1.RelationAttribute.DrawerSize.ValueString())
 				} else {
 					drawerSize1 = nil
 				}
-				editMode1 := new(shared.RelationAttributeEditMode)
+				editMode1 := new(shared.EditMode)
 				if !attributesItem1.RelationAttribute.EditMode.IsUnknown() && !attributesItem1.RelationAttribute.EditMode.IsNull() {
-					*editMode1 = shared.RelationAttributeEditMode(attributesItem1.RelationAttribute.EditMode.ValueString())
+					*editMode1 = shared.EditMode(attributesItem1.RelationAttribute.EditMode.ValueString())
 				} else {
 					editMode1 = nil
 				}
@@ -6615,15 +6571,15 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					readonly36 = nil
 				}
-				relationAffinityMode2 := new(shared.RelationAttributeRelationAffinityMode)
+				relationAffinityMode2 := new(shared.RelationAffinityMode)
 				if !attributesItem1.RelationAttribute.RelationAffinityMode.IsUnknown() && !attributesItem1.RelationAttribute.RelationAffinityMode.IsNull() {
-					*relationAffinityMode2 = shared.RelationAttributeRelationAffinityMode(attributesItem1.RelationAttribute.RelationAffinityMode.ValueString())
+					*relationAffinityMode2 = shared.RelationAffinityMode(attributesItem1.RelationAttribute.RelationAffinityMode.ValueString())
 				} else {
 					relationAffinityMode2 = nil
 				}
-				relationType1 := new(shared.RelationAttributeRelationType)
+				relationType1 := new(shared.RelationType)
 				if !attributesItem1.RelationAttribute.RelationType.IsUnknown() && !attributesItem1.RelationAttribute.RelationType.IsNull() {
-					*relationType1 = shared.RelationAttributeRelationType(attributesItem1.RelationAttribute.RelationType.ValueString())
+					*relationType1 = shared.RelationType(attributesItem1.RelationAttribute.RelationType.ValueString())
 				} else {
 					relationType1 = nil
 				}
@@ -6662,11 +6618,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable36 = nil
 				}
-				summaryFields1 := make([]shared.RelationAttributeSummaryFields, 0)
+				var summaryFields1 []shared.SummaryFields = nil
 				for _, summaryFieldsItem1 := range attributesItem1.RelationAttribute.SummaryFields {
 					if !summaryFieldsItem1.Str.IsUnknown() && !summaryFieldsItem1.Str.IsNull() {
 						str7 := summaryFieldsItem1.Str.ValueString()
-						summaryFields1 = append(summaryFields1, shared.RelationAttributeSummaryFields{
+						summaryFields1 = append(summaryFields1, shared.SummaryFields{
 							Str: &str7,
 						})
 					}
@@ -6687,16 +6643,16 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 							DisplayAs: displayAs1,
 							Field:     field1,
 						}
-						summaryFields1 = append(summaryFields1, shared.RelationAttributeSummaryFields{
+						summaryFields1 = append(summaryFields1, shared.SummaryFields{
 							SummaryField: &summaryField1,
 						})
 					}
 				}
-				type37 := new(shared.RelationAttributeType)
+				typeVar36 := new(shared.RelationAttributeType)
 				if !attributesItem1.RelationAttribute.Type.IsUnknown() && !attributesItem1.RelationAttribute.Type.IsNull() {
-					*type37 = shared.RelationAttributeType(attributesItem1.RelationAttribute.Type.ValueString())
+					*typeVar36 = shared.RelationAttributeType(attributesItem1.RelationAttribute.Type.ValueString())
 				} else {
-					type37 = nil
+					typeVar36 = nil
 				}
 				valueFormatter36 := new(string)
 				if !attributesItem1.RelationAttribute.ValueFormatter.IsUnknown() && !attributesItem1.RelationAttribute.ValueFormatter.IsNull() {
@@ -6741,7 +6697,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					SettingFlag:              settingFlag38,
 					ShowInTable:              showInTable36,
 					SummaryFields:            summaryFields1,
-					Type:                     type37,
+					Type:                     typeVar36,
 					ValueFormatter:           valueFormatter36,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -6749,15 +6705,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.UserRelationAttribute != nil {
-				purpose38 := make([]string, 0)
+				var purpose38 []string = nil
 				for _, purposeItem38 := range attributesItem1.UserRelationAttribute.Purpose {
 					purpose38 = append(purpose38, purposeItem38.ValueString())
 				}
-				constraints37 := make(map[string]interface{})
-				for constraintsKey37, constraintsValue37 := range attributesItem1.UserRelationAttribute.Constraints {
-					var constraintsInst37 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue37.ValueString()), &constraintsInst37)
-					constraints37[constraintsKey37] = constraintsInst37
+				var constraints37 *shared.UserRelationAttributeConstraints
+				if attributesItem1.UserRelationAttribute.Constraints != nil {
+					constraints37 = &shared.UserRelationAttributeConstraints{}
 				}
 				var defaultValue37 interface{}
 				if !attributesItem1.UserRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.UserRelationAttribute.DefaultValue.IsNull() {
@@ -6873,11 +6827,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable37 = nil
 				}
-				type38 := new(shared.UserRelationAttributeType)
+				typeVar37 := new(shared.UserRelationAttributeType)
 				if !attributesItem1.UserRelationAttribute.Type.IsUnknown() && !attributesItem1.UserRelationAttribute.Type.IsNull() {
-					*type38 = shared.UserRelationAttributeType(attributesItem1.UserRelationAttribute.Type.ValueString())
+					*typeVar37 = shared.UserRelationAttributeType(attributesItem1.UserRelationAttribute.Type.ValueString())
 				} else {
-					type38 = nil
+					typeVar37 = nil
 				}
 				valueFormatter37 := new(string)
 				if !attributesItem1.UserRelationAttribute.ValueFormatter.IsUnknown() && !attributesItem1.UserRelationAttribute.ValueFormatter.IsNull() {
@@ -6909,7 +6863,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required37,
 					SettingFlag:              settingFlag39,
 					ShowInTable:              showInTable37,
-					Type:                     type38,
+					Type:                     typeVar37,
 					ValueFormatter:           valueFormatter37,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -6917,15 +6871,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.AddressRelationAttribute != nil {
-				purpose39 := make([]string, 0)
+				var purpose39 []string = nil
 				for _, purposeItem39 := range attributesItem1.AddressRelationAttribute.Purpose {
 					purpose39 = append(purpose39, purposeItem39.ValueString())
 				}
-				constraints38 := make(map[string]interface{})
-				for constraintsKey38, constraintsValue38 := range attributesItem1.AddressRelationAttribute.Constraints {
-					var constraintsInst38 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue38.ValueString()), &constraintsInst38)
-					constraints38[constraintsKey38] = constraintsInst38
+				var constraints38 *shared.Constraints
+				if attributesItem1.AddressRelationAttribute.Constraints != nil {
+					constraints38 = &shared.Constraints{}
 				}
 				var defaultValue38 interface{}
 				if !attributesItem1.AddressRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.AddressRelationAttribute.DefaultValue.IsNull() {
@@ -7041,11 +6993,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable38 = nil
 				}
-				type39 := new(shared.AddressRelationAttributeType)
+				typeVar38 := new(shared.Type)
 				if !attributesItem1.AddressRelationAttribute.Type.IsUnknown() && !attributesItem1.AddressRelationAttribute.Type.IsNull() {
-					*type39 = shared.AddressRelationAttributeType(attributesItem1.AddressRelationAttribute.Type.ValueString())
+					*typeVar38 = shared.Type(attributesItem1.AddressRelationAttribute.Type.ValueString())
 				} else {
-					type39 = nil
+					typeVar38 = nil
 				}
 				valueFormatter38 := new(string)
 				if !attributesItem1.AddressRelationAttribute.ValueFormatter.IsUnknown() && !attributesItem1.AddressRelationAttribute.ValueFormatter.IsNull() {
@@ -7077,7 +7029,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required38,
 					SettingFlag:              settingFlag40,
 					ShowInTable:              showInTable38,
-					Type:                     type39,
+					Type:                     typeVar38,
 					ValueFormatter:           valueFormatter38,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -7085,15 +7037,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.PaymentMethodRelationAttribute != nil {
-				purpose40 := make([]string, 0)
+				var purpose40 []string = nil
 				for _, purposeItem40 := range attributesItem1.PaymentMethodRelationAttribute.Purpose {
 					purpose40 = append(purpose40, purposeItem40.ValueString())
 				}
-				constraints39 := make(map[string]interface{})
-				for constraintsKey39, constraintsValue39 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
-					var constraintsInst39 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue39.ValueString()), &constraintsInst39)
-					constraints39[constraintsKey39] = constraintsInst39
+				var constraints39 *shared.PaymentMethodRelationAttributeConstraints
+				if attributesItem1.PaymentMethodRelationAttribute.Constraints != nil {
+					constraints39 = &shared.PaymentMethodRelationAttributeConstraints{}
 				}
 				var defaultValue39 interface{}
 				if !attributesItem1.PaymentMethodRelationAttribute.DefaultValue.IsUnknown() && !attributesItem1.PaymentMethodRelationAttribute.DefaultValue.IsNull() {
@@ -7209,11 +7159,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable39 = nil
 				}
-				type40 := new(shared.PaymentMethodRelationAttributeType)
+				typeVar39 := new(shared.PaymentMethodRelationAttributeType)
 				if !attributesItem1.PaymentMethodRelationAttribute.Type.IsUnknown() && !attributesItem1.PaymentMethodRelationAttribute.Type.IsNull() {
-					*type40 = shared.PaymentMethodRelationAttributeType(attributesItem1.PaymentMethodRelationAttribute.Type.ValueString())
+					*typeVar39 = shared.PaymentMethodRelationAttributeType(attributesItem1.PaymentMethodRelationAttribute.Type.ValueString())
 				} else {
-					type40 = nil
+					typeVar39 = nil
 				}
 				valueFormatter39 := new(string)
 				if !attributesItem1.PaymentMethodRelationAttribute.ValueFormatter.IsUnknown() && !attributesItem1.PaymentMethodRelationAttribute.ValueFormatter.IsNull() {
@@ -7245,7 +7195,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required39,
 					SettingFlag:              settingFlag41,
 					ShowInTable:              showInTable39,
-					Type:                     type40,
+					Type:                     typeVar39,
 					ValueFormatter:           valueFormatter39,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -7253,36 +7203,34 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.CurrencyAttribute != nil {
-				purpose41 := make([]string, 0)
+				var purpose41 []string = nil
 				for _, purposeItem41 := range attributesItem1.CurrencyAttribute.Purpose {
 					purpose41 = append(purpose41, purposeItem41.ValueString())
 				}
-				constraints40 := make(map[string]interface{})
-				for constraintsKey40, constraintsValue40 := range attributesItem1.CurrencyAttribute.Constraints {
-					var constraintsInst40 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue40.ValueString()), &constraintsInst40)
-					constraints40[constraintsKey40] = constraintsInst40
+				var constraints40 *shared.CurrencyAttributeConstraints
+				if attributesItem1.CurrencyAttribute.Constraints != nil {
+					constraints40 = &shared.CurrencyAttributeConstraints{}
 				}
-				currency1 := make([]shared.CurrencyAttributeCurrency, 0)
+				var currency1 []shared.Currency = nil
 				for _, currencyItem1 := range attributesItem1.CurrencyAttribute.Currency {
-					if currencyItem1.CurrencyAttributeCurrency1 != nil {
-						code1 := currencyItem1.CurrencyAttributeCurrency1.Code.ValueString()
-						description1 := currencyItem1.CurrencyAttributeCurrency1.Description.ValueString()
+					if currencyItem1.One != nil {
+						code1 := currencyItem1.One.Code.ValueString()
+						description1 := currencyItem1.One.Description.ValueString()
 						flag1 := new(string)
-						if !currencyItem1.CurrencyAttributeCurrency1.Flag.IsUnknown() && !currencyItem1.CurrencyAttributeCurrency1.Flag.IsNull() {
-							*flag1 = currencyItem1.CurrencyAttributeCurrency1.Flag.ValueString()
+						if !currencyItem1.One.Flag.IsUnknown() && !currencyItem1.One.Flag.IsNull() {
+							*flag1 = currencyItem1.One.Flag.ValueString()
 						} else {
 							flag1 = nil
 						}
-						symbol1 := currencyItem1.CurrencyAttributeCurrency1.Symbol.ValueString()
-						currencyAttributeCurrency11 := shared.CurrencyAttributeCurrency1{
+						symbol1 := currencyItem1.One.Symbol.ValueString()
+						eleven := shared.One{
 							Code:        code1,
 							Description: description1,
 							Flag:        flag1,
 							Symbol:      symbol1,
 						}
-						currency1 = append(currency1, shared.CurrencyAttributeCurrency{
-							CurrencyAttributeCurrency1: &currencyAttributeCurrency11,
+						currency1 = append(currency1, shared.Currency{
+							One: &eleven,
 						})
 					}
 				}
@@ -7400,7 +7348,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable40 = nil
 				}
-				type41 := shared.CurrencyAttributeType(attributesItem1.CurrencyAttribute.Type.ValueString())
+				typeVar40 := shared.CurrencyAttributeType(attributesItem1.CurrencyAttribute.Type.ValueString())
 				valueFormatter40 := new(string)
 				if !attributesItem1.CurrencyAttribute.ValueFormatter.IsUnknown() && !attributesItem1.CurrencyAttribute.ValueFormatter.IsNull() {
 					*valueFormatter40 = attributesItem1.CurrencyAttribute.ValueFormatter.ValueString()
@@ -7432,7 +7380,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required40,
 					SettingFlag:              settingFlag42,
 					ShowInTable:              showInTable40,
-					Type:                     type41,
+					Type:                     typeVar40,
 					ValueFormatter:           valueFormatter40,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -7440,15 +7388,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.RepeatableAttribute != nil {
-				purpose42 := make([]string, 0)
+				var purpose42 []string = nil
 				for _, purposeItem42 := range attributesItem1.RepeatableAttribute.Purpose {
 					purpose42 = append(purpose42, purposeItem42.ValueString())
 				}
-				constraints41 := make(map[string]interface{})
-				for constraintsKey41, constraintsValue41 := range attributesItem1.RepeatableAttribute.Constraints {
-					var constraintsInst41 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue41.ValueString()), &constraintsInst41)
-					constraints41[constraintsKey41] = constraintsInst41
+				var constraints41 *shared.RepeatableAttributeConstraints
+				if attributesItem1.RepeatableAttribute.Constraints != nil {
+					constraints41 = &shared.RepeatableAttributeConstraints{}
 				}
 				var defaultValue41 interface{}
 				if !attributesItem1.RepeatableAttribute.DefaultValue.IsUnknown() && !attributesItem1.RepeatableAttribute.DefaultValue.IsNull() {
@@ -7582,11 +7528,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable41 = nil
 				}
-				type42 := new(shared.RepeatableAttributeType)
+				typeVar41 := new(shared.RepeatableAttributeType)
 				if !attributesItem1.RepeatableAttribute.Type.IsUnknown() && !attributesItem1.RepeatableAttribute.Type.IsNull() {
-					*type42 = shared.RepeatableAttributeType(attributesItem1.RepeatableAttribute.Type.ValueString())
+					*typeVar41 = shared.RepeatableAttributeType(attributesItem1.RepeatableAttribute.Type.ValueString())
 				} else {
-					type42 = nil
+					typeVar41 = nil
 				}
 				valueFormatter41 := new(string)
 				if !attributesItem1.RepeatableAttribute.ValueFormatter.IsUnknown() && !attributesItem1.RepeatableAttribute.ValueFormatter.IsNull() {
@@ -7621,7 +7567,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required41,
 					SettingFlag:              settingFlag43,
 					ShowInTable:              showInTable41,
-					Type:                     type42,
+					Type:                     typeVar41,
 					ValueFormatter:           valueFormatter41,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -7629,15 +7575,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.TagsAttribute != nil {
-				purpose43 := make([]string, 0)
+				var purpose43 []string = nil
 				for _, purposeItem43 := range attributesItem1.TagsAttribute.Purpose {
 					purpose43 = append(purpose43, purposeItem43.ValueString())
 				}
-				constraints42 := make(map[string]interface{})
-				for constraintsKey42, constraintsValue42 := range attributesItem1.TagsAttribute.Constraints {
-					var constraintsInst42 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue42.ValueString()), &constraintsInst42)
-					constraints42[constraintsKey42] = constraintsInst42
+				var constraints42 *shared.TagsAttributeConstraints
+				if attributesItem1.TagsAttribute.Constraints != nil {
+					constraints42 = &shared.TagsAttributeConstraints{}
 				}
 				var defaultValue42 interface{}
 				if !attributesItem1.TagsAttribute.DefaultValue.IsUnknown() && !attributesItem1.TagsAttribute.DefaultValue.IsNull() {
@@ -7693,7 +7637,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					layout42 = nil
 				}
 				name42 := attributesItem1.TagsAttribute.Name.ValueString()
-				options7 := make([]string, 0)
+				var options7 []string = nil
 				for _, optionsItem7 := range attributesItem1.TagsAttribute.Options {
 					options7 = append(options7, optionsItem7.ValueString())
 				}
@@ -7751,15 +7695,15 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable42 = nil
 				}
-				suggestions1 := make([]string, 0)
+				var suggestions1 []string = nil
 				for _, suggestionsItem1 := range attributesItem1.TagsAttribute.Suggestions {
 					suggestions1 = append(suggestions1, suggestionsItem1.ValueString())
 				}
-				type43 := new(shared.TagsAttributeType)
+				typeVar42 := new(shared.TagsAttributeType)
 				if !attributesItem1.TagsAttribute.Type.IsUnknown() && !attributesItem1.TagsAttribute.Type.IsNull() {
-					*type43 = shared.TagsAttributeType(attributesItem1.TagsAttribute.Type.ValueString())
+					*typeVar42 = shared.TagsAttributeType(attributesItem1.TagsAttribute.Type.ValueString())
 				} else {
-					type43 = nil
+					typeVar42 = nil
 				}
 				valueFormatter42 := new(string)
 				if !attributesItem1.TagsAttribute.ValueFormatter.IsUnknown() && !attributesItem1.TagsAttribute.ValueFormatter.IsNull() {
@@ -7792,7 +7736,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					SettingFlag:              settingFlag44,
 					ShowInTable:              showInTable42,
 					Suggestions:              suggestions1,
-					Type:                     type43,
+					Type:                     typeVar42,
 					ValueFormatter:           valueFormatter42,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -7800,15 +7744,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.NumberAttribute != nil {
-				purpose44 := make([]string, 0)
+				var purpose44 []string = nil
 				for _, purposeItem44 := range attributesItem1.NumberAttribute.Purpose {
 					purpose44 = append(purpose44, purposeItem44.ValueString())
 				}
-				constraints43 := make(map[string]interface{})
-				for constraintsKey43, constraintsValue43 := range attributesItem1.NumberAttribute.Constraints {
-					var constraintsInst43 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue43.ValueString()), &constraintsInst43)
-					constraints43[constraintsKey43] = constraintsInst43
+				var constraints43 *shared.NumberAttributeConstraints
+				if attributesItem1.NumberAttribute.Constraints != nil {
+					constraints43 = &shared.NumberAttributeConstraints{}
 				}
 				var defaultValue43 interface{}
 				if !attributesItem1.NumberAttribute.DefaultValue.IsUnknown() && !attributesItem1.NumberAttribute.DefaultValue.IsNull() {
@@ -7924,11 +7866,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable43 = nil
 				}
-				type44 := new(shared.NumberAttributeType)
+				typeVar43 := new(shared.NumberAttributeType)
 				if !attributesItem1.NumberAttribute.Type.IsUnknown() && !attributesItem1.NumberAttribute.Type.IsNull() {
-					*type44 = shared.NumberAttributeType(attributesItem1.NumberAttribute.Type.ValueString())
+					*typeVar43 = shared.NumberAttributeType(attributesItem1.NumberAttribute.Type.ValueString())
 				} else {
-					type44 = nil
+					typeVar43 = nil
 				}
 				valueFormatter43 := new(string)
 				if !attributesItem1.NumberAttribute.ValueFormatter.IsUnknown() && !attributesItem1.NumberAttribute.ValueFormatter.IsNull() {
@@ -7960,7 +7902,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required43,
 					SettingFlag:              settingFlag45,
 					ShowInTable:              showInTable43,
-					Type:                     type44,
+					Type:                     typeVar43,
 					ValueFormatter:           valueFormatter43,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -7968,15 +7910,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.ConsentAttribute != nil {
-				purpose45 := make([]string, 0)
+				var purpose45 []string = nil
 				for _, purposeItem45 := range attributesItem1.ConsentAttribute.Purpose {
 					purpose45 = append(purpose45, purposeItem45.ValueString())
 				}
-				constraints44 := make(map[string]interface{})
-				for constraintsKey44, constraintsValue44 := range attributesItem1.ConsentAttribute.Constraints {
-					var constraintsInst44 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue44.ValueString()), &constraintsInst44)
-					constraints44[constraintsKey44] = constraintsInst44
+				var constraints44 *shared.ConsentAttributeConstraints
+				if attributesItem1.ConsentAttribute.Constraints != nil {
+					constraints44 = &shared.ConsentAttributeConstraints{}
 				}
 				var defaultValue44 interface{}
 				if !attributesItem1.ConsentAttribute.DefaultValue.IsUnknown() && !attributesItem1.ConsentAttribute.DefaultValue.IsNull() {
@@ -8024,7 +7964,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					icon44 = nil
 				}
-				identifiers1 := make([]string, 0)
+				var identifiers1 []string = nil
 				for _, identifiersItem1 := range attributesItem1.ConsentAttribute.Identifiers {
 					identifiers1 = append(identifiers1, identifiersItem1.ValueString())
 				}
@@ -8091,7 +8031,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					showInTable44 = nil
 				}
 				topic1 := attributesItem1.ConsentAttribute.Topic.ValueString()
-				type45 := shared.ConsentAttributeType(attributesItem1.ConsentAttribute.Type.ValueString())
+				typeVar44 := shared.ConsentAttributeType(attributesItem1.ConsentAttribute.Type.ValueString())
 				valueFormatter44 := new(string)
 				if !attributesItem1.ConsentAttribute.ValueFormatter.IsUnknown() && !attributesItem1.ConsentAttribute.ValueFormatter.IsNull() {
 					*valueFormatter44 = attributesItem1.ConsentAttribute.ValueFormatter.ValueString()
@@ -8123,7 +8063,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					SettingFlag:              settingFlag46,
 					ShowInTable:              showInTable44,
 					Topic:                    topic1,
-					Type:                     type45,
+					Type:                     typeVar44,
 					ValueFormatter:           valueFormatter44,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -8131,15 +8071,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.InternalAttribute != nil {
-				purpose46 := make([]string, 0)
+				var purpose46 []string = nil
 				for _, purposeItem46 := range attributesItem1.InternalAttribute.Purpose {
 					purpose46 = append(purpose46, purposeItem46.ValueString())
 				}
-				constraints45 := make(map[string]interface{})
-				for constraintsKey45, constraintsValue45 := range attributesItem1.InternalAttribute.Constraints {
-					var constraintsInst45 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue45.ValueString()), &constraintsInst45)
-					constraints45[constraintsKey45] = constraintsInst45
+				var constraints45 *shared.InternalAttributeConstraints
+				if attributesItem1.InternalAttribute.Constraints != nil {
+					constraints45 = &shared.InternalAttributeConstraints{}
 				}
 				var defaultValue45 interface{}
 				if !attributesItem1.InternalAttribute.DefaultValue.IsUnknown() && !attributesItem1.InternalAttribute.DefaultValue.IsNull() {
@@ -8249,11 +8187,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable45 = nil
 				}
-				type46 := new(shared.InternalAttributeType)
+				typeVar45 := new(shared.InternalAttributeType)
 				if !attributesItem1.InternalAttribute.Type.IsUnknown() && !attributesItem1.InternalAttribute.Type.IsNull() {
-					*type46 = shared.InternalAttributeType(attributesItem1.InternalAttribute.Type.ValueString())
+					*typeVar45 = shared.InternalAttributeType(attributesItem1.InternalAttribute.Type.ValueString())
 				} else {
-					type46 = nil
+					typeVar45 = nil
 				}
 				valueFormatter45 := new(string)
 				if !attributesItem1.InternalAttribute.ValueFormatter.IsUnknown() && !attributesItem1.InternalAttribute.ValueFormatter.IsNull() {
@@ -8284,7 +8222,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required45,
 					SettingFlag:              settingFlag47,
 					ShowInTable:              showInTable45,
-					Type:                     type46,
+					Type:                     typeVar45,
 					ValueFormatter:           valueFormatter45,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -8292,15 +8230,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.OrderedListAttribute != nil {
-				purpose47 := make([]string, 0)
+				var purpose47 []string = nil
 				for _, purposeItem47 := range attributesItem1.OrderedListAttribute.Purpose {
 					purpose47 = append(purpose47, purposeItem47.ValueString())
 				}
-				constraints46 := make(map[string]interface{})
-				for constraintsKey46, constraintsValue46 := range attributesItem1.OrderedListAttribute.Constraints {
-					var constraintsInst46 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue46.ValueString()), &constraintsInst46)
-					constraints46[constraintsKey46] = constraintsInst46
+				var constraints46 *shared.OrderedListAttributeConstraints
+				if attributesItem1.OrderedListAttribute.Constraints != nil {
+					constraints46 = &shared.OrderedListAttributeConstraints{}
 				}
 				var defaultValue46 interface{}
 				if !attributesItem1.OrderedListAttribute.DefaultValue.IsUnknown() && !attributesItem1.OrderedListAttribute.DefaultValue.IsNull() {
@@ -8410,11 +8346,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable46 = nil
 				}
-				type47 := new(shared.OrderedListAttributeType)
+				typeVar46 := new(shared.OrderedListAttributeType)
 				if !attributesItem1.OrderedListAttribute.Type.IsUnknown() && !attributesItem1.OrderedListAttribute.Type.IsNull() {
-					*type47 = shared.OrderedListAttributeType(attributesItem1.OrderedListAttribute.Type.ValueString())
+					*typeVar46 = shared.OrderedListAttributeType(attributesItem1.OrderedListAttribute.Type.ValueString())
 				} else {
-					type47 = nil
+					typeVar46 = nil
 				}
 				valueFormatter46 := new(string)
 				if !attributesItem1.OrderedListAttribute.ValueFormatter.IsUnknown() && !attributesItem1.OrderedListAttribute.ValueFormatter.IsNull() {
@@ -8445,7 +8381,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required46,
 					SettingFlag:              settingFlag48,
 					ShowInTable:              showInTable46,
-					Type:                     type47,
+					Type:                     typeVar46,
 					ValueFormatter:           valueFormatter46,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -8453,23 +8389,21 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.FileAttribute != nil {
-				purpose48 := make([]string, 0)
+				var purpose48 []string = nil
 				for _, purposeItem48 := range attributesItem1.FileAttribute.Purpose {
 					purpose48 = append(purpose48, purposeItem48.ValueString())
 				}
-				allowedExtensions1 := make([]string, 0)
+				var allowedExtensions1 []string = nil
 				for _, allowedExtensionsItem1 := range attributesItem1.FileAttribute.AllowedExtensions {
 					allowedExtensions1 = append(allowedExtensions1, allowedExtensionsItem1.ValueString())
 				}
-				constraints47 := make(map[string]interface{})
-				for constraintsKey47, constraintsValue47 := range attributesItem1.FileAttribute.Constraints {
-					var constraintsInst47 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue47.ValueString()), &constraintsInst47)
-					constraints47[constraintsKey47] = constraintsInst47
+				var constraints47 *shared.FileAttributeConstraints
+				if attributesItem1.FileAttribute.Constraints != nil {
+					constraints47 = &shared.FileAttributeConstraints{}
 				}
-				defaultAccessControl1 := new(shared.FileAttributeDefaultAccessControl)
+				defaultAccessControl1 := new(shared.DefaultAccessControl)
 				if !attributesItem1.FileAttribute.DefaultAccessControl.IsUnknown() && !attributesItem1.FileAttribute.DefaultAccessControl.IsNull() {
-					*defaultAccessControl1 = shared.FileAttributeDefaultAccessControl(attributesItem1.FileAttribute.DefaultAccessControl.ValueString())
+					*defaultAccessControl1 = shared.DefaultAccessControl(attributesItem1.FileAttribute.DefaultAccessControl.ValueString())
 				} else {
 					defaultAccessControl1 = nil
 				}
@@ -8599,7 +8533,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable47 = nil
 				}
-				type48 := shared.FileAttributeType(attributesItem1.FileAttribute.Type.ValueString())
+				typeVar47 := shared.FileAttributeType(attributesItem1.FileAttribute.Type.ValueString())
 				valueFormatter47 := new(string)
 				if !attributesItem1.FileAttribute.ValueFormatter.IsUnknown() && !attributesItem1.FileAttribute.ValueFormatter.IsNull() {
 					*valueFormatter47 = attributesItem1.FileAttribute.ValueFormatter.ValueString()
@@ -8634,7 +8568,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required47,
 					SettingFlag:              settingFlag49,
 					ShowInTable:              showInTable47,
-					Type:                     type48,
+					Type:                     typeVar47,
 					ValueFormatter:           valueFormatter47,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -8642,15 +8576,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.ComputedAttribute != nil {
-				purpose49 := make([]string, 0)
+				var purpose49 []string = nil
 				for _, purposeItem49 := range attributesItem1.ComputedAttribute.Purpose {
 					purpose49 = append(purpose49, purposeItem49.ValueString())
 				}
-				constraints48 := make(map[string]interface{})
-				for constraintsKey48, constraintsValue48 := range attributesItem1.ComputedAttribute.Constraints {
-					var constraintsInst48 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue48.ValueString()), &constraintsInst48)
-					constraints48[constraintsKey48] = constraintsInst48
+				var constraints48 *shared.ComputedAttributeConstraints
+				if attributesItem1.ComputedAttribute.Constraints != nil {
+					constraints48 = &shared.ComputedAttributeConstraints{}
 				}
 				var defaultValue48 interface{}
 				if !attributesItem1.ComputedAttribute.DefaultValue.IsUnknown() && !attributesItem1.ComputedAttribute.DefaultValue.IsNull() {
@@ -8760,11 +8692,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable48 = nil
 				}
-				type49 := new(shared.ComputedAttributeType)
+				typeVar48 := new(shared.ComputedAttributeType)
 				if !attributesItem1.ComputedAttribute.Type.IsUnknown() && !attributesItem1.ComputedAttribute.Type.IsNull() {
-					*type49 = shared.ComputedAttributeType(attributesItem1.ComputedAttribute.Type.ValueString())
+					*typeVar48 = shared.ComputedAttributeType(attributesItem1.ComputedAttribute.Type.ValueString())
 				} else {
-					type49 = nil
+					typeVar48 = nil
 				}
 				valueFormatter48 := new(string)
 				if !attributesItem1.ComputedAttribute.ValueFormatter.IsUnknown() && !attributesItem1.ComputedAttribute.ValueFormatter.IsNull() {
@@ -8795,7 +8727,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required48,
 					SettingFlag:              settingFlag50,
 					ShowInTable:              showInTable48,
-					Type:                     type49,
+					Type:                     typeVar48,
 					ValueFormatter:           valueFormatter48,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -8803,15 +8735,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.PartnerStatusAttribute != nil {
-				purpose50 := make([]string, 0)
+				var purpose50 []string = nil
 				for _, purposeItem50 := range attributesItem1.PartnerStatusAttribute.Purpose {
 					purpose50 = append(purpose50, purposeItem50.ValueString())
 				}
-				constraints49 := make(map[string]interface{})
-				for constraintsKey49, constraintsValue49 := range attributesItem1.PartnerStatusAttribute.Constraints {
-					var constraintsInst49 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue49.ValueString()), &constraintsInst49)
-					constraints49[constraintsKey49] = constraintsInst49
+				var constraints49 *shared.PartnerStatusAttributeConstraints
+				if attributesItem1.PartnerStatusAttribute.Constraints != nil {
+					constraints49 = &shared.PartnerStatusAttributeConstraints{}
 				}
 				var defaultValue49 interface{}
 				if !attributesItem1.PartnerStatusAttribute.DefaultValue.IsUnknown() && !attributesItem1.PartnerStatusAttribute.DefaultValue.IsNull() {
@@ -8921,11 +8851,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable49 = nil
 				}
-				type50 := new(shared.PartnerStatusAttributeType)
+				typeVar49 := new(shared.PartnerStatusAttributeType)
 				if !attributesItem1.PartnerStatusAttribute.Type.IsUnknown() && !attributesItem1.PartnerStatusAttribute.Type.IsNull() {
-					*type50 = shared.PartnerStatusAttributeType(attributesItem1.PartnerStatusAttribute.Type.ValueString())
+					*typeVar49 = shared.PartnerStatusAttributeType(attributesItem1.PartnerStatusAttribute.Type.ValueString())
 				} else {
-					type50 = nil
+					typeVar49 = nil
 				}
 				valueFormatter49 := new(string)
 				if !attributesItem1.PartnerStatusAttribute.ValueFormatter.IsUnknown() && !attributesItem1.PartnerStatusAttribute.ValueFormatter.IsNull() {
@@ -8956,7 +8886,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required49,
 					SettingFlag:              settingFlag51,
 					ShowInTable:              showInTable49,
-					Type:                     type50,
+					Type:                     typeVar49,
 					ValueFormatter:           valueFormatter49,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -8964,15 +8894,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.InvitationEmailAttribute != nil {
-				purpose51 := make([]string, 0)
+				var purpose51 []string = nil
 				for _, purposeItem51 := range attributesItem1.InvitationEmailAttribute.Purpose {
 					purpose51 = append(purpose51, purposeItem51.ValueString())
 				}
-				constraints50 := make(map[string]interface{})
-				for constraintsKey50, constraintsValue50 := range attributesItem1.InvitationEmailAttribute.Constraints {
-					var constraintsInst50 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue50.ValueString()), &constraintsInst50)
-					constraints50[constraintsKey50] = constraintsInst50
+				var constraints50 *shared.InvitationEmailAttributeConstraints
+				if attributesItem1.InvitationEmailAttribute.Constraints != nil {
+					constraints50 = &shared.InvitationEmailAttributeConstraints{}
 				}
 				var defaultValue50 interface{}
 				if !attributesItem1.InvitationEmailAttribute.DefaultValue.IsUnknown() && !attributesItem1.InvitationEmailAttribute.DefaultValue.IsNull() {
@@ -9082,11 +9010,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable50 = nil
 				}
-				type51 := new(shared.InvitationEmailAttributeType)
+				typeVar50 := new(shared.InvitationEmailAttributeType)
 				if !attributesItem1.InvitationEmailAttribute.Type.IsUnknown() && !attributesItem1.InvitationEmailAttribute.Type.IsNull() {
-					*type51 = shared.InvitationEmailAttributeType(attributesItem1.InvitationEmailAttribute.Type.ValueString())
+					*typeVar50 = shared.InvitationEmailAttributeType(attributesItem1.InvitationEmailAttribute.Type.ValueString())
 				} else {
-					type51 = nil
+					typeVar50 = nil
 				}
 				valueFormatter50 := new(string)
 				if !attributesItem1.InvitationEmailAttribute.ValueFormatter.IsUnknown() && !attributesItem1.InvitationEmailAttribute.ValueFormatter.IsNull() {
@@ -9117,7 +9045,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required50,
 					SettingFlag:              settingFlag52,
 					ShowInTable:              showInTable50,
-					Type:                     type51,
+					Type:                     typeVar50,
 					ValueFormatter:           valueFormatter50,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -9125,15 +9053,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.AutomationAttribute != nil {
-				purpose52 := make([]string, 0)
+				var purpose52 []string = nil
 				for _, purposeItem52 := range attributesItem1.AutomationAttribute.Purpose {
 					purpose52 = append(purpose52, purposeItem52.ValueString())
 				}
-				constraints51 := make(map[string]interface{})
-				for constraintsKey51, constraintsValue51 := range attributesItem1.AutomationAttribute.Constraints {
-					var constraintsInst51 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue51.ValueString()), &constraintsInst51)
-					constraints51[constraintsKey51] = constraintsInst51
+				var constraints51 *shared.AutomationAttributeConstraints
+				if attributesItem1.AutomationAttribute.Constraints != nil {
+					constraints51 = &shared.AutomationAttributeConstraints{}
 				}
 				var defaultValue51 interface{}
 				if !attributesItem1.AutomationAttribute.DefaultValue.IsUnknown() && !attributesItem1.AutomationAttribute.DefaultValue.IsNull() {
@@ -9243,11 +9169,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable51 = nil
 				}
-				type52 := new(shared.AutomationAttributeType)
+				typeVar51 := new(shared.AutomationAttributeType)
 				if !attributesItem1.AutomationAttribute.Type.IsUnknown() && !attributesItem1.AutomationAttribute.Type.IsNull() {
-					*type52 = shared.AutomationAttributeType(attributesItem1.AutomationAttribute.Type.ValueString())
+					*typeVar51 = shared.AutomationAttributeType(attributesItem1.AutomationAttribute.Type.ValueString())
 				} else {
-					type52 = nil
+					typeVar51 = nil
 				}
 				valueFormatter51 := new(string)
 				if !attributesItem1.AutomationAttribute.ValueFormatter.IsUnknown() && !attributesItem1.AutomationAttribute.ValueFormatter.IsNull() {
@@ -9278,7 +9204,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required51,
 					SettingFlag:              settingFlag53,
 					ShowInTable:              showInTable51,
-					Type:                     type52,
+					Type:                     typeVar51,
 					ValueFormatter:           valueFormatter51,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -9286,15 +9212,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.InternalUserAttribute != nil {
-				purpose53 := make([]string, 0)
+				var purpose53 []string = nil
 				for _, purposeItem53 := range attributesItem1.InternalUserAttribute.Purpose {
 					purpose53 = append(purpose53, purposeItem53.ValueString())
 				}
-				constraints52 := make(map[string]interface{})
-				for constraintsKey52, constraintsValue52 := range attributesItem1.InternalUserAttribute.Constraints {
-					var constraintsInst52 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue52.ValueString()), &constraintsInst52)
-					constraints52[constraintsKey52] = constraintsInst52
+				var constraints52 *shared.InternalUserAttributeConstraints
+				if attributesItem1.InternalUserAttribute.Constraints != nil {
+					constraints52 = &shared.InternalUserAttributeConstraints{}
 				}
 				var defaultValue52 interface{}
 				if !attributesItem1.InternalUserAttribute.DefaultValue.IsUnknown() && !attributesItem1.InternalUserAttribute.DefaultValue.IsNull() {
@@ -9404,11 +9328,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable52 = nil
 				}
-				type53 := new(shared.InternalUserAttributeType)
+				typeVar52 := new(shared.InternalUserAttributeType)
 				if !attributesItem1.InternalUserAttribute.Type.IsUnknown() && !attributesItem1.InternalUserAttribute.Type.IsNull() {
-					*type53 = shared.InternalUserAttributeType(attributesItem1.InternalUserAttribute.Type.ValueString())
+					*typeVar52 = shared.InternalUserAttributeType(attributesItem1.InternalUserAttribute.Type.ValueString())
 				} else {
-					type53 = nil
+					typeVar52 = nil
 				}
 				valueFormatter52 := new(string)
 				if !attributesItem1.InternalUserAttribute.ValueFormatter.IsUnknown() && !attributesItem1.InternalUserAttribute.ValueFormatter.IsNull() {
@@ -9439,7 +9363,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required52,
 					SettingFlag:              settingFlag54,
 					ShowInTable:              showInTable52,
-					Type:                     type53,
+					Type:                     typeVar52,
 					ValueFormatter:           valueFormatter52,
 				}
 				attributes1 = append(attributes1, shared.Attribute{
@@ -9447,15 +9371,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				})
 			}
 			if attributesItem1.PurposeAttribute != nil {
-				purpose54 := make([]string, 0)
+				var purpose54 []string = nil
 				for _, purposeItem54 := range attributesItem1.PurposeAttribute.Purpose {
 					purpose54 = append(purpose54, purposeItem54.ValueString())
 				}
-				constraints53 := make(map[string]interface{})
-				for constraintsKey53, constraintsValue53 := range attributesItem1.PurposeAttribute.Constraints {
-					var constraintsInst53 interface{}
-					_ = json.Unmarshal([]byte(constraintsValue53.ValueString()), &constraintsInst53)
-					constraints53[constraintsKey53] = constraintsInst53
+				var constraints53 *shared.PurposeAttributeConstraints
+				if attributesItem1.PurposeAttribute.Constraints != nil {
+					constraints53 = &shared.PurposeAttributeConstraints{}
 				}
 				createdAt3 := new(time.Time)
 				if !attributesItem1.PurposeAttribute.CreatedAt.IsUnknown() && !attributesItem1.PurposeAttribute.CreatedAt.IsNull() {
@@ -9529,7 +9451,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					order53 = nil
 				}
-				parents1 := make([]string, 0)
+				var parents1 []string = nil
 				for _, parentsItem1 := range attributesItem1.PurposeAttribute.Parents {
 					parents1 = append(parents1, parentsItem1.ValueString())
 				}
@@ -9581,11 +9503,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					showInTable53 = nil
 				}
-				type54 := new(shared.PurposeAttributeType)
+				typeVar53 := new(shared.PurposeAttributeType)
 				if !attributesItem1.PurposeAttribute.Type.IsUnknown() && !attributesItem1.PurposeAttribute.Type.IsNull() {
-					*type54 = shared.PurposeAttributeType(attributesItem1.PurposeAttribute.Type.ValueString())
+					*typeVar53 = shared.PurposeAttributeType(attributesItem1.PurposeAttribute.Type.ValueString())
 				} else {
-					type54 = nil
+					typeVar53 = nil
 				}
 				updatedAt3 := new(time.Time)
 				if !attributesItem1.PurposeAttribute.UpdatedAt.IsUnknown() && !attributesItem1.PurposeAttribute.UpdatedAt.IsNull() {
@@ -9625,7 +9547,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 					Required:                 required53,
 					SettingFlag:              settingFlag55,
 					ShowInTable:              showInTable53,
-					Type:                     type54,
+					Type:                     typeVar53,
 					UpdatedAt:                updatedAt3,
 					ValueFormatter:           valueFormatter53,
 				}
@@ -9659,7 +9581,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 		} else {
 			title8 = nil
 		}
-		uiHooks := make([]shared.EntityCapabilityUIHooks, 0)
+		var uiHooks []shared.UIHooks = nil
 		for _, uiHooksItem := range capabilitiesItem.UIHooks {
 			component := new(string)
 			if !uiHooksItem.Component.IsUnknown() && !uiHooksItem.Component.IsNull() {
@@ -9692,11 +9614,11 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				icon54 = nil
 			}
-			import1 := new(string)
+			importVar := new(string)
 			if !uiHooksItem.Import.IsUnknown() && !uiHooksItem.Import.IsNull() {
-				*import1 = uiHooksItem.Import.ValueString()
+				*importVar = uiHooksItem.Import.ValueString()
 			} else {
-				import1 = nil
+				importVar = nil
 			}
 			order54 := new(int64)
 			if !uiHooksItem.Order.IsUnknown() && !uiHooksItem.Order.IsNull() {
@@ -9710,7 +9632,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				renderCondition54 = nil
 			}
-			var requiredPermission *shared.EntityCapabilityUIHooksRequiredPermission
+			var requiredPermission *shared.RequiredPermission
 			if uiHooksItem.RequiredPermission != nil {
 				action := uiHooksItem.RequiredPermission.Action.ValueString()
 				resource := new(string)
@@ -9719,7 +9641,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 				} else {
 					resource = nil
 				}
-				requiredPermission = &shared.EntityCapabilityUIHooksRequiredPermission{
+				requiredPermission = &shared.RequiredPermission{
 					Action:   action,
 					Resource: resource,
 				}
@@ -9736,14 +9658,14 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				title9 = nil
 			}
-			uiHooks = append(uiHooks, shared.EntityCapabilityUIHooks{
+			uiHooks = append(uiHooks, shared.UIHooks{
 				Component:          component,
 				Disabled:           disabled,
 				GroupExpanded:      groupExpanded,
 				Header:             header,
 				Hook:               hook,
 				Icon:               icon54,
-				Import:             import1,
+				Import:             importVar,
 				Order:              order54,
 				RenderCondition:    renderCondition54,
 				RequiredPermission: requiredPermission,
@@ -9774,7 +9696,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 	} else {
 		draft = nil
 	}
-	enableSetting := make([]string, 0)
+	var enableSetting []string = nil
 	for _, enableSettingItem := range r.EnableSetting {
 		enableSetting = append(enableSetting, enableSettingItem.ValueString())
 	}
@@ -9792,16 +9714,16 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 		} else {
 			index = nil
 		}
-		type55 := new(shared.SearchMappingsType)
+		typeVar54 := new(shared.SearchMappingsType)
 		if !explicitSearchMappingsValue.Type.IsUnknown() && !explicitSearchMappingsValue.Type.IsNull() {
-			*type55 = shared.SearchMappingsType(explicitSearchMappingsValue.Type.ValueString())
+			*typeVar54 = shared.SearchMappingsType(explicitSearchMappingsValue.Type.ValueString())
 		} else {
-			type55 = nil
+			typeVar54 = nil
 		}
 		explicitSearchMappingsInst := shared.SearchMappings{
 			Fields: fields,
 			Index:  index,
-			Type:   type55,
+			Type:   typeVar54,
 		}
 		explicitSearchMappings[explicitSearchMappingsKey] = explicitSearchMappingsInst
 	}
@@ -9811,9 +9733,9 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 	} else {
 		featureFlag57 = nil
 	}
-	groupSettings := make([]shared.EntitySchemaGroupSettings, 0)
+	var groupSettings []shared.GroupSettings = nil
 	for _, groupSettingsItem := range r.GroupSettings {
-		purpose55 := make([]string, 0)
+		var purpose55 []string = nil
 		for _, purposeItem55 := range groupSettingsItem.Purpose {
 			purpose55 = append(purpose55, purposeItem55.ValueString())
 		}
@@ -9830,13 +9752,13 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			featureFlag58 = nil
 		}
 		id4 := groupSettingsItem.ID.ValueString()
-		var infoTooltipTitle *shared.EntitySchemaGroupSettingsInfoTooltipTitle
+		var infoTooltipTitle *shared.InfoTooltipTitle
 		if groupSettingsItem.InfoTooltipTitle != nil {
-			default3 := new(string)
+			defaultVar1 := new(string)
 			if !groupSettingsItem.InfoTooltipTitle.Default.IsUnknown() && !groupSettingsItem.InfoTooltipTitle.Default.IsNull() {
-				*default3 = groupSettingsItem.InfoTooltipTitle.Default.ValueString()
+				*defaultVar1 = groupSettingsItem.InfoTooltipTitle.Default.ValueString()
 			} else {
-				default3 = nil
+				defaultVar1 = nil
 			}
 			key := new(string)
 			if !groupSettingsItem.InfoTooltipTitle.Key.IsUnknown() && !groupSettingsItem.InfoTooltipTitle.Key.IsNull() {
@@ -9844,8 +9766,8 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				key = nil
 			}
-			infoTooltipTitle = &shared.EntitySchemaGroupSettingsInfoTooltipTitle{
-				Default: default3,
+			infoTooltipTitle = &shared.InfoTooltipTitle{
+				Default: defaultVar1,
 				Key:     key,
 			}
 		}
@@ -9868,7 +9790,7 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 		} else {
 			settingFlag57 = nil
 		}
-		groupSettings = append(groupSettings, shared.EntitySchemaGroupSettings{
+		groupSettings = append(groupSettings, shared.GroupSettings{
 			Purpose:          purpose55,
 			Expanded:         expanded,
 			FeatureFlag:      featureFlag58,
@@ -9886,8 +9808,12 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 	} else {
 		icon55 = nil
 	}
-	var layoutSettings *shared.EntitySchemaLayoutSettings
+	var layoutSettings *shared.LayoutSettings
 	if r.LayoutSettings != nil {
+		var additionalProperties interface{}
+		if !r.LayoutSettings.AdditionalProperties.IsUnknown() && !r.LayoutSettings.AdditionalProperties.IsNull() {
+			_ = json.Unmarshal([]byte(r.LayoutSettings.AdditionalProperties.ValueString()), &additionalProperties)
+		}
 		gridGap := new(string)
 		if !r.LayoutSettings.GridGap.IsUnknown() && !r.LayoutSettings.GridGap.IsNull() {
 			*gridGap = r.LayoutSettings.GridGap.ValueString()
@@ -9900,14 +9826,10 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 		} else {
 			gridTemplateColumns = nil
 		}
-		var additionalProperties interface{}
-		if !r.LayoutSettings.AdditionalProperties.IsUnknown() && !r.LayoutSettings.AdditionalProperties.IsNull() {
-			_ = json.Unmarshal([]byte(r.LayoutSettings.AdditionalProperties.ValueString()), &additionalProperties)
-		}
-		layoutSettings = &shared.EntitySchemaLayoutSettings{
+		layoutSettings = &shared.LayoutSettings{
+			AdditionalProperties: additionalProperties,
 			GridGap:              gridGap,
 			GridTemplateColumns:  gridTemplateColumns,
-			AdditionalProperties: additionalProperties,
 		}
 	}
 	name55 := r.Name.ValueString()
@@ -9925,181 +9847,185 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 	} else {
 		titleTemplate = nil
 	}
-	var uiConfig *shared.EntitySchemaUIConfig
+	var uiConfig *shared.UIConfig
 	if r.UIConfig != nil {
-		var createView *shared.EntitySchemaUIConfigCreateView
-		var entityDefaultCreate *shared.EntityDefaultCreate
-		if r.UIConfig.CreateView.EntityDefaultCreate != nil {
-			searchParams := make(map[string]string)
-			for searchParamsKey, searchParamsValue := range r.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
-				searchParamsInst := searchParamsValue.ValueString()
-				searchParams[searchParamsKey] = searchParamsInst
-			}
-			var tableMenuOptions *shared.EntityDefaultCreateTableMenuOptions
-			if r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions != nil {
-				icon56 := new(string)
-				if !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon.IsNull() {
-					*icon56 = r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon.ValueString()
+		var createView *shared.CreateView
+		if r.UIConfig.CreateView != nil {
+			var entityDefaultCreate *shared.EntityDefaultCreate
+			if r.UIConfig.CreateView.EntityDefaultCreate != nil {
+				searchParams := make(map[string]string)
+				for searchParamsKey, searchParamsValue := range r.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
+					searchParamsInst := searchParamsValue.ValueString()
+					searchParams[searchParamsKey] = searchParamsInst
+				}
+				var tableMenuOptions *shared.TableMenuOptions
+				if r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions != nil {
+					icon56 := new(string)
+					if !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon.IsNull() {
+						*icon56 = r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon.ValueString()
+					} else {
+						icon56 = nil
+					}
+					label57 := new(string)
+					if !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Label.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Label.IsNull() {
+						*label57 = r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Label.ValueString()
+					} else {
+						label57 = nil
+					}
+					tableMenuOptions = &shared.TableMenuOptions{
+						Icon:  icon56,
+						Label: label57,
+					}
+				}
+				viewType := new(shared.ViewType)
+				if !r.UIConfig.CreateView.EntityDefaultCreate.ViewType.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.ViewType.IsNull() {
+					*viewType = shared.ViewType(r.UIConfig.CreateView.EntityDefaultCreate.ViewType.ValueString())
 				} else {
-					icon56 = nil
+					viewType = nil
 				}
-				label57 := new(string)
-				if !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Label.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Label.IsNull() {
-					*label57 = r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Label.ValueString()
+				entityDefaultCreate = &shared.EntityDefaultCreate{
+					SearchParams:     searchParams,
+					TableMenuOptions: tableMenuOptions,
+					ViewType:         viewType,
+				}
+			}
+			if entityDefaultCreate != nil {
+				createView = &shared.CreateView{
+					EntityDefaultCreate: entityDefaultCreate,
+				}
+			}
+			var redirectEntityView *shared.RedirectEntityView
+			if r.UIConfig.CreateView.RedirectEntityView != nil {
+				route1 := new(string)
+				if !r.UIConfig.CreateView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.CreateView.RedirectEntityView.Route.IsNull() {
+					*route1 = r.UIConfig.CreateView.RedirectEntityView.Route.ValueString()
 				} else {
-					label57 = nil
+					route1 = nil
 				}
-				tableMenuOptions = &shared.EntityDefaultCreateTableMenuOptions{
-					Icon:  icon56,
-					Label: label57,
-				}
-			}
-			viewType := new(shared.EntityDefaultCreateViewType)
-			if !r.UIConfig.CreateView.EntityDefaultCreate.ViewType.IsUnknown() && !r.UIConfig.CreateView.EntityDefaultCreate.ViewType.IsNull() {
-				*viewType = shared.EntityDefaultCreateViewType(r.UIConfig.CreateView.EntityDefaultCreate.ViewType.ValueString())
-			} else {
-				viewType = nil
-			}
-			entityDefaultCreate = &shared.EntityDefaultCreate{
-				SearchParams:     searchParams,
-				TableMenuOptions: tableMenuOptions,
-				ViewType:         viewType,
-			}
-		}
-		if entityDefaultCreate != nil {
-			createView = &shared.EntitySchemaUIConfigCreateView{
-				EntityDefaultCreate: entityDefaultCreate,
-			}
-		}
-		var redirectEntityView *shared.RedirectEntityView
-		if r.UIConfig.CreateView.RedirectEntityView != nil {
-			route1 := new(string)
-			if !r.UIConfig.CreateView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.CreateView.RedirectEntityView.Route.IsNull() {
-				*route1 = r.UIConfig.CreateView.RedirectEntityView.Route.ValueString()
-			} else {
-				route1 = nil
-			}
-			viewType1 := new(shared.RedirectEntityViewViewType)
-			if !r.UIConfig.CreateView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.CreateView.RedirectEntityView.ViewType.IsNull() {
-				*viewType1 = shared.RedirectEntityViewViewType(r.UIConfig.CreateView.RedirectEntityView.ViewType.ValueString())
-			} else {
-				viewType1 = nil
-			}
-			redirectEntityView = &shared.RedirectEntityView{
-				Route:    route1,
-				ViewType: viewType1,
-			}
-		}
-		if redirectEntityView != nil {
-			createView = &shared.EntitySchemaUIConfigCreateView{
-				RedirectEntityView: redirectEntityView,
-			}
-		}
-		var entityViewDisabled *shared.EntityViewDisabled
-		if r.UIConfig.CreateView.EntityViewDisabled != nil {
-			viewType2 := new(shared.EntityViewDisabledViewType)
-			if !r.UIConfig.CreateView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.CreateView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType2 = shared.EntityViewDisabledViewType(r.UIConfig.CreateView.EntityViewDisabled.ViewType.ValueString())
-			} else {
-				viewType2 = nil
-			}
-			entityViewDisabled = &shared.EntityViewDisabled{
-				ViewType: viewType2,
-			}
-		}
-		if entityViewDisabled != nil {
-			createView = &shared.EntitySchemaUIConfigCreateView{
-				EntityViewDisabled: entityViewDisabled,
-			}
-		}
-		var editView *shared.EntitySchemaUIConfigEditView
-		var entityDefaultEdit *shared.EntityDefaultEdit
-		if r.UIConfig.EditView.EntityDefaultEdit != nil {
-			searchParams1 := make(map[string]string)
-			for searchParamsKey1, searchParamsValue1 := range r.UIConfig.EditView.EntityDefaultEdit.SearchParams {
-				searchParamsInst1 := searchParamsValue1.ValueString()
-				searchParams1[searchParamsKey1] = searchParamsInst1
-			}
-			var tableMenuOptions1 *shared.EntityDefaultEditTableMenuOptions
-			if r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions != nil {
-				icon57 := new(string)
-				if !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon.IsNull() {
-					*icon57 = r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon.ValueString()
+				viewType1 := new(shared.RedirectEntityViewViewType)
+				if !r.UIConfig.CreateView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.CreateView.RedirectEntityView.ViewType.IsNull() {
+					*viewType1 = shared.RedirectEntityViewViewType(r.UIConfig.CreateView.RedirectEntityView.ViewType.ValueString())
 				} else {
-					icon57 = nil
+					viewType1 = nil
 				}
-				label58 := new(string)
-				if !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Label.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Label.IsNull() {
-					*label58 = r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Label.ValueString()
+				redirectEntityView = &shared.RedirectEntityView{
+					Route:    route1,
+					ViewType: viewType1,
+				}
+			}
+			if redirectEntityView != nil {
+				createView = &shared.CreateView{
+					RedirectEntityView: redirectEntityView,
+				}
+			}
+			var entityViewDisabled *shared.EntityViewDisabled
+			if r.UIConfig.CreateView.EntityViewDisabled != nil {
+				viewType2 := new(shared.EntityViewDisabledViewType)
+				if !r.UIConfig.CreateView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.CreateView.EntityViewDisabled.ViewType.IsNull() {
+					*viewType2 = shared.EntityViewDisabledViewType(r.UIConfig.CreateView.EntityViewDisabled.ViewType.ValueString())
 				} else {
-					label58 = nil
+					viewType2 = nil
 				}
-				tableMenuOptions1 = &shared.EntityDefaultEditTableMenuOptions{
-					Icon:  icon57,
-					Label: label58,
+				entityViewDisabled = &shared.EntityViewDisabled{
+					ViewType: viewType2,
 				}
 			}
-			viewType3 := new(shared.EntityDefaultEditViewType)
-			if !r.UIConfig.EditView.EntityDefaultEdit.ViewType.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.ViewType.IsNull() {
-				*viewType3 = shared.EntityDefaultEditViewType(r.UIConfig.EditView.EntityDefaultEdit.ViewType.ValueString())
-			} else {
-				viewType3 = nil
-			}
-			entityDefaultEdit = &shared.EntityDefaultEdit{
-				SearchParams:     searchParams1,
-				TableMenuOptions: tableMenuOptions1,
-				ViewType:         viewType3,
+			if entityViewDisabled != nil {
+				createView = &shared.CreateView{
+					EntityViewDisabled: entityViewDisabled,
+				}
 			}
 		}
-		if entityDefaultEdit != nil {
-			editView = &shared.EntitySchemaUIConfigEditView{
-				EntityDefaultEdit: entityDefaultEdit,
+		var editView *shared.EditView
+		if r.UIConfig.EditView != nil {
+			var entityDefaultEdit *shared.EntityDefaultEdit
+			if r.UIConfig.EditView.EntityDefaultEdit != nil {
+				searchParams1 := make(map[string]string)
+				for searchParamsKey1, searchParamsValue1 := range r.UIConfig.EditView.EntityDefaultEdit.SearchParams {
+					searchParamsInst1 := searchParamsValue1.ValueString()
+					searchParams1[searchParamsKey1] = searchParamsInst1
+				}
+				var tableMenuOptions1 *shared.EntityDefaultEditTableMenuOptions
+				if r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions != nil {
+					icon57 := new(string)
+					if !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon.IsNull() {
+						*icon57 = r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon.ValueString()
+					} else {
+						icon57 = nil
+					}
+					label58 := new(string)
+					if !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Label.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Label.IsNull() {
+						*label58 = r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Label.ValueString()
+					} else {
+						label58 = nil
+					}
+					tableMenuOptions1 = &shared.EntityDefaultEditTableMenuOptions{
+						Icon:  icon57,
+						Label: label58,
+					}
+				}
+				viewType3 := new(shared.EntityDefaultEditViewType)
+				if !r.UIConfig.EditView.EntityDefaultEdit.ViewType.IsUnknown() && !r.UIConfig.EditView.EntityDefaultEdit.ViewType.IsNull() {
+					*viewType3 = shared.EntityDefaultEditViewType(r.UIConfig.EditView.EntityDefaultEdit.ViewType.ValueString())
+				} else {
+					viewType3 = nil
+				}
+				entityDefaultEdit = &shared.EntityDefaultEdit{
+					SearchParams:     searchParams1,
+					TableMenuOptions: tableMenuOptions1,
+					ViewType:         viewType3,
+				}
+			}
+			if entityDefaultEdit != nil {
+				editView = &shared.EditView{
+					EntityDefaultEdit: entityDefaultEdit,
+				}
+			}
+			var redirectEntityView1 *shared.RedirectEntityView
+			if r.UIConfig.EditView.RedirectEntityView != nil {
+				route2 := new(string)
+				if !r.UIConfig.EditView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.EditView.RedirectEntityView.Route.IsNull() {
+					*route2 = r.UIConfig.EditView.RedirectEntityView.Route.ValueString()
+				} else {
+					route2 = nil
+				}
+				viewType4 := new(shared.RedirectEntityViewViewType)
+				if !r.UIConfig.EditView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.EditView.RedirectEntityView.ViewType.IsNull() {
+					*viewType4 = shared.RedirectEntityViewViewType(r.UIConfig.EditView.RedirectEntityView.ViewType.ValueString())
+				} else {
+					viewType4 = nil
+				}
+				redirectEntityView1 = &shared.RedirectEntityView{
+					Route:    route2,
+					ViewType: viewType4,
+				}
+			}
+			if redirectEntityView1 != nil {
+				editView = &shared.EditView{
+					RedirectEntityView: redirectEntityView1,
+				}
+			}
+			var entityViewDisabled1 *shared.EntityViewDisabled
+			if r.UIConfig.EditView.EntityViewDisabled != nil {
+				viewType5 := new(shared.EntityViewDisabledViewType)
+				if !r.UIConfig.EditView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.EditView.EntityViewDisabled.ViewType.IsNull() {
+					*viewType5 = shared.EntityViewDisabledViewType(r.UIConfig.EditView.EntityViewDisabled.ViewType.ValueString())
+				} else {
+					viewType5 = nil
+				}
+				entityViewDisabled1 = &shared.EntityViewDisabled{
+					ViewType: viewType5,
+				}
+			}
+			if entityViewDisabled1 != nil {
+				editView = &shared.EditView{
+					EntityViewDisabled: entityViewDisabled1,
+				}
 			}
 		}
-		var redirectEntityView1 *shared.RedirectEntityView
-		if r.UIConfig.EditView.RedirectEntityView != nil {
-			route2 := new(string)
-			if !r.UIConfig.EditView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.EditView.RedirectEntityView.Route.IsNull() {
-				*route2 = r.UIConfig.EditView.RedirectEntityView.Route.ValueString()
-			} else {
-				route2 = nil
-			}
-			viewType4 := new(shared.RedirectEntityViewViewType)
-			if !r.UIConfig.EditView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.EditView.RedirectEntityView.ViewType.IsNull() {
-				*viewType4 = shared.RedirectEntityViewViewType(r.UIConfig.EditView.RedirectEntityView.ViewType.ValueString())
-			} else {
-				viewType4 = nil
-			}
-			redirectEntityView1 = &shared.RedirectEntityView{
-				Route:    route2,
-				ViewType: viewType4,
-			}
-		}
-		if redirectEntityView1 != nil {
-			editView = &shared.EntitySchemaUIConfigEditView{
-				RedirectEntityView: redirectEntityView1,
-			}
-		}
-		var entityViewDisabled1 *shared.EntityViewDisabled
-		if r.UIConfig.EditView.EntityViewDisabled != nil {
-			viewType5 := new(shared.EntityViewDisabledViewType)
-			if !r.UIConfig.EditView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.EditView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType5 = shared.EntityViewDisabledViewType(r.UIConfig.EditView.EntityViewDisabled.ViewType.ValueString())
-			} else {
-				viewType5 = nil
-			}
-			entityViewDisabled1 = &shared.EntityViewDisabled{
-				ViewType: viewType5,
-			}
-		}
-		if entityViewDisabled1 != nil {
-			editView = &shared.EntitySchemaUIConfigEditView{
-				EntityViewDisabled: entityViewDisabled1,
-			}
-		}
-		var listItem *shared.EntitySchemaUIConfigListItem
+		var listItem *shared.ListItem
 		if r.UIConfig.ListItem != nil {
-			summaryAttributes := make([]shared.EntitySchemaUIConfigListItemSummaryAttributes, 0)
+			var summaryAttributes []shared.SummaryAttributes = nil
 			for _, summaryAttributesItem := range r.UIConfig.ListItem.SummaryAttributes {
 				if summaryAttributesItem.SummaryAttribute != nil {
 					featureFlag59 := new(string)
@@ -10143,22 +10069,22 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 						TagColor:        tagColor,
 						Value:           value6,
 					}
-					summaryAttributes = append(summaryAttributes, shared.EntitySchemaUIConfigListItemSummaryAttributes{
+					summaryAttributes = append(summaryAttributes, shared.SummaryAttributes{
 						SummaryAttribute: &summaryAttribute,
 					})
 				}
 				if !summaryAttributesItem.Str.IsUnknown() && !summaryAttributesItem.Str.IsNull() {
 					str8 := summaryAttributesItem.Str.ValueString()
-					summaryAttributes = append(summaryAttributes, shared.EntitySchemaUIConfigListItemSummaryAttributes{
+					summaryAttributes = append(summaryAttributes, shared.SummaryAttributes{
 						Str: &str8,
 					})
 				}
 			}
-			listItem = &shared.EntitySchemaUIConfigListItem{
+			listItem = &shared.ListItem{
 				SummaryAttributes: summaryAttributes,
 			}
 		}
-		var sharing *shared.EntitySchemaUIConfigSharing
+		var sharing *shared.Sharing
 		if r.UIConfig.Sharing != nil {
 			showSharingButton := new(bool)
 			if !r.UIConfig.Sharing.ShowSharingButton.IsUnknown() && !r.UIConfig.Sharing.ShowSharingButton.IsNull() {
@@ -10166,278 +10092,280 @@ func (r *SchemaResourceModel) ToCreateSDKType() *shared.EntitySchema {
 			} else {
 				showSharingButton = nil
 			}
-			sharing = &shared.EntitySchemaUIConfigSharing{
+			sharing = &shared.Sharing{
 				ShowSharingButton: showSharingButton,
 			}
 		}
-		var singleView *shared.EntitySchemaUIConfigSingleView
-		var entityDefaultEdit1 *shared.EntityDefaultEdit
-		if r.UIConfig.SingleView.EntityDefaultEdit != nil {
-			searchParams2 := make(map[string]string)
-			for searchParamsKey2, searchParamsValue2 := range r.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
-				searchParamsInst2 := searchParamsValue2.ValueString()
-				searchParams2[searchParamsKey2] = searchParamsInst2
-			}
-			var tableMenuOptions2 *shared.EntityDefaultEditTableMenuOptions
-			if r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions != nil {
-				icon58 := new(string)
-				if !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon.IsNull() {
-					*icon58 = r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon.ValueString()
+		var singleView *shared.SingleView
+		if r.UIConfig.SingleView != nil {
+			var entityDefaultEdit1 *shared.EntityDefaultEdit
+			if r.UIConfig.SingleView.EntityDefaultEdit != nil {
+				searchParams2 := make(map[string]string)
+				for searchParamsKey2, searchParamsValue2 := range r.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
+					searchParamsInst2 := searchParamsValue2.ValueString()
+					searchParams2[searchParamsKey2] = searchParamsInst2
+				}
+				var tableMenuOptions2 *shared.EntityDefaultEditTableMenuOptions
+				if r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions != nil {
+					icon58 := new(string)
+					if !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon.IsNull() {
+						*icon58 = r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon.ValueString()
+					} else {
+						icon58 = nil
+					}
+					label60 := new(string)
+					if !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Label.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Label.IsNull() {
+						*label60 = r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Label.ValueString()
+					} else {
+						label60 = nil
+					}
+					tableMenuOptions2 = &shared.EntityDefaultEditTableMenuOptions{
+						Icon:  icon58,
+						Label: label60,
+					}
+				}
+				viewType6 := new(shared.EntityDefaultEditViewType)
+				if !r.UIConfig.SingleView.EntityDefaultEdit.ViewType.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.ViewType.IsNull() {
+					*viewType6 = shared.EntityDefaultEditViewType(r.UIConfig.SingleView.EntityDefaultEdit.ViewType.ValueString())
 				} else {
-					icon58 = nil
+					viewType6 = nil
 				}
-				label60 := new(string)
-				if !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Label.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Label.IsNull() {
-					*label60 = r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Label.ValueString()
+				entityDefaultEdit1 = &shared.EntityDefaultEdit{
+					SearchParams:     searchParams2,
+					TableMenuOptions: tableMenuOptions2,
+					ViewType:         viewType6,
+				}
+			}
+			if entityDefaultEdit1 != nil {
+				singleView = &shared.SingleView{
+					EntityDefaultEdit: entityDefaultEdit1,
+				}
+			}
+			var redirectEntityView2 *shared.RedirectEntityView
+			if r.UIConfig.SingleView.RedirectEntityView != nil {
+				route3 := new(string)
+				if !r.UIConfig.SingleView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.SingleView.RedirectEntityView.Route.IsNull() {
+					*route3 = r.UIConfig.SingleView.RedirectEntityView.Route.ValueString()
 				} else {
-					label60 = nil
+					route3 = nil
 				}
-				tableMenuOptions2 = &shared.EntityDefaultEditTableMenuOptions{
-					Icon:  icon58,
-					Label: label60,
+				viewType7 := new(shared.RedirectEntityViewViewType)
+				if !r.UIConfig.SingleView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.SingleView.RedirectEntityView.ViewType.IsNull() {
+					*viewType7 = shared.RedirectEntityViewViewType(r.UIConfig.SingleView.RedirectEntityView.ViewType.ValueString())
+				} else {
+					viewType7 = nil
+				}
+				redirectEntityView2 = &shared.RedirectEntityView{
+					Route:    route3,
+					ViewType: viewType7,
 				}
 			}
-			viewType6 := new(shared.EntityDefaultEditViewType)
-			if !r.UIConfig.SingleView.EntityDefaultEdit.ViewType.IsUnknown() && !r.UIConfig.SingleView.EntityDefaultEdit.ViewType.IsNull() {
-				*viewType6 = shared.EntityDefaultEditViewType(r.UIConfig.SingleView.EntityDefaultEdit.ViewType.ValueString())
-			} else {
-				viewType6 = nil
+			if redirectEntityView2 != nil {
+				singleView = &shared.SingleView{
+					RedirectEntityView: redirectEntityView2,
+				}
 			}
-			entityDefaultEdit1 = &shared.EntityDefaultEdit{
-				SearchParams:     searchParams2,
-				TableMenuOptions: tableMenuOptions2,
-				ViewType:         viewType6,
+			var entityViewDisabled2 *shared.EntityViewDisabled
+			if r.UIConfig.SingleView.EntityViewDisabled != nil {
+				viewType8 := new(shared.EntityViewDisabledViewType)
+				if !r.UIConfig.SingleView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.SingleView.EntityViewDisabled.ViewType.IsNull() {
+					*viewType8 = shared.EntityViewDisabledViewType(r.UIConfig.SingleView.EntityViewDisabled.ViewType.ValueString())
+				} else {
+					viewType8 = nil
+				}
+				entityViewDisabled2 = &shared.EntityViewDisabled{
+					ViewType: viewType8,
+				}
 			}
-		}
-		if entityDefaultEdit1 != nil {
-			singleView = &shared.EntitySchemaUIConfigSingleView{
-				EntityDefaultEdit: entityDefaultEdit1,
-			}
-		}
-		var redirectEntityView2 *shared.RedirectEntityView
-		if r.UIConfig.SingleView.RedirectEntityView != nil {
-			route3 := new(string)
-			if !r.UIConfig.SingleView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.SingleView.RedirectEntityView.Route.IsNull() {
-				*route3 = r.UIConfig.SingleView.RedirectEntityView.Route.ValueString()
-			} else {
-				route3 = nil
-			}
-			viewType7 := new(shared.RedirectEntityViewViewType)
-			if !r.UIConfig.SingleView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.SingleView.RedirectEntityView.ViewType.IsNull() {
-				*viewType7 = shared.RedirectEntityViewViewType(r.UIConfig.SingleView.RedirectEntityView.ViewType.ValueString())
-			} else {
-				viewType7 = nil
-			}
-			redirectEntityView2 = &shared.RedirectEntityView{
-				Route:    route3,
-				ViewType: viewType7,
+			if entityViewDisabled2 != nil {
+				singleView = &shared.SingleView{
+					EntityViewDisabled: entityViewDisabled2,
+				}
 			}
 		}
-		if redirectEntityView2 != nil {
-			singleView = &shared.EntitySchemaUIConfigSingleView{
-				RedirectEntityView: redirectEntityView2,
-			}
-		}
-		var entityViewDisabled2 *shared.EntityViewDisabled
-		if r.UIConfig.SingleView.EntityViewDisabled != nil {
-			viewType8 := new(shared.EntityViewDisabledViewType)
-			if !r.UIConfig.SingleView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.SingleView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType8 = shared.EntityViewDisabledViewType(r.UIConfig.SingleView.EntityViewDisabled.ViewType.ValueString())
-			} else {
-				viewType8 = nil
-			}
-			entityViewDisabled2 = &shared.EntityViewDisabled{
-				ViewType: viewType8,
-			}
-		}
-		if entityViewDisabled2 != nil {
-			singleView = &shared.EntitySchemaUIConfigSingleView{
-				EntityViewDisabled: entityViewDisabled2,
-			}
-		}
-		var tableView *shared.EntitySchemaUIConfigTableView
-		var entityDefaultTable *shared.EntityDefaultTable
-		if r.UIConfig.TableView.EntityDefaultTable != nil {
-			classicView := new(string)
-			if !r.UIConfig.TableView.EntityDefaultTable.ClassicView.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.ClassicView.IsNull() {
-				*classicView = r.UIConfig.TableView.EntityDefaultTable.ClassicView.ValueString()
-			} else {
-				classicView = nil
-			}
-			dropdownItems := make([]shared.EntityDefaultTableDropdownItems, 0)
-			for _, dropdownItemsItem := range r.UIConfig.TableView.EntityDefaultTable.DropdownItems {
-				if dropdownItemsItem.EntityDefaultTableDropdownItems1 != nil {
-					entity2 := new(string)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.IsNull() {
-						*entity2 = dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity.ValueString()
-					} else {
-						entity2 = nil
+		var tableView *shared.TableView
+		if r.UIConfig.TableView != nil {
+			var entityDefaultTable *shared.EntityDefaultTable
+			if r.UIConfig.TableView.EntityDefaultTable != nil {
+				classicView := new(string)
+				if !r.UIConfig.TableView.EntityDefaultTable.ClassicView.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.ClassicView.IsNull() {
+					*classicView = r.UIConfig.TableView.EntityDefaultTable.ClassicView.ValueString()
+				} else {
+					classicView = nil
+				}
+				var dropdownItems []shared.DropdownItems = nil
+				for _, dropdownItemsItem := range r.UIConfig.TableView.EntityDefaultTable.DropdownItems {
+					if dropdownItemsItem.One != nil {
+						entity2 := new(string)
+						if !dropdownItemsItem.One.Entity.IsUnknown() && !dropdownItemsItem.One.Entity.IsNull() {
+							*entity2 = dropdownItemsItem.One.Entity.ValueString()
+						} else {
+							entity2 = nil
+						}
+						featureFlag60 := new(string)
+						if !dropdownItemsItem.One.FeatureFlag.IsUnknown() && !dropdownItemsItem.One.FeatureFlag.IsNull() {
+							*featureFlag60 = dropdownItemsItem.One.FeatureFlag.ValueString()
+						} else {
+							featureFlag60 = nil
+						}
+						legacy1 := new(bool)
+						if !dropdownItemsItem.One.Legacy.IsUnknown() && !dropdownItemsItem.One.Legacy.IsNull() {
+							*legacy1 = dropdownItemsItem.One.Legacy.ValueBool()
+						} else {
+							legacy1 = nil
+						}
+						typeVar55 := new(shared.EntityDefaultTableType)
+						if !dropdownItemsItem.One.Type.IsUnknown() && !dropdownItemsItem.One.Type.IsNull() {
+							*typeVar55 = shared.EntityDefaultTableType(dropdownItemsItem.One.Type.ValueString())
+						} else {
+							typeVar55 = nil
+						}
+						entityDefaultTable1 := shared.EntityDefaultTable1{
+							Entity:      entity2,
+							FeatureFlag: featureFlag60,
+							Legacy:      legacy1,
+							Type:        typeVar55,
+						}
+						dropdownItems = append(dropdownItems, shared.DropdownItems{
+							EntityDefaultTable1: &entityDefaultTable1,
+						})
 					}
-					featureFlag60 := new(string)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.IsNull() {
-						*featureFlag60 = dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag.ValueString()
-					} else {
-						featureFlag60 = nil
+					if dropdownItemsItem.Two != nil {
+						featureFlag61 := new(string)
+						if !dropdownItemsItem.Two.FeatureFlag.IsUnknown() && !dropdownItemsItem.Two.FeatureFlag.IsNull() {
+							*featureFlag61 = dropdownItemsItem.Two.FeatureFlag.ValueString()
+						} else {
+							featureFlag61 = nil
+						}
+						legacy2 := new(bool)
+						if !dropdownItemsItem.Two.Legacy.IsUnknown() && !dropdownItemsItem.Two.Legacy.IsNull() {
+							*legacy2 = dropdownItemsItem.Two.Legacy.ValueBool()
+						} else {
+							legacy2 = nil
+						}
+						title10 := new(string)
+						if !dropdownItemsItem.Two.Title.IsUnknown() && !dropdownItemsItem.Two.Title.IsNull() {
+							*title10 = dropdownItemsItem.Two.Title.ValueString()
+						} else {
+							title10 = nil
+						}
+						typeVar56 := new(shared.EntityDefaultTableSchemasType)
+						if !dropdownItemsItem.Two.Type.IsUnknown() && !dropdownItemsItem.Two.Type.IsNull() {
+							*typeVar56 = shared.EntityDefaultTableSchemasType(dropdownItemsItem.Two.Type.ValueString())
+						} else {
+							typeVar56 = nil
+						}
+						uri := new(string)
+						if !dropdownItemsItem.Two.URI.IsUnknown() && !dropdownItemsItem.Two.URI.IsNull() {
+							*uri = dropdownItemsItem.Two.URI.ValueString()
+						} else {
+							uri = nil
+						}
+						two := shared.Two{
+							FeatureFlag: featureFlag61,
+							Legacy:      legacy2,
+							Title:       title10,
+							Type:        typeVar56,
+							URI:         uri,
+						}
+						dropdownItems = append(dropdownItems, shared.DropdownItems{
+							Two: &two,
+						})
 					}
-					legacy1 := new(bool)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.Legacy.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.Legacy.IsNull() {
-						*legacy1 = dropdownItemsItem.EntityDefaultTableDropdownItems1.Legacy.ValueBool()
-					} else {
-						legacy1 = nil
+				}
+				enableThumbnails := new(bool)
+				if !r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails.IsNull() {
+					*enableThumbnails = r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails.ValueBool()
+				} else {
+					enableThumbnails = nil
+				}
+				var navbarActions []shared.NavbarActions = nil
+				for _, navbarActionsItem := range r.UIConfig.TableView.EntityDefaultTable.NavbarActions {
+					var options8 []shared.EntityDefaultTableOptions = nil
+					for _, optionsItem8 := range navbarActionsItem.Options {
+						label61 := optionsItem8.Label.ValueString()
+						var params *shared.EntityDefaultTableParams
+						if optionsItem8.Params != nil {
+							params = &shared.EntityDefaultTableParams{}
+						}
+						options8 = append(options8, shared.EntityDefaultTableOptions{
+							Label:  label61,
+							Params: params,
+						})
 					}
-					type56 := new(shared.EntityDefaultTableDropdownItems1Type)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.IsNull() {
-						*type56 = shared.EntityDefaultTableDropdownItems1Type(dropdownItemsItem.EntityDefaultTableDropdownItems1.Type.ValueString())
-					} else {
-						type56 = nil
-					}
-					entityDefaultTableDropdownItems1 := shared.EntityDefaultTableDropdownItems1{
-						Entity:      entity2,
-						FeatureFlag: featureFlag60,
-						Legacy:      legacy1,
-						Type:        type56,
-					}
-					dropdownItems = append(dropdownItems, shared.EntityDefaultTableDropdownItems{
-						EntityDefaultTableDropdownItems1: &entityDefaultTableDropdownItems1,
+					type1 := navbarActionsItem.Type.ValueString()
+					navbarActions = append(navbarActions, shared.NavbarActions{
+						Options: options8,
+						Type:    type1,
 					})
 				}
-				if dropdownItemsItem.EntityDefaultTableDropdownItems2 != nil {
-					featureFlag61 := new(string)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.FeatureFlag.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.FeatureFlag.IsNull() {
-						*featureFlag61 = dropdownItemsItem.EntityDefaultTableDropdownItems2.FeatureFlag.ValueString()
-					} else {
-						featureFlag61 = nil
-					}
-					legacy2 := new(bool)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.Legacy.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.Legacy.IsNull() {
-						*legacy2 = dropdownItemsItem.EntityDefaultTableDropdownItems2.Legacy.ValueBool()
-					} else {
-						legacy2 = nil
-					}
-					title10 := new(string)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.IsNull() {
-						*title10 = dropdownItemsItem.EntityDefaultTableDropdownItems2.Title.ValueString()
-					} else {
-						title10 = nil
-					}
-					type57 := new(shared.EntityDefaultTableDropdownItems2Type)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.IsNull() {
-						*type57 = shared.EntityDefaultTableDropdownItems2Type(dropdownItemsItem.EntityDefaultTableDropdownItems2.Type.ValueString())
-					} else {
-						type57 = nil
-					}
-					uri := new(string)
-					if !dropdownItemsItem.EntityDefaultTableDropdownItems2.URI.IsUnknown() && !dropdownItemsItem.EntityDefaultTableDropdownItems2.URI.IsNull() {
-						*uri = dropdownItemsItem.EntityDefaultTableDropdownItems2.URI.ValueString()
-					} else {
-						uri = nil
-					}
-					entityDefaultTableDropdownItems2 := shared.EntityDefaultTableDropdownItems2{
-						FeatureFlag: featureFlag61,
-						Legacy:      legacy2,
-						Title:       title10,
-						Type:        type57,
-						URI:         uri,
-					}
-					dropdownItems = append(dropdownItems, shared.EntityDefaultTableDropdownItems{
-						EntityDefaultTableDropdownItems2: &entityDefaultTableDropdownItems2,
-					})
+				var rowActions []string = nil
+				for _, rowActionsItem := range r.UIConfig.TableView.EntityDefaultTable.RowActions {
+					rowActions = append(rowActions, rowActionsItem.ValueString())
+				}
+				viewType9 := new(shared.EntityDefaultTableViewType)
+				if !r.UIConfig.TableView.EntityDefaultTable.ViewType.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.ViewType.IsNull() {
+					*viewType9 = shared.EntityDefaultTableViewType(r.UIConfig.TableView.EntityDefaultTable.ViewType.ValueString())
+				} else {
+					viewType9 = nil
+				}
+				entityDefaultTable = &shared.EntityDefaultTable{
+					ClassicView:      classicView,
+					DropdownItems:    dropdownItems,
+					EnableThumbnails: enableThumbnails,
+					NavbarActions:    navbarActions,
+					RowActions:       rowActions,
+					ViewType:         viewType9,
 				}
 			}
-			enableThumbnails := new(bool)
-			if !r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails.IsNull() {
-				*enableThumbnails = r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails.ValueBool()
-			} else {
-				enableThumbnails = nil
-			}
-			navbarActions := make([]shared.EntityDefaultTableNavbarActions, 0)
-			for _, navbarActionsItem := range r.UIConfig.TableView.EntityDefaultTable.NavbarActions {
-				options8 := make([]shared.EntityDefaultTableNavbarActionsOptions, 0)
-				for _, optionsItem8 := range navbarActionsItem.Options {
-					label61 := optionsItem8.Label.ValueString()
-					params := make(map[string]interface{})
-					for paramsKey, paramsValue := range optionsItem8.Params {
-						var paramsInst interface{}
-						_ = json.Unmarshal([]byte(paramsValue.ValueString()), &paramsInst)
-						params[paramsKey] = paramsInst
-					}
-					options8 = append(options8, shared.EntityDefaultTableNavbarActionsOptions{
-						Label:  label61,
-						Params: params,
-					})
+			if entityDefaultTable != nil {
+				tableView = &shared.TableView{
+					EntityDefaultTable: entityDefaultTable,
 				}
-				type58 := navbarActionsItem.Type.ValueString()
-				navbarActions = append(navbarActions, shared.EntityDefaultTableNavbarActions{
-					Options: options8,
-					Type:    type58,
-				})
 			}
-			rowActions := make([]string, 0)
-			for _, rowActionsItem := range r.UIConfig.TableView.EntityDefaultTable.RowActions {
-				rowActions = append(rowActions, rowActionsItem.ValueString())
+			var redirectEntityView3 *shared.RedirectEntityView
+			if r.UIConfig.TableView.RedirectEntityView != nil {
+				route4 := new(string)
+				if !r.UIConfig.TableView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.TableView.RedirectEntityView.Route.IsNull() {
+					*route4 = r.UIConfig.TableView.RedirectEntityView.Route.ValueString()
+				} else {
+					route4 = nil
+				}
+				viewType10 := new(shared.RedirectEntityViewViewType)
+				if !r.UIConfig.TableView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.TableView.RedirectEntityView.ViewType.IsNull() {
+					*viewType10 = shared.RedirectEntityViewViewType(r.UIConfig.TableView.RedirectEntityView.ViewType.ValueString())
+				} else {
+					viewType10 = nil
+				}
+				redirectEntityView3 = &shared.RedirectEntityView{
+					Route:    route4,
+					ViewType: viewType10,
+				}
 			}
-			viewType9 := new(shared.EntityDefaultTableViewType)
-			if !r.UIConfig.TableView.EntityDefaultTable.ViewType.IsUnknown() && !r.UIConfig.TableView.EntityDefaultTable.ViewType.IsNull() {
-				*viewType9 = shared.EntityDefaultTableViewType(r.UIConfig.TableView.EntityDefaultTable.ViewType.ValueString())
-			} else {
-				viewType9 = nil
+			if redirectEntityView3 != nil {
+				tableView = &shared.TableView{
+					RedirectEntityView: redirectEntityView3,
+				}
 			}
-			entityDefaultTable = &shared.EntityDefaultTable{
-				ClassicView:      classicView,
-				DropdownItems:    dropdownItems,
-				EnableThumbnails: enableThumbnails,
-				NavbarActions:    navbarActions,
-				RowActions:       rowActions,
-				ViewType:         viewType9,
+			var entityViewDisabled3 *shared.EntityViewDisabled
+			if r.UIConfig.TableView.EntityViewDisabled != nil {
+				viewType11 := new(shared.EntityViewDisabledViewType)
+				if !r.UIConfig.TableView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.TableView.EntityViewDisabled.ViewType.IsNull() {
+					*viewType11 = shared.EntityViewDisabledViewType(r.UIConfig.TableView.EntityViewDisabled.ViewType.ValueString())
+				} else {
+					viewType11 = nil
+				}
+				entityViewDisabled3 = &shared.EntityViewDisabled{
+					ViewType: viewType11,
+				}
 			}
-		}
-		if entityDefaultTable != nil {
-			tableView = &shared.EntitySchemaUIConfigTableView{
-				EntityDefaultTable: entityDefaultTable,
-			}
-		}
-		var redirectEntityView3 *shared.RedirectEntityView
-		if r.UIConfig.TableView.RedirectEntityView != nil {
-			route4 := new(string)
-			if !r.UIConfig.TableView.RedirectEntityView.Route.IsUnknown() && !r.UIConfig.TableView.RedirectEntityView.Route.IsNull() {
-				*route4 = r.UIConfig.TableView.RedirectEntityView.Route.ValueString()
-			} else {
-				route4 = nil
-			}
-			viewType10 := new(shared.RedirectEntityViewViewType)
-			if !r.UIConfig.TableView.RedirectEntityView.ViewType.IsUnknown() && !r.UIConfig.TableView.RedirectEntityView.ViewType.IsNull() {
-				*viewType10 = shared.RedirectEntityViewViewType(r.UIConfig.TableView.RedirectEntityView.ViewType.ValueString())
-			} else {
-				viewType10 = nil
-			}
-			redirectEntityView3 = &shared.RedirectEntityView{
-				Route:    route4,
-				ViewType: viewType10,
+			if entityViewDisabled3 != nil {
+				tableView = &shared.TableView{
+					EntityViewDisabled: entityViewDisabled3,
+				}
 			}
 		}
-		if redirectEntityView3 != nil {
-			tableView = &shared.EntitySchemaUIConfigTableView{
-				RedirectEntityView: redirectEntityView3,
-			}
-		}
-		var entityViewDisabled3 *shared.EntityViewDisabled
-		if r.UIConfig.TableView.EntityViewDisabled != nil {
-			viewType11 := new(shared.EntityViewDisabledViewType)
-			if !r.UIConfig.TableView.EntityViewDisabled.ViewType.IsUnknown() && !r.UIConfig.TableView.EntityViewDisabled.ViewType.IsNull() {
-				*viewType11 = shared.EntityViewDisabledViewType(r.UIConfig.TableView.EntityViewDisabled.ViewType.ValueString())
-			} else {
-				viewType11 = nil
-			}
-			entityViewDisabled3 = &shared.EntityViewDisabled{
-				ViewType: viewType11,
-			}
-		}
-		if entityViewDisabled3 != nil {
-			tableView = &shared.EntitySchemaUIConfigTableView{
-				EntityViewDisabled: entityViewDisabled3,
-			}
-		}
-		uiConfig = &shared.EntitySchemaUIConfig{
+		uiConfig = &shared.UIConfig{
 			CreateView: createView,
 			EditView:   editView,
 			ListItem:   listItem,
@@ -10491,480 +10419,244 @@ func (r *SchemaResourceModel) ToDeleteSDKType() *shared.EntitySchema {
 }
 
 func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaItem) {
-	r.Attributes = nil
-	for _, attributesItem := range resp.Attributes {
+	if len(r.Attributes) > len(resp.Attributes) {
+		r.Attributes = r.Attributes[:len(resp.Attributes)]
+	}
+	for attributesCount, attributesItem := range resp.Attributes {
 		var attributes1 Attribute
-		if attributesItem.TextAttribute != nil {
-			attributes1.TextAttribute = &TextAttribute{}
-			attributes1.TextAttribute.Purpose = nil
-			for _, v := range attributesItem.TextAttribute.Purpose {
-				attributes1.TextAttribute.Purpose = append(attributes1.TextAttribute.Purpose, types.StringValue(v))
+		if attributesItem.AddressRelationAttribute != nil {
+			attributes1.AddressRelationAttribute = &AddressRelationAttribute{}
+			attributes1.AddressRelationAttribute.Purpose = nil
+			for _, v := range attributesItem.AddressRelationAttribute.Purpose {
+				attributes1.AddressRelationAttribute.Purpose = append(attributes1.AddressRelationAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.TextAttribute.Constraints == nil && len(attributesItem.TextAttribute.Constraints) > 0 {
-				attributes1.TextAttribute.Constraints = make(map[string]types.String)
-				for key, value := range attributesItem.TextAttribute.Constraints {
-					result, _ := json.Marshal(value)
-					attributes1.TextAttribute.Constraints[key] = types.StringValue(string(result))
-				}
-			}
-			if attributesItem.TextAttribute.DefaultValue == nil {
-				attributes1.TextAttribute.DefaultValue = types.StringNull()
+			if attributesItem.AddressRelationAttribute.Constraints == nil {
+				attributes1.AddressRelationAttribute.Constraints = nil
 			} else {
-				defaultValueResult, _ := json.Marshal(attributesItem.TextAttribute.DefaultValue)
-				attributes1.TextAttribute.DefaultValue = types.StringValue(string(defaultValueResult))
+				attributes1.AddressRelationAttribute.Constraints = &Constraints{}
 			}
-			if attributesItem.TextAttribute.Deprecated != nil {
-				attributes1.TextAttribute.Deprecated = types.BoolValue(*attributesItem.TextAttribute.Deprecated)
+			if attributesItem.AddressRelationAttribute.DefaultValue == nil {
+				attributes1.AddressRelationAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.TextAttribute.Deprecated = types.BoolNull()
+				defaultValueResult, _ := json.Marshal(attributesItem.AddressRelationAttribute.DefaultValue)
+				attributes1.AddressRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult))
 			}
-			if attributesItem.TextAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.TextAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.TextAttribute.EntityBuilderDisableEdit)
+			if attributesItem.AddressRelationAttribute.Deprecated != nil {
+				attributes1.AddressRelationAttribute.Deprecated = types.BoolValue(*attributesItem.AddressRelationAttribute.Deprecated)
 			} else {
-				attributes1.TextAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.AddressRelationAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.FeatureFlag != nil {
-				attributes1.TextAttribute.FeatureFlag = types.StringValue(*attributesItem.TextAttribute.FeatureFlag)
+			if attributesItem.AddressRelationAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.AddressRelationAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.TextAttribute.FeatureFlag = types.StringNull()
+				attributes1.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.Group != nil {
-				attributes1.TextAttribute.Group = types.StringValue(*attributesItem.TextAttribute.Group)
+			if attributesItem.AddressRelationAttribute.FeatureFlag != nil {
+				attributes1.AddressRelationAttribute.FeatureFlag = types.StringValue(*attributesItem.AddressRelationAttribute.FeatureFlag)
 			} else {
-				attributes1.TextAttribute.Group = types.StringNull()
+				attributes1.AddressRelationAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.TextAttribute.Hidden != nil {
-				attributes1.TextAttribute.Hidden = types.BoolValue(*attributesItem.TextAttribute.Hidden)
+			if attributesItem.AddressRelationAttribute.Group != nil {
+				attributes1.AddressRelationAttribute.Group = types.StringValue(*attributesItem.AddressRelationAttribute.Group)
 			} else {
-				attributes1.TextAttribute.Hidden = types.BoolNull()
+				attributes1.AddressRelationAttribute.Group = types.StringNull()
 			}
-			if attributesItem.TextAttribute.HideLabel != nil {
-				attributes1.TextAttribute.HideLabel = types.BoolValue(*attributesItem.TextAttribute.HideLabel)
+			if attributesItem.AddressRelationAttribute.HasPrimary != nil {
+				attributes1.AddressRelationAttribute.HasPrimary = types.BoolValue(*attributesItem.AddressRelationAttribute.HasPrimary)
 			} else {
-				attributes1.TextAttribute.HideLabel = types.BoolNull()
+				attributes1.AddressRelationAttribute.HasPrimary = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.Icon != nil {
-				attributes1.TextAttribute.Icon = types.StringValue(*attributesItem.TextAttribute.Icon)
+			if attributesItem.AddressRelationAttribute.Hidden != nil {
+				attributes1.AddressRelationAttribute.Hidden = types.BoolValue(*attributesItem.AddressRelationAttribute.Hidden)
 			} else {
-				attributes1.TextAttribute.Icon = types.StringNull()
+				attributes1.AddressRelationAttribute.Hidden = types.BoolNull()
 			}
-			attributes1.TextAttribute.Label = types.StringValue(attributesItem.TextAttribute.Label)
-			if attributesItem.TextAttribute.Layout != nil {
-				attributes1.TextAttribute.Layout = types.StringValue(*attributesItem.TextAttribute.Layout)
+			if attributesItem.AddressRelationAttribute.HideLabel != nil {
+				attributes1.AddressRelationAttribute.HideLabel = types.BoolValue(*attributesItem.AddressRelationAttribute.HideLabel)
 			} else {
-				attributes1.TextAttribute.Layout = types.StringNull()
+				attributes1.AddressRelationAttribute.HideLabel = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.Multiline != nil {
-				attributes1.TextAttribute.Multiline = types.BoolValue(*attributesItem.TextAttribute.Multiline)
+			if attributesItem.AddressRelationAttribute.Icon != nil {
+				attributes1.AddressRelationAttribute.Icon = types.StringValue(*attributesItem.AddressRelationAttribute.Icon)
 			} else {
-				attributes1.TextAttribute.Multiline = types.BoolNull()
+				attributes1.AddressRelationAttribute.Icon = types.StringNull()
 			}
-			attributes1.TextAttribute.Name = types.StringValue(attributesItem.TextAttribute.Name)
-			if attributesItem.TextAttribute.Order != nil {
-				attributes1.TextAttribute.Order = types.Int64Value(*attributesItem.TextAttribute.Order)
+			attributes1.AddressRelationAttribute.Label = types.StringValue(attributesItem.AddressRelationAttribute.Label)
+			if attributesItem.AddressRelationAttribute.Layout != nil {
+				attributes1.AddressRelationAttribute.Layout = types.StringValue(*attributesItem.AddressRelationAttribute.Layout)
 			} else {
-				attributes1.TextAttribute.Order = types.Int64Null()
+				attributes1.AddressRelationAttribute.Layout = types.StringNull()
 			}
-			if attributesItem.TextAttribute.Placeholder != nil {
-				attributes1.TextAttribute.Placeholder = types.StringValue(*attributesItem.TextAttribute.Placeholder)
+			attributes1.AddressRelationAttribute.Name = types.StringValue(attributesItem.AddressRelationAttribute.Name)
+			if attributesItem.AddressRelationAttribute.Order != nil {
+				attributes1.AddressRelationAttribute.Order = types.Int64Value(*attributesItem.AddressRelationAttribute.Order)
 			} else {
-				attributes1.TextAttribute.Placeholder = types.StringNull()
+				attributes1.AddressRelationAttribute.Order = types.Int64Null()
 			}
-			if attributesItem.TextAttribute.PreviewValueFormatter != nil {
-				attributes1.TextAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.TextAttribute.PreviewValueFormatter)
+			if attributesItem.AddressRelationAttribute.Placeholder != nil {
+				attributes1.AddressRelationAttribute.Placeholder = types.StringValue(*attributesItem.AddressRelationAttribute.Placeholder)
 			} else {
-				attributes1.TextAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.AddressRelationAttribute.Placeholder = types.StringNull()
 			}
-			if attributesItem.TextAttribute.Protected != nil {
-				attributes1.TextAttribute.Protected = types.BoolValue(*attributesItem.TextAttribute.Protected)
+			if attributesItem.AddressRelationAttribute.PreviewValueFormatter != nil {
+				attributes1.AddressRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.AddressRelationAttribute.PreviewValueFormatter)
 			} else {
-				attributes1.TextAttribute.Protected = types.BoolNull()
+				attributes1.AddressRelationAttribute.PreviewValueFormatter = types.StringNull()
 			}
-			if attributesItem.TextAttribute.Readonly != nil {
-				attributes1.TextAttribute.Readonly = types.BoolValue(*attributesItem.TextAttribute.Readonly)
+			if attributesItem.AddressRelationAttribute.Protected != nil {
+				attributes1.AddressRelationAttribute.Protected = types.BoolValue(*attributesItem.AddressRelationAttribute.Protected)
 			} else {
-				attributes1.TextAttribute.Readonly = types.BoolNull()
+				attributes1.AddressRelationAttribute.Protected = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.RenderCondition != nil {
-				attributes1.TextAttribute.RenderCondition = types.StringValue(*attributesItem.TextAttribute.RenderCondition)
+			if attributesItem.AddressRelationAttribute.Readonly != nil {
+				attributes1.AddressRelationAttribute.Readonly = types.BoolValue(*attributesItem.AddressRelationAttribute.Readonly)
 			} else {
-				attributes1.TextAttribute.RenderCondition = types.StringNull()
+				attributes1.AddressRelationAttribute.Readonly = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.Required != nil {
-				attributes1.TextAttribute.Required = types.BoolValue(*attributesItem.TextAttribute.Required)
+			if attributesItem.AddressRelationAttribute.RenderCondition != nil {
+				attributes1.AddressRelationAttribute.RenderCondition = types.StringValue(*attributesItem.AddressRelationAttribute.RenderCondition)
 			} else {
-				attributes1.TextAttribute.Required = types.BoolNull()
+				attributes1.AddressRelationAttribute.RenderCondition = types.StringNull()
 			}
-			if attributesItem.TextAttribute.SettingFlag != nil {
-				attributes1.TextAttribute.SettingFlag = types.StringValue(*attributesItem.TextAttribute.SettingFlag)
+			if attributesItem.AddressRelationAttribute.Required != nil {
+				attributes1.AddressRelationAttribute.Required = types.BoolValue(*attributesItem.AddressRelationAttribute.Required)
 			} else {
-				attributes1.TextAttribute.SettingFlag = types.StringNull()
+				attributes1.AddressRelationAttribute.Required = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.ShowInTable != nil {
-				attributes1.TextAttribute.ShowInTable = types.BoolValue(*attributesItem.TextAttribute.ShowInTable)
+			if attributesItem.AddressRelationAttribute.SettingFlag != nil {
+				attributes1.AddressRelationAttribute.SettingFlag = types.StringValue(*attributesItem.AddressRelationAttribute.SettingFlag)
 			} else {
-				attributes1.TextAttribute.ShowInTable = types.BoolNull()
+				attributes1.AddressRelationAttribute.SettingFlag = types.StringNull()
 			}
-			if attributesItem.TextAttribute.Type != nil {
-				attributes1.TextAttribute.Type = types.StringValue(string(*attributesItem.TextAttribute.Type))
+			if attributesItem.AddressRelationAttribute.ShowInTable != nil {
+				attributes1.AddressRelationAttribute.ShowInTable = types.BoolValue(*attributesItem.AddressRelationAttribute.ShowInTable)
 			} else {
-				attributes1.TextAttribute.Type = types.StringNull()
+				attributes1.AddressRelationAttribute.ShowInTable = types.BoolNull()
 			}
-			if attributesItem.TextAttribute.ValueFormatter != nil {
-				attributes1.TextAttribute.ValueFormatter = types.StringValue(*attributesItem.TextAttribute.ValueFormatter)
+			if attributesItem.AddressRelationAttribute.Type != nil {
+				attributes1.AddressRelationAttribute.Type = types.StringValue(string(*attributesItem.AddressRelationAttribute.Type))
 			} else {
-				attributes1.TextAttribute.ValueFormatter = types.StringNull()
+				attributes1.AddressRelationAttribute.Type = types.StringNull()
+			}
+			if attributesItem.AddressRelationAttribute.ValueFormatter != nil {
+				attributes1.AddressRelationAttribute.ValueFormatter = types.StringValue(*attributesItem.AddressRelationAttribute.ValueFormatter)
+			} else {
+				attributes1.AddressRelationAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.LinkAttribute != nil {
-			attributes1.LinkAttribute = &LinkAttribute{}
-			attributes1.LinkAttribute.Purpose = nil
-			for _, v := range attributesItem.LinkAttribute.Purpose {
-				attributes1.LinkAttribute.Purpose = append(attributes1.LinkAttribute.Purpose, types.StringValue(v))
+		if attributesItem.AutomationAttribute != nil {
+			attributes1.AutomationAttribute = &AutomationAttribute{}
+			attributes1.AutomationAttribute.Purpose = nil
+			for _, v := range attributesItem.AutomationAttribute.Purpose {
+				attributes1.AutomationAttribute.Purpose = append(attributes1.AutomationAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.LinkAttribute.Constraints == nil && len(attributesItem.LinkAttribute.Constraints) > 0 {
-				attributes1.LinkAttribute.Constraints = make(map[string]types.String)
-				for key1, value1 := range attributesItem.LinkAttribute.Constraints {
-					result1, _ := json.Marshal(value1)
-					attributes1.LinkAttribute.Constraints[key1] = types.StringValue(string(result1))
-				}
-			}
-			if attributesItem.LinkAttribute.DefaultValue == nil {
-				attributes1.LinkAttribute.DefaultValue = types.StringNull()
+			if attributesItem.AutomationAttribute.Constraints == nil {
+				attributes1.AutomationAttribute.Constraints = nil
 			} else {
-				defaultValueResult1, _ := json.Marshal(attributesItem.LinkAttribute.DefaultValue)
-				attributes1.LinkAttribute.DefaultValue = types.StringValue(string(defaultValueResult1))
+				attributes1.AutomationAttribute.Constraints = &Constraints{}
 			}
-			if attributesItem.LinkAttribute.Deprecated != nil {
-				attributes1.LinkAttribute.Deprecated = types.BoolValue(*attributesItem.LinkAttribute.Deprecated)
+			if attributesItem.AutomationAttribute.DefaultValue == nil {
+				attributes1.AutomationAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.LinkAttribute.Deprecated = types.BoolNull()
+				defaultValueResult1, _ := json.Marshal(attributesItem.AutomationAttribute.DefaultValue)
+				attributes1.AutomationAttribute.DefaultValue = types.StringValue(string(defaultValueResult1))
 			}
-			if attributesItem.LinkAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.LinkAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.LinkAttribute.EntityBuilderDisableEdit)
+			if attributesItem.AutomationAttribute.Deprecated != nil {
+				attributes1.AutomationAttribute.Deprecated = types.BoolValue(*attributesItem.AutomationAttribute.Deprecated)
 			} else {
-				attributes1.LinkAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.AutomationAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.FeatureFlag != nil {
-				attributes1.LinkAttribute.FeatureFlag = types.StringValue(*attributesItem.LinkAttribute.FeatureFlag)
+			if attributesItem.AutomationAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.AutomationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.AutomationAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.LinkAttribute.FeatureFlag = types.StringNull()
+				attributes1.AutomationAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.Group != nil {
-				attributes1.LinkAttribute.Group = types.StringValue(*attributesItem.LinkAttribute.Group)
+			if attributesItem.AutomationAttribute.FeatureFlag != nil {
+				attributes1.AutomationAttribute.FeatureFlag = types.StringValue(*attributesItem.AutomationAttribute.FeatureFlag)
 			} else {
-				attributes1.LinkAttribute.Group = types.StringNull()
+				attributes1.AutomationAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.Hidden != nil {
-				attributes1.LinkAttribute.Hidden = types.BoolValue(*attributesItem.LinkAttribute.Hidden)
+			if attributesItem.AutomationAttribute.Group != nil {
+				attributes1.AutomationAttribute.Group = types.StringValue(*attributesItem.AutomationAttribute.Group)
 			} else {
-				attributes1.LinkAttribute.Hidden = types.BoolNull()
+				attributes1.AutomationAttribute.Group = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.HideLabel != nil {
-				attributes1.LinkAttribute.HideLabel = types.BoolValue(*attributesItem.LinkAttribute.HideLabel)
+			if attributesItem.AutomationAttribute.Hidden != nil {
+				attributes1.AutomationAttribute.Hidden = types.BoolValue(*attributesItem.AutomationAttribute.Hidden)
 			} else {
-				attributes1.LinkAttribute.HideLabel = types.BoolNull()
+				attributes1.AutomationAttribute.Hidden = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.Icon != nil {
-				attributes1.LinkAttribute.Icon = types.StringValue(*attributesItem.LinkAttribute.Icon)
+			if attributesItem.AutomationAttribute.HideLabel != nil {
+				attributes1.AutomationAttribute.HideLabel = types.BoolValue(*attributesItem.AutomationAttribute.HideLabel)
 			} else {
-				attributes1.LinkAttribute.Icon = types.StringNull()
+				attributes1.AutomationAttribute.HideLabel = types.BoolNull()
 			}
-			attributes1.LinkAttribute.Label = types.StringValue(attributesItem.LinkAttribute.Label)
-			if attributesItem.LinkAttribute.Layout != nil {
-				attributes1.LinkAttribute.Layout = types.StringValue(*attributesItem.LinkAttribute.Layout)
+			if attributesItem.AutomationAttribute.Icon != nil {
+				attributes1.AutomationAttribute.Icon = types.StringValue(*attributesItem.AutomationAttribute.Icon)
 			} else {
-				attributes1.LinkAttribute.Layout = types.StringNull()
+				attributes1.AutomationAttribute.Icon = types.StringNull()
 			}
-			attributes1.LinkAttribute.Name = types.StringValue(attributesItem.LinkAttribute.Name)
-			if attributesItem.LinkAttribute.Order != nil {
-				attributes1.LinkAttribute.Order = types.Int64Value(*attributesItem.LinkAttribute.Order)
+			attributes1.AutomationAttribute.Label = types.StringValue(attributesItem.AutomationAttribute.Label)
+			if attributesItem.AutomationAttribute.Layout != nil {
+				attributes1.AutomationAttribute.Layout = types.StringValue(*attributesItem.AutomationAttribute.Layout)
 			} else {
-				attributes1.LinkAttribute.Order = types.Int64Null()
+				attributes1.AutomationAttribute.Layout = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.Placeholder != nil {
-				attributes1.LinkAttribute.Placeholder = types.StringValue(*attributesItem.LinkAttribute.Placeholder)
+			attributes1.AutomationAttribute.Name = types.StringValue(attributesItem.AutomationAttribute.Name)
+			if attributesItem.AutomationAttribute.Order != nil {
+				attributes1.AutomationAttribute.Order = types.Int64Value(*attributesItem.AutomationAttribute.Order)
 			} else {
-				attributes1.LinkAttribute.Placeholder = types.StringNull()
+				attributes1.AutomationAttribute.Order = types.Int64Null()
 			}
-			if attributesItem.LinkAttribute.PreviewValueFormatter != nil {
-				attributes1.LinkAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.LinkAttribute.PreviewValueFormatter)
+			if attributesItem.AutomationAttribute.Placeholder != nil {
+				attributes1.AutomationAttribute.Placeholder = types.StringValue(*attributesItem.AutomationAttribute.Placeholder)
 			} else {
-				attributes1.LinkAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.AutomationAttribute.Placeholder = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.Protected != nil {
-				attributes1.LinkAttribute.Protected = types.BoolValue(*attributesItem.LinkAttribute.Protected)
+			if attributesItem.AutomationAttribute.PreviewValueFormatter != nil {
+				attributes1.AutomationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.AutomationAttribute.PreviewValueFormatter)
 			} else {
-				attributes1.LinkAttribute.Protected = types.BoolNull()
+				attributes1.AutomationAttribute.PreviewValueFormatter = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.Readonly != nil {
-				attributes1.LinkAttribute.Readonly = types.BoolValue(*attributesItem.LinkAttribute.Readonly)
+			if attributesItem.AutomationAttribute.Protected != nil {
+				attributes1.AutomationAttribute.Protected = types.BoolValue(*attributesItem.AutomationAttribute.Protected)
 			} else {
-				attributes1.LinkAttribute.Readonly = types.BoolNull()
+				attributes1.AutomationAttribute.Protected = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.RenderCondition != nil {
-				attributes1.LinkAttribute.RenderCondition = types.StringValue(*attributesItem.LinkAttribute.RenderCondition)
+			if attributesItem.AutomationAttribute.Readonly != nil {
+				attributes1.AutomationAttribute.Readonly = types.BoolValue(*attributesItem.AutomationAttribute.Readonly)
 			} else {
-				attributes1.LinkAttribute.RenderCondition = types.StringNull()
+				attributes1.AutomationAttribute.Readonly = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.Required != nil {
-				attributes1.LinkAttribute.Required = types.BoolValue(*attributesItem.LinkAttribute.Required)
+			if attributesItem.AutomationAttribute.RenderCondition != nil {
+				attributes1.AutomationAttribute.RenderCondition = types.StringValue(*attributesItem.AutomationAttribute.RenderCondition)
 			} else {
-				attributes1.LinkAttribute.Required = types.BoolNull()
+				attributes1.AutomationAttribute.RenderCondition = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.SettingFlag != nil {
-				attributes1.LinkAttribute.SettingFlag = types.StringValue(*attributesItem.LinkAttribute.SettingFlag)
+			if attributesItem.AutomationAttribute.Required != nil {
+				attributes1.AutomationAttribute.Required = types.BoolValue(*attributesItem.AutomationAttribute.Required)
 			} else {
-				attributes1.LinkAttribute.SettingFlag = types.StringNull()
+				attributes1.AutomationAttribute.Required = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.ShowInTable != nil {
-				attributes1.LinkAttribute.ShowInTable = types.BoolValue(*attributesItem.LinkAttribute.ShowInTable)
+			if attributesItem.AutomationAttribute.SettingFlag != nil {
+				attributes1.AutomationAttribute.SettingFlag = types.StringValue(*attributesItem.AutomationAttribute.SettingFlag)
 			} else {
-				attributes1.LinkAttribute.ShowInTable = types.BoolNull()
+				attributes1.AutomationAttribute.SettingFlag = types.StringNull()
 			}
-			if attributesItem.LinkAttribute.Type != nil {
-				attributes1.LinkAttribute.Type = types.StringValue(string(*attributesItem.LinkAttribute.Type))
+			if attributesItem.AutomationAttribute.ShowInTable != nil {
+				attributes1.AutomationAttribute.ShowInTable = types.BoolValue(*attributesItem.AutomationAttribute.ShowInTable)
 			} else {
-				attributes1.LinkAttribute.Type = types.StringNull()
+				attributes1.AutomationAttribute.ShowInTable = types.BoolNull()
 			}
-			if attributesItem.LinkAttribute.ValueFormatter != nil {
-				attributes1.LinkAttribute.ValueFormatter = types.StringValue(*attributesItem.LinkAttribute.ValueFormatter)
+			if attributesItem.AutomationAttribute.Type != nil {
+				attributes1.AutomationAttribute.Type = types.StringValue(string(*attributesItem.AutomationAttribute.Type))
 			} else {
-				attributes1.LinkAttribute.ValueFormatter = types.StringNull()
+				attributes1.AutomationAttribute.Type = types.StringNull()
 			}
-		}
-		if attributesItem.DateAttribute != nil {
-			attributes1.DateAttribute = &DateAttribute{}
-			attributes1.DateAttribute.Purpose = nil
-			for _, v := range attributesItem.DateAttribute.Purpose {
-				attributes1.DateAttribute.Purpose = append(attributes1.DateAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.DateAttribute.Constraints == nil && len(attributesItem.DateAttribute.Constraints) > 0 {
-				attributes1.DateAttribute.Constraints = make(map[string]types.String)
-				for key2, value2 := range attributesItem.DateAttribute.Constraints {
-					result2, _ := json.Marshal(value2)
-					attributes1.DateAttribute.Constraints[key2] = types.StringValue(string(result2))
-				}
-			}
-			if attributesItem.DateAttribute.DefaultValue == nil {
-				attributes1.DateAttribute.DefaultValue = types.StringNull()
+			if attributesItem.AutomationAttribute.ValueFormatter != nil {
+				attributes1.AutomationAttribute.ValueFormatter = types.StringValue(*attributesItem.AutomationAttribute.ValueFormatter)
 			} else {
-				defaultValueResult2, _ := json.Marshal(attributesItem.DateAttribute.DefaultValue)
-				attributes1.DateAttribute.DefaultValue = types.StringValue(string(defaultValueResult2))
-			}
-			if attributesItem.DateAttribute.Deprecated != nil {
-				attributes1.DateAttribute.Deprecated = types.BoolValue(*attributesItem.DateAttribute.Deprecated)
-			} else {
-				attributes1.DateAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.DateAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.DateAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.DateAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.FeatureFlag != nil {
-				attributes1.DateAttribute.FeatureFlag = types.StringValue(*attributesItem.DateAttribute.FeatureFlag)
-			} else {
-				attributes1.DateAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.DateAttribute.Group != nil {
-				attributes1.DateAttribute.Group = types.StringValue(*attributesItem.DateAttribute.Group)
-			} else {
-				attributes1.DateAttribute.Group = types.StringNull()
-			}
-			if attributesItem.DateAttribute.Hidden != nil {
-				attributes1.DateAttribute.Hidden = types.BoolValue(*attributesItem.DateAttribute.Hidden)
-			} else {
-				attributes1.DateAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.HideLabel != nil {
-				attributes1.DateAttribute.HideLabel = types.BoolValue(*attributesItem.DateAttribute.HideLabel)
-			} else {
-				attributes1.DateAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.Icon != nil {
-				attributes1.DateAttribute.Icon = types.StringValue(*attributesItem.DateAttribute.Icon)
-			} else {
-				attributes1.DateAttribute.Icon = types.StringNull()
-			}
-			attributes1.DateAttribute.Label = types.StringValue(attributesItem.DateAttribute.Label)
-			if attributesItem.DateAttribute.Layout != nil {
-				attributes1.DateAttribute.Layout = types.StringValue(*attributesItem.DateAttribute.Layout)
-			} else {
-				attributes1.DateAttribute.Layout = types.StringNull()
-			}
-			attributes1.DateAttribute.Name = types.StringValue(attributesItem.DateAttribute.Name)
-			if attributesItem.DateAttribute.Order != nil {
-				attributes1.DateAttribute.Order = types.Int64Value(*attributesItem.DateAttribute.Order)
-			} else {
-				attributes1.DateAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.DateAttribute.Placeholder != nil {
-				attributes1.DateAttribute.Placeholder = types.StringValue(*attributesItem.DateAttribute.Placeholder)
-			} else {
-				attributes1.DateAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.DateAttribute.PreviewValueFormatter != nil {
-				attributes1.DateAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.DateAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.DateAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.DateAttribute.Protected != nil {
-				attributes1.DateAttribute.Protected = types.BoolValue(*attributesItem.DateAttribute.Protected)
-			} else {
-				attributes1.DateAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.Readonly != nil {
-				attributes1.DateAttribute.Readonly = types.BoolValue(*attributesItem.DateAttribute.Readonly)
-			} else {
-				attributes1.DateAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.RenderCondition != nil {
-				attributes1.DateAttribute.RenderCondition = types.StringValue(*attributesItem.DateAttribute.RenderCondition)
-			} else {
-				attributes1.DateAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.DateAttribute.Required != nil {
-				attributes1.DateAttribute.Required = types.BoolValue(*attributesItem.DateAttribute.Required)
-			} else {
-				attributes1.DateAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.SettingFlag != nil {
-				attributes1.DateAttribute.SettingFlag = types.StringValue(*attributesItem.DateAttribute.SettingFlag)
-			} else {
-				attributes1.DateAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.DateAttribute.ShowInTable != nil {
-				attributes1.DateAttribute.ShowInTable = types.BoolValue(*attributesItem.DateAttribute.ShowInTable)
-			} else {
-				attributes1.DateAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.DateAttribute.Type != nil {
-				attributes1.DateAttribute.Type = types.StringValue(string(*attributesItem.DateAttribute.Type))
-			} else {
-				attributes1.DateAttribute.Type = types.StringNull()
-			}
-			if attributesItem.DateAttribute.ValueFormatter != nil {
-				attributes1.DateAttribute.ValueFormatter = types.StringValue(*attributesItem.DateAttribute.ValueFormatter)
-			} else {
-				attributes1.DateAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.CountryAttribute != nil {
-			attributes1.CountryAttribute = &CountryAttribute{}
-			attributes1.CountryAttribute.Purpose = nil
-			for _, v := range attributesItem.CountryAttribute.Purpose {
-				attributes1.CountryAttribute.Purpose = append(attributes1.CountryAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.CountryAttribute.Constraints == nil && len(attributesItem.CountryAttribute.Constraints) > 0 {
-				attributes1.CountryAttribute.Constraints = make(map[string]types.String)
-				for key3, value3 := range attributesItem.CountryAttribute.Constraints {
-					result3, _ := json.Marshal(value3)
-					attributes1.CountryAttribute.Constraints[key3] = types.StringValue(string(result3))
-				}
-			}
-			if attributesItem.CountryAttribute.DefaultValue == nil {
-				attributes1.CountryAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult3, _ := json.Marshal(attributesItem.CountryAttribute.DefaultValue)
-				attributes1.CountryAttribute.DefaultValue = types.StringValue(string(defaultValueResult3))
-			}
-			if attributesItem.CountryAttribute.Deprecated != nil {
-				attributes1.CountryAttribute.Deprecated = types.BoolValue(*attributesItem.CountryAttribute.Deprecated)
-			} else {
-				attributes1.CountryAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.CountryAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.CountryAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.CountryAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.FeatureFlag != nil {
-				attributes1.CountryAttribute.FeatureFlag = types.StringValue(*attributesItem.CountryAttribute.FeatureFlag)
-			} else {
-				attributes1.CountryAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.Group != nil {
-				attributes1.CountryAttribute.Group = types.StringValue(*attributesItem.CountryAttribute.Group)
-			} else {
-				attributes1.CountryAttribute.Group = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.Hidden != nil {
-				attributes1.CountryAttribute.Hidden = types.BoolValue(*attributesItem.CountryAttribute.Hidden)
-			} else {
-				attributes1.CountryAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.HideLabel != nil {
-				attributes1.CountryAttribute.HideLabel = types.BoolValue(*attributesItem.CountryAttribute.HideLabel)
-			} else {
-				attributes1.CountryAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.Icon != nil {
-				attributes1.CountryAttribute.Icon = types.StringValue(*attributesItem.CountryAttribute.Icon)
-			} else {
-				attributes1.CountryAttribute.Icon = types.StringNull()
-			}
-			attributes1.CountryAttribute.Label = types.StringValue(attributesItem.CountryAttribute.Label)
-			if attributesItem.CountryAttribute.Layout != nil {
-				attributes1.CountryAttribute.Layout = types.StringValue(*attributesItem.CountryAttribute.Layout)
-			} else {
-				attributes1.CountryAttribute.Layout = types.StringNull()
-			}
-			attributes1.CountryAttribute.Name = types.StringValue(attributesItem.CountryAttribute.Name)
-			if attributesItem.CountryAttribute.Order != nil {
-				attributes1.CountryAttribute.Order = types.Int64Value(*attributesItem.CountryAttribute.Order)
-			} else {
-				attributes1.CountryAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.CountryAttribute.Placeholder != nil {
-				attributes1.CountryAttribute.Placeholder = types.StringValue(*attributesItem.CountryAttribute.Placeholder)
-			} else {
-				attributes1.CountryAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.PreviewValueFormatter != nil {
-				attributes1.CountryAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.CountryAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.CountryAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.Protected != nil {
-				attributes1.CountryAttribute.Protected = types.BoolValue(*attributesItem.CountryAttribute.Protected)
-			} else {
-				attributes1.CountryAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.Readonly != nil {
-				attributes1.CountryAttribute.Readonly = types.BoolValue(*attributesItem.CountryAttribute.Readonly)
-			} else {
-				attributes1.CountryAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.RenderCondition != nil {
-				attributes1.CountryAttribute.RenderCondition = types.StringValue(*attributesItem.CountryAttribute.RenderCondition)
-			} else {
-				attributes1.CountryAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.Required != nil {
-				attributes1.CountryAttribute.Required = types.BoolValue(*attributesItem.CountryAttribute.Required)
-			} else {
-				attributes1.CountryAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.SettingFlag != nil {
-				attributes1.CountryAttribute.SettingFlag = types.StringValue(*attributesItem.CountryAttribute.SettingFlag)
-			} else {
-				attributes1.CountryAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.ShowInTable != nil {
-				attributes1.CountryAttribute.ShowInTable = types.BoolValue(*attributesItem.CountryAttribute.ShowInTable)
-			} else {
-				attributes1.CountryAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.CountryAttribute.Type != nil {
-				attributes1.CountryAttribute.Type = types.StringValue(string(*attributesItem.CountryAttribute.Type))
-			} else {
-				attributes1.CountryAttribute.Type = types.StringNull()
-			}
-			if attributesItem.CountryAttribute.ValueFormatter != nil {
-				attributes1.CountryAttribute.ValueFormatter = types.StringValue(*attributesItem.CountryAttribute.ValueFormatter)
-			} else {
-				attributes1.CountryAttribute.ValueFormatter = types.StringNull()
+				attributes1.AutomationAttribute.ValueFormatter = types.StringNull()
 			}
 		}
 		if attributesItem.BooleanAttribute != nil {
@@ -10973,18 +10665,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			for _, v := range attributesItem.BooleanAttribute.Purpose {
 				attributes1.BooleanAttribute.Purpose = append(attributes1.BooleanAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.BooleanAttribute.Constraints == nil && len(attributesItem.BooleanAttribute.Constraints) > 0 {
-				attributes1.BooleanAttribute.Constraints = make(map[string]types.String)
-				for key4, value4 := range attributesItem.BooleanAttribute.Constraints {
-					result4, _ := json.Marshal(value4)
-					attributes1.BooleanAttribute.Constraints[key4] = types.StringValue(string(result4))
-				}
+			if attributesItem.BooleanAttribute.Constraints == nil {
+				attributes1.BooleanAttribute.Constraints = nil
+			} else {
+				attributes1.BooleanAttribute.Constraints = &Constraints{}
 			}
 			if attributesItem.BooleanAttribute.DefaultValue == nil {
 				attributes1.BooleanAttribute.DefaultValue = types.StringNull()
 			} else {
-				defaultValueResult4, _ := json.Marshal(attributesItem.BooleanAttribute.DefaultValue)
-				attributes1.BooleanAttribute.DefaultValue = types.StringValue(string(defaultValueResult4))
+				defaultValueResult2, _ := json.Marshal(attributesItem.BooleanAttribute.DefaultValue)
+				attributes1.BooleanAttribute.DefaultValue = types.StringValue(string(defaultValueResult2))
 			}
 			if attributesItem.BooleanAttribute.Deprecated != nil {
 				attributes1.BooleanAttribute.Deprecated = types.BoolValue(*attributesItem.BooleanAttribute.Deprecated)
@@ -11084,147 +10774,1197 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				attributes1.BooleanAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.SelectAttribute != nil {
-			attributes1.SelectAttribute = &SelectAttribute{}
-			attributes1.SelectAttribute.Purpose = nil
-			for _, v := range attributesItem.SelectAttribute.Purpose {
-				attributes1.SelectAttribute.Purpose = append(attributes1.SelectAttribute.Purpose, types.StringValue(v))
+		if attributesItem.ComputedAttribute != nil {
+			attributes1.ComputedAttribute = &ComputedAttribute{}
+			attributes1.ComputedAttribute.Purpose = nil
+			for _, v := range attributesItem.ComputedAttribute.Purpose {
+				attributes1.ComputedAttribute.Purpose = append(attributes1.ComputedAttribute.Purpose, types.StringValue(v))
 			}
-			if attributesItem.SelectAttribute.AllowAny != nil {
-				attributes1.SelectAttribute.AllowAny = types.BoolValue(*attributesItem.SelectAttribute.AllowAny)
+			if attributesItem.ComputedAttribute.Constraints == nil {
+				attributes1.ComputedAttribute.Constraints = nil
 			} else {
-				attributes1.SelectAttribute.AllowAny = types.BoolNull()
+				attributes1.ComputedAttribute.Constraints = &Constraints{}
 			}
-			if attributes1.SelectAttribute.Constraints == nil && len(attributesItem.SelectAttribute.Constraints) > 0 {
-				attributes1.SelectAttribute.Constraints = make(map[string]types.String)
-				for key5, value5 := range attributesItem.SelectAttribute.Constraints {
-					result5, _ := json.Marshal(value5)
-					attributes1.SelectAttribute.Constraints[key5] = types.StringValue(string(result5))
-				}
-			}
-			if attributesItem.SelectAttribute.DefaultValue == nil {
-				attributes1.SelectAttribute.DefaultValue = types.StringNull()
+			if attributesItem.ComputedAttribute.DefaultValue == nil {
+				attributes1.ComputedAttribute.DefaultValue = types.StringNull()
 			} else {
-				defaultValueResult5, _ := json.Marshal(attributesItem.SelectAttribute.DefaultValue)
-				attributes1.SelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult5))
+				defaultValueResult3, _ := json.Marshal(attributesItem.ComputedAttribute.DefaultValue)
+				attributes1.ComputedAttribute.DefaultValue = types.StringValue(string(defaultValueResult3))
 			}
-			if attributesItem.SelectAttribute.Deprecated != nil {
-				attributes1.SelectAttribute.Deprecated = types.BoolValue(*attributesItem.SelectAttribute.Deprecated)
+			if attributesItem.ComputedAttribute.Deprecated != nil {
+				attributes1.ComputedAttribute.Deprecated = types.BoolValue(*attributesItem.ComputedAttribute.Deprecated)
 			} else {
-				attributes1.SelectAttribute.Deprecated = types.BoolNull()
+				attributes1.ComputedAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.SelectAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.SelectAttribute.EntityBuilderDisableEdit)
+			if attributesItem.ComputedAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.ComputedAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.ComputedAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.SelectAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.ComputedAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.FeatureFlag != nil {
-				attributes1.SelectAttribute.FeatureFlag = types.StringValue(*attributesItem.SelectAttribute.FeatureFlag)
+			if attributesItem.ComputedAttribute.FeatureFlag != nil {
+				attributes1.ComputedAttribute.FeatureFlag = types.StringValue(*attributesItem.ComputedAttribute.FeatureFlag)
 			} else {
-				attributes1.SelectAttribute.FeatureFlag = types.StringNull()
+				attributes1.ComputedAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.SelectAttribute.Group != nil {
-				attributes1.SelectAttribute.Group = types.StringValue(*attributesItem.SelectAttribute.Group)
+			if attributesItem.ComputedAttribute.Group != nil {
+				attributes1.ComputedAttribute.Group = types.StringValue(*attributesItem.ComputedAttribute.Group)
 			} else {
-				attributes1.SelectAttribute.Group = types.StringNull()
+				attributes1.ComputedAttribute.Group = types.StringNull()
 			}
-			if attributesItem.SelectAttribute.Hidden != nil {
-				attributes1.SelectAttribute.Hidden = types.BoolValue(*attributesItem.SelectAttribute.Hidden)
+			if attributesItem.ComputedAttribute.Hidden != nil {
+				attributes1.ComputedAttribute.Hidden = types.BoolValue(*attributesItem.ComputedAttribute.Hidden)
 			} else {
-				attributes1.SelectAttribute.Hidden = types.BoolNull()
+				attributes1.ComputedAttribute.Hidden = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.HideLabel != nil {
-				attributes1.SelectAttribute.HideLabel = types.BoolValue(*attributesItem.SelectAttribute.HideLabel)
+			if attributesItem.ComputedAttribute.HideLabel != nil {
+				attributes1.ComputedAttribute.HideLabel = types.BoolValue(*attributesItem.ComputedAttribute.HideLabel)
 			} else {
-				attributes1.SelectAttribute.HideLabel = types.BoolNull()
+				attributes1.ComputedAttribute.HideLabel = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.Icon != nil {
-				attributes1.SelectAttribute.Icon = types.StringValue(*attributesItem.SelectAttribute.Icon)
+			if attributesItem.ComputedAttribute.Icon != nil {
+				attributes1.ComputedAttribute.Icon = types.StringValue(*attributesItem.ComputedAttribute.Icon)
 			} else {
-				attributes1.SelectAttribute.Icon = types.StringNull()
+				attributes1.ComputedAttribute.Icon = types.StringNull()
 			}
-			attributes1.SelectAttribute.Label = types.StringValue(attributesItem.SelectAttribute.Label)
-			if attributesItem.SelectAttribute.Layout != nil {
-				attributes1.SelectAttribute.Layout = types.StringValue(*attributesItem.SelectAttribute.Layout)
+			attributes1.ComputedAttribute.Label = types.StringValue(attributesItem.ComputedAttribute.Label)
+			if attributesItem.ComputedAttribute.Layout != nil {
+				attributes1.ComputedAttribute.Layout = types.StringValue(*attributesItem.ComputedAttribute.Layout)
 			} else {
-				attributes1.SelectAttribute.Layout = types.StringNull()
+				attributes1.ComputedAttribute.Layout = types.StringNull()
 			}
-			attributes1.SelectAttribute.Name = types.StringValue(attributesItem.SelectAttribute.Name)
-			attributes1.SelectAttribute.Options = nil
-			for _, optionsItem := range attributesItem.SelectAttribute.Options {
-				var options1 SelectAttributeOptions
-				if optionsItem.SelectAttributeOptionsOption != nil {
-					options1.SelectAttributeOptionsOption = &SelectAttributeOptionsOption{}
-					if optionsItem.SelectAttributeOptionsOption.Title != nil {
-						options1.SelectAttributeOptionsOption.Title = types.StringValue(*optionsItem.SelectAttributeOptionsOption.Title)
+			attributes1.ComputedAttribute.Name = types.StringValue(attributesItem.ComputedAttribute.Name)
+			if attributesItem.ComputedAttribute.Order != nil {
+				attributes1.ComputedAttribute.Order = types.Int64Value(*attributesItem.ComputedAttribute.Order)
+			} else {
+				attributes1.ComputedAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.ComputedAttribute.Placeholder != nil {
+				attributes1.ComputedAttribute.Placeholder = types.StringValue(*attributesItem.ComputedAttribute.Placeholder)
+			} else {
+				attributes1.ComputedAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.ComputedAttribute.PreviewValueFormatter != nil {
+				attributes1.ComputedAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.ComputedAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.ComputedAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.ComputedAttribute.Protected != nil {
+				attributes1.ComputedAttribute.Protected = types.BoolValue(*attributesItem.ComputedAttribute.Protected)
+			} else {
+				attributes1.ComputedAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.ComputedAttribute.Readonly != nil {
+				attributes1.ComputedAttribute.Readonly = types.BoolValue(*attributesItem.ComputedAttribute.Readonly)
+			} else {
+				attributes1.ComputedAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.ComputedAttribute.RenderCondition != nil {
+				attributes1.ComputedAttribute.RenderCondition = types.StringValue(*attributesItem.ComputedAttribute.RenderCondition)
+			} else {
+				attributes1.ComputedAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.ComputedAttribute.Required != nil {
+				attributes1.ComputedAttribute.Required = types.BoolValue(*attributesItem.ComputedAttribute.Required)
+			} else {
+				attributes1.ComputedAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.ComputedAttribute.SettingFlag != nil {
+				attributes1.ComputedAttribute.SettingFlag = types.StringValue(*attributesItem.ComputedAttribute.SettingFlag)
+			} else {
+				attributes1.ComputedAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.ComputedAttribute.ShowInTable != nil {
+				attributes1.ComputedAttribute.ShowInTable = types.BoolValue(*attributesItem.ComputedAttribute.ShowInTable)
+			} else {
+				attributes1.ComputedAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.ComputedAttribute.Type != nil {
+				attributes1.ComputedAttribute.Type = types.StringValue(string(*attributesItem.ComputedAttribute.Type))
+			} else {
+				attributes1.ComputedAttribute.Type = types.StringNull()
+			}
+			if attributesItem.ComputedAttribute.ValueFormatter != nil {
+				attributes1.ComputedAttribute.ValueFormatter = types.StringValue(*attributesItem.ComputedAttribute.ValueFormatter)
+			} else {
+				attributes1.ComputedAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.ConsentAttribute != nil {
+			attributes1.ConsentAttribute = &ConsentAttribute{}
+			attributes1.ConsentAttribute.Purpose = nil
+			for _, v := range attributesItem.ConsentAttribute.Purpose {
+				attributes1.ConsentAttribute.Purpose = append(attributes1.ConsentAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.ConsentAttribute.Constraints == nil {
+				attributes1.ConsentAttribute.Constraints = nil
+			} else {
+				attributes1.ConsentAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.ConsentAttribute.DefaultValue == nil {
+				attributes1.ConsentAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult4, _ := json.Marshal(attributesItem.ConsentAttribute.DefaultValue)
+				attributes1.ConsentAttribute.DefaultValue = types.StringValue(string(defaultValueResult4))
+			}
+			if attributesItem.ConsentAttribute.Deprecated != nil {
+				attributes1.ConsentAttribute.Deprecated = types.BoolValue(*attributesItem.ConsentAttribute.Deprecated)
+			} else {
+				attributes1.ConsentAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.ConsentAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.ConsentAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.ConsentAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.FeatureFlag != nil {
+				attributes1.ConsentAttribute.FeatureFlag = types.StringValue(*attributesItem.ConsentAttribute.FeatureFlag)
+			} else {
+				attributes1.ConsentAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.ConsentAttribute.Group != nil {
+				attributes1.ConsentAttribute.Group = types.StringValue(*attributesItem.ConsentAttribute.Group)
+			} else {
+				attributes1.ConsentAttribute.Group = types.StringNull()
+			}
+			if attributesItem.ConsentAttribute.Hidden != nil {
+				attributes1.ConsentAttribute.Hidden = types.BoolValue(*attributesItem.ConsentAttribute.Hidden)
+			} else {
+				attributes1.ConsentAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.HideLabel != nil {
+				attributes1.ConsentAttribute.HideLabel = types.BoolValue(*attributesItem.ConsentAttribute.HideLabel)
+			} else {
+				attributes1.ConsentAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.Icon != nil {
+				attributes1.ConsentAttribute.Icon = types.StringValue(*attributesItem.ConsentAttribute.Icon)
+			} else {
+				attributes1.ConsentAttribute.Icon = types.StringNull()
+			}
+			attributes1.ConsentAttribute.Identifiers = nil
+			for _, v := range attributesItem.ConsentAttribute.Identifiers {
+				attributes1.ConsentAttribute.Identifiers = append(attributes1.ConsentAttribute.Identifiers, types.StringValue(v))
+			}
+			attributes1.ConsentAttribute.Label = types.StringValue(attributesItem.ConsentAttribute.Label)
+			if attributesItem.ConsentAttribute.Layout != nil {
+				attributes1.ConsentAttribute.Layout = types.StringValue(*attributesItem.ConsentAttribute.Layout)
+			} else {
+				attributes1.ConsentAttribute.Layout = types.StringNull()
+			}
+			attributes1.ConsentAttribute.Name = types.StringValue(attributesItem.ConsentAttribute.Name)
+			if attributesItem.ConsentAttribute.Order != nil {
+				attributes1.ConsentAttribute.Order = types.Int64Value(*attributesItem.ConsentAttribute.Order)
+			} else {
+				attributes1.ConsentAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.ConsentAttribute.Placeholder != nil {
+				attributes1.ConsentAttribute.Placeholder = types.StringValue(*attributesItem.ConsentAttribute.Placeholder)
+			} else {
+				attributes1.ConsentAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.ConsentAttribute.PreviewValueFormatter != nil {
+				attributes1.ConsentAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.ConsentAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.ConsentAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.ConsentAttribute.Protected != nil {
+				attributes1.ConsentAttribute.Protected = types.BoolValue(*attributesItem.ConsentAttribute.Protected)
+			} else {
+				attributes1.ConsentAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.Readonly != nil {
+				attributes1.ConsentAttribute.Readonly = types.BoolValue(*attributesItem.ConsentAttribute.Readonly)
+			} else {
+				attributes1.ConsentAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.RenderCondition != nil {
+				attributes1.ConsentAttribute.RenderCondition = types.StringValue(*attributesItem.ConsentAttribute.RenderCondition)
+			} else {
+				attributes1.ConsentAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.ConsentAttribute.Required != nil {
+				attributes1.ConsentAttribute.Required = types.BoolValue(*attributesItem.ConsentAttribute.Required)
+			} else {
+				attributes1.ConsentAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.ConsentAttribute.SettingFlag != nil {
+				attributes1.ConsentAttribute.SettingFlag = types.StringValue(*attributesItem.ConsentAttribute.SettingFlag)
+			} else {
+				attributes1.ConsentAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.ConsentAttribute.ShowInTable != nil {
+				attributes1.ConsentAttribute.ShowInTable = types.BoolValue(*attributesItem.ConsentAttribute.ShowInTable)
+			} else {
+				attributes1.ConsentAttribute.ShowInTable = types.BoolNull()
+			}
+			attributes1.ConsentAttribute.Topic = types.StringValue(attributesItem.ConsentAttribute.Topic)
+			attributes1.ConsentAttribute.Type = types.StringValue(string(attributesItem.ConsentAttribute.Type))
+			if attributesItem.ConsentAttribute.ValueFormatter != nil {
+				attributes1.ConsentAttribute.ValueFormatter = types.StringValue(*attributesItem.ConsentAttribute.ValueFormatter)
+			} else {
+				attributes1.ConsentAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.CountryAttribute != nil {
+			attributes1.CountryAttribute = &CountryAttribute{}
+			attributes1.CountryAttribute.Purpose = nil
+			for _, v := range attributesItem.CountryAttribute.Purpose {
+				attributes1.CountryAttribute.Purpose = append(attributes1.CountryAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.CountryAttribute.Constraints == nil {
+				attributes1.CountryAttribute.Constraints = nil
+			} else {
+				attributes1.CountryAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.CountryAttribute.DefaultValue == nil {
+				attributes1.CountryAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult5, _ := json.Marshal(attributesItem.CountryAttribute.DefaultValue)
+				attributes1.CountryAttribute.DefaultValue = types.StringValue(string(defaultValueResult5))
+			}
+			if attributesItem.CountryAttribute.Deprecated != nil {
+				attributes1.CountryAttribute.Deprecated = types.BoolValue(*attributesItem.CountryAttribute.Deprecated)
+			} else {
+				attributes1.CountryAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.CountryAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.CountryAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.CountryAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.FeatureFlag != nil {
+				attributes1.CountryAttribute.FeatureFlag = types.StringValue(*attributesItem.CountryAttribute.FeatureFlag)
+			} else {
+				attributes1.CountryAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.Group != nil {
+				attributes1.CountryAttribute.Group = types.StringValue(*attributesItem.CountryAttribute.Group)
+			} else {
+				attributes1.CountryAttribute.Group = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.Hidden != nil {
+				attributes1.CountryAttribute.Hidden = types.BoolValue(*attributesItem.CountryAttribute.Hidden)
+			} else {
+				attributes1.CountryAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.HideLabel != nil {
+				attributes1.CountryAttribute.HideLabel = types.BoolValue(*attributesItem.CountryAttribute.HideLabel)
+			} else {
+				attributes1.CountryAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.Icon != nil {
+				attributes1.CountryAttribute.Icon = types.StringValue(*attributesItem.CountryAttribute.Icon)
+			} else {
+				attributes1.CountryAttribute.Icon = types.StringNull()
+			}
+			attributes1.CountryAttribute.Label = types.StringValue(attributesItem.CountryAttribute.Label)
+			if attributesItem.CountryAttribute.Layout != nil {
+				attributes1.CountryAttribute.Layout = types.StringValue(*attributesItem.CountryAttribute.Layout)
+			} else {
+				attributes1.CountryAttribute.Layout = types.StringNull()
+			}
+			attributes1.CountryAttribute.Name = types.StringValue(attributesItem.CountryAttribute.Name)
+			if attributesItem.CountryAttribute.Order != nil {
+				attributes1.CountryAttribute.Order = types.Int64Value(*attributesItem.CountryAttribute.Order)
+			} else {
+				attributes1.CountryAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.CountryAttribute.Placeholder != nil {
+				attributes1.CountryAttribute.Placeholder = types.StringValue(*attributesItem.CountryAttribute.Placeholder)
+			} else {
+				attributes1.CountryAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.PreviewValueFormatter != nil {
+				attributes1.CountryAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.CountryAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.CountryAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.Protected != nil {
+				attributes1.CountryAttribute.Protected = types.BoolValue(*attributesItem.CountryAttribute.Protected)
+			} else {
+				attributes1.CountryAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.Readonly != nil {
+				attributes1.CountryAttribute.Readonly = types.BoolValue(*attributesItem.CountryAttribute.Readonly)
+			} else {
+				attributes1.CountryAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.RenderCondition != nil {
+				attributes1.CountryAttribute.RenderCondition = types.StringValue(*attributesItem.CountryAttribute.RenderCondition)
+			} else {
+				attributes1.CountryAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.Required != nil {
+				attributes1.CountryAttribute.Required = types.BoolValue(*attributesItem.CountryAttribute.Required)
+			} else {
+				attributes1.CountryAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.SettingFlag != nil {
+				attributes1.CountryAttribute.SettingFlag = types.StringValue(*attributesItem.CountryAttribute.SettingFlag)
+			} else {
+				attributes1.CountryAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.ShowInTable != nil {
+				attributes1.CountryAttribute.ShowInTable = types.BoolValue(*attributesItem.CountryAttribute.ShowInTable)
+			} else {
+				attributes1.CountryAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.CountryAttribute.Type != nil {
+				attributes1.CountryAttribute.Type = types.StringValue(string(*attributesItem.CountryAttribute.Type))
+			} else {
+				attributes1.CountryAttribute.Type = types.StringNull()
+			}
+			if attributesItem.CountryAttribute.ValueFormatter != nil {
+				attributes1.CountryAttribute.ValueFormatter = types.StringValue(*attributesItem.CountryAttribute.ValueFormatter)
+			} else {
+				attributes1.CountryAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.CurrencyAttribute != nil {
+			attributes1.CurrencyAttribute = &CurrencyAttribute{}
+			attributes1.CurrencyAttribute.Purpose = nil
+			for _, v := range attributesItem.CurrencyAttribute.Purpose {
+				attributes1.CurrencyAttribute.Purpose = append(attributes1.CurrencyAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.CurrencyAttribute.Constraints == nil {
+				attributes1.CurrencyAttribute.Constraints = nil
+			} else {
+				attributes1.CurrencyAttribute.Constraints = &Constraints{}
+			}
+			if len(attributes1.CurrencyAttribute.Currency) > len(attributesItem.CurrencyAttribute.Currency) {
+				attributes1.CurrencyAttribute.Currency = attributes1.CurrencyAttribute.Currency[:len(attributesItem.CurrencyAttribute.Currency)]
+			}
+			for currencyCount, currencyItem := range attributesItem.CurrencyAttribute.Currency {
+				var currency1 Currency
+				if currencyItem.One != nil {
+					currency1.One = &One{}
+					currency1.One.Code = types.StringValue(currencyItem.One.Code)
+					currency1.One.Description = types.StringValue(currencyItem.One.Description)
+					if currencyItem.One.Flag != nil {
+						currency1.One.Flag = types.StringValue(*currencyItem.One.Flag)
 					} else {
-						options1.SelectAttributeOptionsOption.Title = types.StringNull()
+						currency1.One.Flag = types.StringNull()
 					}
-					options1.SelectAttributeOptionsOption.Value = types.StringValue(optionsItem.SelectAttributeOptionsOption.Value)
+					currency1.One.Symbol = types.StringValue(currencyItem.One.Symbol)
 				}
-				if optionsItem.Str != nil {
-					if optionsItem.Str != nil {
-						options1.Str = types.StringValue(*optionsItem.Str)
-					} else {
-						options1.Str = types.StringNull()
-					}
+				if currencyCount+1 > len(attributes1.CurrencyAttribute.Currency) {
+					attributes1.CurrencyAttribute.Currency = append(attributes1.CurrencyAttribute.Currency, currency1)
+				} else {
 				}
-				attributes1.SelectAttribute.Options = append(attributes1.SelectAttribute.Options, options1)
 			}
-			if attributesItem.SelectAttribute.Order != nil {
-				attributes1.SelectAttribute.Order = types.Int64Value(*attributesItem.SelectAttribute.Order)
+			if attributesItem.CurrencyAttribute.CurrencySelectorOnly != nil {
+				attributes1.CurrencyAttribute.CurrencySelectorOnly = types.BoolValue(*attributesItem.CurrencyAttribute.CurrencySelectorOnly)
 			} else {
-				attributes1.SelectAttribute.Order = types.Int64Null()
+				attributes1.CurrencyAttribute.CurrencySelectorOnly = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.Placeholder != nil {
-				attributes1.SelectAttribute.Placeholder = types.StringValue(*attributesItem.SelectAttribute.Placeholder)
+			if attributesItem.CurrencyAttribute.DefaultValue == nil {
+				attributes1.CurrencyAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.SelectAttribute.Placeholder = types.StringNull()
+				defaultValueResult6, _ := json.Marshal(attributesItem.CurrencyAttribute.DefaultValue)
+				attributes1.CurrencyAttribute.DefaultValue = types.StringValue(string(defaultValueResult6))
 			}
-			if attributesItem.SelectAttribute.PreviewValueFormatter != nil {
-				attributes1.SelectAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.SelectAttribute.PreviewValueFormatter)
+			if attributesItem.CurrencyAttribute.Deprecated != nil {
+				attributes1.CurrencyAttribute.Deprecated = types.BoolValue(*attributesItem.CurrencyAttribute.Deprecated)
 			} else {
-				attributes1.SelectAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.CurrencyAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.Protected != nil {
-				attributes1.SelectAttribute.Protected = types.BoolValue(*attributesItem.SelectAttribute.Protected)
+			if attributesItem.CurrencyAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.CurrencyAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.SelectAttribute.Protected = types.BoolNull()
+				attributes1.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.Readonly != nil {
-				attributes1.SelectAttribute.Readonly = types.BoolValue(*attributesItem.SelectAttribute.Readonly)
+			if attributesItem.CurrencyAttribute.FeatureFlag != nil {
+				attributes1.CurrencyAttribute.FeatureFlag = types.StringValue(*attributesItem.CurrencyAttribute.FeatureFlag)
 			} else {
-				attributes1.SelectAttribute.Readonly = types.BoolNull()
+				attributes1.CurrencyAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.SelectAttribute.RenderCondition != nil {
-				attributes1.SelectAttribute.RenderCondition = types.StringValue(*attributesItem.SelectAttribute.RenderCondition)
+			if attributesItem.CurrencyAttribute.Group != nil {
+				attributes1.CurrencyAttribute.Group = types.StringValue(*attributesItem.CurrencyAttribute.Group)
 			} else {
-				attributes1.SelectAttribute.RenderCondition = types.StringNull()
+				attributes1.CurrencyAttribute.Group = types.StringNull()
 			}
-			if attributesItem.SelectAttribute.Required != nil {
-				attributes1.SelectAttribute.Required = types.BoolValue(*attributesItem.SelectAttribute.Required)
+			if attributesItem.CurrencyAttribute.Hidden != nil {
+				attributes1.CurrencyAttribute.Hidden = types.BoolValue(*attributesItem.CurrencyAttribute.Hidden)
 			} else {
-				attributes1.SelectAttribute.Required = types.BoolNull()
+				attributes1.CurrencyAttribute.Hidden = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.SettingFlag != nil {
-				attributes1.SelectAttribute.SettingFlag = types.StringValue(*attributesItem.SelectAttribute.SettingFlag)
+			if attributesItem.CurrencyAttribute.HideLabel != nil {
+				attributes1.CurrencyAttribute.HideLabel = types.BoolValue(*attributesItem.CurrencyAttribute.HideLabel)
 			} else {
-				attributes1.SelectAttribute.SettingFlag = types.StringNull()
+				attributes1.CurrencyAttribute.HideLabel = types.BoolNull()
 			}
-			if attributesItem.SelectAttribute.ShowInTable != nil {
-				attributes1.SelectAttribute.ShowInTable = types.BoolValue(*attributesItem.SelectAttribute.ShowInTable)
+			if attributesItem.CurrencyAttribute.Icon != nil {
+				attributes1.CurrencyAttribute.Icon = types.StringValue(*attributesItem.CurrencyAttribute.Icon)
 			} else {
-				attributes1.SelectAttribute.ShowInTable = types.BoolNull()
+				attributes1.CurrencyAttribute.Icon = types.StringNull()
 			}
-			if attributesItem.SelectAttribute.Type != nil {
-				attributes1.SelectAttribute.Type = types.StringValue(string(*attributesItem.SelectAttribute.Type))
+			attributes1.CurrencyAttribute.Label = types.StringValue(attributesItem.CurrencyAttribute.Label)
+			if attributesItem.CurrencyAttribute.Layout != nil {
+				attributes1.CurrencyAttribute.Layout = types.StringValue(*attributesItem.CurrencyAttribute.Layout)
 			} else {
-				attributes1.SelectAttribute.Type = types.StringNull()
+				attributes1.CurrencyAttribute.Layout = types.StringNull()
 			}
-			if attributesItem.SelectAttribute.ValueFormatter != nil {
-				attributes1.SelectAttribute.ValueFormatter = types.StringValue(*attributesItem.SelectAttribute.ValueFormatter)
+			attributes1.CurrencyAttribute.Name = types.StringValue(attributesItem.CurrencyAttribute.Name)
+			if attributesItem.CurrencyAttribute.Order != nil {
+				attributes1.CurrencyAttribute.Order = types.Int64Value(*attributesItem.CurrencyAttribute.Order)
 			} else {
-				attributes1.SelectAttribute.ValueFormatter = types.StringNull()
+				attributes1.CurrencyAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.CurrencyAttribute.Placeholder != nil {
+				attributes1.CurrencyAttribute.Placeholder = types.StringValue(*attributesItem.CurrencyAttribute.Placeholder)
+			} else {
+				attributes1.CurrencyAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.CurrencyAttribute.PreviewValueFormatter != nil {
+				attributes1.CurrencyAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.CurrencyAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.CurrencyAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.CurrencyAttribute.Protected != nil {
+				attributes1.CurrencyAttribute.Protected = types.BoolValue(*attributesItem.CurrencyAttribute.Protected)
+			} else {
+				attributes1.CurrencyAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.CurrencyAttribute.Readonly != nil {
+				attributes1.CurrencyAttribute.Readonly = types.BoolValue(*attributesItem.CurrencyAttribute.Readonly)
+			} else {
+				attributes1.CurrencyAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.CurrencyAttribute.RenderCondition != nil {
+				attributes1.CurrencyAttribute.RenderCondition = types.StringValue(*attributesItem.CurrencyAttribute.RenderCondition)
+			} else {
+				attributes1.CurrencyAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.CurrencyAttribute.Required != nil {
+				attributes1.CurrencyAttribute.Required = types.BoolValue(*attributesItem.CurrencyAttribute.Required)
+			} else {
+				attributes1.CurrencyAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.CurrencyAttribute.SettingFlag != nil {
+				attributes1.CurrencyAttribute.SettingFlag = types.StringValue(*attributesItem.CurrencyAttribute.SettingFlag)
+			} else {
+				attributes1.CurrencyAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.CurrencyAttribute.ShowInTable != nil {
+				attributes1.CurrencyAttribute.ShowInTable = types.BoolValue(*attributesItem.CurrencyAttribute.ShowInTable)
+			} else {
+				attributes1.CurrencyAttribute.ShowInTable = types.BoolNull()
+			}
+			attributes1.CurrencyAttribute.Type = types.StringValue(string(attributesItem.CurrencyAttribute.Type))
+			if attributesItem.CurrencyAttribute.ValueFormatter != nil {
+				attributes1.CurrencyAttribute.ValueFormatter = types.StringValue(*attributesItem.CurrencyAttribute.ValueFormatter)
+			} else {
+				attributes1.CurrencyAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.DateAttribute != nil {
+			attributes1.DateAttribute = &DateAttribute{}
+			attributes1.DateAttribute.Purpose = nil
+			for _, v := range attributesItem.DateAttribute.Purpose {
+				attributes1.DateAttribute.Purpose = append(attributes1.DateAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.DateAttribute.Constraints == nil {
+				attributes1.DateAttribute.Constraints = nil
+			} else {
+				attributes1.DateAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.DateAttribute.DefaultValue == nil {
+				attributes1.DateAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult7, _ := json.Marshal(attributesItem.DateAttribute.DefaultValue)
+				attributes1.DateAttribute.DefaultValue = types.StringValue(string(defaultValueResult7))
+			}
+			if attributesItem.DateAttribute.Deprecated != nil {
+				attributes1.DateAttribute.Deprecated = types.BoolValue(*attributesItem.DateAttribute.Deprecated)
+			} else {
+				attributes1.DateAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.DateAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.DateAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.DateAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.FeatureFlag != nil {
+				attributes1.DateAttribute.FeatureFlag = types.StringValue(*attributesItem.DateAttribute.FeatureFlag)
+			} else {
+				attributes1.DateAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.DateAttribute.Group != nil {
+				attributes1.DateAttribute.Group = types.StringValue(*attributesItem.DateAttribute.Group)
+			} else {
+				attributes1.DateAttribute.Group = types.StringNull()
+			}
+			if attributesItem.DateAttribute.Hidden != nil {
+				attributes1.DateAttribute.Hidden = types.BoolValue(*attributesItem.DateAttribute.Hidden)
+			} else {
+				attributes1.DateAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.HideLabel != nil {
+				attributes1.DateAttribute.HideLabel = types.BoolValue(*attributesItem.DateAttribute.HideLabel)
+			} else {
+				attributes1.DateAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.Icon != nil {
+				attributes1.DateAttribute.Icon = types.StringValue(*attributesItem.DateAttribute.Icon)
+			} else {
+				attributes1.DateAttribute.Icon = types.StringNull()
+			}
+			attributes1.DateAttribute.Label = types.StringValue(attributesItem.DateAttribute.Label)
+			if attributesItem.DateAttribute.Layout != nil {
+				attributes1.DateAttribute.Layout = types.StringValue(*attributesItem.DateAttribute.Layout)
+			} else {
+				attributes1.DateAttribute.Layout = types.StringNull()
+			}
+			attributes1.DateAttribute.Name = types.StringValue(attributesItem.DateAttribute.Name)
+			if attributesItem.DateAttribute.Order != nil {
+				attributes1.DateAttribute.Order = types.Int64Value(*attributesItem.DateAttribute.Order)
+			} else {
+				attributes1.DateAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.DateAttribute.Placeholder != nil {
+				attributes1.DateAttribute.Placeholder = types.StringValue(*attributesItem.DateAttribute.Placeholder)
+			} else {
+				attributes1.DateAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.DateAttribute.PreviewValueFormatter != nil {
+				attributes1.DateAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.DateAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.DateAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.DateAttribute.Protected != nil {
+				attributes1.DateAttribute.Protected = types.BoolValue(*attributesItem.DateAttribute.Protected)
+			} else {
+				attributes1.DateAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.Readonly != nil {
+				attributes1.DateAttribute.Readonly = types.BoolValue(*attributesItem.DateAttribute.Readonly)
+			} else {
+				attributes1.DateAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.RenderCondition != nil {
+				attributes1.DateAttribute.RenderCondition = types.StringValue(*attributesItem.DateAttribute.RenderCondition)
+			} else {
+				attributes1.DateAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.DateAttribute.Required != nil {
+				attributes1.DateAttribute.Required = types.BoolValue(*attributesItem.DateAttribute.Required)
+			} else {
+				attributes1.DateAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.SettingFlag != nil {
+				attributes1.DateAttribute.SettingFlag = types.StringValue(*attributesItem.DateAttribute.SettingFlag)
+			} else {
+				attributes1.DateAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.DateAttribute.ShowInTable != nil {
+				attributes1.DateAttribute.ShowInTable = types.BoolValue(*attributesItem.DateAttribute.ShowInTable)
+			} else {
+				attributes1.DateAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.DateAttribute.Type != nil {
+				attributes1.DateAttribute.Type = types.StringValue(string(*attributesItem.DateAttribute.Type))
+			} else {
+				attributes1.DateAttribute.Type = types.StringNull()
+			}
+			if attributesItem.DateAttribute.ValueFormatter != nil {
+				attributes1.DateAttribute.ValueFormatter = types.StringValue(*attributesItem.DateAttribute.ValueFormatter)
+			} else {
+				attributes1.DateAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.FileAttribute != nil {
+			attributes1.FileAttribute = &FileAttribute{}
+			attributes1.FileAttribute.Purpose = nil
+			for _, v := range attributesItem.FileAttribute.Purpose {
+				attributes1.FileAttribute.Purpose = append(attributes1.FileAttribute.Purpose, types.StringValue(v))
+			}
+			attributes1.FileAttribute.AllowedExtensions = nil
+			for _, v := range attributesItem.FileAttribute.AllowedExtensions {
+				attributes1.FileAttribute.AllowedExtensions = append(attributes1.FileAttribute.AllowedExtensions, types.StringValue(v))
+			}
+			if attributesItem.FileAttribute.Constraints == nil {
+				attributes1.FileAttribute.Constraints = nil
+			} else {
+				attributes1.FileAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.FileAttribute.DefaultAccessControl != nil {
+				attributes1.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem.FileAttribute.DefaultAccessControl))
+			} else {
+				attributes1.FileAttribute.DefaultAccessControl = types.StringNull()
+			}
+			if attributesItem.FileAttribute.DefaultValue == nil {
+				attributes1.FileAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult8, _ := json.Marshal(attributesItem.FileAttribute.DefaultValue)
+				attributes1.FileAttribute.DefaultValue = types.StringValue(string(defaultValueResult8))
+			}
+			if attributesItem.FileAttribute.Deprecated != nil {
+				attributes1.FileAttribute.Deprecated = types.BoolValue(*attributesItem.FileAttribute.Deprecated)
+			} else {
+				attributes1.FileAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.DisplayImagesLandscaped != nil {
+				attributes1.FileAttribute.DisplayImagesLandscaped = types.BoolValue(*attributesItem.FileAttribute.DisplayImagesLandscaped)
+			} else {
+				attributes1.FileAttribute.DisplayImagesLandscaped = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.EnableDescription != nil {
+				attributes1.FileAttribute.EnableDescription = types.BoolValue(*attributesItem.FileAttribute.EnableDescription)
+			} else {
+				attributes1.FileAttribute.EnableDescription = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.FileAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.FileAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.FileAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.FeatureFlag != nil {
+				attributes1.FileAttribute.FeatureFlag = types.StringValue(*attributesItem.FileAttribute.FeatureFlag)
+			} else {
+				attributes1.FileAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.FileAttribute.Group != nil {
+				attributes1.FileAttribute.Group = types.StringValue(*attributesItem.FileAttribute.Group)
+			} else {
+				attributes1.FileAttribute.Group = types.StringNull()
+			}
+			if attributesItem.FileAttribute.Hidden != nil {
+				attributes1.FileAttribute.Hidden = types.BoolValue(*attributesItem.FileAttribute.Hidden)
+			} else {
+				attributes1.FileAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.HideLabel != nil {
+				attributes1.FileAttribute.HideLabel = types.BoolValue(*attributesItem.FileAttribute.HideLabel)
+			} else {
+				attributes1.FileAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.Icon != nil {
+				attributes1.FileAttribute.Icon = types.StringValue(*attributesItem.FileAttribute.Icon)
+			} else {
+				attributes1.FileAttribute.Icon = types.StringNull()
+			}
+			attributes1.FileAttribute.Label = types.StringValue(attributesItem.FileAttribute.Label)
+			if attributesItem.FileAttribute.Layout != nil {
+				attributes1.FileAttribute.Layout = types.StringValue(*attributesItem.FileAttribute.Layout)
+			} else {
+				attributes1.FileAttribute.Layout = types.StringNull()
+			}
+			if attributesItem.FileAttribute.Multiple != nil {
+				attributes1.FileAttribute.Multiple = types.BoolValue(*attributesItem.FileAttribute.Multiple)
+			} else {
+				attributes1.FileAttribute.Multiple = types.BoolNull()
+			}
+			attributes1.FileAttribute.Name = types.StringValue(attributesItem.FileAttribute.Name)
+			if attributesItem.FileAttribute.Order != nil {
+				attributes1.FileAttribute.Order = types.Int64Value(*attributesItem.FileAttribute.Order)
+			} else {
+				attributes1.FileAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.FileAttribute.Placeholder != nil {
+				attributes1.FileAttribute.Placeholder = types.StringValue(*attributesItem.FileAttribute.Placeholder)
+			} else {
+				attributes1.FileAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.FileAttribute.PreviewValueFormatter != nil {
+				attributes1.FileAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.FileAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.FileAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.FileAttribute.Protected != nil {
+				attributes1.FileAttribute.Protected = types.BoolValue(*attributesItem.FileAttribute.Protected)
+			} else {
+				attributes1.FileAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.Readonly != nil {
+				attributes1.FileAttribute.Readonly = types.BoolValue(*attributesItem.FileAttribute.Readonly)
+			} else {
+				attributes1.FileAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.RenderCondition != nil {
+				attributes1.FileAttribute.RenderCondition = types.StringValue(*attributesItem.FileAttribute.RenderCondition)
+			} else {
+				attributes1.FileAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.FileAttribute.Required != nil {
+				attributes1.FileAttribute.Required = types.BoolValue(*attributesItem.FileAttribute.Required)
+			} else {
+				attributes1.FileAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.FileAttribute.SettingFlag != nil {
+				attributes1.FileAttribute.SettingFlag = types.StringValue(*attributesItem.FileAttribute.SettingFlag)
+			} else {
+				attributes1.FileAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.FileAttribute.ShowInTable != nil {
+				attributes1.FileAttribute.ShowInTable = types.BoolValue(*attributesItem.FileAttribute.ShowInTable)
+			} else {
+				attributes1.FileAttribute.ShowInTable = types.BoolNull()
+			}
+			attributes1.FileAttribute.Type = types.StringValue(string(attributesItem.FileAttribute.Type))
+			if attributesItem.FileAttribute.ValueFormatter != nil {
+				attributes1.FileAttribute.ValueFormatter = types.StringValue(*attributesItem.FileAttribute.ValueFormatter)
+			} else {
+				attributes1.FileAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.InternalAttribute != nil {
+			attributes1.InternalAttribute = &InternalAttribute{}
+			attributes1.InternalAttribute.Purpose = nil
+			for _, v := range attributesItem.InternalAttribute.Purpose {
+				attributes1.InternalAttribute.Purpose = append(attributes1.InternalAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.InternalAttribute.Constraints == nil {
+				attributes1.InternalAttribute.Constraints = nil
+			} else {
+				attributes1.InternalAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.InternalAttribute.DefaultValue == nil {
+				attributes1.InternalAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult9, _ := json.Marshal(attributesItem.InternalAttribute.DefaultValue)
+				attributes1.InternalAttribute.DefaultValue = types.StringValue(string(defaultValueResult9))
+			}
+			if attributesItem.InternalAttribute.Deprecated != nil {
+				attributes1.InternalAttribute.Deprecated = types.BoolValue(*attributesItem.InternalAttribute.Deprecated)
+			} else {
+				attributes1.InternalAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.InternalAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.InternalAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.InternalAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.FeatureFlag != nil {
+				attributes1.InternalAttribute.FeatureFlag = types.StringValue(*attributesItem.InternalAttribute.FeatureFlag)
+			} else {
+				attributes1.InternalAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.Group != nil {
+				attributes1.InternalAttribute.Group = types.StringValue(*attributesItem.InternalAttribute.Group)
+			} else {
+				attributes1.InternalAttribute.Group = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.Hidden != nil {
+				attributes1.InternalAttribute.Hidden = types.BoolValue(*attributesItem.InternalAttribute.Hidden)
+			} else {
+				attributes1.InternalAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.HideLabel != nil {
+				attributes1.InternalAttribute.HideLabel = types.BoolValue(*attributesItem.InternalAttribute.HideLabel)
+			} else {
+				attributes1.InternalAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.Icon != nil {
+				attributes1.InternalAttribute.Icon = types.StringValue(*attributesItem.InternalAttribute.Icon)
+			} else {
+				attributes1.InternalAttribute.Icon = types.StringNull()
+			}
+			attributes1.InternalAttribute.Label = types.StringValue(attributesItem.InternalAttribute.Label)
+			if attributesItem.InternalAttribute.Layout != nil {
+				attributes1.InternalAttribute.Layout = types.StringValue(*attributesItem.InternalAttribute.Layout)
+			} else {
+				attributes1.InternalAttribute.Layout = types.StringNull()
+			}
+			attributes1.InternalAttribute.Name = types.StringValue(attributesItem.InternalAttribute.Name)
+			if attributesItem.InternalAttribute.Order != nil {
+				attributes1.InternalAttribute.Order = types.Int64Value(*attributesItem.InternalAttribute.Order)
+			} else {
+				attributes1.InternalAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.InternalAttribute.Placeholder != nil {
+				attributes1.InternalAttribute.Placeholder = types.StringValue(*attributesItem.InternalAttribute.Placeholder)
+			} else {
+				attributes1.InternalAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.PreviewValueFormatter != nil {
+				attributes1.InternalAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.InternalAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.InternalAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.Protected != nil {
+				attributes1.InternalAttribute.Protected = types.BoolValue(*attributesItem.InternalAttribute.Protected)
+			} else {
+				attributes1.InternalAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.Readonly != nil {
+				attributes1.InternalAttribute.Readonly = types.BoolValue(*attributesItem.InternalAttribute.Readonly)
+			} else {
+				attributes1.InternalAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.RenderCondition != nil {
+				attributes1.InternalAttribute.RenderCondition = types.StringValue(*attributesItem.InternalAttribute.RenderCondition)
+			} else {
+				attributes1.InternalAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.Required != nil {
+				attributes1.InternalAttribute.Required = types.BoolValue(*attributesItem.InternalAttribute.Required)
+			} else {
+				attributes1.InternalAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.SettingFlag != nil {
+				attributes1.InternalAttribute.SettingFlag = types.StringValue(*attributesItem.InternalAttribute.SettingFlag)
+			} else {
+				attributes1.InternalAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.ShowInTable != nil {
+				attributes1.InternalAttribute.ShowInTable = types.BoolValue(*attributesItem.InternalAttribute.ShowInTable)
+			} else {
+				attributes1.InternalAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.InternalAttribute.Type != nil {
+				attributes1.InternalAttribute.Type = types.StringValue(string(*attributesItem.InternalAttribute.Type))
+			} else {
+				attributes1.InternalAttribute.Type = types.StringNull()
+			}
+			if attributesItem.InternalAttribute.ValueFormatter != nil {
+				attributes1.InternalAttribute.ValueFormatter = types.StringValue(*attributesItem.InternalAttribute.ValueFormatter)
+			} else {
+				attributes1.InternalAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.InternalUserAttribute != nil {
+			attributes1.InternalUserAttribute = &InternalUserAttribute{}
+			attributes1.InternalUserAttribute.Purpose = nil
+			for _, v := range attributesItem.InternalUserAttribute.Purpose {
+				attributes1.InternalUserAttribute.Purpose = append(attributes1.InternalUserAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.InternalUserAttribute.Constraints == nil {
+				attributes1.InternalUserAttribute.Constraints = nil
+			} else {
+				attributes1.InternalUserAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.InternalUserAttribute.DefaultValue == nil {
+				attributes1.InternalUserAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult10, _ := json.Marshal(attributesItem.InternalUserAttribute.DefaultValue)
+				attributes1.InternalUserAttribute.DefaultValue = types.StringValue(string(defaultValueResult10))
+			}
+			if attributesItem.InternalUserAttribute.Deprecated != nil {
+				attributes1.InternalUserAttribute.Deprecated = types.BoolValue(*attributesItem.InternalUserAttribute.Deprecated)
+			} else {
+				attributes1.InternalUserAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.InternalUserAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.FeatureFlag != nil {
+				attributes1.InternalUserAttribute.FeatureFlag = types.StringValue(*attributesItem.InternalUserAttribute.FeatureFlag)
+			} else {
+				attributes1.InternalUserAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.Group != nil {
+				attributes1.InternalUserAttribute.Group = types.StringValue(*attributesItem.InternalUserAttribute.Group)
+			} else {
+				attributes1.InternalUserAttribute.Group = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.Hidden != nil {
+				attributes1.InternalUserAttribute.Hidden = types.BoolValue(*attributesItem.InternalUserAttribute.Hidden)
+			} else {
+				attributes1.InternalUserAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.HideLabel != nil {
+				attributes1.InternalUserAttribute.HideLabel = types.BoolValue(*attributesItem.InternalUserAttribute.HideLabel)
+			} else {
+				attributes1.InternalUserAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.Icon != nil {
+				attributes1.InternalUserAttribute.Icon = types.StringValue(*attributesItem.InternalUserAttribute.Icon)
+			} else {
+				attributes1.InternalUserAttribute.Icon = types.StringNull()
+			}
+			attributes1.InternalUserAttribute.Label = types.StringValue(attributesItem.InternalUserAttribute.Label)
+			if attributesItem.InternalUserAttribute.Layout != nil {
+				attributes1.InternalUserAttribute.Layout = types.StringValue(*attributesItem.InternalUserAttribute.Layout)
+			} else {
+				attributes1.InternalUserAttribute.Layout = types.StringNull()
+			}
+			attributes1.InternalUserAttribute.Name = types.StringValue(attributesItem.InternalUserAttribute.Name)
+			if attributesItem.InternalUserAttribute.Order != nil {
+				attributes1.InternalUserAttribute.Order = types.Int64Value(*attributesItem.InternalUserAttribute.Order)
+			} else {
+				attributes1.InternalUserAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.InternalUserAttribute.Placeholder != nil {
+				attributes1.InternalUserAttribute.Placeholder = types.StringValue(*attributesItem.InternalUserAttribute.Placeholder)
+			} else {
+				attributes1.InternalUserAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.PreviewValueFormatter != nil {
+				attributes1.InternalUserAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.InternalUserAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.InternalUserAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.Protected != nil {
+				attributes1.InternalUserAttribute.Protected = types.BoolValue(*attributesItem.InternalUserAttribute.Protected)
+			} else {
+				attributes1.InternalUserAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.Readonly != nil {
+				attributes1.InternalUserAttribute.Readonly = types.BoolValue(*attributesItem.InternalUserAttribute.Readonly)
+			} else {
+				attributes1.InternalUserAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.RenderCondition != nil {
+				attributes1.InternalUserAttribute.RenderCondition = types.StringValue(*attributesItem.InternalUserAttribute.RenderCondition)
+			} else {
+				attributes1.InternalUserAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.Required != nil {
+				attributes1.InternalUserAttribute.Required = types.BoolValue(*attributesItem.InternalUserAttribute.Required)
+			} else {
+				attributes1.InternalUserAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.SettingFlag != nil {
+				attributes1.InternalUserAttribute.SettingFlag = types.StringValue(*attributesItem.InternalUserAttribute.SettingFlag)
+			} else {
+				attributes1.InternalUserAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.ShowInTable != nil {
+				attributes1.InternalUserAttribute.ShowInTable = types.BoolValue(*attributesItem.InternalUserAttribute.ShowInTable)
+			} else {
+				attributes1.InternalUserAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.InternalUserAttribute.Type != nil {
+				attributes1.InternalUserAttribute.Type = types.StringValue(string(*attributesItem.InternalUserAttribute.Type))
+			} else {
+				attributes1.InternalUserAttribute.Type = types.StringNull()
+			}
+			if attributesItem.InternalUserAttribute.ValueFormatter != nil {
+				attributes1.InternalUserAttribute.ValueFormatter = types.StringValue(*attributesItem.InternalUserAttribute.ValueFormatter)
+			} else {
+				attributes1.InternalUserAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.InvitationEmailAttribute != nil {
+			attributes1.InvitationEmailAttribute = &InvitationEmailAttribute{}
+			attributes1.InvitationEmailAttribute.Purpose = nil
+			for _, v := range attributesItem.InvitationEmailAttribute.Purpose {
+				attributes1.InvitationEmailAttribute.Purpose = append(attributes1.InvitationEmailAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.InvitationEmailAttribute.Constraints == nil {
+				attributes1.InvitationEmailAttribute.Constraints = nil
+			} else {
+				attributes1.InvitationEmailAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.InvitationEmailAttribute.DefaultValue == nil {
+				attributes1.InvitationEmailAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult11, _ := json.Marshal(attributesItem.InvitationEmailAttribute.DefaultValue)
+				attributes1.InvitationEmailAttribute.DefaultValue = types.StringValue(string(defaultValueResult11))
+			}
+			if attributesItem.InvitationEmailAttribute.Deprecated != nil {
+				attributes1.InvitationEmailAttribute.Deprecated = types.BoolValue(*attributesItem.InvitationEmailAttribute.Deprecated)
+			} else {
+				attributes1.InvitationEmailAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.InvitationEmailAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.FeatureFlag != nil {
+				attributes1.InvitationEmailAttribute.FeatureFlag = types.StringValue(*attributesItem.InvitationEmailAttribute.FeatureFlag)
+			} else {
+				attributes1.InvitationEmailAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Group != nil {
+				attributes1.InvitationEmailAttribute.Group = types.StringValue(*attributesItem.InvitationEmailAttribute.Group)
+			} else {
+				attributes1.InvitationEmailAttribute.Group = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Hidden != nil {
+				attributes1.InvitationEmailAttribute.Hidden = types.BoolValue(*attributesItem.InvitationEmailAttribute.Hidden)
+			} else {
+				attributes1.InvitationEmailAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.HideLabel != nil {
+				attributes1.InvitationEmailAttribute.HideLabel = types.BoolValue(*attributesItem.InvitationEmailAttribute.HideLabel)
+			} else {
+				attributes1.InvitationEmailAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Icon != nil {
+				attributes1.InvitationEmailAttribute.Icon = types.StringValue(*attributesItem.InvitationEmailAttribute.Icon)
+			} else {
+				attributes1.InvitationEmailAttribute.Icon = types.StringNull()
+			}
+			attributes1.InvitationEmailAttribute.Label = types.StringValue(attributesItem.InvitationEmailAttribute.Label)
+			if attributesItem.InvitationEmailAttribute.Layout != nil {
+				attributes1.InvitationEmailAttribute.Layout = types.StringValue(*attributesItem.InvitationEmailAttribute.Layout)
+			} else {
+				attributes1.InvitationEmailAttribute.Layout = types.StringNull()
+			}
+			attributes1.InvitationEmailAttribute.Name = types.StringValue(attributesItem.InvitationEmailAttribute.Name)
+			if attributesItem.InvitationEmailAttribute.Order != nil {
+				attributes1.InvitationEmailAttribute.Order = types.Int64Value(*attributesItem.InvitationEmailAttribute.Order)
+			} else {
+				attributes1.InvitationEmailAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.InvitationEmailAttribute.Placeholder != nil {
+				attributes1.InvitationEmailAttribute.Placeholder = types.StringValue(*attributesItem.InvitationEmailAttribute.Placeholder)
+			} else {
+				attributes1.InvitationEmailAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.PreviewValueFormatter != nil {
+				attributes1.InvitationEmailAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.InvitationEmailAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.InvitationEmailAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Protected != nil {
+				attributes1.InvitationEmailAttribute.Protected = types.BoolValue(*attributesItem.InvitationEmailAttribute.Protected)
+			} else {
+				attributes1.InvitationEmailAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Readonly != nil {
+				attributes1.InvitationEmailAttribute.Readonly = types.BoolValue(*attributesItem.InvitationEmailAttribute.Readonly)
+			} else {
+				attributes1.InvitationEmailAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.RenderCondition != nil {
+				attributes1.InvitationEmailAttribute.RenderCondition = types.StringValue(*attributesItem.InvitationEmailAttribute.RenderCondition)
+			} else {
+				attributes1.InvitationEmailAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Required != nil {
+				attributes1.InvitationEmailAttribute.Required = types.BoolValue(*attributesItem.InvitationEmailAttribute.Required)
+			} else {
+				attributes1.InvitationEmailAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.SettingFlag != nil {
+				attributes1.InvitationEmailAttribute.SettingFlag = types.StringValue(*attributesItem.InvitationEmailAttribute.SettingFlag)
+			} else {
+				attributes1.InvitationEmailAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.ShowInTable != nil {
+				attributes1.InvitationEmailAttribute.ShowInTable = types.BoolValue(*attributesItem.InvitationEmailAttribute.ShowInTable)
+			} else {
+				attributes1.InvitationEmailAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.InvitationEmailAttribute.Type != nil {
+				attributes1.InvitationEmailAttribute.Type = types.StringValue(string(*attributesItem.InvitationEmailAttribute.Type))
+			} else {
+				attributes1.InvitationEmailAttribute.Type = types.StringNull()
+			}
+			if attributesItem.InvitationEmailAttribute.ValueFormatter != nil {
+				attributes1.InvitationEmailAttribute.ValueFormatter = types.StringValue(*attributesItem.InvitationEmailAttribute.ValueFormatter)
+			} else {
+				attributes1.InvitationEmailAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.LinkAttribute != nil {
+			attributes1.LinkAttribute = &LinkAttribute{}
+			attributes1.LinkAttribute.Purpose = nil
+			for _, v := range attributesItem.LinkAttribute.Purpose {
+				attributes1.LinkAttribute.Purpose = append(attributes1.LinkAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.LinkAttribute.Constraints == nil {
+				attributes1.LinkAttribute.Constraints = nil
+			} else {
+				attributes1.LinkAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.LinkAttribute.DefaultValue == nil {
+				attributes1.LinkAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult12, _ := json.Marshal(attributesItem.LinkAttribute.DefaultValue)
+				attributes1.LinkAttribute.DefaultValue = types.StringValue(string(defaultValueResult12))
+			}
+			if attributesItem.LinkAttribute.Deprecated != nil {
+				attributes1.LinkAttribute.Deprecated = types.BoolValue(*attributesItem.LinkAttribute.Deprecated)
+			} else {
+				attributes1.LinkAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.LinkAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.LinkAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.LinkAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.FeatureFlag != nil {
+				attributes1.LinkAttribute.FeatureFlag = types.StringValue(*attributesItem.LinkAttribute.FeatureFlag)
+			} else {
+				attributes1.LinkAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.Group != nil {
+				attributes1.LinkAttribute.Group = types.StringValue(*attributesItem.LinkAttribute.Group)
+			} else {
+				attributes1.LinkAttribute.Group = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.Hidden != nil {
+				attributes1.LinkAttribute.Hidden = types.BoolValue(*attributesItem.LinkAttribute.Hidden)
+			} else {
+				attributes1.LinkAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.HideLabel != nil {
+				attributes1.LinkAttribute.HideLabel = types.BoolValue(*attributesItem.LinkAttribute.HideLabel)
+			} else {
+				attributes1.LinkAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.Icon != nil {
+				attributes1.LinkAttribute.Icon = types.StringValue(*attributesItem.LinkAttribute.Icon)
+			} else {
+				attributes1.LinkAttribute.Icon = types.StringNull()
+			}
+			attributes1.LinkAttribute.Label = types.StringValue(attributesItem.LinkAttribute.Label)
+			if attributesItem.LinkAttribute.Layout != nil {
+				attributes1.LinkAttribute.Layout = types.StringValue(*attributesItem.LinkAttribute.Layout)
+			} else {
+				attributes1.LinkAttribute.Layout = types.StringNull()
+			}
+			attributes1.LinkAttribute.Name = types.StringValue(attributesItem.LinkAttribute.Name)
+			if attributesItem.LinkAttribute.Order != nil {
+				attributes1.LinkAttribute.Order = types.Int64Value(*attributesItem.LinkAttribute.Order)
+			} else {
+				attributes1.LinkAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.LinkAttribute.Placeholder != nil {
+				attributes1.LinkAttribute.Placeholder = types.StringValue(*attributesItem.LinkAttribute.Placeholder)
+			} else {
+				attributes1.LinkAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.PreviewValueFormatter != nil {
+				attributes1.LinkAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.LinkAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.LinkAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.Protected != nil {
+				attributes1.LinkAttribute.Protected = types.BoolValue(*attributesItem.LinkAttribute.Protected)
+			} else {
+				attributes1.LinkAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.Readonly != nil {
+				attributes1.LinkAttribute.Readonly = types.BoolValue(*attributesItem.LinkAttribute.Readonly)
+			} else {
+				attributes1.LinkAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.RenderCondition != nil {
+				attributes1.LinkAttribute.RenderCondition = types.StringValue(*attributesItem.LinkAttribute.RenderCondition)
+			} else {
+				attributes1.LinkAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.Required != nil {
+				attributes1.LinkAttribute.Required = types.BoolValue(*attributesItem.LinkAttribute.Required)
+			} else {
+				attributes1.LinkAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.SettingFlag != nil {
+				attributes1.LinkAttribute.SettingFlag = types.StringValue(*attributesItem.LinkAttribute.SettingFlag)
+			} else {
+				attributes1.LinkAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.ShowInTable != nil {
+				attributes1.LinkAttribute.ShowInTable = types.BoolValue(*attributesItem.LinkAttribute.ShowInTable)
+			} else {
+				attributes1.LinkAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.LinkAttribute.Type != nil {
+				attributes1.LinkAttribute.Type = types.StringValue(string(*attributesItem.LinkAttribute.Type))
+			} else {
+				attributes1.LinkAttribute.Type = types.StringNull()
+			}
+			if attributesItem.LinkAttribute.ValueFormatter != nil {
+				attributes1.LinkAttribute.ValueFormatter = types.StringValue(*attributesItem.LinkAttribute.ValueFormatter)
+			} else {
+				attributes1.LinkAttribute.ValueFormatter = types.StringNull()
 			}
 		}
 		if attributesItem.MultiSelectAttribute != nil {
@@ -11243,18 +11983,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			} else {
 				attributes1.MultiSelectAttribute.AllowExtraOptions = types.BoolNull()
 			}
-			if attributes1.MultiSelectAttribute.Constraints == nil && len(attributesItem.MultiSelectAttribute.Constraints) > 0 {
-				attributes1.MultiSelectAttribute.Constraints = make(map[string]types.String)
-				for key6, value7 := range attributesItem.MultiSelectAttribute.Constraints {
-					result6, _ := json.Marshal(value7)
-					attributes1.MultiSelectAttribute.Constraints[key6] = types.StringValue(string(result6))
-				}
+			if attributesItem.MultiSelectAttribute.Constraints == nil {
+				attributes1.MultiSelectAttribute.Constraints = nil
+			} else {
+				attributes1.MultiSelectAttribute.Constraints = &Constraints{}
 			}
 			if attributesItem.MultiSelectAttribute.DefaultValue == nil {
 				attributes1.MultiSelectAttribute.DefaultValue = types.StringNull()
 			} else {
-				defaultValueResult6, _ := json.Marshal(attributesItem.MultiSelectAttribute.DefaultValue)
-				attributes1.MultiSelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult6))
+				defaultValueResult13, _ := json.Marshal(attributesItem.MultiSelectAttribute.DefaultValue)
+				attributes1.MultiSelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult13))
 			}
 			if attributesItem.MultiSelectAttribute.Deprecated != nil {
 				attributes1.MultiSelectAttribute.Deprecated = types.BoolValue(*attributesItem.MultiSelectAttribute.Deprecated)
@@ -11303,26 +12041,31 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				attributes1.MultiSelectAttribute.Layout = types.StringNull()
 			}
 			attributes1.MultiSelectAttribute.Name = types.StringValue(attributesItem.MultiSelectAttribute.Name)
-			attributes1.MultiSelectAttribute.Options = nil
-			for _, optionsItem1 := range attributesItem.MultiSelectAttribute.Options {
-				var options3 MultiSelectAttributeOptions
-				if optionsItem1.Str != nil {
-					if optionsItem1.Str != nil {
-						options3.Str = types.StringValue(*optionsItem1.Str)
+			if len(attributes1.MultiSelectAttribute.Options) > len(attributesItem.MultiSelectAttribute.Options) {
+				attributes1.MultiSelectAttribute.Options = attributes1.MultiSelectAttribute.Options[:len(attributesItem.MultiSelectAttribute.Options)]
+			}
+			for optionsCount, optionsItem := range attributesItem.MultiSelectAttribute.Options {
+				var options1 Options
+				if optionsItem.Str != nil {
+					if optionsItem.Str != nil {
+						options1.Str = types.StringValue(*optionsItem.Str)
 					} else {
-						options3.Str = types.StringNull()
+						options1.Str = types.StringNull()
 					}
 				}
-				if optionsItem1.MultiSelectAttributeOptions2 != nil {
-					options3.MultiSelectAttributeOptions2 = &SelectAttributeOptionsOption{}
-					if optionsItem1.MultiSelectAttributeOptions2.Title != nil {
-						options3.MultiSelectAttributeOptions2.Title = types.StringValue(*optionsItem1.MultiSelectAttributeOptions2.Title)
+				if optionsItem.MultiSelectAttribute2 != nil {
+					options1.Two = &MultiSelectAttribute2{}
+					if optionsItem.MultiSelectAttribute2.Title != nil {
+						options1.Two.Title = types.StringValue(*optionsItem.MultiSelectAttribute2.Title)
 					} else {
-						options3.MultiSelectAttributeOptions2.Title = types.StringNull()
+						options1.Two.Title = types.StringNull()
 					}
-					options3.MultiSelectAttributeOptions2.Value = types.StringValue(optionsItem1.MultiSelectAttributeOptions2.Value)
+					options1.Two.Value = types.StringValue(optionsItem.MultiSelectAttribute2.Value)
 				}
-				attributes1.MultiSelectAttribute.Options = append(attributes1.MultiSelectAttribute.Options, options3)
+				if optionsCount+1 > len(attributes1.MultiSelectAttribute.Options) {
+					attributes1.MultiSelectAttribute.Options = append(attributes1.MultiSelectAttribute.Options, options1)
+				} else {
+				}
 			}
 			if attributesItem.MultiSelectAttribute.Order != nil {
 				attributes1.MultiSelectAttribute.Order = types.Int64Value(*attributesItem.MultiSelectAttribute.Order)
@@ -11380,269 +12123,608 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				attributes1.MultiSelectAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.StatusAttribute != nil {
-			attributes1.StatusAttribute = &StatusAttribute{}
-			attributes1.StatusAttribute.Purpose = nil
-			for _, v := range attributesItem.StatusAttribute.Purpose {
-				attributes1.StatusAttribute.Purpose = append(attributes1.StatusAttribute.Purpose, types.StringValue(v))
+		if attributesItem.NumberAttribute != nil {
+			attributes1.NumberAttribute = &NumberAttribute{}
+			attributes1.NumberAttribute.Purpose = nil
+			for _, v := range attributesItem.NumberAttribute.Purpose {
+				attributes1.NumberAttribute.Purpose = append(attributes1.NumberAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.StatusAttribute.Constraints == nil && len(attributesItem.StatusAttribute.Constraints) > 0 {
-				attributes1.StatusAttribute.Constraints = make(map[string]types.String)
-				for key7, value9 := range attributesItem.StatusAttribute.Constraints {
-					result7, _ := json.Marshal(value9)
-					attributes1.StatusAttribute.Constraints[key7] = types.StringValue(string(result7))
-				}
-			}
-			if attributesItem.StatusAttribute.DefaultValue == nil {
-				attributes1.StatusAttribute.DefaultValue = types.StringNull()
+			if attributesItem.NumberAttribute.Constraints == nil {
+				attributes1.NumberAttribute.Constraints = nil
 			} else {
-				defaultValueResult7, _ := json.Marshal(attributesItem.StatusAttribute.DefaultValue)
-				attributes1.StatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult7))
+				attributes1.NumberAttribute.Constraints = &Constraints{}
 			}
-			if attributesItem.StatusAttribute.Deprecated != nil {
-				attributes1.StatusAttribute.Deprecated = types.BoolValue(*attributesItem.StatusAttribute.Deprecated)
+			if attributesItem.NumberAttribute.DefaultValue == nil {
+				attributes1.NumberAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.StatusAttribute.Deprecated = types.BoolNull()
+				defaultValueResult14, _ := json.Marshal(attributesItem.NumberAttribute.DefaultValue)
+				attributes1.NumberAttribute.DefaultValue = types.StringValue(string(defaultValueResult14))
 			}
-			if attributesItem.StatusAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.StatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.StatusAttribute.EntityBuilderDisableEdit)
+			if attributesItem.NumberAttribute.Deprecated != nil {
+				attributes1.NumberAttribute.Deprecated = types.BoolValue(*attributesItem.NumberAttribute.Deprecated)
 			} else {
-				attributes1.StatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.NumberAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.StatusAttribute.FeatureFlag != nil {
-				attributes1.StatusAttribute.FeatureFlag = types.StringValue(*attributesItem.StatusAttribute.FeatureFlag)
+			if attributesItem.NumberAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.NumberAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.NumberAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.StatusAttribute.FeatureFlag = types.StringNull()
+				attributes1.NumberAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.StatusAttribute.Group != nil {
-				attributes1.StatusAttribute.Group = types.StringValue(*attributesItem.StatusAttribute.Group)
+			if attributesItem.NumberAttribute.FeatureFlag != nil {
+				attributes1.NumberAttribute.FeatureFlag = types.StringValue(*attributesItem.NumberAttribute.FeatureFlag)
 			} else {
-				attributes1.StatusAttribute.Group = types.StringNull()
+				attributes1.NumberAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.Hidden != nil {
-				attributes1.StatusAttribute.Hidden = types.BoolValue(*attributesItem.StatusAttribute.Hidden)
+			if attributesItem.NumberAttribute.Format != nil {
+				attributes1.NumberAttribute.Format = types.StringValue(*attributesItem.NumberAttribute.Format)
 			} else {
-				attributes1.StatusAttribute.Hidden = types.BoolNull()
+				attributes1.NumberAttribute.Format = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.HideLabel != nil {
-				attributes1.StatusAttribute.HideLabel = types.BoolValue(*attributesItem.StatusAttribute.HideLabel)
+			if attributesItem.NumberAttribute.Group != nil {
+				attributes1.NumberAttribute.Group = types.StringValue(*attributesItem.NumberAttribute.Group)
 			} else {
-				attributes1.StatusAttribute.HideLabel = types.BoolNull()
+				attributes1.NumberAttribute.Group = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.Icon != nil {
-				attributes1.StatusAttribute.Icon = types.StringValue(*attributesItem.StatusAttribute.Icon)
+			if attributesItem.NumberAttribute.Hidden != nil {
+				attributes1.NumberAttribute.Hidden = types.BoolValue(*attributesItem.NumberAttribute.Hidden)
 			} else {
-				attributes1.StatusAttribute.Icon = types.StringNull()
+				attributes1.NumberAttribute.Hidden = types.BoolNull()
 			}
-			attributes1.StatusAttribute.Label = types.StringValue(attributesItem.StatusAttribute.Label)
-			if attributesItem.StatusAttribute.Layout != nil {
-				attributes1.StatusAttribute.Layout = types.StringValue(*attributesItem.StatusAttribute.Layout)
+			if attributesItem.NumberAttribute.HideLabel != nil {
+				attributes1.NumberAttribute.HideLabel = types.BoolValue(*attributesItem.NumberAttribute.HideLabel)
 			} else {
-				attributes1.StatusAttribute.Layout = types.StringNull()
+				attributes1.NumberAttribute.HideLabel = types.BoolNull()
 			}
-			attributes1.StatusAttribute.Name = types.StringValue(attributesItem.StatusAttribute.Name)
-			attributes1.StatusAttribute.Options = nil
-			for _, optionsItem2 := range attributesItem.StatusAttribute.Options {
-				var options5 StatusAttributeOptions
-				if optionsItem2.Str != nil {
-					if optionsItem2.Str != nil {
-						options5.Str = types.StringValue(*optionsItem2.Str)
-					} else {
-						options5.Str = types.StringNull()
-					}
-				}
-				if optionsItem2.StatusAttributeOptions2 != nil {
-					options5.StatusAttributeOptions2 = &SelectAttributeOptionsOption{}
-					if optionsItem2.StatusAttributeOptions2.Title != nil {
-						options5.StatusAttributeOptions2.Title = types.StringValue(*optionsItem2.StatusAttributeOptions2.Title)
-					} else {
-						options5.StatusAttributeOptions2.Title = types.StringNull()
-					}
-					options5.StatusAttributeOptions2.Value = types.StringValue(optionsItem2.StatusAttributeOptions2.Value)
-				}
-				attributes1.StatusAttribute.Options = append(attributes1.StatusAttribute.Options, options5)
-			}
-			if attributesItem.StatusAttribute.Order != nil {
-				attributes1.StatusAttribute.Order = types.Int64Value(*attributesItem.StatusAttribute.Order)
+			if attributesItem.NumberAttribute.Icon != nil {
+				attributes1.NumberAttribute.Icon = types.StringValue(*attributesItem.NumberAttribute.Icon)
 			} else {
-				attributes1.StatusAttribute.Order = types.Int64Null()
+				attributes1.NumberAttribute.Icon = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.Placeholder != nil {
-				attributes1.StatusAttribute.Placeholder = types.StringValue(*attributesItem.StatusAttribute.Placeholder)
+			attributes1.NumberAttribute.Label = types.StringValue(attributesItem.NumberAttribute.Label)
+			if attributesItem.NumberAttribute.Layout != nil {
+				attributes1.NumberAttribute.Layout = types.StringValue(*attributesItem.NumberAttribute.Layout)
 			} else {
-				attributes1.StatusAttribute.Placeholder = types.StringNull()
+				attributes1.NumberAttribute.Layout = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.PreviewValueFormatter != nil {
-				attributes1.StatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.StatusAttribute.PreviewValueFormatter)
+			attributes1.NumberAttribute.Name = types.StringValue(attributesItem.NumberAttribute.Name)
+			if attributesItem.NumberAttribute.Order != nil {
+				attributes1.NumberAttribute.Order = types.Int64Value(*attributesItem.NumberAttribute.Order)
 			} else {
-				attributes1.StatusAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.NumberAttribute.Order = types.Int64Null()
 			}
-			if attributesItem.StatusAttribute.Protected != nil {
-				attributes1.StatusAttribute.Protected = types.BoolValue(*attributesItem.StatusAttribute.Protected)
+			if attributesItem.NumberAttribute.Placeholder != nil {
+				attributes1.NumberAttribute.Placeholder = types.StringValue(*attributesItem.NumberAttribute.Placeholder)
 			} else {
-				attributes1.StatusAttribute.Protected = types.BoolNull()
+				attributes1.NumberAttribute.Placeholder = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.Readonly != nil {
-				attributes1.StatusAttribute.Readonly = types.BoolValue(*attributesItem.StatusAttribute.Readonly)
+			if attributesItem.NumberAttribute.PreviewValueFormatter != nil {
+				attributes1.NumberAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.NumberAttribute.PreviewValueFormatter)
 			} else {
-				attributes1.StatusAttribute.Readonly = types.BoolNull()
+				attributes1.NumberAttribute.PreviewValueFormatter = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.RenderCondition != nil {
-				attributes1.StatusAttribute.RenderCondition = types.StringValue(*attributesItem.StatusAttribute.RenderCondition)
+			if attributesItem.NumberAttribute.Protected != nil {
+				attributes1.NumberAttribute.Protected = types.BoolValue(*attributesItem.NumberAttribute.Protected)
 			} else {
-				attributes1.StatusAttribute.RenderCondition = types.StringNull()
+				attributes1.NumberAttribute.Protected = types.BoolNull()
 			}
-			if attributesItem.StatusAttribute.Required != nil {
-				attributes1.StatusAttribute.Required = types.BoolValue(*attributesItem.StatusAttribute.Required)
+			if attributesItem.NumberAttribute.Readonly != nil {
+				attributes1.NumberAttribute.Readonly = types.BoolValue(*attributesItem.NumberAttribute.Readonly)
 			} else {
-				attributes1.StatusAttribute.Required = types.BoolNull()
+				attributes1.NumberAttribute.Readonly = types.BoolNull()
 			}
-			if attributesItem.StatusAttribute.SettingFlag != nil {
-				attributes1.StatusAttribute.SettingFlag = types.StringValue(*attributesItem.StatusAttribute.SettingFlag)
+			if attributesItem.NumberAttribute.RenderCondition != nil {
+				attributes1.NumberAttribute.RenderCondition = types.StringValue(*attributesItem.NumberAttribute.RenderCondition)
 			} else {
-				attributes1.StatusAttribute.SettingFlag = types.StringNull()
+				attributes1.NumberAttribute.RenderCondition = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.ShowInTable != nil {
-				attributes1.StatusAttribute.ShowInTable = types.BoolValue(*attributesItem.StatusAttribute.ShowInTable)
+			if attributesItem.NumberAttribute.Required != nil {
+				attributes1.NumberAttribute.Required = types.BoolValue(*attributesItem.NumberAttribute.Required)
 			} else {
-				attributes1.StatusAttribute.ShowInTable = types.BoolNull()
+				attributes1.NumberAttribute.Required = types.BoolNull()
 			}
-			if attributesItem.StatusAttribute.Type != nil {
-				attributes1.StatusAttribute.Type = types.StringValue(string(*attributesItem.StatusAttribute.Type))
+			if attributesItem.NumberAttribute.SettingFlag != nil {
+				attributes1.NumberAttribute.SettingFlag = types.StringValue(*attributesItem.NumberAttribute.SettingFlag)
 			} else {
-				attributes1.StatusAttribute.Type = types.StringNull()
+				attributes1.NumberAttribute.SettingFlag = types.StringNull()
 			}
-			if attributesItem.StatusAttribute.ValueFormatter != nil {
-				attributes1.StatusAttribute.ValueFormatter = types.StringValue(*attributesItem.StatusAttribute.ValueFormatter)
+			if attributesItem.NumberAttribute.ShowInTable != nil {
+				attributes1.NumberAttribute.ShowInTable = types.BoolValue(*attributesItem.NumberAttribute.ShowInTable)
 			} else {
-				attributes1.StatusAttribute.ValueFormatter = types.StringNull()
+				attributes1.NumberAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.NumberAttribute.Type != nil {
+				attributes1.NumberAttribute.Type = types.StringValue(string(*attributesItem.NumberAttribute.Type))
+			} else {
+				attributes1.NumberAttribute.Type = types.StringNull()
+			}
+			if attributesItem.NumberAttribute.ValueFormatter != nil {
+				attributes1.NumberAttribute.ValueFormatter = types.StringValue(*attributesItem.NumberAttribute.ValueFormatter)
+			} else {
+				attributes1.NumberAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.SequenceAttribute != nil {
-			attributes1.SequenceAttribute = &SequenceAttribute{}
-			attributes1.SequenceAttribute.Purpose = nil
-			for _, v := range attributesItem.SequenceAttribute.Purpose {
-				attributes1.SequenceAttribute.Purpose = append(attributes1.SequenceAttribute.Purpose, types.StringValue(v))
+		if attributesItem.OrderedListAttribute != nil {
+			attributes1.OrderedListAttribute = &OrderedListAttribute{}
+			attributes1.OrderedListAttribute.Purpose = nil
+			for _, v := range attributesItem.OrderedListAttribute.Purpose {
+				attributes1.OrderedListAttribute.Purpose = append(attributes1.OrderedListAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.SequenceAttribute.Constraints == nil && len(attributesItem.SequenceAttribute.Constraints) > 0 {
-				attributes1.SequenceAttribute.Constraints = make(map[string]types.String)
-				for key8, value11 := range attributesItem.SequenceAttribute.Constraints {
-					result8, _ := json.Marshal(value11)
-					attributes1.SequenceAttribute.Constraints[key8] = types.StringValue(string(result8))
-				}
-			}
-			if attributesItem.SequenceAttribute.DefaultValue == nil {
-				attributes1.SequenceAttribute.DefaultValue = types.StringNull()
+			if attributesItem.OrderedListAttribute.Constraints == nil {
+				attributes1.OrderedListAttribute.Constraints = nil
 			} else {
-				defaultValueResult8, _ := json.Marshal(attributesItem.SequenceAttribute.DefaultValue)
-				attributes1.SequenceAttribute.DefaultValue = types.StringValue(string(defaultValueResult8))
+				attributes1.OrderedListAttribute.Constraints = &Constraints{}
 			}
-			if attributesItem.SequenceAttribute.Deprecated != nil {
-				attributes1.SequenceAttribute.Deprecated = types.BoolValue(*attributesItem.SequenceAttribute.Deprecated)
+			if attributesItem.OrderedListAttribute.DefaultValue == nil {
+				attributes1.OrderedListAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.SequenceAttribute.Deprecated = types.BoolNull()
+				defaultValueResult15, _ := json.Marshal(attributesItem.OrderedListAttribute.DefaultValue)
+				attributes1.OrderedListAttribute.DefaultValue = types.StringValue(string(defaultValueResult15))
 			}
-			if attributesItem.SequenceAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.SequenceAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.SequenceAttribute.EntityBuilderDisableEdit)
+			if attributesItem.OrderedListAttribute.Deprecated != nil {
+				attributes1.OrderedListAttribute.Deprecated = types.BoolValue(*attributesItem.OrderedListAttribute.Deprecated)
 			} else {
-				attributes1.SequenceAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.OrderedListAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.FeatureFlag != nil {
-				attributes1.SequenceAttribute.FeatureFlag = types.StringValue(*attributesItem.SequenceAttribute.FeatureFlag)
+			if attributesItem.OrderedListAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.OrderedListAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.SequenceAttribute.FeatureFlag = types.StringNull()
+				attributes1.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.Group != nil {
-				attributes1.SequenceAttribute.Group = types.StringValue(*attributesItem.SequenceAttribute.Group)
+			if attributesItem.OrderedListAttribute.FeatureFlag != nil {
+				attributes1.OrderedListAttribute.FeatureFlag = types.StringValue(*attributesItem.OrderedListAttribute.FeatureFlag)
 			} else {
-				attributes1.SequenceAttribute.Group = types.StringNull()
+				attributes1.OrderedListAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.Hidden != nil {
-				attributes1.SequenceAttribute.Hidden = types.BoolValue(*attributesItem.SequenceAttribute.Hidden)
+			if attributesItem.OrderedListAttribute.Group != nil {
+				attributes1.OrderedListAttribute.Group = types.StringValue(*attributesItem.OrderedListAttribute.Group)
 			} else {
-				attributes1.SequenceAttribute.Hidden = types.BoolNull()
+				attributes1.OrderedListAttribute.Group = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.HideLabel != nil {
-				attributes1.SequenceAttribute.HideLabel = types.BoolValue(*attributesItem.SequenceAttribute.HideLabel)
+			if attributesItem.OrderedListAttribute.Hidden != nil {
+				attributes1.OrderedListAttribute.Hidden = types.BoolValue(*attributesItem.OrderedListAttribute.Hidden)
 			} else {
-				attributes1.SequenceAttribute.HideLabel = types.BoolNull()
+				attributes1.OrderedListAttribute.Hidden = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.Icon != nil {
-				attributes1.SequenceAttribute.Icon = types.StringValue(*attributesItem.SequenceAttribute.Icon)
+			if attributesItem.OrderedListAttribute.HideLabel != nil {
+				attributes1.OrderedListAttribute.HideLabel = types.BoolValue(*attributesItem.OrderedListAttribute.HideLabel)
 			} else {
-				attributes1.SequenceAttribute.Icon = types.StringNull()
+				attributes1.OrderedListAttribute.HideLabel = types.BoolNull()
 			}
-			attributes1.SequenceAttribute.Label = types.StringValue(attributesItem.SequenceAttribute.Label)
-			if attributesItem.SequenceAttribute.Layout != nil {
-				attributes1.SequenceAttribute.Layout = types.StringValue(*attributesItem.SequenceAttribute.Layout)
+			if attributesItem.OrderedListAttribute.Icon != nil {
+				attributes1.OrderedListAttribute.Icon = types.StringValue(*attributesItem.OrderedListAttribute.Icon)
 			} else {
-				attributes1.SequenceAttribute.Layout = types.StringNull()
+				attributes1.OrderedListAttribute.Icon = types.StringNull()
 			}
-			attributes1.SequenceAttribute.Name = types.StringValue(attributesItem.SequenceAttribute.Name)
-			if attributesItem.SequenceAttribute.Order != nil {
-				attributes1.SequenceAttribute.Order = types.Int64Value(*attributesItem.SequenceAttribute.Order)
+			attributes1.OrderedListAttribute.Label = types.StringValue(attributesItem.OrderedListAttribute.Label)
+			if attributesItem.OrderedListAttribute.Layout != nil {
+				attributes1.OrderedListAttribute.Layout = types.StringValue(*attributesItem.OrderedListAttribute.Layout)
 			} else {
-				attributes1.SequenceAttribute.Order = types.Int64Null()
+				attributes1.OrderedListAttribute.Layout = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.Placeholder != nil {
-				attributes1.SequenceAttribute.Placeholder = types.StringValue(*attributesItem.SequenceAttribute.Placeholder)
+			attributes1.OrderedListAttribute.Name = types.StringValue(attributesItem.OrderedListAttribute.Name)
+			if attributesItem.OrderedListAttribute.Order != nil {
+				attributes1.OrderedListAttribute.Order = types.Int64Value(*attributesItem.OrderedListAttribute.Order)
 			} else {
-				attributes1.SequenceAttribute.Placeholder = types.StringNull()
+				attributes1.OrderedListAttribute.Order = types.Int64Null()
 			}
-			if attributesItem.SequenceAttribute.Prefix != nil {
-				attributes1.SequenceAttribute.Prefix = types.StringValue(*attributesItem.SequenceAttribute.Prefix)
+			if attributesItem.OrderedListAttribute.Placeholder != nil {
+				attributes1.OrderedListAttribute.Placeholder = types.StringValue(*attributesItem.OrderedListAttribute.Placeholder)
 			} else {
-				attributes1.SequenceAttribute.Prefix = types.StringNull()
+				attributes1.OrderedListAttribute.Placeholder = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.PreviewValueFormatter != nil {
-				attributes1.SequenceAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.SequenceAttribute.PreviewValueFormatter)
+			if attributesItem.OrderedListAttribute.PreviewValueFormatter != nil {
+				attributes1.OrderedListAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.OrderedListAttribute.PreviewValueFormatter)
 			} else {
-				attributes1.SequenceAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.OrderedListAttribute.PreviewValueFormatter = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.Protected != nil {
-				attributes1.SequenceAttribute.Protected = types.BoolValue(*attributesItem.SequenceAttribute.Protected)
+			if attributesItem.OrderedListAttribute.Protected != nil {
+				attributes1.OrderedListAttribute.Protected = types.BoolValue(*attributesItem.OrderedListAttribute.Protected)
 			} else {
-				attributes1.SequenceAttribute.Protected = types.BoolNull()
+				attributes1.OrderedListAttribute.Protected = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.Readonly != nil {
-				attributes1.SequenceAttribute.Readonly = types.BoolValue(*attributesItem.SequenceAttribute.Readonly)
+			if attributesItem.OrderedListAttribute.Readonly != nil {
+				attributes1.OrderedListAttribute.Readonly = types.BoolValue(*attributesItem.OrderedListAttribute.Readonly)
 			} else {
-				attributes1.SequenceAttribute.Readonly = types.BoolNull()
+				attributes1.OrderedListAttribute.Readonly = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.RenderCondition != nil {
-				attributes1.SequenceAttribute.RenderCondition = types.StringValue(*attributesItem.SequenceAttribute.RenderCondition)
+			if attributesItem.OrderedListAttribute.RenderCondition != nil {
+				attributes1.OrderedListAttribute.RenderCondition = types.StringValue(*attributesItem.OrderedListAttribute.RenderCondition)
 			} else {
-				attributes1.SequenceAttribute.RenderCondition = types.StringNull()
+				attributes1.OrderedListAttribute.RenderCondition = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.Required != nil {
-				attributes1.SequenceAttribute.Required = types.BoolValue(*attributesItem.SequenceAttribute.Required)
+			if attributesItem.OrderedListAttribute.Required != nil {
+				attributes1.OrderedListAttribute.Required = types.BoolValue(*attributesItem.OrderedListAttribute.Required)
 			} else {
-				attributes1.SequenceAttribute.Required = types.BoolNull()
+				attributes1.OrderedListAttribute.Required = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.SettingFlag != nil {
-				attributes1.SequenceAttribute.SettingFlag = types.StringValue(*attributesItem.SequenceAttribute.SettingFlag)
+			if attributesItem.OrderedListAttribute.SettingFlag != nil {
+				attributes1.OrderedListAttribute.SettingFlag = types.StringValue(*attributesItem.OrderedListAttribute.SettingFlag)
 			} else {
-				attributes1.SequenceAttribute.SettingFlag = types.StringNull()
+				attributes1.OrderedListAttribute.SettingFlag = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.ShowInTable != nil {
-				attributes1.SequenceAttribute.ShowInTable = types.BoolValue(*attributesItem.SequenceAttribute.ShowInTable)
+			if attributesItem.OrderedListAttribute.ShowInTable != nil {
+				attributes1.OrderedListAttribute.ShowInTable = types.BoolValue(*attributesItem.OrderedListAttribute.ShowInTable)
 			} else {
-				attributes1.SequenceAttribute.ShowInTable = types.BoolNull()
+				attributes1.OrderedListAttribute.ShowInTable = types.BoolNull()
 			}
-			if attributesItem.SequenceAttribute.StartNumber != nil {
-				attributes1.SequenceAttribute.StartNumber = types.Int64Value(*attributesItem.SequenceAttribute.StartNumber)
+			if attributesItem.OrderedListAttribute.Type != nil {
+				attributes1.OrderedListAttribute.Type = types.StringValue(string(*attributesItem.OrderedListAttribute.Type))
 			} else {
-				attributes1.SequenceAttribute.StartNumber = types.Int64Null()
+				attributes1.OrderedListAttribute.Type = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.Type != nil {
-				attributes1.SequenceAttribute.Type = types.StringValue(string(*attributesItem.SequenceAttribute.Type))
+			if attributesItem.OrderedListAttribute.ValueFormatter != nil {
+				attributes1.OrderedListAttribute.ValueFormatter = types.StringValue(*attributesItem.OrderedListAttribute.ValueFormatter)
 			} else {
-				attributes1.SequenceAttribute.Type = types.StringNull()
+				attributes1.OrderedListAttribute.ValueFormatter = types.StringNull()
 			}
-			if attributesItem.SequenceAttribute.ValueFormatter != nil {
-				attributes1.SequenceAttribute.ValueFormatter = types.StringValue(*attributesItem.SequenceAttribute.ValueFormatter)
+		}
+		if attributesItem.PartnerStatusAttribute != nil {
+			attributes1.PartnerStatusAttribute = &PartnerStatusAttribute{}
+			attributes1.PartnerStatusAttribute.Purpose = nil
+			for _, v := range attributesItem.PartnerStatusAttribute.Purpose {
+				attributes1.PartnerStatusAttribute.Purpose = append(attributes1.PartnerStatusAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.PartnerStatusAttribute.Constraints == nil {
+				attributes1.PartnerStatusAttribute.Constraints = nil
 			} else {
-				attributes1.SequenceAttribute.ValueFormatter = types.StringNull()
+				attributes1.PartnerStatusAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.PartnerStatusAttribute.DefaultValue == nil {
+				attributes1.PartnerStatusAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult16, _ := json.Marshal(attributesItem.PartnerStatusAttribute.DefaultValue)
+				attributes1.PartnerStatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult16))
+			}
+			if attributesItem.PartnerStatusAttribute.Deprecated != nil {
+				attributes1.PartnerStatusAttribute.Deprecated = types.BoolValue(*attributesItem.PartnerStatusAttribute.Deprecated)
+			} else {
+				attributes1.PartnerStatusAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.PartnerStatusAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.FeatureFlag != nil {
+				attributes1.PartnerStatusAttribute.FeatureFlag = types.StringValue(*attributesItem.PartnerStatusAttribute.FeatureFlag)
+			} else {
+				attributes1.PartnerStatusAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Group != nil {
+				attributes1.PartnerStatusAttribute.Group = types.StringValue(*attributesItem.PartnerStatusAttribute.Group)
+			} else {
+				attributes1.PartnerStatusAttribute.Group = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Hidden != nil {
+				attributes1.PartnerStatusAttribute.Hidden = types.BoolValue(*attributesItem.PartnerStatusAttribute.Hidden)
+			} else {
+				attributes1.PartnerStatusAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.HideLabel != nil {
+				attributes1.PartnerStatusAttribute.HideLabel = types.BoolValue(*attributesItem.PartnerStatusAttribute.HideLabel)
+			} else {
+				attributes1.PartnerStatusAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Icon != nil {
+				attributes1.PartnerStatusAttribute.Icon = types.StringValue(*attributesItem.PartnerStatusAttribute.Icon)
+			} else {
+				attributes1.PartnerStatusAttribute.Icon = types.StringNull()
+			}
+			attributes1.PartnerStatusAttribute.Label = types.StringValue(attributesItem.PartnerStatusAttribute.Label)
+			if attributesItem.PartnerStatusAttribute.Layout != nil {
+				attributes1.PartnerStatusAttribute.Layout = types.StringValue(*attributesItem.PartnerStatusAttribute.Layout)
+			} else {
+				attributes1.PartnerStatusAttribute.Layout = types.StringNull()
+			}
+			attributes1.PartnerStatusAttribute.Name = types.StringValue(attributesItem.PartnerStatusAttribute.Name)
+			if attributesItem.PartnerStatusAttribute.Order != nil {
+				attributes1.PartnerStatusAttribute.Order = types.Int64Value(*attributesItem.PartnerStatusAttribute.Order)
+			} else {
+				attributes1.PartnerStatusAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.PartnerStatusAttribute.Placeholder != nil {
+				attributes1.PartnerStatusAttribute.Placeholder = types.StringValue(*attributesItem.PartnerStatusAttribute.Placeholder)
+			} else {
+				attributes1.PartnerStatusAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.PreviewValueFormatter != nil {
+				attributes1.PartnerStatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.PartnerStatusAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.PartnerStatusAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Protected != nil {
+				attributes1.PartnerStatusAttribute.Protected = types.BoolValue(*attributesItem.PartnerStatusAttribute.Protected)
+			} else {
+				attributes1.PartnerStatusAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Readonly != nil {
+				attributes1.PartnerStatusAttribute.Readonly = types.BoolValue(*attributesItem.PartnerStatusAttribute.Readonly)
+			} else {
+				attributes1.PartnerStatusAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.RenderCondition != nil {
+				attributes1.PartnerStatusAttribute.RenderCondition = types.StringValue(*attributesItem.PartnerStatusAttribute.RenderCondition)
+			} else {
+				attributes1.PartnerStatusAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Required != nil {
+				attributes1.PartnerStatusAttribute.Required = types.BoolValue(*attributesItem.PartnerStatusAttribute.Required)
+			} else {
+				attributes1.PartnerStatusAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.SettingFlag != nil {
+				attributes1.PartnerStatusAttribute.SettingFlag = types.StringValue(*attributesItem.PartnerStatusAttribute.SettingFlag)
+			} else {
+				attributes1.PartnerStatusAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.ShowInTable != nil {
+				attributes1.PartnerStatusAttribute.ShowInTable = types.BoolValue(*attributesItem.PartnerStatusAttribute.ShowInTable)
+			} else {
+				attributes1.PartnerStatusAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.PartnerStatusAttribute.Type != nil {
+				attributes1.PartnerStatusAttribute.Type = types.StringValue(string(*attributesItem.PartnerStatusAttribute.Type))
+			} else {
+				attributes1.PartnerStatusAttribute.Type = types.StringNull()
+			}
+			if attributesItem.PartnerStatusAttribute.ValueFormatter != nil {
+				attributes1.PartnerStatusAttribute.ValueFormatter = types.StringValue(*attributesItem.PartnerStatusAttribute.ValueFormatter)
+			} else {
+				attributes1.PartnerStatusAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.PaymentMethodRelationAttribute != nil {
+			attributes1.PaymentMethodRelationAttribute = &PaymentMethodRelationAttribute{}
+			attributes1.PaymentMethodRelationAttribute.Purpose = nil
+			for _, v := range attributesItem.PaymentMethodRelationAttribute.Purpose {
+				attributes1.PaymentMethodRelationAttribute.Purpose = append(attributes1.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Constraints == nil {
+				attributes1.PaymentMethodRelationAttribute.Constraints = nil
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.PaymentMethodRelationAttribute.DefaultValue == nil {
+				attributes1.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult17, _ := json.Marshal(attributesItem.PaymentMethodRelationAttribute.DefaultValue)
+				attributes1.PaymentMethodRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult17))
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Deprecated != nil {
+				attributes1.PaymentMethodRelationAttribute.Deprecated = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Deprecated)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.FeatureFlag != nil {
+				attributes1.PaymentMethodRelationAttribute.FeatureFlag = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.FeatureFlag)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Group != nil {
+				attributes1.PaymentMethodRelationAttribute.Group = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Group)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Group = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.HasPrimary != nil {
+				attributes1.PaymentMethodRelationAttribute.HasPrimary = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.HasPrimary)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.HasPrimary = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Hidden != nil {
+				attributes1.PaymentMethodRelationAttribute.Hidden = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Hidden)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.HideLabel != nil {
+				attributes1.PaymentMethodRelationAttribute.HideLabel = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.HideLabel)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Icon != nil {
+				attributes1.PaymentMethodRelationAttribute.Icon = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Icon)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Icon = types.StringNull()
+			}
+			attributes1.PaymentMethodRelationAttribute.Label = types.StringValue(attributesItem.PaymentMethodRelationAttribute.Label)
+			if attributesItem.PaymentMethodRelationAttribute.Layout != nil {
+				attributes1.PaymentMethodRelationAttribute.Layout = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Layout)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Layout = types.StringNull()
+			}
+			attributes1.PaymentMethodRelationAttribute.Name = types.StringValue(attributesItem.PaymentMethodRelationAttribute.Name)
+			if attributesItem.PaymentMethodRelationAttribute.Order != nil {
+				attributes1.PaymentMethodRelationAttribute.Order = types.Int64Value(*attributesItem.PaymentMethodRelationAttribute.Order)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Placeholder != nil {
+				attributes1.PaymentMethodRelationAttribute.Placeholder = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Placeholder)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.PreviewValueFormatter != nil {
+				attributes1.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Protected != nil {
+				attributes1.PaymentMethodRelationAttribute.Protected = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Protected)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Readonly != nil {
+				attributes1.PaymentMethodRelationAttribute.Readonly = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Readonly)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.RenderCondition != nil {
+				attributes1.PaymentMethodRelationAttribute.RenderCondition = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.RenderCondition)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Required != nil {
+				attributes1.PaymentMethodRelationAttribute.Required = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Required)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.SettingFlag != nil {
+				attributes1.PaymentMethodRelationAttribute.SettingFlag = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.SettingFlag)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.ShowInTable != nil {
+				attributes1.PaymentMethodRelationAttribute.ShowInTable = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.ShowInTable)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.Type != nil {
+				attributes1.PaymentMethodRelationAttribute.Type = types.StringValue(string(*attributesItem.PaymentMethodRelationAttribute.Type))
+			} else {
+				attributes1.PaymentMethodRelationAttribute.Type = types.StringNull()
+			}
+			if attributesItem.PaymentMethodRelationAttribute.ValueFormatter != nil {
+				attributes1.PaymentMethodRelationAttribute.ValueFormatter = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.ValueFormatter)
+			} else {
+				attributes1.PaymentMethodRelationAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.PurposeAttribute != nil {
+			attributes1.PurposeAttribute = &PurposeAttribute{}
+			attributes1.PurposeAttribute.Purpose = nil
+			for _, v := range attributesItem.PurposeAttribute.Purpose {
+				attributes1.PurposeAttribute.Purpose = append(attributes1.PurposeAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.PurposeAttribute.Constraints == nil {
+				attributes1.PurposeAttribute.Constraints = nil
+			} else {
+				attributes1.PurposeAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.PurposeAttribute.CreatedAt != nil {
+				attributes1.PurposeAttribute.CreatedAt = types.StringValue(attributesItem.PurposeAttribute.CreatedAt.Format(time.RFC3339Nano))
+			} else {
+				attributes1.PurposeAttribute.CreatedAt = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.DefaultValue == nil {
+				attributes1.PurposeAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult18, _ := json.Marshal(attributesItem.PurposeAttribute.DefaultValue)
+				attributes1.PurposeAttribute.DefaultValue = types.StringValue(string(defaultValueResult18))
+			}
+			if attributesItem.PurposeAttribute.Deprecated != nil {
+				attributes1.PurposeAttribute.Deprecated = types.BoolValue(*attributesItem.PurposeAttribute.Deprecated)
+			} else {
+				attributes1.PurposeAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.PurposeAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.PurposeAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.PurposeAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.FeatureFlag != nil {
+				attributes1.PurposeAttribute.FeatureFlag = types.StringValue(*attributesItem.PurposeAttribute.FeatureFlag)
+			} else {
+				attributes1.PurposeAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.Group != nil {
+				attributes1.PurposeAttribute.Group = types.StringValue(*attributesItem.PurposeAttribute.Group)
+			} else {
+				attributes1.PurposeAttribute.Group = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.Hidden != nil {
+				attributes1.PurposeAttribute.Hidden = types.BoolValue(*attributesItem.PurposeAttribute.Hidden)
+			} else {
+				attributes1.PurposeAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.HideLabel != nil {
+				attributes1.PurposeAttribute.HideLabel = types.BoolValue(*attributesItem.PurposeAttribute.HideLabel)
+			} else {
+				attributes1.PurposeAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.Icon != nil {
+				attributes1.PurposeAttribute.Icon = types.StringValue(*attributesItem.PurposeAttribute.Icon)
+			} else {
+				attributes1.PurposeAttribute.Icon = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.ID != nil {
+				attributes1.PurposeAttribute.ID = types.StringValue(*attributesItem.PurposeAttribute.ID)
+			} else {
+				attributes1.PurposeAttribute.ID = types.StringNull()
+			}
+			attributes1.PurposeAttribute.Label = types.StringValue(attributesItem.PurposeAttribute.Label)
+			if attributesItem.PurposeAttribute.Layout != nil {
+				attributes1.PurposeAttribute.Layout = types.StringValue(*attributesItem.PurposeAttribute.Layout)
+			} else {
+				attributes1.PurposeAttribute.Layout = types.StringNull()
+			}
+			attributes1.PurposeAttribute.Name = types.StringValue(attributesItem.PurposeAttribute.Name)
+			if attributesItem.PurposeAttribute.Order != nil {
+				attributes1.PurposeAttribute.Order = types.Int64Value(*attributesItem.PurposeAttribute.Order)
+			} else {
+				attributes1.PurposeAttribute.Order = types.Int64Null()
+			}
+			attributes1.PurposeAttribute.Parents = nil
+			for _, v := range attributesItem.PurposeAttribute.Parents {
+				attributes1.PurposeAttribute.Parents = append(attributes1.PurposeAttribute.Parents, types.StringValue(v))
+			}
+			if attributesItem.PurposeAttribute.Placeholder != nil {
+				attributes1.PurposeAttribute.Placeholder = types.StringValue(*attributesItem.PurposeAttribute.Placeholder)
+			} else {
+				attributes1.PurposeAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.PreviewValueFormatter != nil {
+				attributes1.PurposeAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.PurposeAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.PurposeAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.Protected != nil {
+				attributes1.PurposeAttribute.Protected = types.BoolValue(*attributesItem.PurposeAttribute.Protected)
+			} else {
+				attributes1.PurposeAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.Readonly != nil {
+				attributes1.PurposeAttribute.Readonly = types.BoolValue(*attributesItem.PurposeAttribute.Readonly)
+			} else {
+				attributes1.PurposeAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.RenderCondition != nil {
+				attributes1.PurposeAttribute.RenderCondition = types.StringValue(*attributesItem.PurposeAttribute.RenderCondition)
+			} else {
+				attributes1.PurposeAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.Required != nil {
+				attributes1.PurposeAttribute.Required = types.BoolValue(*attributesItem.PurposeAttribute.Required)
+			} else {
+				attributes1.PurposeAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.SettingFlag != nil {
+				attributes1.PurposeAttribute.SettingFlag = types.StringValue(*attributesItem.PurposeAttribute.SettingFlag)
+			} else {
+				attributes1.PurposeAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.ShowInTable != nil {
+				attributes1.PurposeAttribute.ShowInTable = types.BoolValue(*attributesItem.PurposeAttribute.ShowInTable)
+			} else {
+				attributes1.PurposeAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.PurposeAttribute.Type != nil {
+				attributes1.PurposeAttribute.Type = types.StringValue(string(*attributesItem.PurposeAttribute.Type))
+			} else {
+				attributes1.PurposeAttribute.Type = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.UpdatedAt != nil {
+				attributes1.PurposeAttribute.UpdatedAt = types.StringValue(attributesItem.PurposeAttribute.UpdatedAt.Format(time.RFC3339Nano))
+			} else {
+				attributes1.PurposeAttribute.UpdatedAt = types.StringNull()
+			}
+			if attributesItem.PurposeAttribute.ValueFormatter != nil {
+				attributes1.PurposeAttribute.ValueFormatter = types.StringValue(*attributesItem.PurposeAttribute.ValueFormatter)
+			} else {
+				attributes1.PurposeAttribute.ValueFormatter = types.StringNull()
 			}
 		}
 		if attributesItem.RelationAttribute != nil {
@@ -11651,9 +12733,11 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			for _, v := range attributesItem.RelationAttribute.Purpose {
 				attributes1.RelationAttribute.Purpose = append(attributes1.RelationAttribute.Purpose, types.StringValue(v))
 			}
-			attributes1.RelationAttribute.Actions = nil
-			for _, actionsItem := range attributesItem.RelationAttribute.Actions {
-				var actions1 RelationAttributeActions
+			if len(attributes1.RelationAttribute.Actions) > len(attributesItem.RelationAttribute.Actions) {
+				attributes1.RelationAttribute.Actions = attributes1.RelationAttribute.Actions[:len(attributesItem.RelationAttribute.Actions)]
+			}
+			for actionsCount, actionsItem := range attributesItem.RelationAttribute.Actions {
+				var actions1 Actions
 				if actionsItem.ActionType != nil {
 					actions1.ActionType = types.StringValue(string(*actionsItem.ActionType))
 				} else {
@@ -11677,8 +12761,12 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				if actionsItem.NewEntityItem == nil {
 					actions1.NewEntityItem = nil
 				} else {
-					actions1.NewEntityItem = &RelationAttributeActionsNewEntityItem{}
-					actions1.NewEntityItem.CreatedAt = types.StringValue(actionsItem.NewEntityItem.CreatedAt.Format(time.RFC3339))
+					actions1.NewEntityItem = &NewEntityItem{}
+					if actionsItem.NewEntityItem.CreatedAt != nil {
+						actions1.NewEntityItem.CreatedAt = types.StringValue(actionsItem.NewEntityItem.CreatedAt.Format(time.RFC3339Nano))
+					} else {
+						actions1.NewEntityItem.CreatedAt = types.StringNull()
+					}
 					actions1.NewEntityItem.ID = types.StringValue(actionsItem.NewEntityItem.ID)
 					actions1.NewEntityItem.Org = types.StringValue(actionsItem.NewEntityItem.Org)
 					actions1.NewEntityItem.Schema = types.StringValue(actionsItem.NewEntityItem.Schema)
@@ -11686,15 +12774,21 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					for _, v := range actionsItem.NewEntityItem.Tags {
 						actions1.NewEntityItem.Tags = append(actions1.NewEntityItem.Tags, types.StringValue(v))
 					}
-					actions1.NewEntityItem.Title = types.StringValue(actionsItem.NewEntityItem.Title)
-					actions1.NewEntityItem.UpdatedAt = types.StringValue(actionsItem.NewEntityItem.UpdatedAt.Format(time.RFC3339))
-					if actions1.NewEntityItem.Entity.IsUnknown() {
-						if actionsItem.NewEntityItem.Entity == nil {
-							actions1.NewEntityItem.Entity = types.StringNull()
-						} else {
-							entityResult, _ := json.Marshal(actionsItem.NewEntityItem.Entity)
-							actions1.NewEntityItem.Entity = types.StringValue(string(entityResult))
-						}
+					if actionsItem.NewEntityItem.Title != nil {
+						actions1.NewEntityItem.Title = types.StringValue(*actionsItem.NewEntityItem.Title)
+					} else {
+						actions1.NewEntityItem.Title = types.StringNull()
+					}
+					if actionsItem.NewEntityItem.UpdatedAt != nil {
+						actions1.NewEntityItem.UpdatedAt = types.StringValue(actionsItem.NewEntityItem.UpdatedAt.Format(time.RFC3339Nano))
+					} else {
+						actions1.NewEntityItem.UpdatedAt = types.StringNull()
+					}
+					if actionsItem.NewEntityItem.Entity == nil {
+						actions1.NewEntityItem.Entity = types.StringNull()
+					} else {
+						entityResult, _ := json.Marshal(actionsItem.NewEntityItem.Entity)
+						actions1.NewEntityItem.Entity = types.StringValue(string(entityResult))
 					}
 				}
 				if actionsItem.SettingFlag != nil {
@@ -11702,7 +12796,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				} else {
 					actions1.SettingFlag = types.StringNull()
 				}
-				attributes1.RelationAttribute.Actions = append(attributes1.RelationAttribute.Actions, actions1)
+				if actionsCount+1 > len(attributes1.RelationAttribute.Actions) {
+					attributes1.RelationAttribute.Actions = append(attributes1.RelationAttribute.Actions, actions1)
+				} else {
+					attributes1.RelationAttribute.Actions[actionsCount].ActionType = actions1.ActionType
+					attributes1.RelationAttribute.Actions[actionsCount].Default = actions1.Default
+					attributes1.RelationAttribute.Actions[actionsCount].FeatureFlag = actions1.FeatureFlag
+					attributes1.RelationAttribute.Actions[actionsCount].Label = actions1.Label
+					attributes1.RelationAttribute.Actions[actionsCount].NewEntityItem = actions1.NewEntityItem
+					attributes1.RelationAttribute.Actions[actionsCount].SettingFlag = actions1.SettingFlag
+				}
 			}
 			if attributesItem.RelationAttribute.AddButtonLabel != nil {
 				attributes1.RelationAttribute.AddButtonLabel = types.StringValue(*attributesItem.RelationAttribute.AddButtonLabel)
@@ -11713,18 +12816,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			for _, v := range attributesItem.RelationAttribute.AllowedSchemas {
 				attributes1.RelationAttribute.AllowedSchemas = append(attributes1.RelationAttribute.AllowedSchemas, types.StringValue(v))
 			}
-			if attributes1.RelationAttribute.Constraints == nil && len(attributesItem.RelationAttribute.Constraints) > 0 {
-				attributes1.RelationAttribute.Constraints = make(map[string]types.String)
-				for key9, value12 := range attributesItem.RelationAttribute.Constraints {
-					result9, _ := json.Marshal(value12)
-					attributes1.RelationAttribute.Constraints[key9] = types.StringValue(string(result9))
-				}
+			if attributesItem.RelationAttribute.Constraints == nil {
+				attributes1.RelationAttribute.Constraints = nil
+			} else {
+				attributes1.RelationAttribute.Constraints = &Constraints{}
 			}
 			if attributesItem.RelationAttribute.DefaultValue == nil {
 				attributes1.RelationAttribute.DefaultValue = types.StringNull()
 			} else {
-				defaultValueResult9, _ := json.Marshal(attributesItem.RelationAttribute.DefaultValue)
-				attributes1.RelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult9))
+				defaultValueResult19, _ := json.Marshal(attributesItem.RelationAttribute.DefaultValue)
+				attributes1.RelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult19))
 			}
 			if attributesItem.RelationAttribute.Deprecated != nil {
 				attributes1.RelationAttribute.Deprecated = types.BoolValue(*attributesItem.RelationAttribute.Deprecated)
@@ -11845,8 +12946,8 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			}
 			if attributes1.RelationAttribute.ReverseAttributes == nil && len(attributesItem.RelationAttribute.ReverseAttributes) > 0 {
 				attributes1.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-				for key10, value13 := range attributesItem.RelationAttribute.ReverseAttributes {
-					attributes1.RelationAttribute.ReverseAttributes[key10] = types.StringValue(value13)
+				for key, value1 := range attributesItem.RelationAttribute.ReverseAttributes {
+					attributes1.RelationAttribute.ReverseAttributes[key] = types.StringValue(value1)
 				}
 			}
 			if attributesItem.RelationAttribute.SearchPlaceholder != nil {
@@ -11864,9 +12965,11 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			} else {
 				attributes1.RelationAttribute.ShowInTable = types.BoolNull()
 			}
-			attributes1.RelationAttribute.SummaryFields = nil
-			for _, summaryFieldsItem := range attributesItem.RelationAttribute.SummaryFields {
-				var summaryFields1 RelationAttributeSummaryFields
+			if len(attributes1.RelationAttribute.SummaryFields) > len(attributesItem.RelationAttribute.SummaryFields) {
+				attributes1.RelationAttribute.SummaryFields = attributes1.RelationAttribute.SummaryFields[:len(attributesItem.RelationAttribute.SummaryFields)]
+			}
+			for summaryFieldsCount, summaryFieldsItem := range attributesItem.RelationAttribute.SummaryFields {
+				var summaryFields1 SummaryFields
 				if summaryFieldsItem.Str != nil {
 					if summaryFieldsItem.Str != nil {
 						summaryFields1.Str = types.StringValue(*summaryFieldsItem.Str)
@@ -11887,7 +12990,10 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 						summaryFields1.SummaryField.Field = types.StringNull()
 					}
 				}
-				attributes1.RelationAttribute.SummaryFields = append(attributes1.RelationAttribute.SummaryFields, summaryFields1)
+				if summaryFieldsCount+1 > len(attributes1.RelationAttribute.SummaryFields) {
+					attributes1.RelationAttribute.SummaryFields = append(attributes1.RelationAttribute.SummaryFields, summaryFields1)
+				} else {
+				}
 			}
 			if attributesItem.RelationAttribute.Type != nil {
 				attributes1.RelationAttribute.Type = types.StringValue(string(*attributesItem.RelationAttribute.Type))
@@ -11900,524 +13006,22 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				attributes1.RelationAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.UserRelationAttribute != nil {
-			attributes1.UserRelationAttribute = &UserRelationAttribute{}
-			attributes1.UserRelationAttribute.Purpose = nil
-			for _, v := range attributesItem.UserRelationAttribute.Purpose {
-				attributes1.UserRelationAttribute.Purpose = append(attributes1.UserRelationAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.UserRelationAttribute.Constraints == nil && len(attributesItem.UserRelationAttribute.Constraints) > 0 {
-				attributes1.UserRelationAttribute.Constraints = make(map[string]types.String)
-				for key11, value14 := range attributesItem.UserRelationAttribute.Constraints {
-					result10, _ := json.Marshal(value14)
-					attributes1.UserRelationAttribute.Constraints[key11] = types.StringValue(string(result10))
-				}
-			}
-			if attributesItem.UserRelationAttribute.DefaultValue == nil {
-				attributes1.UserRelationAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult10, _ := json.Marshal(attributesItem.UserRelationAttribute.DefaultValue)
-				attributes1.UserRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult10))
-			}
-			if attributesItem.UserRelationAttribute.Deprecated != nil {
-				attributes1.UserRelationAttribute.Deprecated = types.BoolValue(*attributesItem.UserRelationAttribute.Deprecated)
-			} else {
-				attributes1.UserRelationAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.UserRelationAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.FeatureFlag != nil {
-				attributes1.UserRelationAttribute.FeatureFlag = types.StringValue(*attributesItem.UserRelationAttribute.FeatureFlag)
-			} else {
-				attributes1.UserRelationAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.Group != nil {
-				attributes1.UserRelationAttribute.Group = types.StringValue(*attributesItem.UserRelationAttribute.Group)
-			} else {
-				attributes1.UserRelationAttribute.Group = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.Hidden != nil {
-				attributes1.UserRelationAttribute.Hidden = types.BoolValue(*attributesItem.UserRelationAttribute.Hidden)
-			} else {
-				attributes1.UserRelationAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.HideLabel != nil {
-				attributes1.UserRelationAttribute.HideLabel = types.BoolValue(*attributesItem.UserRelationAttribute.HideLabel)
-			} else {
-				attributes1.UserRelationAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.Icon != nil {
-				attributes1.UserRelationAttribute.Icon = types.StringValue(*attributesItem.UserRelationAttribute.Icon)
-			} else {
-				attributes1.UserRelationAttribute.Icon = types.StringNull()
-			}
-			attributes1.UserRelationAttribute.Label = types.StringValue(attributesItem.UserRelationAttribute.Label)
-			if attributesItem.UserRelationAttribute.Layout != nil {
-				attributes1.UserRelationAttribute.Layout = types.StringValue(*attributesItem.UserRelationAttribute.Layout)
-			} else {
-				attributes1.UserRelationAttribute.Layout = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.Multiple != nil {
-				attributes1.UserRelationAttribute.Multiple = types.BoolValue(*attributesItem.UserRelationAttribute.Multiple)
-			} else {
-				attributes1.UserRelationAttribute.Multiple = types.BoolNull()
-			}
-			attributes1.UserRelationAttribute.Name = types.StringValue(attributesItem.UserRelationAttribute.Name)
-			if attributesItem.UserRelationAttribute.Order != nil {
-				attributes1.UserRelationAttribute.Order = types.Int64Value(*attributesItem.UserRelationAttribute.Order)
-			} else {
-				attributes1.UserRelationAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.UserRelationAttribute.Placeholder != nil {
-				attributes1.UserRelationAttribute.Placeholder = types.StringValue(*attributesItem.UserRelationAttribute.Placeholder)
-			} else {
-				attributes1.UserRelationAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.PreviewValueFormatter != nil {
-				attributes1.UserRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.UserRelationAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.UserRelationAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.Protected != nil {
-				attributes1.UserRelationAttribute.Protected = types.BoolValue(*attributesItem.UserRelationAttribute.Protected)
-			} else {
-				attributes1.UserRelationAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.Readonly != nil {
-				attributes1.UserRelationAttribute.Readonly = types.BoolValue(*attributesItem.UserRelationAttribute.Readonly)
-			} else {
-				attributes1.UserRelationAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.RenderCondition != nil {
-				attributes1.UserRelationAttribute.RenderCondition = types.StringValue(*attributesItem.UserRelationAttribute.RenderCondition)
-			} else {
-				attributes1.UserRelationAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.Required != nil {
-				attributes1.UserRelationAttribute.Required = types.BoolValue(*attributesItem.UserRelationAttribute.Required)
-			} else {
-				attributes1.UserRelationAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.SettingFlag != nil {
-				attributes1.UserRelationAttribute.SettingFlag = types.StringValue(*attributesItem.UserRelationAttribute.SettingFlag)
-			} else {
-				attributes1.UserRelationAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.ShowInTable != nil {
-				attributes1.UserRelationAttribute.ShowInTable = types.BoolValue(*attributesItem.UserRelationAttribute.ShowInTable)
-			} else {
-				attributes1.UserRelationAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.UserRelationAttribute.Type != nil {
-				attributes1.UserRelationAttribute.Type = types.StringValue(string(*attributesItem.UserRelationAttribute.Type))
-			} else {
-				attributes1.UserRelationAttribute.Type = types.StringNull()
-			}
-			if attributesItem.UserRelationAttribute.ValueFormatter != nil {
-				attributes1.UserRelationAttribute.ValueFormatter = types.StringValue(*attributesItem.UserRelationAttribute.ValueFormatter)
-			} else {
-				attributes1.UserRelationAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.AddressRelationAttribute != nil {
-			attributes1.AddressRelationAttribute = &AddressRelationAttribute{}
-			attributes1.AddressRelationAttribute.Purpose = nil
-			for _, v := range attributesItem.AddressRelationAttribute.Purpose {
-				attributes1.AddressRelationAttribute.Purpose = append(attributes1.AddressRelationAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.AddressRelationAttribute.Constraints == nil && len(attributesItem.AddressRelationAttribute.Constraints) > 0 {
-				attributes1.AddressRelationAttribute.Constraints = make(map[string]types.String)
-				for key12, value15 := range attributesItem.AddressRelationAttribute.Constraints {
-					result11, _ := json.Marshal(value15)
-					attributes1.AddressRelationAttribute.Constraints[key12] = types.StringValue(string(result11))
-				}
-			}
-			if attributesItem.AddressRelationAttribute.DefaultValue == nil {
-				attributes1.AddressRelationAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult11, _ := json.Marshal(attributesItem.AddressRelationAttribute.DefaultValue)
-				attributes1.AddressRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult11))
-			}
-			if attributesItem.AddressRelationAttribute.Deprecated != nil {
-				attributes1.AddressRelationAttribute.Deprecated = types.BoolValue(*attributesItem.AddressRelationAttribute.Deprecated)
-			} else {
-				attributes1.AddressRelationAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.AddressRelationAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.FeatureFlag != nil {
-				attributes1.AddressRelationAttribute.FeatureFlag = types.StringValue(*attributesItem.AddressRelationAttribute.FeatureFlag)
-			} else {
-				attributes1.AddressRelationAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.Group != nil {
-				attributes1.AddressRelationAttribute.Group = types.StringValue(*attributesItem.AddressRelationAttribute.Group)
-			} else {
-				attributes1.AddressRelationAttribute.Group = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.HasPrimary != nil {
-				attributes1.AddressRelationAttribute.HasPrimary = types.BoolValue(*attributesItem.AddressRelationAttribute.HasPrimary)
-			} else {
-				attributes1.AddressRelationAttribute.HasPrimary = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.Hidden != nil {
-				attributes1.AddressRelationAttribute.Hidden = types.BoolValue(*attributesItem.AddressRelationAttribute.Hidden)
-			} else {
-				attributes1.AddressRelationAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.HideLabel != nil {
-				attributes1.AddressRelationAttribute.HideLabel = types.BoolValue(*attributesItem.AddressRelationAttribute.HideLabel)
-			} else {
-				attributes1.AddressRelationAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.Icon != nil {
-				attributes1.AddressRelationAttribute.Icon = types.StringValue(*attributesItem.AddressRelationAttribute.Icon)
-			} else {
-				attributes1.AddressRelationAttribute.Icon = types.StringNull()
-			}
-			attributes1.AddressRelationAttribute.Label = types.StringValue(attributesItem.AddressRelationAttribute.Label)
-			if attributesItem.AddressRelationAttribute.Layout != nil {
-				attributes1.AddressRelationAttribute.Layout = types.StringValue(*attributesItem.AddressRelationAttribute.Layout)
-			} else {
-				attributes1.AddressRelationAttribute.Layout = types.StringNull()
-			}
-			attributes1.AddressRelationAttribute.Name = types.StringValue(attributesItem.AddressRelationAttribute.Name)
-			if attributesItem.AddressRelationAttribute.Order != nil {
-				attributes1.AddressRelationAttribute.Order = types.Int64Value(*attributesItem.AddressRelationAttribute.Order)
-			} else {
-				attributes1.AddressRelationAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.AddressRelationAttribute.Placeholder != nil {
-				attributes1.AddressRelationAttribute.Placeholder = types.StringValue(*attributesItem.AddressRelationAttribute.Placeholder)
-			} else {
-				attributes1.AddressRelationAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.PreviewValueFormatter != nil {
-				attributes1.AddressRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.AddressRelationAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.AddressRelationAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.Protected != nil {
-				attributes1.AddressRelationAttribute.Protected = types.BoolValue(*attributesItem.AddressRelationAttribute.Protected)
-			} else {
-				attributes1.AddressRelationAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.Readonly != nil {
-				attributes1.AddressRelationAttribute.Readonly = types.BoolValue(*attributesItem.AddressRelationAttribute.Readonly)
-			} else {
-				attributes1.AddressRelationAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.RenderCondition != nil {
-				attributes1.AddressRelationAttribute.RenderCondition = types.StringValue(*attributesItem.AddressRelationAttribute.RenderCondition)
-			} else {
-				attributes1.AddressRelationAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.Required != nil {
-				attributes1.AddressRelationAttribute.Required = types.BoolValue(*attributesItem.AddressRelationAttribute.Required)
-			} else {
-				attributes1.AddressRelationAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.SettingFlag != nil {
-				attributes1.AddressRelationAttribute.SettingFlag = types.StringValue(*attributesItem.AddressRelationAttribute.SettingFlag)
-			} else {
-				attributes1.AddressRelationAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.ShowInTable != nil {
-				attributes1.AddressRelationAttribute.ShowInTable = types.BoolValue(*attributesItem.AddressRelationAttribute.ShowInTable)
-			} else {
-				attributes1.AddressRelationAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.AddressRelationAttribute.Type != nil {
-				attributes1.AddressRelationAttribute.Type = types.StringValue(string(*attributesItem.AddressRelationAttribute.Type))
-			} else {
-				attributes1.AddressRelationAttribute.Type = types.StringNull()
-			}
-			if attributesItem.AddressRelationAttribute.ValueFormatter != nil {
-				attributes1.AddressRelationAttribute.ValueFormatter = types.StringValue(*attributesItem.AddressRelationAttribute.ValueFormatter)
-			} else {
-				attributes1.AddressRelationAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.PaymentMethodRelationAttribute != nil {
-			attributes1.PaymentMethodRelationAttribute = &PaymentMethodRelationAttribute{}
-			attributes1.PaymentMethodRelationAttribute.Purpose = nil
-			for _, v := range attributesItem.PaymentMethodRelationAttribute.Purpose {
-				attributes1.PaymentMethodRelationAttribute.Purpose = append(attributes1.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.PaymentMethodRelationAttribute.Constraints == nil && len(attributesItem.PaymentMethodRelationAttribute.Constraints) > 0 {
-				attributes1.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
-				for key13, value16 := range attributesItem.PaymentMethodRelationAttribute.Constraints {
-					result12, _ := json.Marshal(value16)
-					attributes1.PaymentMethodRelationAttribute.Constraints[key13] = types.StringValue(string(result12))
-				}
-			}
-			if attributesItem.PaymentMethodRelationAttribute.DefaultValue == nil {
-				attributes1.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult12, _ := json.Marshal(attributesItem.PaymentMethodRelationAttribute.DefaultValue)
-				attributes1.PaymentMethodRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult12))
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Deprecated != nil {
-				attributes1.PaymentMethodRelationAttribute.Deprecated = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Deprecated)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.FeatureFlag != nil {
-				attributes1.PaymentMethodRelationAttribute.FeatureFlag = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.FeatureFlag)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Group != nil {
-				attributes1.PaymentMethodRelationAttribute.Group = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Group)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Group = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.HasPrimary != nil {
-				attributes1.PaymentMethodRelationAttribute.HasPrimary = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.HasPrimary)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.HasPrimary = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Hidden != nil {
-				attributes1.PaymentMethodRelationAttribute.Hidden = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Hidden)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.HideLabel != nil {
-				attributes1.PaymentMethodRelationAttribute.HideLabel = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.HideLabel)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Icon != nil {
-				attributes1.PaymentMethodRelationAttribute.Icon = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Icon)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Icon = types.StringNull()
-			}
-			attributes1.PaymentMethodRelationAttribute.Label = types.StringValue(attributesItem.PaymentMethodRelationAttribute.Label)
-			if attributesItem.PaymentMethodRelationAttribute.Layout != nil {
-				attributes1.PaymentMethodRelationAttribute.Layout = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Layout)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Layout = types.StringNull()
-			}
-			attributes1.PaymentMethodRelationAttribute.Name = types.StringValue(attributesItem.PaymentMethodRelationAttribute.Name)
-			if attributesItem.PaymentMethodRelationAttribute.Order != nil {
-				attributes1.PaymentMethodRelationAttribute.Order = types.Int64Value(*attributesItem.PaymentMethodRelationAttribute.Order)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Placeholder != nil {
-				attributes1.PaymentMethodRelationAttribute.Placeholder = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.Placeholder)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.PreviewValueFormatter != nil {
-				attributes1.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Protected != nil {
-				attributes1.PaymentMethodRelationAttribute.Protected = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Protected)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Readonly != nil {
-				attributes1.PaymentMethodRelationAttribute.Readonly = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Readonly)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.RenderCondition != nil {
-				attributes1.PaymentMethodRelationAttribute.RenderCondition = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.RenderCondition)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Required != nil {
-				attributes1.PaymentMethodRelationAttribute.Required = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.Required)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.SettingFlag != nil {
-				attributes1.PaymentMethodRelationAttribute.SettingFlag = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.SettingFlag)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.ShowInTable != nil {
-				attributes1.PaymentMethodRelationAttribute.ShowInTable = types.BoolValue(*attributesItem.PaymentMethodRelationAttribute.ShowInTable)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.Type != nil {
-				attributes1.PaymentMethodRelationAttribute.Type = types.StringValue(string(*attributesItem.PaymentMethodRelationAttribute.Type))
-			} else {
-				attributes1.PaymentMethodRelationAttribute.Type = types.StringNull()
-			}
-			if attributesItem.PaymentMethodRelationAttribute.ValueFormatter != nil {
-				attributes1.PaymentMethodRelationAttribute.ValueFormatter = types.StringValue(*attributesItem.PaymentMethodRelationAttribute.ValueFormatter)
-			} else {
-				attributes1.PaymentMethodRelationAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.CurrencyAttribute != nil {
-			attributes1.CurrencyAttribute = &CurrencyAttribute{}
-			attributes1.CurrencyAttribute.Purpose = nil
-			for _, v := range attributesItem.CurrencyAttribute.Purpose {
-				attributes1.CurrencyAttribute.Purpose = append(attributes1.CurrencyAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.CurrencyAttribute.Constraints == nil && len(attributesItem.CurrencyAttribute.Constraints) > 0 {
-				attributes1.CurrencyAttribute.Constraints = make(map[string]types.String)
-				for key14, value17 := range attributesItem.CurrencyAttribute.Constraints {
-					result13, _ := json.Marshal(value17)
-					attributes1.CurrencyAttribute.Constraints[key14] = types.StringValue(string(result13))
-				}
-			}
-			attributes1.CurrencyAttribute.Currency = nil
-			for _, currencyItem := range attributesItem.CurrencyAttribute.Currency {
-				var currency1 CurrencyAttributeCurrency
-				if currencyItem.CurrencyAttributeCurrency1 != nil {
-					currency1.CurrencyAttributeCurrency1 = &CurrencyAttributeCurrency1{}
-					currency1.CurrencyAttributeCurrency1.Code = types.StringValue(currencyItem.CurrencyAttributeCurrency1.Code)
-					currency1.CurrencyAttributeCurrency1.Description = types.StringValue(currencyItem.CurrencyAttributeCurrency1.Description)
-					if currencyItem.CurrencyAttributeCurrency1.Flag != nil {
-						currency1.CurrencyAttributeCurrency1.Flag = types.StringValue(*currencyItem.CurrencyAttributeCurrency1.Flag)
-					} else {
-						currency1.CurrencyAttributeCurrency1.Flag = types.StringNull()
-					}
-					currency1.CurrencyAttributeCurrency1.Symbol = types.StringValue(currencyItem.CurrencyAttributeCurrency1.Symbol)
-				}
-				attributes1.CurrencyAttribute.Currency = append(attributes1.CurrencyAttribute.Currency, currency1)
-			}
-			if attributesItem.CurrencyAttribute.CurrencySelectorOnly != nil {
-				attributes1.CurrencyAttribute.CurrencySelectorOnly = types.BoolValue(*attributesItem.CurrencyAttribute.CurrencySelectorOnly)
-			} else {
-				attributes1.CurrencyAttribute.CurrencySelectorOnly = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.DefaultValue == nil {
-				attributes1.CurrencyAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult13, _ := json.Marshal(attributesItem.CurrencyAttribute.DefaultValue)
-				attributes1.CurrencyAttribute.DefaultValue = types.StringValue(string(defaultValueResult13))
-			}
-			if attributesItem.CurrencyAttribute.Deprecated != nil {
-				attributes1.CurrencyAttribute.Deprecated = types.BoolValue(*attributesItem.CurrencyAttribute.Deprecated)
-			} else {
-				attributes1.CurrencyAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.CurrencyAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.FeatureFlag != nil {
-				attributes1.CurrencyAttribute.FeatureFlag = types.StringValue(*attributesItem.CurrencyAttribute.FeatureFlag)
-			} else {
-				attributes1.CurrencyAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.CurrencyAttribute.Group != nil {
-				attributes1.CurrencyAttribute.Group = types.StringValue(*attributesItem.CurrencyAttribute.Group)
-			} else {
-				attributes1.CurrencyAttribute.Group = types.StringNull()
-			}
-			if attributesItem.CurrencyAttribute.Hidden != nil {
-				attributes1.CurrencyAttribute.Hidden = types.BoolValue(*attributesItem.CurrencyAttribute.Hidden)
-			} else {
-				attributes1.CurrencyAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.HideLabel != nil {
-				attributes1.CurrencyAttribute.HideLabel = types.BoolValue(*attributesItem.CurrencyAttribute.HideLabel)
-			} else {
-				attributes1.CurrencyAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.Icon != nil {
-				attributes1.CurrencyAttribute.Icon = types.StringValue(*attributesItem.CurrencyAttribute.Icon)
-			} else {
-				attributes1.CurrencyAttribute.Icon = types.StringNull()
-			}
-			attributes1.CurrencyAttribute.Label = types.StringValue(attributesItem.CurrencyAttribute.Label)
-			if attributesItem.CurrencyAttribute.Layout != nil {
-				attributes1.CurrencyAttribute.Layout = types.StringValue(*attributesItem.CurrencyAttribute.Layout)
-			} else {
-				attributes1.CurrencyAttribute.Layout = types.StringNull()
-			}
-			attributes1.CurrencyAttribute.Name = types.StringValue(attributesItem.CurrencyAttribute.Name)
-			if attributesItem.CurrencyAttribute.Order != nil {
-				attributes1.CurrencyAttribute.Order = types.Int64Value(*attributesItem.CurrencyAttribute.Order)
-			} else {
-				attributes1.CurrencyAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.CurrencyAttribute.Placeholder != nil {
-				attributes1.CurrencyAttribute.Placeholder = types.StringValue(*attributesItem.CurrencyAttribute.Placeholder)
-			} else {
-				attributes1.CurrencyAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.CurrencyAttribute.PreviewValueFormatter != nil {
-				attributes1.CurrencyAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.CurrencyAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.CurrencyAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.CurrencyAttribute.Protected != nil {
-				attributes1.CurrencyAttribute.Protected = types.BoolValue(*attributesItem.CurrencyAttribute.Protected)
-			} else {
-				attributes1.CurrencyAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.Readonly != nil {
-				attributes1.CurrencyAttribute.Readonly = types.BoolValue(*attributesItem.CurrencyAttribute.Readonly)
-			} else {
-				attributes1.CurrencyAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.RenderCondition != nil {
-				attributes1.CurrencyAttribute.RenderCondition = types.StringValue(*attributesItem.CurrencyAttribute.RenderCondition)
-			} else {
-				attributes1.CurrencyAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.CurrencyAttribute.Required != nil {
-				attributes1.CurrencyAttribute.Required = types.BoolValue(*attributesItem.CurrencyAttribute.Required)
-			} else {
-				attributes1.CurrencyAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.CurrencyAttribute.SettingFlag != nil {
-				attributes1.CurrencyAttribute.SettingFlag = types.StringValue(*attributesItem.CurrencyAttribute.SettingFlag)
-			} else {
-				attributes1.CurrencyAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.CurrencyAttribute.ShowInTable != nil {
-				attributes1.CurrencyAttribute.ShowInTable = types.BoolValue(*attributesItem.CurrencyAttribute.ShowInTable)
-			} else {
-				attributes1.CurrencyAttribute.ShowInTable = types.BoolNull()
-			}
-			attributes1.CurrencyAttribute.Type = types.StringValue(string(attributesItem.CurrencyAttribute.Type))
-			if attributesItem.CurrencyAttribute.ValueFormatter != nil {
-				attributes1.CurrencyAttribute.ValueFormatter = types.StringValue(*attributesItem.CurrencyAttribute.ValueFormatter)
-			} else {
-				attributes1.CurrencyAttribute.ValueFormatter = types.StringNull()
-			}
-		}
 		if attributesItem.RepeatableAttribute != nil {
 			attributes1.RepeatableAttribute = &RepeatableAttribute{}
 			attributes1.RepeatableAttribute.Purpose = nil
 			for _, v := range attributesItem.RepeatableAttribute.Purpose {
 				attributes1.RepeatableAttribute.Purpose = append(attributes1.RepeatableAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.RepeatableAttribute.Constraints == nil && len(attributesItem.RepeatableAttribute.Constraints) > 0 {
-				attributes1.RepeatableAttribute.Constraints = make(map[string]types.String)
-				for key15, value18 := range attributesItem.RepeatableAttribute.Constraints {
-					result14, _ := json.Marshal(value18)
-					attributes1.RepeatableAttribute.Constraints[key15] = types.StringValue(string(result14))
-				}
+			if attributesItem.RepeatableAttribute.Constraints == nil {
+				attributes1.RepeatableAttribute.Constraints = nil
+			} else {
+				attributes1.RepeatableAttribute.Constraints = &Constraints{}
 			}
 			if attributesItem.RepeatableAttribute.DefaultValue == nil {
 				attributes1.RepeatableAttribute.DefaultValue = types.StringNull()
 			} else {
-				defaultValueResult14, _ := json.Marshal(attributesItem.RepeatableAttribute.DefaultValue)
-				attributes1.RepeatableAttribute.DefaultValue = types.StringValue(string(defaultValueResult14))
+				defaultValueResult20, _ := json.Marshal(attributesItem.RepeatableAttribute.DefaultValue)
+				attributes1.RepeatableAttribute.DefaultValue = types.StringValue(string(defaultValueResult20))
 			}
 			if attributesItem.RepeatableAttribute.Deprecated != nil {
 				attributes1.RepeatableAttribute.Deprecated = types.BoolValue(*attributesItem.RepeatableAttribute.Deprecated)
@@ -12537,24 +13141,434 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				attributes1.RepeatableAttribute.ValueFormatter = types.StringNull()
 			}
 		}
+		if attributesItem.SelectAttribute != nil {
+			attributes1.SelectAttribute = &SelectAttribute{}
+			attributes1.SelectAttribute.Purpose = nil
+			for _, v := range attributesItem.SelectAttribute.Purpose {
+				attributes1.SelectAttribute.Purpose = append(attributes1.SelectAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.SelectAttribute.AllowAny != nil {
+				attributes1.SelectAttribute.AllowAny = types.BoolValue(*attributesItem.SelectAttribute.AllowAny)
+			} else {
+				attributes1.SelectAttribute.AllowAny = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.Constraints == nil {
+				attributes1.SelectAttribute.Constraints = nil
+			} else {
+				attributes1.SelectAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.SelectAttribute.DefaultValue == nil {
+				attributes1.SelectAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult21, _ := json.Marshal(attributesItem.SelectAttribute.DefaultValue)
+				attributes1.SelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult21))
+			}
+			if attributesItem.SelectAttribute.Deprecated != nil {
+				attributes1.SelectAttribute.Deprecated = types.BoolValue(*attributesItem.SelectAttribute.Deprecated)
+			} else {
+				attributes1.SelectAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.SelectAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.SelectAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.SelectAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.FeatureFlag != nil {
+				attributes1.SelectAttribute.FeatureFlag = types.StringValue(*attributesItem.SelectAttribute.FeatureFlag)
+			} else {
+				attributes1.SelectAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.Group != nil {
+				attributes1.SelectAttribute.Group = types.StringValue(*attributesItem.SelectAttribute.Group)
+			} else {
+				attributes1.SelectAttribute.Group = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.Hidden != nil {
+				attributes1.SelectAttribute.Hidden = types.BoolValue(*attributesItem.SelectAttribute.Hidden)
+			} else {
+				attributes1.SelectAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.HideLabel != nil {
+				attributes1.SelectAttribute.HideLabel = types.BoolValue(*attributesItem.SelectAttribute.HideLabel)
+			} else {
+				attributes1.SelectAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.Icon != nil {
+				attributes1.SelectAttribute.Icon = types.StringValue(*attributesItem.SelectAttribute.Icon)
+			} else {
+				attributes1.SelectAttribute.Icon = types.StringNull()
+			}
+			attributes1.SelectAttribute.Label = types.StringValue(attributesItem.SelectAttribute.Label)
+			if attributesItem.SelectAttribute.Layout != nil {
+				attributes1.SelectAttribute.Layout = types.StringValue(*attributesItem.SelectAttribute.Layout)
+			} else {
+				attributes1.SelectAttribute.Layout = types.StringNull()
+			}
+			attributes1.SelectAttribute.Name = types.StringValue(attributesItem.SelectAttribute.Name)
+			if len(attributes1.SelectAttribute.Options) > len(attributesItem.SelectAttribute.Options) {
+				attributes1.SelectAttribute.Options = attributes1.SelectAttribute.Options[:len(attributesItem.SelectAttribute.Options)]
+			}
+			for optionsCount1, optionsItem1 := range attributesItem.SelectAttribute.Options {
+				var options3 SelectAttributeOptions
+				if optionsItem1.Str != nil {
+					if optionsItem1.Str != nil {
+						options3.Str = types.StringValue(*optionsItem1.Str)
+					} else {
+						options3.Str = types.StringNull()
+					}
+				}
+				if optionsItem1.Option != nil {
+					options3.Option = &MultiSelectAttribute2{}
+					if optionsItem1.Option.Title != nil {
+						options3.Option.Title = types.StringValue(*optionsItem1.Option.Title)
+					} else {
+						options3.Option.Title = types.StringNull()
+					}
+					options3.Option.Value = types.StringValue(optionsItem1.Option.Value)
+				}
+				if optionsCount1+1 > len(attributes1.SelectAttribute.Options) {
+					attributes1.SelectAttribute.Options = append(attributes1.SelectAttribute.Options, options3)
+				} else {
+				}
+			}
+			if attributesItem.SelectAttribute.Order != nil {
+				attributes1.SelectAttribute.Order = types.Int64Value(*attributesItem.SelectAttribute.Order)
+			} else {
+				attributes1.SelectAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.SelectAttribute.Placeholder != nil {
+				attributes1.SelectAttribute.Placeholder = types.StringValue(*attributesItem.SelectAttribute.Placeholder)
+			} else {
+				attributes1.SelectAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.PreviewValueFormatter != nil {
+				attributes1.SelectAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.SelectAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.SelectAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.Protected != nil {
+				attributes1.SelectAttribute.Protected = types.BoolValue(*attributesItem.SelectAttribute.Protected)
+			} else {
+				attributes1.SelectAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.Readonly != nil {
+				attributes1.SelectAttribute.Readonly = types.BoolValue(*attributesItem.SelectAttribute.Readonly)
+			} else {
+				attributes1.SelectAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.RenderCondition != nil {
+				attributes1.SelectAttribute.RenderCondition = types.StringValue(*attributesItem.SelectAttribute.RenderCondition)
+			} else {
+				attributes1.SelectAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.Required != nil {
+				attributes1.SelectAttribute.Required = types.BoolValue(*attributesItem.SelectAttribute.Required)
+			} else {
+				attributes1.SelectAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.SettingFlag != nil {
+				attributes1.SelectAttribute.SettingFlag = types.StringValue(*attributesItem.SelectAttribute.SettingFlag)
+			} else {
+				attributes1.SelectAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.ShowInTable != nil {
+				attributes1.SelectAttribute.ShowInTable = types.BoolValue(*attributesItem.SelectAttribute.ShowInTable)
+			} else {
+				attributes1.SelectAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.SelectAttribute.Type != nil {
+				attributes1.SelectAttribute.Type = types.StringValue(string(*attributesItem.SelectAttribute.Type))
+			} else {
+				attributes1.SelectAttribute.Type = types.StringNull()
+			}
+			if attributesItem.SelectAttribute.ValueFormatter != nil {
+				attributes1.SelectAttribute.ValueFormatter = types.StringValue(*attributesItem.SelectAttribute.ValueFormatter)
+			} else {
+				attributes1.SelectAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.SequenceAttribute != nil {
+			attributes1.SequenceAttribute = &SequenceAttribute{}
+			attributes1.SequenceAttribute.Purpose = nil
+			for _, v := range attributesItem.SequenceAttribute.Purpose {
+				attributes1.SequenceAttribute.Purpose = append(attributes1.SequenceAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.SequenceAttribute.Constraints == nil {
+				attributes1.SequenceAttribute.Constraints = nil
+			} else {
+				attributes1.SequenceAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.SequenceAttribute.DefaultValue == nil {
+				attributes1.SequenceAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult22, _ := json.Marshal(attributesItem.SequenceAttribute.DefaultValue)
+				attributes1.SequenceAttribute.DefaultValue = types.StringValue(string(defaultValueResult22))
+			}
+			if attributesItem.SequenceAttribute.Deprecated != nil {
+				attributes1.SequenceAttribute.Deprecated = types.BoolValue(*attributesItem.SequenceAttribute.Deprecated)
+			} else {
+				attributes1.SequenceAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.SequenceAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.SequenceAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.SequenceAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.FeatureFlag != nil {
+				attributes1.SequenceAttribute.FeatureFlag = types.StringValue(*attributesItem.SequenceAttribute.FeatureFlag)
+			} else {
+				attributes1.SequenceAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.Group != nil {
+				attributes1.SequenceAttribute.Group = types.StringValue(*attributesItem.SequenceAttribute.Group)
+			} else {
+				attributes1.SequenceAttribute.Group = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.Hidden != nil {
+				attributes1.SequenceAttribute.Hidden = types.BoolValue(*attributesItem.SequenceAttribute.Hidden)
+			} else {
+				attributes1.SequenceAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.HideLabel != nil {
+				attributes1.SequenceAttribute.HideLabel = types.BoolValue(*attributesItem.SequenceAttribute.HideLabel)
+			} else {
+				attributes1.SequenceAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.Icon != nil {
+				attributes1.SequenceAttribute.Icon = types.StringValue(*attributesItem.SequenceAttribute.Icon)
+			} else {
+				attributes1.SequenceAttribute.Icon = types.StringNull()
+			}
+			attributes1.SequenceAttribute.Label = types.StringValue(attributesItem.SequenceAttribute.Label)
+			if attributesItem.SequenceAttribute.Layout != nil {
+				attributes1.SequenceAttribute.Layout = types.StringValue(*attributesItem.SequenceAttribute.Layout)
+			} else {
+				attributes1.SequenceAttribute.Layout = types.StringNull()
+			}
+			attributes1.SequenceAttribute.Name = types.StringValue(attributesItem.SequenceAttribute.Name)
+			if attributesItem.SequenceAttribute.Order != nil {
+				attributes1.SequenceAttribute.Order = types.Int64Value(*attributesItem.SequenceAttribute.Order)
+			} else {
+				attributes1.SequenceAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.SequenceAttribute.Placeholder != nil {
+				attributes1.SequenceAttribute.Placeholder = types.StringValue(*attributesItem.SequenceAttribute.Placeholder)
+			} else {
+				attributes1.SequenceAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.Prefix != nil {
+				attributes1.SequenceAttribute.Prefix = types.StringValue(*attributesItem.SequenceAttribute.Prefix)
+			} else {
+				attributes1.SequenceAttribute.Prefix = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.PreviewValueFormatter != nil {
+				attributes1.SequenceAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.SequenceAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.SequenceAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.Protected != nil {
+				attributes1.SequenceAttribute.Protected = types.BoolValue(*attributesItem.SequenceAttribute.Protected)
+			} else {
+				attributes1.SequenceAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.Readonly != nil {
+				attributes1.SequenceAttribute.Readonly = types.BoolValue(*attributesItem.SequenceAttribute.Readonly)
+			} else {
+				attributes1.SequenceAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.RenderCondition != nil {
+				attributes1.SequenceAttribute.RenderCondition = types.StringValue(*attributesItem.SequenceAttribute.RenderCondition)
+			} else {
+				attributes1.SequenceAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.Required != nil {
+				attributes1.SequenceAttribute.Required = types.BoolValue(*attributesItem.SequenceAttribute.Required)
+			} else {
+				attributes1.SequenceAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.SettingFlag != nil {
+				attributes1.SequenceAttribute.SettingFlag = types.StringValue(*attributesItem.SequenceAttribute.SettingFlag)
+			} else {
+				attributes1.SequenceAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.ShowInTable != nil {
+				attributes1.SequenceAttribute.ShowInTable = types.BoolValue(*attributesItem.SequenceAttribute.ShowInTable)
+			} else {
+				attributes1.SequenceAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.SequenceAttribute.StartNumber != nil {
+				attributes1.SequenceAttribute.StartNumber = types.Int64Value(*attributesItem.SequenceAttribute.StartNumber)
+			} else {
+				attributes1.SequenceAttribute.StartNumber = types.Int64Null()
+			}
+			if attributesItem.SequenceAttribute.Type != nil {
+				attributes1.SequenceAttribute.Type = types.StringValue(string(*attributesItem.SequenceAttribute.Type))
+			} else {
+				attributes1.SequenceAttribute.Type = types.StringNull()
+			}
+			if attributesItem.SequenceAttribute.ValueFormatter != nil {
+				attributes1.SequenceAttribute.ValueFormatter = types.StringValue(*attributesItem.SequenceAttribute.ValueFormatter)
+			} else {
+				attributes1.SequenceAttribute.ValueFormatter = types.StringNull()
+			}
+		}
+		if attributesItem.StatusAttribute != nil {
+			attributes1.StatusAttribute = &StatusAttribute{}
+			attributes1.StatusAttribute.Purpose = nil
+			for _, v := range attributesItem.StatusAttribute.Purpose {
+				attributes1.StatusAttribute.Purpose = append(attributes1.StatusAttribute.Purpose, types.StringValue(v))
+			}
+			if attributesItem.StatusAttribute.Constraints == nil {
+				attributes1.StatusAttribute.Constraints = nil
+			} else {
+				attributes1.StatusAttribute.Constraints = &Constraints{}
+			}
+			if attributesItem.StatusAttribute.DefaultValue == nil {
+				attributes1.StatusAttribute.DefaultValue = types.StringNull()
+			} else {
+				defaultValueResult23, _ := json.Marshal(attributesItem.StatusAttribute.DefaultValue)
+				attributes1.StatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult23))
+			}
+			if attributesItem.StatusAttribute.Deprecated != nil {
+				attributes1.StatusAttribute.Deprecated = types.BoolValue(*attributesItem.StatusAttribute.Deprecated)
+			} else {
+				attributes1.StatusAttribute.Deprecated = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.StatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.StatusAttribute.EntityBuilderDisableEdit)
+			} else {
+				attributes1.StatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.FeatureFlag != nil {
+				attributes1.StatusAttribute.FeatureFlag = types.StringValue(*attributesItem.StatusAttribute.FeatureFlag)
+			} else {
+				attributes1.StatusAttribute.FeatureFlag = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.Group != nil {
+				attributes1.StatusAttribute.Group = types.StringValue(*attributesItem.StatusAttribute.Group)
+			} else {
+				attributes1.StatusAttribute.Group = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.Hidden != nil {
+				attributes1.StatusAttribute.Hidden = types.BoolValue(*attributesItem.StatusAttribute.Hidden)
+			} else {
+				attributes1.StatusAttribute.Hidden = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.HideLabel != nil {
+				attributes1.StatusAttribute.HideLabel = types.BoolValue(*attributesItem.StatusAttribute.HideLabel)
+			} else {
+				attributes1.StatusAttribute.HideLabel = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.Icon != nil {
+				attributes1.StatusAttribute.Icon = types.StringValue(*attributesItem.StatusAttribute.Icon)
+			} else {
+				attributes1.StatusAttribute.Icon = types.StringNull()
+			}
+			attributes1.StatusAttribute.Label = types.StringValue(attributesItem.StatusAttribute.Label)
+			if attributesItem.StatusAttribute.Layout != nil {
+				attributes1.StatusAttribute.Layout = types.StringValue(*attributesItem.StatusAttribute.Layout)
+			} else {
+				attributes1.StatusAttribute.Layout = types.StringNull()
+			}
+			attributes1.StatusAttribute.Name = types.StringValue(attributesItem.StatusAttribute.Name)
+			if len(attributes1.StatusAttribute.Options) > len(attributesItem.StatusAttribute.Options) {
+				attributes1.StatusAttribute.Options = attributes1.StatusAttribute.Options[:len(attributesItem.StatusAttribute.Options)]
+			}
+			for optionsCount2, optionsItem2 := range attributesItem.StatusAttribute.Options {
+				var options5 Options
+				if optionsItem2.Str != nil {
+					if optionsItem2.Str != nil {
+						options5.Str = types.StringValue(*optionsItem2.Str)
+					} else {
+						options5.Str = types.StringNull()
+					}
+				}
+				if optionsItem2.StatusAttribute2 != nil {
+					options5.Two = &MultiSelectAttribute2{}
+					if optionsItem2.StatusAttribute2.Title != nil {
+						options5.Two.Title = types.StringValue(*optionsItem2.StatusAttribute2.Title)
+					} else {
+						options5.Two.Title = types.StringNull()
+					}
+					options5.Two.Value = types.StringValue(optionsItem2.StatusAttribute2.Value)
+				}
+				if optionsCount2+1 > len(attributes1.StatusAttribute.Options) {
+					attributes1.StatusAttribute.Options = append(attributes1.StatusAttribute.Options, options5)
+				} else {
+				}
+			}
+			if attributesItem.StatusAttribute.Order != nil {
+				attributes1.StatusAttribute.Order = types.Int64Value(*attributesItem.StatusAttribute.Order)
+			} else {
+				attributes1.StatusAttribute.Order = types.Int64Null()
+			}
+			if attributesItem.StatusAttribute.Placeholder != nil {
+				attributes1.StatusAttribute.Placeholder = types.StringValue(*attributesItem.StatusAttribute.Placeholder)
+			} else {
+				attributes1.StatusAttribute.Placeholder = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.PreviewValueFormatter != nil {
+				attributes1.StatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.StatusAttribute.PreviewValueFormatter)
+			} else {
+				attributes1.StatusAttribute.PreviewValueFormatter = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.Protected != nil {
+				attributes1.StatusAttribute.Protected = types.BoolValue(*attributesItem.StatusAttribute.Protected)
+			} else {
+				attributes1.StatusAttribute.Protected = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.Readonly != nil {
+				attributes1.StatusAttribute.Readonly = types.BoolValue(*attributesItem.StatusAttribute.Readonly)
+			} else {
+				attributes1.StatusAttribute.Readonly = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.RenderCondition != nil {
+				attributes1.StatusAttribute.RenderCondition = types.StringValue(*attributesItem.StatusAttribute.RenderCondition)
+			} else {
+				attributes1.StatusAttribute.RenderCondition = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.Required != nil {
+				attributes1.StatusAttribute.Required = types.BoolValue(*attributesItem.StatusAttribute.Required)
+			} else {
+				attributes1.StatusAttribute.Required = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.SettingFlag != nil {
+				attributes1.StatusAttribute.SettingFlag = types.StringValue(*attributesItem.StatusAttribute.SettingFlag)
+			} else {
+				attributes1.StatusAttribute.SettingFlag = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.ShowInTable != nil {
+				attributes1.StatusAttribute.ShowInTable = types.BoolValue(*attributesItem.StatusAttribute.ShowInTable)
+			} else {
+				attributes1.StatusAttribute.ShowInTable = types.BoolNull()
+			}
+			if attributesItem.StatusAttribute.Type != nil {
+				attributes1.StatusAttribute.Type = types.StringValue(string(*attributesItem.StatusAttribute.Type))
+			} else {
+				attributes1.StatusAttribute.Type = types.StringNull()
+			}
+			if attributesItem.StatusAttribute.ValueFormatter != nil {
+				attributes1.StatusAttribute.ValueFormatter = types.StringValue(*attributesItem.StatusAttribute.ValueFormatter)
+			} else {
+				attributes1.StatusAttribute.ValueFormatter = types.StringNull()
+			}
+		}
 		if attributesItem.TagsAttribute != nil {
 			attributes1.TagsAttribute = &TagsAttribute{}
 			attributes1.TagsAttribute.Purpose = nil
 			for _, v := range attributesItem.TagsAttribute.Purpose {
 				attributes1.TagsAttribute.Purpose = append(attributes1.TagsAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.TagsAttribute.Constraints == nil && len(attributesItem.TagsAttribute.Constraints) > 0 {
-				attributes1.TagsAttribute.Constraints = make(map[string]types.String)
-				for key16, value19 := range attributesItem.TagsAttribute.Constraints {
-					result15, _ := json.Marshal(value19)
-					attributes1.TagsAttribute.Constraints[key16] = types.StringValue(string(result15))
-				}
+			if attributesItem.TagsAttribute.Constraints == nil {
+				attributes1.TagsAttribute.Constraints = nil
+			} else {
+				attributes1.TagsAttribute.Constraints = &Constraints{}
 			}
 			if attributesItem.TagsAttribute.DefaultValue == nil {
 				attributes1.TagsAttribute.DefaultValue = types.StringNull()
 			} else {
-				defaultValueResult15, _ := json.Marshal(attributesItem.TagsAttribute.DefaultValue)
-				attributes1.TagsAttribute.DefaultValue = types.StringValue(string(defaultValueResult15))
+				defaultValueResult24, _ := json.Marshal(attributesItem.TagsAttribute.DefaultValue)
+				attributes1.TagsAttribute.DefaultValue = types.StringValue(string(defaultValueResult24))
 			}
 			if attributesItem.TagsAttribute.Deprecated != nil {
 				attributes1.TagsAttribute.Deprecated = types.BoolValue(*attributesItem.TagsAttribute.Deprecated)
@@ -12662,1826 +13676,503 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				attributes1.TagsAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.NumberAttribute != nil {
-			attributes1.NumberAttribute = &NumberAttribute{}
-			attributes1.NumberAttribute.Purpose = nil
-			for _, v := range attributesItem.NumberAttribute.Purpose {
-				attributes1.NumberAttribute.Purpose = append(attributes1.NumberAttribute.Purpose, types.StringValue(v))
+		if attributesItem.TextAttribute != nil {
+			attributes1.TextAttribute = &TextAttribute{}
+			attributes1.TextAttribute.Purpose = nil
+			for _, v := range attributesItem.TextAttribute.Purpose {
+				attributes1.TextAttribute.Purpose = append(attributes1.TextAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.NumberAttribute.Constraints == nil && len(attributesItem.NumberAttribute.Constraints) > 0 {
-				attributes1.NumberAttribute.Constraints = make(map[string]types.String)
-				for key17, value20 := range attributesItem.NumberAttribute.Constraints {
-					result16, _ := json.Marshal(value20)
-					attributes1.NumberAttribute.Constraints[key17] = types.StringValue(string(result16))
-				}
-			}
-			if attributesItem.NumberAttribute.DefaultValue == nil {
-				attributes1.NumberAttribute.DefaultValue = types.StringNull()
+			if attributesItem.TextAttribute.Constraints == nil {
+				attributes1.TextAttribute.Constraints = nil
 			} else {
-				defaultValueResult16, _ := json.Marshal(attributesItem.NumberAttribute.DefaultValue)
-				attributes1.NumberAttribute.DefaultValue = types.StringValue(string(defaultValueResult16))
+				attributes1.TextAttribute.Constraints = &Constraints{}
 			}
-			if attributesItem.NumberAttribute.Deprecated != nil {
-				attributes1.NumberAttribute.Deprecated = types.BoolValue(*attributesItem.NumberAttribute.Deprecated)
+			if attributesItem.TextAttribute.DefaultValue == nil {
+				attributes1.TextAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.NumberAttribute.Deprecated = types.BoolNull()
+				defaultValueResult25, _ := json.Marshal(attributesItem.TextAttribute.DefaultValue)
+				attributes1.TextAttribute.DefaultValue = types.StringValue(string(defaultValueResult25))
 			}
-			if attributesItem.NumberAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.NumberAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.NumberAttribute.EntityBuilderDisableEdit)
+			if attributesItem.TextAttribute.Deprecated != nil {
+				attributes1.TextAttribute.Deprecated = types.BoolValue(*attributesItem.TextAttribute.Deprecated)
 			} else {
-				attributes1.NumberAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.TextAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.FeatureFlag != nil {
-				attributes1.NumberAttribute.FeatureFlag = types.StringValue(*attributesItem.NumberAttribute.FeatureFlag)
+			if attributesItem.TextAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.TextAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.TextAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.NumberAttribute.FeatureFlag = types.StringNull()
+				attributes1.TextAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.Format != nil {
-				attributes1.NumberAttribute.Format = types.StringValue(*attributesItem.NumberAttribute.Format)
+			if attributesItem.TextAttribute.FeatureFlag != nil {
+				attributes1.TextAttribute.FeatureFlag = types.StringValue(*attributesItem.TextAttribute.FeatureFlag)
 			} else {
-				attributes1.NumberAttribute.Format = types.StringNull()
+				attributes1.TextAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.NumberAttribute.Group != nil {
-				attributes1.NumberAttribute.Group = types.StringValue(*attributesItem.NumberAttribute.Group)
+			if attributesItem.TextAttribute.Group != nil {
+				attributes1.TextAttribute.Group = types.StringValue(*attributesItem.TextAttribute.Group)
 			} else {
-				attributes1.NumberAttribute.Group = types.StringNull()
+				attributes1.TextAttribute.Group = types.StringNull()
 			}
-			if attributesItem.NumberAttribute.Hidden != nil {
-				attributes1.NumberAttribute.Hidden = types.BoolValue(*attributesItem.NumberAttribute.Hidden)
+			if attributesItem.TextAttribute.Hidden != nil {
+				attributes1.TextAttribute.Hidden = types.BoolValue(*attributesItem.TextAttribute.Hidden)
 			} else {
-				attributes1.NumberAttribute.Hidden = types.BoolNull()
+				attributes1.TextAttribute.Hidden = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.HideLabel != nil {
-				attributes1.NumberAttribute.HideLabel = types.BoolValue(*attributesItem.NumberAttribute.HideLabel)
+			if attributesItem.TextAttribute.HideLabel != nil {
+				attributes1.TextAttribute.HideLabel = types.BoolValue(*attributesItem.TextAttribute.HideLabel)
 			} else {
-				attributes1.NumberAttribute.HideLabel = types.BoolNull()
+				attributes1.TextAttribute.HideLabel = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.Icon != nil {
-				attributes1.NumberAttribute.Icon = types.StringValue(*attributesItem.NumberAttribute.Icon)
+			if attributesItem.TextAttribute.Icon != nil {
+				attributes1.TextAttribute.Icon = types.StringValue(*attributesItem.TextAttribute.Icon)
 			} else {
-				attributes1.NumberAttribute.Icon = types.StringNull()
+				attributes1.TextAttribute.Icon = types.StringNull()
 			}
-			attributes1.NumberAttribute.Label = types.StringValue(attributesItem.NumberAttribute.Label)
-			if attributesItem.NumberAttribute.Layout != nil {
-				attributes1.NumberAttribute.Layout = types.StringValue(*attributesItem.NumberAttribute.Layout)
+			attributes1.TextAttribute.Label = types.StringValue(attributesItem.TextAttribute.Label)
+			if attributesItem.TextAttribute.Layout != nil {
+				attributes1.TextAttribute.Layout = types.StringValue(*attributesItem.TextAttribute.Layout)
 			} else {
-				attributes1.NumberAttribute.Layout = types.StringNull()
+				attributes1.TextAttribute.Layout = types.StringNull()
 			}
-			attributes1.NumberAttribute.Name = types.StringValue(attributesItem.NumberAttribute.Name)
-			if attributesItem.NumberAttribute.Order != nil {
-				attributes1.NumberAttribute.Order = types.Int64Value(*attributesItem.NumberAttribute.Order)
+			if attributesItem.TextAttribute.Multiline != nil {
+				attributes1.TextAttribute.Multiline = types.BoolValue(*attributesItem.TextAttribute.Multiline)
 			} else {
-				attributes1.NumberAttribute.Order = types.Int64Null()
+				attributes1.TextAttribute.Multiline = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.Placeholder != nil {
-				attributes1.NumberAttribute.Placeholder = types.StringValue(*attributesItem.NumberAttribute.Placeholder)
+			attributes1.TextAttribute.Name = types.StringValue(attributesItem.TextAttribute.Name)
+			if attributesItem.TextAttribute.Order != nil {
+				attributes1.TextAttribute.Order = types.Int64Value(*attributesItem.TextAttribute.Order)
 			} else {
-				attributes1.NumberAttribute.Placeholder = types.StringNull()
+				attributes1.TextAttribute.Order = types.Int64Null()
 			}
-			if attributesItem.NumberAttribute.PreviewValueFormatter != nil {
-				attributes1.NumberAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.NumberAttribute.PreviewValueFormatter)
+			if attributesItem.TextAttribute.Placeholder != nil {
+				attributes1.TextAttribute.Placeholder = types.StringValue(*attributesItem.TextAttribute.Placeholder)
 			} else {
-				attributes1.NumberAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.TextAttribute.Placeholder = types.StringNull()
 			}
-			if attributesItem.NumberAttribute.Protected != nil {
-				attributes1.NumberAttribute.Protected = types.BoolValue(*attributesItem.NumberAttribute.Protected)
+			if attributesItem.TextAttribute.PreviewValueFormatter != nil {
+				attributes1.TextAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.TextAttribute.PreviewValueFormatter)
 			} else {
-				attributes1.NumberAttribute.Protected = types.BoolNull()
+				attributes1.TextAttribute.PreviewValueFormatter = types.StringNull()
 			}
-			if attributesItem.NumberAttribute.Readonly != nil {
-				attributes1.NumberAttribute.Readonly = types.BoolValue(*attributesItem.NumberAttribute.Readonly)
+			if attributesItem.TextAttribute.Protected != nil {
+				attributes1.TextAttribute.Protected = types.BoolValue(*attributesItem.TextAttribute.Protected)
 			} else {
-				attributes1.NumberAttribute.Readonly = types.BoolNull()
+				attributes1.TextAttribute.Protected = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.RenderCondition != nil {
-				attributes1.NumberAttribute.RenderCondition = types.StringValue(*attributesItem.NumberAttribute.RenderCondition)
+			if attributesItem.TextAttribute.Readonly != nil {
+				attributes1.TextAttribute.Readonly = types.BoolValue(*attributesItem.TextAttribute.Readonly)
 			} else {
-				attributes1.NumberAttribute.RenderCondition = types.StringNull()
+				attributes1.TextAttribute.Readonly = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.Required != nil {
-				attributes1.NumberAttribute.Required = types.BoolValue(*attributesItem.NumberAttribute.Required)
+			if attributesItem.TextAttribute.RenderCondition != nil {
+				attributes1.TextAttribute.RenderCondition = types.StringValue(*attributesItem.TextAttribute.RenderCondition)
 			} else {
-				attributes1.NumberAttribute.Required = types.BoolNull()
+				attributes1.TextAttribute.RenderCondition = types.StringNull()
 			}
-			if attributesItem.NumberAttribute.SettingFlag != nil {
-				attributes1.NumberAttribute.SettingFlag = types.StringValue(*attributesItem.NumberAttribute.SettingFlag)
+			if attributesItem.TextAttribute.Required != nil {
+				attributes1.TextAttribute.Required = types.BoolValue(*attributesItem.TextAttribute.Required)
 			} else {
-				attributes1.NumberAttribute.SettingFlag = types.StringNull()
+				attributes1.TextAttribute.Required = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.ShowInTable != nil {
-				attributes1.NumberAttribute.ShowInTable = types.BoolValue(*attributesItem.NumberAttribute.ShowInTable)
+			if attributesItem.TextAttribute.SettingFlag != nil {
+				attributes1.TextAttribute.SettingFlag = types.StringValue(*attributesItem.TextAttribute.SettingFlag)
 			} else {
-				attributes1.NumberAttribute.ShowInTable = types.BoolNull()
+				attributes1.TextAttribute.SettingFlag = types.StringNull()
 			}
-			if attributesItem.NumberAttribute.Type != nil {
-				attributes1.NumberAttribute.Type = types.StringValue(string(*attributesItem.NumberAttribute.Type))
+			if attributesItem.TextAttribute.ShowInTable != nil {
+				attributes1.TextAttribute.ShowInTable = types.BoolValue(*attributesItem.TextAttribute.ShowInTable)
 			} else {
-				attributes1.NumberAttribute.Type = types.StringNull()
+				attributes1.TextAttribute.ShowInTable = types.BoolNull()
 			}
-			if attributesItem.NumberAttribute.ValueFormatter != nil {
-				attributes1.NumberAttribute.ValueFormatter = types.StringValue(*attributesItem.NumberAttribute.ValueFormatter)
+			if attributesItem.TextAttribute.Type != nil {
+				attributes1.TextAttribute.Type = types.StringValue(string(*attributesItem.TextAttribute.Type))
 			} else {
-				attributes1.NumberAttribute.ValueFormatter = types.StringNull()
+				attributes1.TextAttribute.Type = types.StringNull()
+			}
+			if attributesItem.TextAttribute.ValueFormatter != nil {
+				attributes1.TextAttribute.ValueFormatter = types.StringValue(*attributesItem.TextAttribute.ValueFormatter)
+			} else {
+				attributes1.TextAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.ConsentAttribute != nil {
-			attributes1.ConsentAttribute = &ConsentAttribute{}
-			attributes1.ConsentAttribute.Purpose = nil
-			for _, v := range attributesItem.ConsentAttribute.Purpose {
-				attributes1.ConsentAttribute.Purpose = append(attributes1.ConsentAttribute.Purpose, types.StringValue(v))
+		if attributesItem.UserRelationAttribute != nil {
+			attributes1.UserRelationAttribute = &UserRelationAttribute{}
+			attributes1.UserRelationAttribute.Purpose = nil
+			for _, v := range attributesItem.UserRelationAttribute.Purpose {
+				attributes1.UserRelationAttribute.Purpose = append(attributes1.UserRelationAttribute.Purpose, types.StringValue(v))
 			}
-			if attributes1.ConsentAttribute.Constraints == nil && len(attributesItem.ConsentAttribute.Constraints) > 0 {
-				attributes1.ConsentAttribute.Constraints = make(map[string]types.String)
-				for key18, value21 := range attributesItem.ConsentAttribute.Constraints {
-					result17, _ := json.Marshal(value21)
-					attributes1.ConsentAttribute.Constraints[key18] = types.StringValue(string(result17))
-				}
-			}
-			if attributesItem.ConsentAttribute.DefaultValue == nil {
-				attributes1.ConsentAttribute.DefaultValue = types.StringNull()
+			if attributesItem.UserRelationAttribute.Constraints == nil {
+				attributes1.UserRelationAttribute.Constraints = nil
 			} else {
-				defaultValueResult17, _ := json.Marshal(attributesItem.ConsentAttribute.DefaultValue)
-				attributes1.ConsentAttribute.DefaultValue = types.StringValue(string(defaultValueResult17))
+				attributes1.UserRelationAttribute.Constraints = &Constraints{}
 			}
-			if attributesItem.ConsentAttribute.Deprecated != nil {
-				attributes1.ConsentAttribute.Deprecated = types.BoolValue(*attributesItem.ConsentAttribute.Deprecated)
+			if attributesItem.UserRelationAttribute.DefaultValue == nil {
+				attributes1.UserRelationAttribute.DefaultValue = types.StringNull()
 			} else {
-				attributes1.ConsentAttribute.Deprecated = types.BoolNull()
+				defaultValueResult26, _ := json.Marshal(attributesItem.UserRelationAttribute.DefaultValue)
+				attributes1.UserRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult26))
 			}
-			if attributesItem.ConsentAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.ConsentAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.ConsentAttribute.EntityBuilderDisableEdit)
+			if attributesItem.UserRelationAttribute.Deprecated != nil {
+				attributes1.UserRelationAttribute.Deprecated = types.BoolValue(*attributesItem.UserRelationAttribute.Deprecated)
 			} else {
-				attributes1.ConsentAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				attributes1.UserRelationAttribute.Deprecated = types.BoolNull()
 			}
-			if attributesItem.ConsentAttribute.FeatureFlag != nil {
-				attributes1.ConsentAttribute.FeatureFlag = types.StringValue(*attributesItem.ConsentAttribute.FeatureFlag)
+			if attributesItem.UserRelationAttribute.EntityBuilderDisableEdit != nil {
+				attributes1.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.UserRelationAttribute.EntityBuilderDisableEdit)
 			} else {
-				attributes1.ConsentAttribute.FeatureFlag = types.StringNull()
+				attributes1.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
 			}
-			if attributesItem.ConsentAttribute.Group != nil {
-				attributes1.ConsentAttribute.Group = types.StringValue(*attributesItem.ConsentAttribute.Group)
+			if attributesItem.UserRelationAttribute.FeatureFlag != nil {
+				attributes1.UserRelationAttribute.FeatureFlag = types.StringValue(*attributesItem.UserRelationAttribute.FeatureFlag)
 			} else {
-				attributes1.ConsentAttribute.Group = types.StringNull()
+				attributes1.UserRelationAttribute.FeatureFlag = types.StringNull()
 			}
-			if attributesItem.ConsentAttribute.Hidden != nil {
-				attributes1.ConsentAttribute.Hidden = types.BoolValue(*attributesItem.ConsentAttribute.Hidden)
+			if attributesItem.UserRelationAttribute.Group != nil {
+				attributes1.UserRelationAttribute.Group = types.StringValue(*attributesItem.UserRelationAttribute.Group)
 			} else {
-				attributes1.ConsentAttribute.Hidden = types.BoolNull()
+				attributes1.UserRelationAttribute.Group = types.StringNull()
 			}
-			if attributesItem.ConsentAttribute.HideLabel != nil {
-				attributes1.ConsentAttribute.HideLabel = types.BoolValue(*attributesItem.ConsentAttribute.HideLabel)
+			if attributesItem.UserRelationAttribute.Hidden != nil {
+				attributes1.UserRelationAttribute.Hidden = types.BoolValue(*attributesItem.UserRelationAttribute.Hidden)
 			} else {
-				attributes1.ConsentAttribute.HideLabel = types.BoolNull()
+				attributes1.UserRelationAttribute.Hidden = types.BoolNull()
 			}
-			if attributesItem.ConsentAttribute.Icon != nil {
-				attributes1.ConsentAttribute.Icon = types.StringValue(*attributesItem.ConsentAttribute.Icon)
+			if attributesItem.UserRelationAttribute.HideLabel != nil {
+				attributes1.UserRelationAttribute.HideLabel = types.BoolValue(*attributesItem.UserRelationAttribute.HideLabel)
 			} else {
-				attributes1.ConsentAttribute.Icon = types.StringNull()
+				attributes1.UserRelationAttribute.HideLabel = types.BoolNull()
 			}
-			attributes1.ConsentAttribute.Identifiers = nil
-			for _, v := range attributesItem.ConsentAttribute.Identifiers {
-				attributes1.ConsentAttribute.Identifiers = append(attributes1.ConsentAttribute.Identifiers, types.StringValue(v))
-			}
-			attributes1.ConsentAttribute.Label = types.StringValue(attributesItem.ConsentAttribute.Label)
-			if attributesItem.ConsentAttribute.Layout != nil {
-				attributes1.ConsentAttribute.Layout = types.StringValue(*attributesItem.ConsentAttribute.Layout)
+			if attributesItem.UserRelationAttribute.Icon != nil {
+				attributes1.UserRelationAttribute.Icon = types.StringValue(*attributesItem.UserRelationAttribute.Icon)
 			} else {
-				attributes1.ConsentAttribute.Layout = types.StringNull()
+				attributes1.UserRelationAttribute.Icon = types.StringNull()
 			}
-			attributes1.ConsentAttribute.Name = types.StringValue(attributesItem.ConsentAttribute.Name)
-			if attributesItem.ConsentAttribute.Order != nil {
-				attributes1.ConsentAttribute.Order = types.Int64Value(*attributesItem.ConsentAttribute.Order)
+			attributes1.UserRelationAttribute.Label = types.StringValue(attributesItem.UserRelationAttribute.Label)
+			if attributesItem.UserRelationAttribute.Layout != nil {
+				attributes1.UserRelationAttribute.Layout = types.StringValue(*attributesItem.UserRelationAttribute.Layout)
 			} else {
-				attributes1.ConsentAttribute.Order = types.Int64Null()
+				attributes1.UserRelationAttribute.Layout = types.StringNull()
 			}
-			if attributesItem.ConsentAttribute.Placeholder != nil {
-				attributes1.ConsentAttribute.Placeholder = types.StringValue(*attributesItem.ConsentAttribute.Placeholder)
+			if attributesItem.UserRelationAttribute.Multiple != nil {
+				attributes1.UserRelationAttribute.Multiple = types.BoolValue(*attributesItem.UserRelationAttribute.Multiple)
 			} else {
-				attributes1.ConsentAttribute.Placeholder = types.StringNull()
+				attributes1.UserRelationAttribute.Multiple = types.BoolNull()
 			}
-			if attributesItem.ConsentAttribute.PreviewValueFormatter != nil {
-				attributes1.ConsentAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.ConsentAttribute.PreviewValueFormatter)
+			attributes1.UserRelationAttribute.Name = types.StringValue(attributesItem.UserRelationAttribute.Name)
+			if attributesItem.UserRelationAttribute.Order != nil {
+				attributes1.UserRelationAttribute.Order = types.Int64Value(*attributesItem.UserRelationAttribute.Order)
 			} else {
-				attributes1.ConsentAttribute.PreviewValueFormatter = types.StringNull()
+				attributes1.UserRelationAttribute.Order = types.Int64Null()
 			}
-			if attributesItem.ConsentAttribute.Protected != nil {
-				attributes1.ConsentAttribute.Protected = types.BoolValue(*attributesItem.ConsentAttribute.Protected)
+			if attributesItem.UserRelationAttribute.Placeholder != nil {
+				attributes1.UserRelationAttribute.Placeholder = types.StringValue(*attributesItem.UserRelationAttribute.Placeholder)
 			} else {
-				attributes1.ConsentAttribute.Protected = types.BoolNull()
+				attributes1.UserRelationAttribute.Placeholder = types.StringNull()
 			}
-			if attributesItem.ConsentAttribute.Readonly != nil {
-				attributes1.ConsentAttribute.Readonly = types.BoolValue(*attributesItem.ConsentAttribute.Readonly)
+			if attributesItem.UserRelationAttribute.PreviewValueFormatter != nil {
+				attributes1.UserRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.UserRelationAttribute.PreviewValueFormatter)
 			} else {
-				attributes1.ConsentAttribute.Readonly = types.BoolNull()
+				attributes1.UserRelationAttribute.PreviewValueFormatter = types.StringNull()
 			}
-			if attributesItem.ConsentAttribute.RenderCondition != nil {
-				attributes1.ConsentAttribute.RenderCondition = types.StringValue(*attributesItem.ConsentAttribute.RenderCondition)
+			if attributesItem.UserRelationAttribute.Protected != nil {
+				attributes1.UserRelationAttribute.Protected = types.BoolValue(*attributesItem.UserRelationAttribute.Protected)
 			} else {
-				attributes1.ConsentAttribute.RenderCondition = types.StringNull()
+				attributes1.UserRelationAttribute.Protected = types.BoolNull()
 			}
-			if attributesItem.ConsentAttribute.Required != nil {
-				attributes1.ConsentAttribute.Required = types.BoolValue(*attributesItem.ConsentAttribute.Required)
+			if attributesItem.UserRelationAttribute.Readonly != nil {
+				attributes1.UserRelationAttribute.Readonly = types.BoolValue(*attributesItem.UserRelationAttribute.Readonly)
 			} else {
-				attributes1.ConsentAttribute.Required = types.BoolNull()
+				attributes1.UserRelationAttribute.Readonly = types.BoolNull()
 			}
-			if attributesItem.ConsentAttribute.SettingFlag != nil {
-				attributes1.ConsentAttribute.SettingFlag = types.StringValue(*attributesItem.ConsentAttribute.SettingFlag)
+			if attributesItem.UserRelationAttribute.RenderCondition != nil {
+				attributes1.UserRelationAttribute.RenderCondition = types.StringValue(*attributesItem.UserRelationAttribute.RenderCondition)
 			} else {
-				attributes1.ConsentAttribute.SettingFlag = types.StringNull()
+				attributes1.UserRelationAttribute.RenderCondition = types.StringNull()
 			}
-			if attributesItem.ConsentAttribute.ShowInTable != nil {
-				attributes1.ConsentAttribute.ShowInTable = types.BoolValue(*attributesItem.ConsentAttribute.ShowInTable)
+			if attributesItem.UserRelationAttribute.Required != nil {
+				attributes1.UserRelationAttribute.Required = types.BoolValue(*attributesItem.UserRelationAttribute.Required)
 			} else {
-				attributes1.ConsentAttribute.ShowInTable = types.BoolNull()
+				attributes1.UserRelationAttribute.Required = types.BoolNull()
 			}
-			attributes1.ConsentAttribute.Topic = types.StringValue(attributesItem.ConsentAttribute.Topic)
-			attributes1.ConsentAttribute.Type = types.StringValue(string(attributesItem.ConsentAttribute.Type))
-			if attributesItem.ConsentAttribute.ValueFormatter != nil {
-				attributes1.ConsentAttribute.ValueFormatter = types.StringValue(*attributesItem.ConsentAttribute.ValueFormatter)
+			if attributesItem.UserRelationAttribute.SettingFlag != nil {
+				attributes1.UserRelationAttribute.SettingFlag = types.StringValue(*attributesItem.UserRelationAttribute.SettingFlag)
 			} else {
-				attributes1.ConsentAttribute.ValueFormatter = types.StringNull()
+				attributes1.UserRelationAttribute.SettingFlag = types.StringNull()
 			}
-		}
-		if attributesItem.InternalAttribute != nil {
-			attributes1.InternalAttribute = &InternalAttribute{}
-			attributes1.InternalAttribute.Purpose = nil
-			for _, v := range attributesItem.InternalAttribute.Purpose {
-				attributes1.InternalAttribute.Purpose = append(attributes1.InternalAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.InternalAttribute.Constraints == nil && len(attributesItem.InternalAttribute.Constraints) > 0 {
-				attributes1.InternalAttribute.Constraints = make(map[string]types.String)
-				for key19, value22 := range attributesItem.InternalAttribute.Constraints {
-					result18, _ := json.Marshal(value22)
-					attributes1.InternalAttribute.Constraints[key19] = types.StringValue(string(result18))
-				}
-			}
-			if attributesItem.InternalAttribute.DefaultValue == nil {
-				attributes1.InternalAttribute.DefaultValue = types.StringNull()
+			if attributesItem.UserRelationAttribute.ShowInTable != nil {
+				attributes1.UserRelationAttribute.ShowInTable = types.BoolValue(*attributesItem.UserRelationAttribute.ShowInTable)
 			} else {
-				defaultValueResult18, _ := json.Marshal(attributesItem.InternalAttribute.DefaultValue)
-				attributes1.InternalAttribute.DefaultValue = types.StringValue(string(defaultValueResult18))
+				attributes1.UserRelationAttribute.ShowInTable = types.BoolNull()
 			}
-			if attributesItem.InternalAttribute.Deprecated != nil {
-				attributes1.InternalAttribute.Deprecated = types.BoolValue(*attributesItem.InternalAttribute.Deprecated)
+			if attributesItem.UserRelationAttribute.Type != nil {
+				attributes1.UserRelationAttribute.Type = types.StringValue(string(*attributesItem.UserRelationAttribute.Type))
 			} else {
-				attributes1.InternalAttribute.Deprecated = types.BoolNull()
+				attributes1.UserRelationAttribute.Type = types.StringNull()
 			}
-			if attributesItem.InternalAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.InternalAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.InternalAttribute.EntityBuilderDisableEdit)
+			if attributesItem.UserRelationAttribute.ValueFormatter != nil {
+				attributes1.UserRelationAttribute.ValueFormatter = types.StringValue(*attributesItem.UserRelationAttribute.ValueFormatter)
 			} else {
-				attributes1.InternalAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.FeatureFlag != nil {
-				attributes1.InternalAttribute.FeatureFlag = types.StringValue(*attributesItem.InternalAttribute.FeatureFlag)
-			} else {
-				attributes1.InternalAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.Group != nil {
-				attributes1.InternalAttribute.Group = types.StringValue(*attributesItem.InternalAttribute.Group)
-			} else {
-				attributes1.InternalAttribute.Group = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.Hidden != nil {
-				attributes1.InternalAttribute.Hidden = types.BoolValue(*attributesItem.InternalAttribute.Hidden)
-			} else {
-				attributes1.InternalAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.HideLabel != nil {
-				attributes1.InternalAttribute.HideLabel = types.BoolValue(*attributesItem.InternalAttribute.HideLabel)
-			} else {
-				attributes1.InternalAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.Icon != nil {
-				attributes1.InternalAttribute.Icon = types.StringValue(*attributesItem.InternalAttribute.Icon)
-			} else {
-				attributes1.InternalAttribute.Icon = types.StringNull()
-			}
-			attributes1.InternalAttribute.Label = types.StringValue(attributesItem.InternalAttribute.Label)
-			if attributesItem.InternalAttribute.Layout != nil {
-				attributes1.InternalAttribute.Layout = types.StringValue(*attributesItem.InternalAttribute.Layout)
-			} else {
-				attributes1.InternalAttribute.Layout = types.StringNull()
-			}
-			attributes1.InternalAttribute.Name = types.StringValue(attributesItem.InternalAttribute.Name)
-			if attributesItem.InternalAttribute.Order != nil {
-				attributes1.InternalAttribute.Order = types.Int64Value(*attributesItem.InternalAttribute.Order)
-			} else {
-				attributes1.InternalAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.InternalAttribute.Placeholder != nil {
-				attributes1.InternalAttribute.Placeholder = types.StringValue(*attributesItem.InternalAttribute.Placeholder)
-			} else {
-				attributes1.InternalAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.PreviewValueFormatter != nil {
-				attributes1.InternalAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.InternalAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.InternalAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.Protected != nil {
-				attributes1.InternalAttribute.Protected = types.BoolValue(*attributesItem.InternalAttribute.Protected)
-			} else {
-				attributes1.InternalAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.Readonly != nil {
-				attributes1.InternalAttribute.Readonly = types.BoolValue(*attributesItem.InternalAttribute.Readonly)
-			} else {
-				attributes1.InternalAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.RenderCondition != nil {
-				attributes1.InternalAttribute.RenderCondition = types.StringValue(*attributesItem.InternalAttribute.RenderCondition)
-			} else {
-				attributes1.InternalAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.Required != nil {
-				attributes1.InternalAttribute.Required = types.BoolValue(*attributesItem.InternalAttribute.Required)
-			} else {
-				attributes1.InternalAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.SettingFlag != nil {
-				attributes1.InternalAttribute.SettingFlag = types.StringValue(*attributesItem.InternalAttribute.SettingFlag)
-			} else {
-				attributes1.InternalAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.ShowInTable != nil {
-				attributes1.InternalAttribute.ShowInTable = types.BoolValue(*attributesItem.InternalAttribute.ShowInTable)
-			} else {
-				attributes1.InternalAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.InternalAttribute.Type != nil {
-				attributes1.InternalAttribute.Type = types.StringValue(string(*attributesItem.InternalAttribute.Type))
-			} else {
-				attributes1.InternalAttribute.Type = types.StringNull()
-			}
-			if attributesItem.InternalAttribute.ValueFormatter != nil {
-				attributes1.InternalAttribute.ValueFormatter = types.StringValue(*attributesItem.InternalAttribute.ValueFormatter)
-			} else {
-				attributes1.InternalAttribute.ValueFormatter = types.StringNull()
+				attributes1.UserRelationAttribute.ValueFormatter = types.StringNull()
 			}
 		}
-		if attributesItem.OrderedListAttribute != nil {
-			attributes1.OrderedListAttribute = &OrderedListAttribute{}
-			attributes1.OrderedListAttribute.Purpose = nil
-			for _, v := range attributesItem.OrderedListAttribute.Purpose {
-				attributes1.OrderedListAttribute.Purpose = append(attributes1.OrderedListAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.OrderedListAttribute.Constraints == nil && len(attributesItem.OrderedListAttribute.Constraints) > 0 {
-				attributes1.OrderedListAttribute.Constraints = make(map[string]types.String)
-				for key20, value23 := range attributesItem.OrderedListAttribute.Constraints {
-					result19, _ := json.Marshal(value23)
-					attributes1.OrderedListAttribute.Constraints[key20] = types.StringValue(string(result19))
-				}
-			}
-			if attributesItem.OrderedListAttribute.DefaultValue == nil {
-				attributes1.OrderedListAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult19, _ := json.Marshal(attributesItem.OrderedListAttribute.DefaultValue)
-				attributes1.OrderedListAttribute.DefaultValue = types.StringValue(string(defaultValueResult19))
-			}
-			if attributesItem.OrderedListAttribute.Deprecated != nil {
-				attributes1.OrderedListAttribute.Deprecated = types.BoolValue(*attributesItem.OrderedListAttribute.Deprecated)
-			} else {
-				attributes1.OrderedListAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.OrderedListAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.FeatureFlag != nil {
-				attributes1.OrderedListAttribute.FeatureFlag = types.StringValue(*attributesItem.OrderedListAttribute.FeatureFlag)
-			} else {
-				attributes1.OrderedListAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.Group != nil {
-				attributes1.OrderedListAttribute.Group = types.StringValue(*attributesItem.OrderedListAttribute.Group)
-			} else {
-				attributes1.OrderedListAttribute.Group = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.Hidden != nil {
-				attributes1.OrderedListAttribute.Hidden = types.BoolValue(*attributesItem.OrderedListAttribute.Hidden)
-			} else {
-				attributes1.OrderedListAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.HideLabel != nil {
-				attributes1.OrderedListAttribute.HideLabel = types.BoolValue(*attributesItem.OrderedListAttribute.HideLabel)
-			} else {
-				attributes1.OrderedListAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.Icon != nil {
-				attributes1.OrderedListAttribute.Icon = types.StringValue(*attributesItem.OrderedListAttribute.Icon)
-			} else {
-				attributes1.OrderedListAttribute.Icon = types.StringNull()
-			}
-			attributes1.OrderedListAttribute.Label = types.StringValue(attributesItem.OrderedListAttribute.Label)
-			if attributesItem.OrderedListAttribute.Layout != nil {
-				attributes1.OrderedListAttribute.Layout = types.StringValue(*attributesItem.OrderedListAttribute.Layout)
-			} else {
-				attributes1.OrderedListAttribute.Layout = types.StringNull()
-			}
-			attributes1.OrderedListAttribute.Name = types.StringValue(attributesItem.OrderedListAttribute.Name)
-			if attributesItem.OrderedListAttribute.Order != nil {
-				attributes1.OrderedListAttribute.Order = types.Int64Value(*attributesItem.OrderedListAttribute.Order)
-			} else {
-				attributes1.OrderedListAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.OrderedListAttribute.Placeholder != nil {
-				attributes1.OrderedListAttribute.Placeholder = types.StringValue(*attributesItem.OrderedListAttribute.Placeholder)
-			} else {
-				attributes1.OrderedListAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.PreviewValueFormatter != nil {
-				attributes1.OrderedListAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.OrderedListAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.OrderedListAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.Protected != nil {
-				attributes1.OrderedListAttribute.Protected = types.BoolValue(*attributesItem.OrderedListAttribute.Protected)
-			} else {
-				attributes1.OrderedListAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.Readonly != nil {
-				attributes1.OrderedListAttribute.Readonly = types.BoolValue(*attributesItem.OrderedListAttribute.Readonly)
-			} else {
-				attributes1.OrderedListAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.RenderCondition != nil {
-				attributes1.OrderedListAttribute.RenderCondition = types.StringValue(*attributesItem.OrderedListAttribute.RenderCondition)
-			} else {
-				attributes1.OrderedListAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.Required != nil {
-				attributes1.OrderedListAttribute.Required = types.BoolValue(*attributesItem.OrderedListAttribute.Required)
-			} else {
-				attributes1.OrderedListAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.SettingFlag != nil {
-				attributes1.OrderedListAttribute.SettingFlag = types.StringValue(*attributesItem.OrderedListAttribute.SettingFlag)
-			} else {
-				attributes1.OrderedListAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.ShowInTable != nil {
-				attributes1.OrderedListAttribute.ShowInTable = types.BoolValue(*attributesItem.OrderedListAttribute.ShowInTable)
-			} else {
-				attributes1.OrderedListAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.OrderedListAttribute.Type != nil {
-				attributes1.OrderedListAttribute.Type = types.StringValue(string(*attributesItem.OrderedListAttribute.Type))
-			} else {
-				attributes1.OrderedListAttribute.Type = types.StringNull()
-			}
-			if attributesItem.OrderedListAttribute.ValueFormatter != nil {
-				attributes1.OrderedListAttribute.ValueFormatter = types.StringValue(*attributesItem.OrderedListAttribute.ValueFormatter)
-			} else {
-				attributes1.OrderedListAttribute.ValueFormatter = types.StringNull()
-			}
+		if attributesCount+1 > len(r.Attributes) {
+			r.Attributes = append(r.Attributes, attributes1)
+		} else {
 		}
-		if attributesItem.FileAttribute != nil {
-			attributes1.FileAttribute = &FileAttribute{}
-			attributes1.FileAttribute.Purpose = nil
-			for _, v := range attributesItem.FileAttribute.Purpose {
-				attributes1.FileAttribute.Purpose = append(attributes1.FileAttribute.Purpose, types.StringValue(v))
-			}
-			attributes1.FileAttribute.AllowedExtensions = nil
-			for _, v := range attributesItem.FileAttribute.AllowedExtensions {
-				attributes1.FileAttribute.AllowedExtensions = append(attributes1.FileAttribute.AllowedExtensions, types.StringValue(v))
-			}
-			if attributes1.FileAttribute.Constraints == nil && len(attributesItem.FileAttribute.Constraints) > 0 {
-				attributes1.FileAttribute.Constraints = make(map[string]types.String)
-				for key21, value24 := range attributesItem.FileAttribute.Constraints {
-					result20, _ := json.Marshal(value24)
-					attributes1.FileAttribute.Constraints[key21] = types.StringValue(string(result20))
-				}
-			}
-			if attributesItem.FileAttribute.DefaultAccessControl != nil {
-				attributes1.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem.FileAttribute.DefaultAccessControl))
-			} else {
-				attributes1.FileAttribute.DefaultAccessControl = types.StringNull()
-			}
-			if attributesItem.FileAttribute.DefaultValue == nil {
-				attributes1.FileAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult20, _ := json.Marshal(attributesItem.FileAttribute.DefaultValue)
-				attributes1.FileAttribute.DefaultValue = types.StringValue(string(defaultValueResult20))
-			}
-			if attributesItem.FileAttribute.Deprecated != nil {
-				attributes1.FileAttribute.Deprecated = types.BoolValue(*attributesItem.FileAttribute.Deprecated)
-			} else {
-				attributes1.FileAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.DisplayImagesLandscaped != nil {
-				attributes1.FileAttribute.DisplayImagesLandscaped = types.BoolValue(*attributesItem.FileAttribute.DisplayImagesLandscaped)
-			} else {
-				attributes1.FileAttribute.DisplayImagesLandscaped = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.EnableDescription != nil {
-				attributes1.FileAttribute.EnableDescription = types.BoolValue(*attributesItem.FileAttribute.EnableDescription)
-			} else {
-				attributes1.FileAttribute.EnableDescription = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.FileAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.FileAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.FileAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.FeatureFlag != nil {
-				attributes1.FileAttribute.FeatureFlag = types.StringValue(*attributesItem.FileAttribute.FeatureFlag)
-			} else {
-				attributes1.FileAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.FileAttribute.Group != nil {
-				attributes1.FileAttribute.Group = types.StringValue(*attributesItem.FileAttribute.Group)
-			} else {
-				attributes1.FileAttribute.Group = types.StringNull()
-			}
-			if attributesItem.FileAttribute.Hidden != nil {
-				attributes1.FileAttribute.Hidden = types.BoolValue(*attributesItem.FileAttribute.Hidden)
-			} else {
-				attributes1.FileAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.HideLabel != nil {
-				attributes1.FileAttribute.HideLabel = types.BoolValue(*attributesItem.FileAttribute.HideLabel)
-			} else {
-				attributes1.FileAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.Icon != nil {
-				attributes1.FileAttribute.Icon = types.StringValue(*attributesItem.FileAttribute.Icon)
-			} else {
-				attributes1.FileAttribute.Icon = types.StringNull()
-			}
-			attributes1.FileAttribute.Label = types.StringValue(attributesItem.FileAttribute.Label)
-			if attributesItem.FileAttribute.Layout != nil {
-				attributes1.FileAttribute.Layout = types.StringValue(*attributesItem.FileAttribute.Layout)
-			} else {
-				attributes1.FileAttribute.Layout = types.StringNull()
-			}
-			if attributesItem.FileAttribute.Multiple != nil {
-				attributes1.FileAttribute.Multiple = types.BoolValue(*attributesItem.FileAttribute.Multiple)
-			} else {
-				attributes1.FileAttribute.Multiple = types.BoolNull()
-			}
-			attributes1.FileAttribute.Name = types.StringValue(attributesItem.FileAttribute.Name)
-			if attributesItem.FileAttribute.Order != nil {
-				attributes1.FileAttribute.Order = types.Int64Value(*attributesItem.FileAttribute.Order)
-			} else {
-				attributes1.FileAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.FileAttribute.Placeholder != nil {
-				attributes1.FileAttribute.Placeholder = types.StringValue(*attributesItem.FileAttribute.Placeholder)
-			} else {
-				attributes1.FileAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.FileAttribute.PreviewValueFormatter != nil {
-				attributes1.FileAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.FileAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.FileAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.FileAttribute.Protected != nil {
-				attributes1.FileAttribute.Protected = types.BoolValue(*attributesItem.FileAttribute.Protected)
-			} else {
-				attributes1.FileAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.Readonly != nil {
-				attributes1.FileAttribute.Readonly = types.BoolValue(*attributesItem.FileAttribute.Readonly)
-			} else {
-				attributes1.FileAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.RenderCondition != nil {
-				attributes1.FileAttribute.RenderCondition = types.StringValue(*attributesItem.FileAttribute.RenderCondition)
-			} else {
-				attributes1.FileAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.FileAttribute.Required != nil {
-				attributes1.FileAttribute.Required = types.BoolValue(*attributesItem.FileAttribute.Required)
-			} else {
-				attributes1.FileAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.FileAttribute.SettingFlag != nil {
-				attributes1.FileAttribute.SettingFlag = types.StringValue(*attributesItem.FileAttribute.SettingFlag)
-			} else {
-				attributes1.FileAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.FileAttribute.ShowInTable != nil {
-				attributes1.FileAttribute.ShowInTable = types.BoolValue(*attributesItem.FileAttribute.ShowInTable)
-			} else {
-				attributes1.FileAttribute.ShowInTable = types.BoolNull()
-			}
-			attributes1.FileAttribute.Type = types.StringValue(string(attributesItem.FileAttribute.Type))
-			if attributesItem.FileAttribute.ValueFormatter != nil {
-				attributes1.FileAttribute.ValueFormatter = types.StringValue(*attributesItem.FileAttribute.ValueFormatter)
-			} else {
-				attributes1.FileAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.ComputedAttribute != nil {
-			attributes1.ComputedAttribute = &ComputedAttribute{}
-			attributes1.ComputedAttribute.Purpose = nil
-			for _, v := range attributesItem.ComputedAttribute.Purpose {
-				attributes1.ComputedAttribute.Purpose = append(attributes1.ComputedAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.ComputedAttribute.Constraints == nil && len(attributesItem.ComputedAttribute.Constraints) > 0 {
-				attributes1.ComputedAttribute.Constraints = make(map[string]types.String)
-				for key22, value25 := range attributesItem.ComputedAttribute.Constraints {
-					result21, _ := json.Marshal(value25)
-					attributes1.ComputedAttribute.Constraints[key22] = types.StringValue(string(result21))
-				}
-			}
-			if attributesItem.ComputedAttribute.DefaultValue == nil {
-				attributes1.ComputedAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult21, _ := json.Marshal(attributesItem.ComputedAttribute.DefaultValue)
-				attributes1.ComputedAttribute.DefaultValue = types.StringValue(string(defaultValueResult21))
-			}
-			if attributesItem.ComputedAttribute.Deprecated != nil {
-				attributes1.ComputedAttribute.Deprecated = types.BoolValue(*attributesItem.ComputedAttribute.Deprecated)
-			} else {
-				attributes1.ComputedAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.ComputedAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.ComputedAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.ComputedAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.FeatureFlag != nil {
-				attributes1.ComputedAttribute.FeatureFlag = types.StringValue(*attributesItem.ComputedAttribute.FeatureFlag)
-			} else {
-				attributes1.ComputedAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.Group != nil {
-				attributes1.ComputedAttribute.Group = types.StringValue(*attributesItem.ComputedAttribute.Group)
-			} else {
-				attributes1.ComputedAttribute.Group = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.Hidden != nil {
-				attributes1.ComputedAttribute.Hidden = types.BoolValue(*attributesItem.ComputedAttribute.Hidden)
-			} else {
-				attributes1.ComputedAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.HideLabel != nil {
-				attributes1.ComputedAttribute.HideLabel = types.BoolValue(*attributesItem.ComputedAttribute.HideLabel)
-			} else {
-				attributes1.ComputedAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.Icon != nil {
-				attributes1.ComputedAttribute.Icon = types.StringValue(*attributesItem.ComputedAttribute.Icon)
-			} else {
-				attributes1.ComputedAttribute.Icon = types.StringNull()
-			}
-			attributes1.ComputedAttribute.Label = types.StringValue(attributesItem.ComputedAttribute.Label)
-			if attributesItem.ComputedAttribute.Layout != nil {
-				attributes1.ComputedAttribute.Layout = types.StringValue(*attributesItem.ComputedAttribute.Layout)
-			} else {
-				attributes1.ComputedAttribute.Layout = types.StringNull()
-			}
-			attributes1.ComputedAttribute.Name = types.StringValue(attributesItem.ComputedAttribute.Name)
-			if attributesItem.ComputedAttribute.Order != nil {
-				attributes1.ComputedAttribute.Order = types.Int64Value(*attributesItem.ComputedAttribute.Order)
-			} else {
-				attributes1.ComputedAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.ComputedAttribute.Placeholder != nil {
-				attributes1.ComputedAttribute.Placeholder = types.StringValue(*attributesItem.ComputedAttribute.Placeholder)
-			} else {
-				attributes1.ComputedAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.PreviewValueFormatter != nil {
-				attributes1.ComputedAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.ComputedAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.ComputedAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.Protected != nil {
-				attributes1.ComputedAttribute.Protected = types.BoolValue(*attributesItem.ComputedAttribute.Protected)
-			} else {
-				attributes1.ComputedAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.Readonly != nil {
-				attributes1.ComputedAttribute.Readonly = types.BoolValue(*attributesItem.ComputedAttribute.Readonly)
-			} else {
-				attributes1.ComputedAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.RenderCondition != nil {
-				attributes1.ComputedAttribute.RenderCondition = types.StringValue(*attributesItem.ComputedAttribute.RenderCondition)
-			} else {
-				attributes1.ComputedAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.Required != nil {
-				attributes1.ComputedAttribute.Required = types.BoolValue(*attributesItem.ComputedAttribute.Required)
-			} else {
-				attributes1.ComputedAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.SettingFlag != nil {
-				attributes1.ComputedAttribute.SettingFlag = types.StringValue(*attributesItem.ComputedAttribute.SettingFlag)
-			} else {
-				attributes1.ComputedAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.ShowInTable != nil {
-				attributes1.ComputedAttribute.ShowInTable = types.BoolValue(*attributesItem.ComputedAttribute.ShowInTable)
-			} else {
-				attributes1.ComputedAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.ComputedAttribute.Type != nil {
-				attributes1.ComputedAttribute.Type = types.StringValue(string(*attributesItem.ComputedAttribute.Type))
-			} else {
-				attributes1.ComputedAttribute.Type = types.StringNull()
-			}
-			if attributesItem.ComputedAttribute.ValueFormatter != nil {
-				attributes1.ComputedAttribute.ValueFormatter = types.StringValue(*attributesItem.ComputedAttribute.ValueFormatter)
-			} else {
-				attributes1.ComputedAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.PartnerStatusAttribute != nil {
-			attributes1.PartnerStatusAttribute = &PartnerStatusAttribute{}
-			attributes1.PartnerStatusAttribute.Purpose = nil
-			for _, v := range attributesItem.PartnerStatusAttribute.Purpose {
-				attributes1.PartnerStatusAttribute.Purpose = append(attributes1.PartnerStatusAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.PartnerStatusAttribute.Constraints == nil && len(attributesItem.PartnerStatusAttribute.Constraints) > 0 {
-				attributes1.PartnerStatusAttribute.Constraints = make(map[string]types.String)
-				for key23, value26 := range attributesItem.PartnerStatusAttribute.Constraints {
-					result22, _ := json.Marshal(value26)
-					attributes1.PartnerStatusAttribute.Constraints[key23] = types.StringValue(string(result22))
-				}
-			}
-			if attributesItem.PartnerStatusAttribute.DefaultValue == nil {
-				attributes1.PartnerStatusAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult22, _ := json.Marshal(attributesItem.PartnerStatusAttribute.DefaultValue)
-				attributes1.PartnerStatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult22))
-			}
-			if attributesItem.PartnerStatusAttribute.Deprecated != nil {
-				attributes1.PartnerStatusAttribute.Deprecated = types.BoolValue(*attributesItem.PartnerStatusAttribute.Deprecated)
-			} else {
-				attributes1.PartnerStatusAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.PartnerStatusAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.FeatureFlag != nil {
-				attributes1.PartnerStatusAttribute.FeatureFlag = types.StringValue(*attributesItem.PartnerStatusAttribute.FeatureFlag)
-			} else {
-				attributes1.PartnerStatusAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Group != nil {
-				attributes1.PartnerStatusAttribute.Group = types.StringValue(*attributesItem.PartnerStatusAttribute.Group)
-			} else {
-				attributes1.PartnerStatusAttribute.Group = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Hidden != nil {
-				attributes1.PartnerStatusAttribute.Hidden = types.BoolValue(*attributesItem.PartnerStatusAttribute.Hidden)
-			} else {
-				attributes1.PartnerStatusAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.HideLabel != nil {
-				attributes1.PartnerStatusAttribute.HideLabel = types.BoolValue(*attributesItem.PartnerStatusAttribute.HideLabel)
-			} else {
-				attributes1.PartnerStatusAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Icon != nil {
-				attributes1.PartnerStatusAttribute.Icon = types.StringValue(*attributesItem.PartnerStatusAttribute.Icon)
-			} else {
-				attributes1.PartnerStatusAttribute.Icon = types.StringNull()
-			}
-			attributes1.PartnerStatusAttribute.Label = types.StringValue(attributesItem.PartnerStatusAttribute.Label)
-			if attributesItem.PartnerStatusAttribute.Layout != nil {
-				attributes1.PartnerStatusAttribute.Layout = types.StringValue(*attributesItem.PartnerStatusAttribute.Layout)
-			} else {
-				attributes1.PartnerStatusAttribute.Layout = types.StringNull()
-			}
-			attributes1.PartnerStatusAttribute.Name = types.StringValue(attributesItem.PartnerStatusAttribute.Name)
-			if attributesItem.PartnerStatusAttribute.Order != nil {
-				attributes1.PartnerStatusAttribute.Order = types.Int64Value(*attributesItem.PartnerStatusAttribute.Order)
-			} else {
-				attributes1.PartnerStatusAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.PartnerStatusAttribute.Placeholder != nil {
-				attributes1.PartnerStatusAttribute.Placeholder = types.StringValue(*attributesItem.PartnerStatusAttribute.Placeholder)
-			} else {
-				attributes1.PartnerStatusAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.PreviewValueFormatter != nil {
-				attributes1.PartnerStatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.PartnerStatusAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.PartnerStatusAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Protected != nil {
-				attributes1.PartnerStatusAttribute.Protected = types.BoolValue(*attributesItem.PartnerStatusAttribute.Protected)
-			} else {
-				attributes1.PartnerStatusAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Readonly != nil {
-				attributes1.PartnerStatusAttribute.Readonly = types.BoolValue(*attributesItem.PartnerStatusAttribute.Readonly)
-			} else {
-				attributes1.PartnerStatusAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.RenderCondition != nil {
-				attributes1.PartnerStatusAttribute.RenderCondition = types.StringValue(*attributesItem.PartnerStatusAttribute.RenderCondition)
-			} else {
-				attributes1.PartnerStatusAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Required != nil {
-				attributes1.PartnerStatusAttribute.Required = types.BoolValue(*attributesItem.PartnerStatusAttribute.Required)
-			} else {
-				attributes1.PartnerStatusAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.SettingFlag != nil {
-				attributes1.PartnerStatusAttribute.SettingFlag = types.StringValue(*attributesItem.PartnerStatusAttribute.SettingFlag)
-			} else {
-				attributes1.PartnerStatusAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.ShowInTable != nil {
-				attributes1.PartnerStatusAttribute.ShowInTable = types.BoolValue(*attributesItem.PartnerStatusAttribute.ShowInTable)
-			} else {
-				attributes1.PartnerStatusAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.PartnerStatusAttribute.Type != nil {
-				attributes1.PartnerStatusAttribute.Type = types.StringValue(string(*attributesItem.PartnerStatusAttribute.Type))
-			} else {
-				attributes1.PartnerStatusAttribute.Type = types.StringNull()
-			}
-			if attributesItem.PartnerStatusAttribute.ValueFormatter != nil {
-				attributes1.PartnerStatusAttribute.ValueFormatter = types.StringValue(*attributesItem.PartnerStatusAttribute.ValueFormatter)
-			} else {
-				attributes1.PartnerStatusAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.InvitationEmailAttribute != nil {
-			attributes1.InvitationEmailAttribute = &InvitationEmailAttribute{}
-			attributes1.InvitationEmailAttribute.Purpose = nil
-			for _, v := range attributesItem.InvitationEmailAttribute.Purpose {
-				attributes1.InvitationEmailAttribute.Purpose = append(attributes1.InvitationEmailAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.InvitationEmailAttribute.Constraints == nil && len(attributesItem.InvitationEmailAttribute.Constraints) > 0 {
-				attributes1.InvitationEmailAttribute.Constraints = make(map[string]types.String)
-				for key24, value27 := range attributesItem.InvitationEmailAttribute.Constraints {
-					result23, _ := json.Marshal(value27)
-					attributes1.InvitationEmailAttribute.Constraints[key24] = types.StringValue(string(result23))
-				}
-			}
-			if attributesItem.InvitationEmailAttribute.DefaultValue == nil {
-				attributes1.InvitationEmailAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult23, _ := json.Marshal(attributesItem.InvitationEmailAttribute.DefaultValue)
-				attributes1.InvitationEmailAttribute.DefaultValue = types.StringValue(string(defaultValueResult23))
-			}
-			if attributesItem.InvitationEmailAttribute.Deprecated != nil {
-				attributes1.InvitationEmailAttribute.Deprecated = types.BoolValue(*attributesItem.InvitationEmailAttribute.Deprecated)
-			} else {
-				attributes1.InvitationEmailAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.InvitationEmailAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.FeatureFlag != nil {
-				attributes1.InvitationEmailAttribute.FeatureFlag = types.StringValue(*attributesItem.InvitationEmailAttribute.FeatureFlag)
-			} else {
-				attributes1.InvitationEmailAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Group != nil {
-				attributes1.InvitationEmailAttribute.Group = types.StringValue(*attributesItem.InvitationEmailAttribute.Group)
-			} else {
-				attributes1.InvitationEmailAttribute.Group = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Hidden != nil {
-				attributes1.InvitationEmailAttribute.Hidden = types.BoolValue(*attributesItem.InvitationEmailAttribute.Hidden)
-			} else {
-				attributes1.InvitationEmailAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.HideLabel != nil {
-				attributes1.InvitationEmailAttribute.HideLabel = types.BoolValue(*attributesItem.InvitationEmailAttribute.HideLabel)
-			} else {
-				attributes1.InvitationEmailAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Icon != nil {
-				attributes1.InvitationEmailAttribute.Icon = types.StringValue(*attributesItem.InvitationEmailAttribute.Icon)
-			} else {
-				attributes1.InvitationEmailAttribute.Icon = types.StringNull()
-			}
-			attributes1.InvitationEmailAttribute.Label = types.StringValue(attributesItem.InvitationEmailAttribute.Label)
-			if attributesItem.InvitationEmailAttribute.Layout != nil {
-				attributes1.InvitationEmailAttribute.Layout = types.StringValue(*attributesItem.InvitationEmailAttribute.Layout)
-			} else {
-				attributes1.InvitationEmailAttribute.Layout = types.StringNull()
-			}
-			attributes1.InvitationEmailAttribute.Name = types.StringValue(attributesItem.InvitationEmailAttribute.Name)
-			if attributesItem.InvitationEmailAttribute.Order != nil {
-				attributes1.InvitationEmailAttribute.Order = types.Int64Value(*attributesItem.InvitationEmailAttribute.Order)
-			} else {
-				attributes1.InvitationEmailAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.InvitationEmailAttribute.Placeholder != nil {
-				attributes1.InvitationEmailAttribute.Placeholder = types.StringValue(*attributesItem.InvitationEmailAttribute.Placeholder)
-			} else {
-				attributes1.InvitationEmailAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.PreviewValueFormatter != nil {
-				attributes1.InvitationEmailAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.InvitationEmailAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.InvitationEmailAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Protected != nil {
-				attributes1.InvitationEmailAttribute.Protected = types.BoolValue(*attributesItem.InvitationEmailAttribute.Protected)
-			} else {
-				attributes1.InvitationEmailAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Readonly != nil {
-				attributes1.InvitationEmailAttribute.Readonly = types.BoolValue(*attributesItem.InvitationEmailAttribute.Readonly)
-			} else {
-				attributes1.InvitationEmailAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.RenderCondition != nil {
-				attributes1.InvitationEmailAttribute.RenderCondition = types.StringValue(*attributesItem.InvitationEmailAttribute.RenderCondition)
-			} else {
-				attributes1.InvitationEmailAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Required != nil {
-				attributes1.InvitationEmailAttribute.Required = types.BoolValue(*attributesItem.InvitationEmailAttribute.Required)
-			} else {
-				attributes1.InvitationEmailAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.SettingFlag != nil {
-				attributes1.InvitationEmailAttribute.SettingFlag = types.StringValue(*attributesItem.InvitationEmailAttribute.SettingFlag)
-			} else {
-				attributes1.InvitationEmailAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.ShowInTable != nil {
-				attributes1.InvitationEmailAttribute.ShowInTable = types.BoolValue(*attributesItem.InvitationEmailAttribute.ShowInTable)
-			} else {
-				attributes1.InvitationEmailAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.InvitationEmailAttribute.Type != nil {
-				attributes1.InvitationEmailAttribute.Type = types.StringValue(string(*attributesItem.InvitationEmailAttribute.Type))
-			} else {
-				attributes1.InvitationEmailAttribute.Type = types.StringNull()
-			}
-			if attributesItem.InvitationEmailAttribute.ValueFormatter != nil {
-				attributes1.InvitationEmailAttribute.ValueFormatter = types.StringValue(*attributesItem.InvitationEmailAttribute.ValueFormatter)
-			} else {
-				attributes1.InvitationEmailAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.AutomationAttribute != nil {
-			attributes1.AutomationAttribute = &AutomationAttribute{}
-			attributes1.AutomationAttribute.Purpose = nil
-			for _, v := range attributesItem.AutomationAttribute.Purpose {
-				attributes1.AutomationAttribute.Purpose = append(attributes1.AutomationAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.AutomationAttribute.Constraints == nil && len(attributesItem.AutomationAttribute.Constraints) > 0 {
-				attributes1.AutomationAttribute.Constraints = make(map[string]types.String)
-				for key25, value28 := range attributesItem.AutomationAttribute.Constraints {
-					result24, _ := json.Marshal(value28)
-					attributes1.AutomationAttribute.Constraints[key25] = types.StringValue(string(result24))
-				}
-			}
-			if attributesItem.AutomationAttribute.DefaultValue == nil {
-				attributes1.AutomationAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult24, _ := json.Marshal(attributesItem.AutomationAttribute.DefaultValue)
-				attributes1.AutomationAttribute.DefaultValue = types.StringValue(string(defaultValueResult24))
-			}
-			if attributesItem.AutomationAttribute.Deprecated != nil {
-				attributes1.AutomationAttribute.Deprecated = types.BoolValue(*attributesItem.AutomationAttribute.Deprecated)
-			} else {
-				attributes1.AutomationAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.AutomationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.AutomationAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.AutomationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.FeatureFlag != nil {
-				attributes1.AutomationAttribute.FeatureFlag = types.StringValue(*attributesItem.AutomationAttribute.FeatureFlag)
-			} else {
-				attributes1.AutomationAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.Group != nil {
-				attributes1.AutomationAttribute.Group = types.StringValue(*attributesItem.AutomationAttribute.Group)
-			} else {
-				attributes1.AutomationAttribute.Group = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.Hidden != nil {
-				attributes1.AutomationAttribute.Hidden = types.BoolValue(*attributesItem.AutomationAttribute.Hidden)
-			} else {
-				attributes1.AutomationAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.HideLabel != nil {
-				attributes1.AutomationAttribute.HideLabel = types.BoolValue(*attributesItem.AutomationAttribute.HideLabel)
-			} else {
-				attributes1.AutomationAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.Icon != nil {
-				attributes1.AutomationAttribute.Icon = types.StringValue(*attributesItem.AutomationAttribute.Icon)
-			} else {
-				attributes1.AutomationAttribute.Icon = types.StringNull()
-			}
-			attributes1.AutomationAttribute.Label = types.StringValue(attributesItem.AutomationAttribute.Label)
-			if attributesItem.AutomationAttribute.Layout != nil {
-				attributes1.AutomationAttribute.Layout = types.StringValue(*attributesItem.AutomationAttribute.Layout)
-			} else {
-				attributes1.AutomationAttribute.Layout = types.StringNull()
-			}
-			attributes1.AutomationAttribute.Name = types.StringValue(attributesItem.AutomationAttribute.Name)
-			if attributesItem.AutomationAttribute.Order != nil {
-				attributes1.AutomationAttribute.Order = types.Int64Value(*attributesItem.AutomationAttribute.Order)
-			} else {
-				attributes1.AutomationAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.AutomationAttribute.Placeholder != nil {
-				attributes1.AutomationAttribute.Placeholder = types.StringValue(*attributesItem.AutomationAttribute.Placeholder)
-			} else {
-				attributes1.AutomationAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.PreviewValueFormatter != nil {
-				attributes1.AutomationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.AutomationAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.AutomationAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.Protected != nil {
-				attributes1.AutomationAttribute.Protected = types.BoolValue(*attributesItem.AutomationAttribute.Protected)
-			} else {
-				attributes1.AutomationAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.Readonly != nil {
-				attributes1.AutomationAttribute.Readonly = types.BoolValue(*attributesItem.AutomationAttribute.Readonly)
-			} else {
-				attributes1.AutomationAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.RenderCondition != nil {
-				attributes1.AutomationAttribute.RenderCondition = types.StringValue(*attributesItem.AutomationAttribute.RenderCondition)
-			} else {
-				attributes1.AutomationAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.Required != nil {
-				attributes1.AutomationAttribute.Required = types.BoolValue(*attributesItem.AutomationAttribute.Required)
-			} else {
-				attributes1.AutomationAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.SettingFlag != nil {
-				attributes1.AutomationAttribute.SettingFlag = types.StringValue(*attributesItem.AutomationAttribute.SettingFlag)
-			} else {
-				attributes1.AutomationAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.ShowInTable != nil {
-				attributes1.AutomationAttribute.ShowInTable = types.BoolValue(*attributesItem.AutomationAttribute.ShowInTable)
-			} else {
-				attributes1.AutomationAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.AutomationAttribute.Type != nil {
-				attributes1.AutomationAttribute.Type = types.StringValue(string(*attributesItem.AutomationAttribute.Type))
-			} else {
-				attributes1.AutomationAttribute.Type = types.StringNull()
-			}
-			if attributesItem.AutomationAttribute.ValueFormatter != nil {
-				attributes1.AutomationAttribute.ValueFormatter = types.StringValue(*attributesItem.AutomationAttribute.ValueFormatter)
-			} else {
-				attributes1.AutomationAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.InternalUserAttribute != nil {
-			attributes1.InternalUserAttribute = &InternalUserAttribute{}
-			attributes1.InternalUserAttribute.Purpose = nil
-			for _, v := range attributesItem.InternalUserAttribute.Purpose {
-				attributes1.InternalUserAttribute.Purpose = append(attributes1.InternalUserAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.InternalUserAttribute.Constraints == nil && len(attributesItem.InternalUserAttribute.Constraints) > 0 {
-				attributes1.InternalUserAttribute.Constraints = make(map[string]types.String)
-				for key26, value29 := range attributesItem.InternalUserAttribute.Constraints {
-					result25, _ := json.Marshal(value29)
-					attributes1.InternalUserAttribute.Constraints[key26] = types.StringValue(string(result25))
-				}
-			}
-			if attributesItem.InternalUserAttribute.DefaultValue == nil {
-				attributes1.InternalUserAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult25, _ := json.Marshal(attributesItem.InternalUserAttribute.DefaultValue)
-				attributes1.InternalUserAttribute.DefaultValue = types.StringValue(string(defaultValueResult25))
-			}
-			if attributesItem.InternalUserAttribute.Deprecated != nil {
-				attributes1.InternalUserAttribute.Deprecated = types.BoolValue(*attributesItem.InternalUserAttribute.Deprecated)
-			} else {
-				attributes1.InternalUserAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.InternalUserAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.FeatureFlag != nil {
-				attributes1.InternalUserAttribute.FeatureFlag = types.StringValue(*attributesItem.InternalUserAttribute.FeatureFlag)
-			} else {
-				attributes1.InternalUserAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.Group != nil {
-				attributes1.InternalUserAttribute.Group = types.StringValue(*attributesItem.InternalUserAttribute.Group)
-			} else {
-				attributes1.InternalUserAttribute.Group = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.Hidden != nil {
-				attributes1.InternalUserAttribute.Hidden = types.BoolValue(*attributesItem.InternalUserAttribute.Hidden)
-			} else {
-				attributes1.InternalUserAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.HideLabel != nil {
-				attributes1.InternalUserAttribute.HideLabel = types.BoolValue(*attributesItem.InternalUserAttribute.HideLabel)
-			} else {
-				attributes1.InternalUserAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.Icon != nil {
-				attributes1.InternalUserAttribute.Icon = types.StringValue(*attributesItem.InternalUserAttribute.Icon)
-			} else {
-				attributes1.InternalUserAttribute.Icon = types.StringNull()
-			}
-			attributes1.InternalUserAttribute.Label = types.StringValue(attributesItem.InternalUserAttribute.Label)
-			if attributesItem.InternalUserAttribute.Layout != nil {
-				attributes1.InternalUserAttribute.Layout = types.StringValue(*attributesItem.InternalUserAttribute.Layout)
-			} else {
-				attributes1.InternalUserAttribute.Layout = types.StringNull()
-			}
-			attributes1.InternalUserAttribute.Name = types.StringValue(attributesItem.InternalUserAttribute.Name)
-			if attributesItem.InternalUserAttribute.Order != nil {
-				attributes1.InternalUserAttribute.Order = types.Int64Value(*attributesItem.InternalUserAttribute.Order)
-			} else {
-				attributes1.InternalUserAttribute.Order = types.Int64Null()
-			}
-			if attributesItem.InternalUserAttribute.Placeholder != nil {
-				attributes1.InternalUserAttribute.Placeholder = types.StringValue(*attributesItem.InternalUserAttribute.Placeholder)
-			} else {
-				attributes1.InternalUserAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.PreviewValueFormatter != nil {
-				attributes1.InternalUserAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.InternalUserAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.InternalUserAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.Protected != nil {
-				attributes1.InternalUserAttribute.Protected = types.BoolValue(*attributesItem.InternalUserAttribute.Protected)
-			} else {
-				attributes1.InternalUserAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.Readonly != nil {
-				attributes1.InternalUserAttribute.Readonly = types.BoolValue(*attributesItem.InternalUserAttribute.Readonly)
-			} else {
-				attributes1.InternalUserAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.RenderCondition != nil {
-				attributes1.InternalUserAttribute.RenderCondition = types.StringValue(*attributesItem.InternalUserAttribute.RenderCondition)
-			} else {
-				attributes1.InternalUserAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.Required != nil {
-				attributes1.InternalUserAttribute.Required = types.BoolValue(*attributesItem.InternalUserAttribute.Required)
-			} else {
-				attributes1.InternalUserAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.SettingFlag != nil {
-				attributes1.InternalUserAttribute.SettingFlag = types.StringValue(*attributesItem.InternalUserAttribute.SettingFlag)
-			} else {
-				attributes1.InternalUserAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.ShowInTable != nil {
-				attributes1.InternalUserAttribute.ShowInTable = types.BoolValue(*attributesItem.InternalUserAttribute.ShowInTable)
-			} else {
-				attributes1.InternalUserAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.InternalUserAttribute.Type != nil {
-				attributes1.InternalUserAttribute.Type = types.StringValue(string(*attributesItem.InternalUserAttribute.Type))
-			} else {
-				attributes1.InternalUserAttribute.Type = types.StringNull()
-			}
-			if attributesItem.InternalUserAttribute.ValueFormatter != nil {
-				attributes1.InternalUserAttribute.ValueFormatter = types.StringValue(*attributesItem.InternalUserAttribute.ValueFormatter)
-			} else {
-				attributes1.InternalUserAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		if attributesItem.PurposeAttribute != nil {
-			attributes1.PurposeAttribute = &PurposeAttribute{}
-			attributes1.PurposeAttribute.Purpose = nil
-			for _, v := range attributesItem.PurposeAttribute.Purpose {
-				attributes1.PurposeAttribute.Purpose = append(attributes1.PurposeAttribute.Purpose, types.StringValue(v))
-			}
-			if attributes1.PurposeAttribute.Constraints == nil && len(attributesItem.PurposeAttribute.Constraints) > 0 {
-				attributes1.PurposeAttribute.Constraints = make(map[string]types.String)
-				for key27, value30 := range attributesItem.PurposeAttribute.Constraints {
-					result26, _ := json.Marshal(value30)
-					attributes1.PurposeAttribute.Constraints[key27] = types.StringValue(string(result26))
-				}
-			}
-			if attributesItem.PurposeAttribute.CreatedAt != nil {
-				attributes1.PurposeAttribute.CreatedAt = types.StringValue(attributesItem.PurposeAttribute.CreatedAt.Format(time.RFC3339))
-			} else {
-				attributes1.PurposeAttribute.CreatedAt = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.DefaultValue == nil {
-				attributes1.PurposeAttribute.DefaultValue = types.StringNull()
-			} else {
-				defaultValueResult26, _ := json.Marshal(attributesItem.PurposeAttribute.DefaultValue)
-				attributes1.PurposeAttribute.DefaultValue = types.StringValue(string(defaultValueResult26))
-			}
-			if attributesItem.PurposeAttribute.Deprecated != nil {
-				attributes1.PurposeAttribute.Deprecated = types.BoolValue(*attributesItem.PurposeAttribute.Deprecated)
-			} else {
-				attributes1.PurposeAttribute.Deprecated = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.EntityBuilderDisableEdit != nil {
-				attributes1.PurposeAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem.PurposeAttribute.EntityBuilderDisableEdit)
-			} else {
-				attributes1.PurposeAttribute.EntityBuilderDisableEdit = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.FeatureFlag != nil {
-				attributes1.PurposeAttribute.FeatureFlag = types.StringValue(*attributesItem.PurposeAttribute.FeatureFlag)
-			} else {
-				attributes1.PurposeAttribute.FeatureFlag = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.Group != nil {
-				attributes1.PurposeAttribute.Group = types.StringValue(*attributesItem.PurposeAttribute.Group)
-			} else {
-				attributes1.PurposeAttribute.Group = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.Hidden != nil {
-				attributes1.PurposeAttribute.Hidden = types.BoolValue(*attributesItem.PurposeAttribute.Hidden)
-			} else {
-				attributes1.PurposeAttribute.Hidden = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.HideLabel != nil {
-				attributes1.PurposeAttribute.HideLabel = types.BoolValue(*attributesItem.PurposeAttribute.HideLabel)
-			} else {
-				attributes1.PurposeAttribute.HideLabel = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.Icon != nil {
-				attributes1.PurposeAttribute.Icon = types.StringValue(*attributesItem.PurposeAttribute.Icon)
-			} else {
-				attributes1.PurposeAttribute.Icon = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.ID != nil {
-				attributes1.PurposeAttribute.ID = types.StringValue(*attributesItem.PurposeAttribute.ID)
-			} else {
-				attributes1.PurposeAttribute.ID = types.StringNull()
-			}
-			attributes1.PurposeAttribute.Label = types.StringValue(attributesItem.PurposeAttribute.Label)
-			if attributesItem.PurposeAttribute.Layout != nil {
-				attributes1.PurposeAttribute.Layout = types.StringValue(*attributesItem.PurposeAttribute.Layout)
-			} else {
-				attributes1.PurposeAttribute.Layout = types.StringNull()
-			}
-			attributes1.PurposeAttribute.Name = types.StringValue(attributesItem.PurposeAttribute.Name)
-			if attributesItem.PurposeAttribute.Order != nil {
-				attributes1.PurposeAttribute.Order = types.Int64Value(*attributesItem.PurposeAttribute.Order)
-			} else {
-				attributes1.PurposeAttribute.Order = types.Int64Null()
-			}
-			attributes1.PurposeAttribute.Parents = nil
-			for _, v := range attributesItem.PurposeAttribute.Parents {
-				attributes1.PurposeAttribute.Parents = append(attributes1.PurposeAttribute.Parents, types.StringValue(v))
-			}
-			if attributesItem.PurposeAttribute.Placeholder != nil {
-				attributes1.PurposeAttribute.Placeholder = types.StringValue(*attributesItem.PurposeAttribute.Placeholder)
-			} else {
-				attributes1.PurposeAttribute.Placeholder = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.PreviewValueFormatter != nil {
-				attributes1.PurposeAttribute.PreviewValueFormatter = types.StringValue(*attributesItem.PurposeAttribute.PreviewValueFormatter)
-			} else {
-				attributes1.PurposeAttribute.PreviewValueFormatter = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.Protected != nil {
-				attributes1.PurposeAttribute.Protected = types.BoolValue(*attributesItem.PurposeAttribute.Protected)
-			} else {
-				attributes1.PurposeAttribute.Protected = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.Readonly != nil {
-				attributes1.PurposeAttribute.Readonly = types.BoolValue(*attributesItem.PurposeAttribute.Readonly)
-			} else {
-				attributes1.PurposeAttribute.Readonly = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.RenderCondition != nil {
-				attributes1.PurposeAttribute.RenderCondition = types.StringValue(*attributesItem.PurposeAttribute.RenderCondition)
-			} else {
-				attributes1.PurposeAttribute.RenderCondition = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.Required != nil {
-				attributes1.PurposeAttribute.Required = types.BoolValue(*attributesItem.PurposeAttribute.Required)
-			} else {
-				attributes1.PurposeAttribute.Required = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.SettingFlag != nil {
-				attributes1.PurposeAttribute.SettingFlag = types.StringValue(*attributesItem.PurposeAttribute.SettingFlag)
-			} else {
-				attributes1.PurposeAttribute.SettingFlag = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.ShowInTable != nil {
-				attributes1.PurposeAttribute.ShowInTable = types.BoolValue(*attributesItem.PurposeAttribute.ShowInTable)
-			} else {
-				attributes1.PurposeAttribute.ShowInTable = types.BoolNull()
-			}
-			if attributesItem.PurposeAttribute.Type != nil {
-				attributes1.PurposeAttribute.Type = types.StringValue(string(*attributesItem.PurposeAttribute.Type))
-			} else {
-				attributes1.PurposeAttribute.Type = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.UpdatedAt != nil {
-				attributes1.PurposeAttribute.UpdatedAt = types.StringValue(attributesItem.PurposeAttribute.UpdatedAt.Format(time.RFC3339))
-			} else {
-				attributes1.PurposeAttribute.UpdatedAt = types.StringNull()
-			}
-			if attributesItem.PurposeAttribute.ValueFormatter != nil {
-				attributes1.PurposeAttribute.ValueFormatter = types.StringValue(*attributesItem.PurposeAttribute.ValueFormatter)
-			} else {
-				attributes1.PurposeAttribute.ValueFormatter = types.StringNull()
-			}
-		}
-		r.Attributes = append(r.Attributes, attributes1)
 	}
 	if resp.Blueprint != nil {
 		r.Blueprint = types.StringValue(*resp.Blueprint)
 	} else {
 		r.Blueprint = types.StringNull()
 	}
-	r.Capabilities = nil
-	for _, capabilitiesItem := range resp.Capabilities {
+	if len(r.Capabilities) > len(resp.Capabilities) {
+		r.Capabilities = r.Capabilities[:len(resp.Capabilities)]
+	}
+	for capabilitiesCount, capabilitiesItem := range resp.Capabilities {
 		var capabilities1 EntityCapability
 		capabilities1.Purpose = nil
 		for _, v := range capabilitiesItem.Purpose {
 			capabilities1.Purpose = append(capabilities1.Purpose, types.StringValue(v))
 		}
-		capabilities1.Attributes = nil
-		for _, attributesItem1 := range capabilitiesItem.Attributes {
-			var attributes3 Attribute1
-			if attributesItem1.TextAttribute != nil {
-				attributes3.TextAttribute = &TextAttribute{}
-				attributes3.TextAttribute.Purpose = nil
-				for _, v := range attributesItem1.TextAttribute.Purpose {
-					attributes3.TextAttribute.Purpose = append(attributes3.TextAttribute.Purpose, types.StringValue(v))
+		if len(capabilities1.Attributes) > len(capabilitiesItem.Attributes) {
+			capabilities1.Attributes = capabilities1.Attributes[:len(capabilitiesItem.Attributes)]
+		}
+		for attributesCount1, attributesItem1 := range capabilitiesItem.Attributes {
+			var attributes3 Attribute
+			if attributesItem1.AddressRelationAttribute != nil {
+				attributes3.AddressRelationAttribute = &AddressRelationAttribute{}
+				attributes3.AddressRelationAttribute.Purpose = nil
+				for _, v := range attributesItem1.AddressRelationAttribute.Purpose {
+					attributes3.AddressRelationAttribute.Purpose = append(attributes3.AddressRelationAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.TextAttribute.Constraints == nil && len(attributesItem1.TextAttribute.Constraints) > 0 {
-					attributes3.TextAttribute.Constraints = make(map[string]types.String)
-					for key28, value31 := range attributesItem1.TextAttribute.Constraints {
-						result27, _ := json.Marshal(value31)
-						attributes3.TextAttribute.Constraints[key28] = types.StringValue(string(result27))
-					}
-				}
-				if attributesItem1.TextAttribute.DefaultValue == nil {
-					attributes3.TextAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.AddressRelationAttribute.Constraints == nil {
+					attributes3.AddressRelationAttribute.Constraints = nil
 				} else {
-					defaultValueResult27, _ := json.Marshal(attributesItem1.TextAttribute.DefaultValue)
-					attributes3.TextAttribute.DefaultValue = types.StringValue(string(defaultValueResult27))
+					attributes3.AddressRelationAttribute.Constraints = &Constraints{}
 				}
-				if attributesItem1.TextAttribute.Deprecated != nil {
-					attributes3.TextAttribute.Deprecated = types.BoolValue(*attributesItem1.TextAttribute.Deprecated)
+				if attributesItem1.AddressRelationAttribute.DefaultValue == nil {
+					attributes3.AddressRelationAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.TextAttribute.Deprecated = types.BoolNull()
+					defaultValueResult27, _ := json.Marshal(attributesItem1.AddressRelationAttribute.DefaultValue)
+					attributes3.AddressRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult27))
 				}
-				if attributesItem1.TextAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.TextAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.TextAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.AddressRelationAttribute.Deprecated != nil {
+					attributes3.AddressRelationAttribute.Deprecated = types.BoolValue(*attributesItem1.AddressRelationAttribute.Deprecated)
 				} else {
-					attributes3.TextAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.AddressRelationAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.FeatureFlag != nil {
-					attributes3.TextAttribute.FeatureFlag = types.StringValue(*attributesItem1.TextAttribute.FeatureFlag)
+				if attributesItem1.AddressRelationAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.AddressRelationAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.TextAttribute.FeatureFlag = types.StringNull()
+					attributes3.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.Group != nil {
-					attributes3.TextAttribute.Group = types.StringValue(*attributesItem1.TextAttribute.Group)
+				if attributesItem1.AddressRelationAttribute.FeatureFlag != nil {
+					attributes3.AddressRelationAttribute.FeatureFlag = types.StringValue(*attributesItem1.AddressRelationAttribute.FeatureFlag)
 				} else {
-					attributes3.TextAttribute.Group = types.StringNull()
+					attributes3.AddressRelationAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.Hidden != nil {
-					attributes3.TextAttribute.Hidden = types.BoolValue(*attributesItem1.TextAttribute.Hidden)
+				if attributesItem1.AddressRelationAttribute.Group != nil {
+					attributes3.AddressRelationAttribute.Group = types.StringValue(*attributesItem1.AddressRelationAttribute.Group)
 				} else {
-					attributes3.TextAttribute.Hidden = types.BoolNull()
+					attributes3.AddressRelationAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.HideLabel != nil {
-					attributes3.TextAttribute.HideLabel = types.BoolValue(*attributesItem1.TextAttribute.HideLabel)
+				if attributesItem1.AddressRelationAttribute.HasPrimary != nil {
+					attributes3.AddressRelationAttribute.HasPrimary = types.BoolValue(*attributesItem1.AddressRelationAttribute.HasPrimary)
 				} else {
-					attributes3.TextAttribute.HideLabel = types.BoolNull()
+					attributes3.AddressRelationAttribute.HasPrimary = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.Icon != nil {
-					attributes3.TextAttribute.Icon = types.StringValue(*attributesItem1.TextAttribute.Icon)
+				if attributesItem1.AddressRelationAttribute.Hidden != nil {
+					attributes3.AddressRelationAttribute.Hidden = types.BoolValue(*attributesItem1.AddressRelationAttribute.Hidden)
 				} else {
-					attributes3.TextAttribute.Icon = types.StringNull()
+					attributes3.AddressRelationAttribute.Hidden = types.BoolNull()
 				}
-				attributes3.TextAttribute.Label = types.StringValue(attributesItem1.TextAttribute.Label)
-				if attributesItem1.TextAttribute.Layout != nil {
-					attributes3.TextAttribute.Layout = types.StringValue(*attributesItem1.TextAttribute.Layout)
+				if attributesItem1.AddressRelationAttribute.HideLabel != nil {
+					attributes3.AddressRelationAttribute.HideLabel = types.BoolValue(*attributesItem1.AddressRelationAttribute.HideLabel)
 				} else {
-					attributes3.TextAttribute.Layout = types.StringNull()
+					attributes3.AddressRelationAttribute.HideLabel = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.Multiline != nil {
-					attributes3.TextAttribute.Multiline = types.BoolValue(*attributesItem1.TextAttribute.Multiline)
+				if attributesItem1.AddressRelationAttribute.Icon != nil {
+					attributes3.AddressRelationAttribute.Icon = types.StringValue(*attributesItem1.AddressRelationAttribute.Icon)
 				} else {
-					attributes3.TextAttribute.Multiline = types.BoolNull()
+					attributes3.AddressRelationAttribute.Icon = types.StringNull()
 				}
-				attributes3.TextAttribute.Name = types.StringValue(attributesItem1.TextAttribute.Name)
-				if attributesItem1.TextAttribute.Order != nil {
-					attributes3.TextAttribute.Order = types.Int64Value(*attributesItem1.TextAttribute.Order)
+				attributes3.AddressRelationAttribute.Label = types.StringValue(attributesItem1.AddressRelationAttribute.Label)
+				if attributesItem1.AddressRelationAttribute.Layout != nil {
+					attributes3.AddressRelationAttribute.Layout = types.StringValue(*attributesItem1.AddressRelationAttribute.Layout)
 				} else {
-					attributes3.TextAttribute.Order = types.Int64Null()
+					attributes3.AddressRelationAttribute.Layout = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.Placeholder != nil {
-					attributes3.TextAttribute.Placeholder = types.StringValue(*attributesItem1.TextAttribute.Placeholder)
+				attributes3.AddressRelationAttribute.Name = types.StringValue(attributesItem1.AddressRelationAttribute.Name)
+				if attributesItem1.AddressRelationAttribute.Order != nil {
+					attributes3.AddressRelationAttribute.Order = types.Int64Value(*attributesItem1.AddressRelationAttribute.Order)
 				} else {
-					attributes3.TextAttribute.Placeholder = types.StringNull()
+					attributes3.AddressRelationAttribute.Order = types.Int64Null()
 				}
-				if attributesItem1.TextAttribute.PreviewValueFormatter != nil {
-					attributes3.TextAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.TextAttribute.PreviewValueFormatter)
+				if attributesItem1.AddressRelationAttribute.Placeholder != nil {
+					attributes3.AddressRelationAttribute.Placeholder = types.StringValue(*attributesItem1.AddressRelationAttribute.Placeholder)
 				} else {
-					attributes3.TextAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.AddressRelationAttribute.Placeholder = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.Protected != nil {
-					attributes3.TextAttribute.Protected = types.BoolValue(*attributesItem1.TextAttribute.Protected)
+				if attributesItem1.AddressRelationAttribute.PreviewValueFormatter != nil {
+					attributes3.AddressRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.AddressRelationAttribute.PreviewValueFormatter)
 				} else {
-					attributes3.TextAttribute.Protected = types.BoolNull()
+					attributes3.AddressRelationAttribute.PreviewValueFormatter = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.Readonly != nil {
-					attributes3.TextAttribute.Readonly = types.BoolValue(*attributesItem1.TextAttribute.Readonly)
+				if attributesItem1.AddressRelationAttribute.Protected != nil {
+					attributes3.AddressRelationAttribute.Protected = types.BoolValue(*attributesItem1.AddressRelationAttribute.Protected)
 				} else {
-					attributes3.TextAttribute.Readonly = types.BoolNull()
+					attributes3.AddressRelationAttribute.Protected = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.RenderCondition != nil {
-					attributes3.TextAttribute.RenderCondition = types.StringValue(*attributesItem1.TextAttribute.RenderCondition)
+				if attributesItem1.AddressRelationAttribute.Readonly != nil {
+					attributes3.AddressRelationAttribute.Readonly = types.BoolValue(*attributesItem1.AddressRelationAttribute.Readonly)
 				} else {
-					attributes3.TextAttribute.RenderCondition = types.StringNull()
+					attributes3.AddressRelationAttribute.Readonly = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.Required != nil {
-					attributes3.TextAttribute.Required = types.BoolValue(*attributesItem1.TextAttribute.Required)
+				if attributesItem1.AddressRelationAttribute.RenderCondition != nil {
+					attributes3.AddressRelationAttribute.RenderCondition = types.StringValue(*attributesItem1.AddressRelationAttribute.RenderCondition)
 				} else {
-					attributes3.TextAttribute.Required = types.BoolNull()
+					attributes3.AddressRelationAttribute.RenderCondition = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.SettingFlag != nil {
-					attributes3.TextAttribute.SettingFlag = types.StringValue(*attributesItem1.TextAttribute.SettingFlag)
+				if attributesItem1.AddressRelationAttribute.Required != nil {
+					attributes3.AddressRelationAttribute.Required = types.BoolValue(*attributesItem1.AddressRelationAttribute.Required)
 				} else {
-					attributes3.TextAttribute.SettingFlag = types.StringNull()
+					attributes3.AddressRelationAttribute.Required = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.ShowInTable != nil {
-					attributes3.TextAttribute.ShowInTable = types.BoolValue(*attributesItem1.TextAttribute.ShowInTable)
+				if attributesItem1.AddressRelationAttribute.SettingFlag != nil {
+					attributes3.AddressRelationAttribute.SettingFlag = types.StringValue(*attributesItem1.AddressRelationAttribute.SettingFlag)
 				} else {
-					attributes3.TextAttribute.ShowInTable = types.BoolNull()
+					attributes3.AddressRelationAttribute.SettingFlag = types.StringNull()
 				}
-				if attributesItem1.TextAttribute.Type != nil {
-					attributes3.TextAttribute.Type = types.StringValue(string(*attributesItem1.TextAttribute.Type))
+				if attributesItem1.AddressRelationAttribute.ShowInTable != nil {
+					attributes3.AddressRelationAttribute.ShowInTable = types.BoolValue(*attributesItem1.AddressRelationAttribute.ShowInTable)
 				} else {
-					attributes3.TextAttribute.Type = types.StringNull()
+					attributes3.AddressRelationAttribute.ShowInTable = types.BoolNull()
 				}
-				if attributesItem1.TextAttribute.ValueFormatter != nil {
-					attributes3.TextAttribute.ValueFormatter = types.StringValue(*attributesItem1.TextAttribute.ValueFormatter)
+				if attributesItem1.AddressRelationAttribute.Type != nil {
+					attributes3.AddressRelationAttribute.Type = types.StringValue(string(*attributesItem1.AddressRelationAttribute.Type))
 				} else {
-					attributes3.TextAttribute.ValueFormatter = types.StringNull()
+					attributes3.AddressRelationAttribute.Type = types.StringNull()
 				}
-			}
-			if attributesItem1.LinkAttribute != nil {
-				attributes3.LinkAttribute = &LinkAttribute{}
-				attributes3.LinkAttribute.Purpose = nil
-				for _, v := range attributesItem1.LinkAttribute.Purpose {
-					attributes3.LinkAttribute.Purpose = append(attributes3.LinkAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.LinkAttribute.Constraints == nil && len(attributesItem1.LinkAttribute.Constraints) > 0 {
-					attributes3.LinkAttribute.Constraints = make(map[string]types.String)
-					for key29, value32 := range attributesItem1.LinkAttribute.Constraints {
-						result28, _ := json.Marshal(value32)
-						attributes3.LinkAttribute.Constraints[key29] = types.StringValue(string(result28))
-					}
-				}
-				if attributesItem1.LinkAttribute.DefaultValue == nil {
-					attributes3.LinkAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.AddressRelationAttribute.ValueFormatter != nil {
+					attributes3.AddressRelationAttribute.ValueFormatter = types.StringValue(*attributesItem1.AddressRelationAttribute.ValueFormatter)
 				} else {
-					defaultValueResult28, _ := json.Marshal(attributesItem1.LinkAttribute.DefaultValue)
-					attributes3.LinkAttribute.DefaultValue = types.StringValue(string(defaultValueResult28))
-				}
-				if attributesItem1.LinkAttribute.Deprecated != nil {
-					attributes3.LinkAttribute.Deprecated = types.BoolValue(*attributesItem1.LinkAttribute.Deprecated)
-				} else {
-					attributes3.LinkAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.LinkAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.LinkAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.LinkAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.FeatureFlag != nil {
-					attributes3.LinkAttribute.FeatureFlag = types.StringValue(*attributesItem1.LinkAttribute.FeatureFlag)
-				} else {
-					attributes3.LinkAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.Group != nil {
-					attributes3.LinkAttribute.Group = types.StringValue(*attributesItem1.LinkAttribute.Group)
-				} else {
-					attributes3.LinkAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.Hidden != nil {
-					attributes3.LinkAttribute.Hidden = types.BoolValue(*attributesItem1.LinkAttribute.Hidden)
-				} else {
-					attributes3.LinkAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.HideLabel != nil {
-					attributes3.LinkAttribute.HideLabel = types.BoolValue(*attributesItem1.LinkAttribute.HideLabel)
-				} else {
-					attributes3.LinkAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.Icon != nil {
-					attributes3.LinkAttribute.Icon = types.StringValue(*attributesItem1.LinkAttribute.Icon)
-				} else {
-					attributes3.LinkAttribute.Icon = types.StringNull()
-				}
-				attributes3.LinkAttribute.Label = types.StringValue(attributesItem1.LinkAttribute.Label)
-				if attributesItem1.LinkAttribute.Layout != nil {
-					attributes3.LinkAttribute.Layout = types.StringValue(*attributesItem1.LinkAttribute.Layout)
-				} else {
-					attributes3.LinkAttribute.Layout = types.StringNull()
-				}
-				attributes3.LinkAttribute.Name = types.StringValue(attributesItem1.LinkAttribute.Name)
-				if attributesItem1.LinkAttribute.Order != nil {
-					attributes3.LinkAttribute.Order = types.Int64Value(*attributesItem1.LinkAttribute.Order)
-				} else {
-					attributes3.LinkAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.LinkAttribute.Placeholder != nil {
-					attributes3.LinkAttribute.Placeholder = types.StringValue(*attributesItem1.LinkAttribute.Placeholder)
-				} else {
-					attributes3.LinkAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.PreviewValueFormatter != nil {
-					attributes3.LinkAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.LinkAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.LinkAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.Protected != nil {
-					attributes3.LinkAttribute.Protected = types.BoolValue(*attributesItem1.LinkAttribute.Protected)
-				} else {
-					attributes3.LinkAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.Readonly != nil {
-					attributes3.LinkAttribute.Readonly = types.BoolValue(*attributesItem1.LinkAttribute.Readonly)
-				} else {
-					attributes3.LinkAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.RenderCondition != nil {
-					attributes3.LinkAttribute.RenderCondition = types.StringValue(*attributesItem1.LinkAttribute.RenderCondition)
-				} else {
-					attributes3.LinkAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.Required != nil {
-					attributes3.LinkAttribute.Required = types.BoolValue(*attributesItem1.LinkAttribute.Required)
-				} else {
-					attributes3.LinkAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.SettingFlag != nil {
-					attributes3.LinkAttribute.SettingFlag = types.StringValue(*attributesItem1.LinkAttribute.SettingFlag)
-				} else {
-					attributes3.LinkAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.ShowInTable != nil {
-					attributes3.LinkAttribute.ShowInTable = types.BoolValue(*attributesItem1.LinkAttribute.ShowInTable)
-				} else {
-					attributes3.LinkAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.LinkAttribute.Type != nil {
-					attributes3.LinkAttribute.Type = types.StringValue(string(*attributesItem1.LinkAttribute.Type))
-				} else {
-					attributes3.LinkAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.LinkAttribute.ValueFormatter != nil {
-					attributes3.LinkAttribute.ValueFormatter = types.StringValue(*attributesItem1.LinkAttribute.ValueFormatter)
-				} else {
-					attributes3.LinkAttribute.ValueFormatter = types.StringNull()
+					attributes3.AddressRelationAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.DateAttribute != nil {
-				attributes3.DateAttribute = &DateAttribute{}
-				attributes3.DateAttribute.Purpose = nil
-				for _, v := range attributesItem1.DateAttribute.Purpose {
-					attributes3.DateAttribute.Purpose = append(attributes3.DateAttribute.Purpose, types.StringValue(v))
+			if attributesItem1.AutomationAttribute != nil {
+				attributes3.AutomationAttribute = &AutomationAttribute{}
+				attributes3.AutomationAttribute.Purpose = nil
+				for _, v := range attributesItem1.AutomationAttribute.Purpose {
+					attributes3.AutomationAttribute.Purpose = append(attributes3.AutomationAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.DateAttribute.Constraints == nil && len(attributesItem1.DateAttribute.Constraints) > 0 {
-					attributes3.DateAttribute.Constraints = make(map[string]types.String)
-					for key30, value33 := range attributesItem1.DateAttribute.Constraints {
-						result29, _ := json.Marshal(value33)
-						attributes3.DateAttribute.Constraints[key30] = types.StringValue(string(result29))
-					}
-				}
-				if attributesItem1.DateAttribute.DefaultValue == nil {
-					attributes3.DateAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.AutomationAttribute.Constraints == nil {
+					attributes3.AutomationAttribute.Constraints = nil
 				} else {
-					defaultValueResult29, _ := json.Marshal(attributesItem1.DateAttribute.DefaultValue)
-					attributes3.DateAttribute.DefaultValue = types.StringValue(string(defaultValueResult29))
+					attributes3.AutomationAttribute.Constraints = &Constraints{}
 				}
-				if attributesItem1.DateAttribute.Deprecated != nil {
-					attributes3.DateAttribute.Deprecated = types.BoolValue(*attributesItem1.DateAttribute.Deprecated)
+				if attributesItem1.AutomationAttribute.DefaultValue == nil {
+					attributes3.AutomationAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.DateAttribute.Deprecated = types.BoolNull()
+					defaultValueResult28, _ := json.Marshal(attributesItem1.AutomationAttribute.DefaultValue)
+					attributes3.AutomationAttribute.DefaultValue = types.StringValue(string(defaultValueResult28))
 				}
-				if attributesItem1.DateAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.DateAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.DateAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.AutomationAttribute.Deprecated != nil {
+					attributes3.AutomationAttribute.Deprecated = types.BoolValue(*attributesItem1.AutomationAttribute.Deprecated)
 				} else {
-					attributes3.DateAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.AutomationAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.FeatureFlag != nil {
-					attributes3.DateAttribute.FeatureFlag = types.StringValue(*attributesItem1.DateAttribute.FeatureFlag)
+				if attributesItem1.AutomationAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.AutomationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.AutomationAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.DateAttribute.FeatureFlag = types.StringNull()
+					attributes3.AutomationAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.Group != nil {
-					attributes3.DateAttribute.Group = types.StringValue(*attributesItem1.DateAttribute.Group)
+				if attributesItem1.AutomationAttribute.FeatureFlag != nil {
+					attributes3.AutomationAttribute.FeatureFlag = types.StringValue(*attributesItem1.AutomationAttribute.FeatureFlag)
 				} else {
-					attributes3.DateAttribute.Group = types.StringNull()
+					attributes3.AutomationAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.Hidden != nil {
-					attributes3.DateAttribute.Hidden = types.BoolValue(*attributesItem1.DateAttribute.Hidden)
+				if attributesItem1.AutomationAttribute.Group != nil {
+					attributes3.AutomationAttribute.Group = types.StringValue(*attributesItem1.AutomationAttribute.Group)
 				} else {
-					attributes3.DateAttribute.Hidden = types.BoolNull()
+					attributes3.AutomationAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.HideLabel != nil {
-					attributes3.DateAttribute.HideLabel = types.BoolValue(*attributesItem1.DateAttribute.HideLabel)
+				if attributesItem1.AutomationAttribute.Hidden != nil {
+					attributes3.AutomationAttribute.Hidden = types.BoolValue(*attributesItem1.AutomationAttribute.Hidden)
 				} else {
-					attributes3.DateAttribute.HideLabel = types.BoolNull()
+					attributes3.AutomationAttribute.Hidden = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.Icon != nil {
-					attributes3.DateAttribute.Icon = types.StringValue(*attributesItem1.DateAttribute.Icon)
+				if attributesItem1.AutomationAttribute.HideLabel != nil {
+					attributes3.AutomationAttribute.HideLabel = types.BoolValue(*attributesItem1.AutomationAttribute.HideLabel)
 				} else {
-					attributes3.DateAttribute.Icon = types.StringNull()
+					attributes3.AutomationAttribute.HideLabel = types.BoolNull()
 				}
-				attributes3.DateAttribute.Label = types.StringValue(attributesItem1.DateAttribute.Label)
-				if attributesItem1.DateAttribute.Layout != nil {
-					attributes3.DateAttribute.Layout = types.StringValue(*attributesItem1.DateAttribute.Layout)
+				if attributesItem1.AutomationAttribute.Icon != nil {
+					attributes3.AutomationAttribute.Icon = types.StringValue(*attributesItem1.AutomationAttribute.Icon)
 				} else {
-					attributes3.DateAttribute.Layout = types.StringNull()
+					attributes3.AutomationAttribute.Icon = types.StringNull()
 				}
-				attributes3.DateAttribute.Name = types.StringValue(attributesItem1.DateAttribute.Name)
-				if attributesItem1.DateAttribute.Order != nil {
-					attributes3.DateAttribute.Order = types.Int64Value(*attributesItem1.DateAttribute.Order)
+				attributes3.AutomationAttribute.Label = types.StringValue(attributesItem1.AutomationAttribute.Label)
+				if attributesItem1.AutomationAttribute.Layout != nil {
+					attributes3.AutomationAttribute.Layout = types.StringValue(*attributesItem1.AutomationAttribute.Layout)
 				} else {
-					attributes3.DateAttribute.Order = types.Int64Null()
+					attributes3.AutomationAttribute.Layout = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.Placeholder != nil {
-					attributes3.DateAttribute.Placeholder = types.StringValue(*attributesItem1.DateAttribute.Placeholder)
+				attributes3.AutomationAttribute.Name = types.StringValue(attributesItem1.AutomationAttribute.Name)
+				if attributesItem1.AutomationAttribute.Order != nil {
+					attributes3.AutomationAttribute.Order = types.Int64Value(*attributesItem1.AutomationAttribute.Order)
 				} else {
-					attributes3.DateAttribute.Placeholder = types.StringNull()
+					attributes3.AutomationAttribute.Order = types.Int64Null()
 				}
-				if attributesItem1.DateAttribute.PreviewValueFormatter != nil {
-					attributes3.DateAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.DateAttribute.PreviewValueFormatter)
+				if attributesItem1.AutomationAttribute.Placeholder != nil {
+					attributes3.AutomationAttribute.Placeholder = types.StringValue(*attributesItem1.AutomationAttribute.Placeholder)
 				} else {
-					attributes3.DateAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.AutomationAttribute.Placeholder = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.Protected != nil {
-					attributes3.DateAttribute.Protected = types.BoolValue(*attributesItem1.DateAttribute.Protected)
+				if attributesItem1.AutomationAttribute.PreviewValueFormatter != nil {
+					attributes3.AutomationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.AutomationAttribute.PreviewValueFormatter)
 				} else {
-					attributes3.DateAttribute.Protected = types.BoolNull()
+					attributes3.AutomationAttribute.PreviewValueFormatter = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.Readonly != nil {
-					attributes3.DateAttribute.Readonly = types.BoolValue(*attributesItem1.DateAttribute.Readonly)
+				if attributesItem1.AutomationAttribute.Protected != nil {
+					attributes3.AutomationAttribute.Protected = types.BoolValue(*attributesItem1.AutomationAttribute.Protected)
 				} else {
-					attributes3.DateAttribute.Readonly = types.BoolNull()
+					attributes3.AutomationAttribute.Protected = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.RenderCondition != nil {
-					attributes3.DateAttribute.RenderCondition = types.StringValue(*attributesItem1.DateAttribute.RenderCondition)
+				if attributesItem1.AutomationAttribute.Readonly != nil {
+					attributes3.AutomationAttribute.Readonly = types.BoolValue(*attributesItem1.AutomationAttribute.Readonly)
 				} else {
-					attributes3.DateAttribute.RenderCondition = types.StringNull()
+					attributes3.AutomationAttribute.Readonly = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.Required != nil {
-					attributes3.DateAttribute.Required = types.BoolValue(*attributesItem1.DateAttribute.Required)
+				if attributesItem1.AutomationAttribute.RenderCondition != nil {
+					attributes3.AutomationAttribute.RenderCondition = types.StringValue(*attributesItem1.AutomationAttribute.RenderCondition)
 				} else {
-					attributes3.DateAttribute.Required = types.BoolNull()
+					attributes3.AutomationAttribute.RenderCondition = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.SettingFlag != nil {
-					attributes3.DateAttribute.SettingFlag = types.StringValue(*attributesItem1.DateAttribute.SettingFlag)
+				if attributesItem1.AutomationAttribute.Required != nil {
+					attributes3.AutomationAttribute.Required = types.BoolValue(*attributesItem1.AutomationAttribute.Required)
 				} else {
-					attributes3.DateAttribute.SettingFlag = types.StringNull()
+					attributes3.AutomationAttribute.Required = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.ShowInTable != nil {
-					attributes3.DateAttribute.ShowInTable = types.BoolValue(*attributesItem1.DateAttribute.ShowInTable)
+				if attributesItem1.AutomationAttribute.SettingFlag != nil {
+					attributes3.AutomationAttribute.SettingFlag = types.StringValue(*attributesItem1.AutomationAttribute.SettingFlag)
 				} else {
-					attributes3.DateAttribute.ShowInTable = types.BoolNull()
+					attributes3.AutomationAttribute.SettingFlag = types.StringNull()
 				}
-				if attributesItem1.DateAttribute.Type != nil {
-					attributes3.DateAttribute.Type = types.StringValue(string(*attributesItem1.DateAttribute.Type))
+				if attributesItem1.AutomationAttribute.ShowInTable != nil {
+					attributes3.AutomationAttribute.ShowInTable = types.BoolValue(*attributesItem1.AutomationAttribute.ShowInTable)
 				} else {
-					attributes3.DateAttribute.Type = types.StringNull()
+					attributes3.AutomationAttribute.ShowInTable = types.BoolNull()
 				}
-				if attributesItem1.DateAttribute.ValueFormatter != nil {
-					attributes3.DateAttribute.ValueFormatter = types.StringValue(*attributesItem1.DateAttribute.ValueFormatter)
+				if attributesItem1.AutomationAttribute.Type != nil {
+					attributes3.AutomationAttribute.Type = types.StringValue(string(*attributesItem1.AutomationAttribute.Type))
 				} else {
-					attributes3.DateAttribute.ValueFormatter = types.StringNull()
+					attributes3.AutomationAttribute.Type = types.StringNull()
 				}
-			}
-			if attributesItem1.CountryAttribute != nil {
-				attributes3.CountryAttribute = &CountryAttribute{}
-				attributes3.CountryAttribute.Purpose = nil
-				for _, v := range attributesItem1.CountryAttribute.Purpose {
-					attributes3.CountryAttribute.Purpose = append(attributes3.CountryAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.CountryAttribute.Constraints == nil && len(attributesItem1.CountryAttribute.Constraints) > 0 {
-					attributes3.CountryAttribute.Constraints = make(map[string]types.String)
-					for key31, value34 := range attributesItem1.CountryAttribute.Constraints {
-						result30, _ := json.Marshal(value34)
-						attributes3.CountryAttribute.Constraints[key31] = types.StringValue(string(result30))
-					}
-				}
-				if attributesItem1.CountryAttribute.DefaultValue == nil {
-					attributes3.CountryAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.AutomationAttribute.ValueFormatter != nil {
+					attributes3.AutomationAttribute.ValueFormatter = types.StringValue(*attributesItem1.AutomationAttribute.ValueFormatter)
 				} else {
-					defaultValueResult30, _ := json.Marshal(attributesItem1.CountryAttribute.DefaultValue)
-					attributes3.CountryAttribute.DefaultValue = types.StringValue(string(defaultValueResult30))
-				}
-				if attributesItem1.CountryAttribute.Deprecated != nil {
-					attributes3.CountryAttribute.Deprecated = types.BoolValue(*attributesItem1.CountryAttribute.Deprecated)
-				} else {
-					attributes3.CountryAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.CountryAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.CountryAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.CountryAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.FeatureFlag != nil {
-					attributes3.CountryAttribute.FeatureFlag = types.StringValue(*attributesItem1.CountryAttribute.FeatureFlag)
-				} else {
-					attributes3.CountryAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.Group != nil {
-					attributes3.CountryAttribute.Group = types.StringValue(*attributesItem1.CountryAttribute.Group)
-				} else {
-					attributes3.CountryAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.Hidden != nil {
-					attributes3.CountryAttribute.Hidden = types.BoolValue(*attributesItem1.CountryAttribute.Hidden)
-				} else {
-					attributes3.CountryAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.HideLabel != nil {
-					attributes3.CountryAttribute.HideLabel = types.BoolValue(*attributesItem1.CountryAttribute.HideLabel)
-				} else {
-					attributes3.CountryAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.Icon != nil {
-					attributes3.CountryAttribute.Icon = types.StringValue(*attributesItem1.CountryAttribute.Icon)
-				} else {
-					attributes3.CountryAttribute.Icon = types.StringNull()
-				}
-				attributes3.CountryAttribute.Label = types.StringValue(attributesItem1.CountryAttribute.Label)
-				if attributesItem1.CountryAttribute.Layout != nil {
-					attributes3.CountryAttribute.Layout = types.StringValue(*attributesItem1.CountryAttribute.Layout)
-				} else {
-					attributes3.CountryAttribute.Layout = types.StringNull()
-				}
-				attributes3.CountryAttribute.Name = types.StringValue(attributesItem1.CountryAttribute.Name)
-				if attributesItem1.CountryAttribute.Order != nil {
-					attributes3.CountryAttribute.Order = types.Int64Value(*attributesItem1.CountryAttribute.Order)
-				} else {
-					attributes3.CountryAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.CountryAttribute.Placeholder != nil {
-					attributes3.CountryAttribute.Placeholder = types.StringValue(*attributesItem1.CountryAttribute.Placeholder)
-				} else {
-					attributes3.CountryAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.PreviewValueFormatter != nil {
-					attributes3.CountryAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.CountryAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.CountryAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.Protected != nil {
-					attributes3.CountryAttribute.Protected = types.BoolValue(*attributesItem1.CountryAttribute.Protected)
-				} else {
-					attributes3.CountryAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.Readonly != nil {
-					attributes3.CountryAttribute.Readonly = types.BoolValue(*attributesItem1.CountryAttribute.Readonly)
-				} else {
-					attributes3.CountryAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.RenderCondition != nil {
-					attributes3.CountryAttribute.RenderCondition = types.StringValue(*attributesItem1.CountryAttribute.RenderCondition)
-				} else {
-					attributes3.CountryAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.Required != nil {
-					attributes3.CountryAttribute.Required = types.BoolValue(*attributesItem1.CountryAttribute.Required)
-				} else {
-					attributes3.CountryAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.SettingFlag != nil {
-					attributes3.CountryAttribute.SettingFlag = types.StringValue(*attributesItem1.CountryAttribute.SettingFlag)
-				} else {
-					attributes3.CountryAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.ShowInTable != nil {
-					attributes3.CountryAttribute.ShowInTable = types.BoolValue(*attributesItem1.CountryAttribute.ShowInTable)
-				} else {
-					attributes3.CountryAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.CountryAttribute.Type != nil {
-					attributes3.CountryAttribute.Type = types.StringValue(string(*attributesItem1.CountryAttribute.Type))
-				} else {
-					attributes3.CountryAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.CountryAttribute.ValueFormatter != nil {
-					attributes3.CountryAttribute.ValueFormatter = types.StringValue(*attributesItem1.CountryAttribute.ValueFormatter)
-				} else {
-					attributes3.CountryAttribute.ValueFormatter = types.StringNull()
+					attributes3.AutomationAttribute.ValueFormatter = types.StringNull()
 				}
 			}
 			if attributesItem1.BooleanAttribute != nil {
@@ -14490,18 +14181,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				for _, v := range attributesItem1.BooleanAttribute.Purpose {
 					attributes3.BooleanAttribute.Purpose = append(attributes3.BooleanAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.BooleanAttribute.Constraints == nil && len(attributesItem1.BooleanAttribute.Constraints) > 0 {
-					attributes3.BooleanAttribute.Constraints = make(map[string]types.String)
-					for key32, value35 := range attributesItem1.BooleanAttribute.Constraints {
-						result31, _ := json.Marshal(value35)
-						attributes3.BooleanAttribute.Constraints[key32] = types.StringValue(string(result31))
-					}
+				if attributesItem1.BooleanAttribute.Constraints == nil {
+					attributes3.BooleanAttribute.Constraints = nil
+				} else {
+					attributes3.BooleanAttribute.Constraints = &Constraints{}
 				}
 				if attributesItem1.BooleanAttribute.DefaultValue == nil {
 					attributes3.BooleanAttribute.DefaultValue = types.StringNull()
 				} else {
-					defaultValueResult31, _ := json.Marshal(attributesItem1.BooleanAttribute.DefaultValue)
-					attributes3.BooleanAttribute.DefaultValue = types.StringValue(string(defaultValueResult31))
+					defaultValueResult29, _ := json.Marshal(attributesItem1.BooleanAttribute.DefaultValue)
+					attributes3.BooleanAttribute.DefaultValue = types.StringValue(string(defaultValueResult29))
 				}
 				if attributesItem1.BooleanAttribute.Deprecated != nil {
 					attributes3.BooleanAttribute.Deprecated = types.BoolValue(*attributesItem1.BooleanAttribute.Deprecated)
@@ -14601,147 +14290,1197 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					attributes3.BooleanAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.SelectAttribute != nil {
-				attributes3.SelectAttribute = &SelectAttribute{}
-				attributes3.SelectAttribute.Purpose = nil
-				for _, v := range attributesItem1.SelectAttribute.Purpose {
-					attributes3.SelectAttribute.Purpose = append(attributes3.SelectAttribute.Purpose, types.StringValue(v))
+			if attributesItem1.ComputedAttribute != nil {
+				attributes3.ComputedAttribute = &ComputedAttribute{}
+				attributes3.ComputedAttribute.Purpose = nil
+				for _, v := range attributesItem1.ComputedAttribute.Purpose {
+					attributes3.ComputedAttribute.Purpose = append(attributes3.ComputedAttribute.Purpose, types.StringValue(v))
 				}
-				if attributesItem1.SelectAttribute.AllowAny != nil {
-					attributes3.SelectAttribute.AllowAny = types.BoolValue(*attributesItem1.SelectAttribute.AllowAny)
+				if attributesItem1.ComputedAttribute.Constraints == nil {
+					attributes3.ComputedAttribute.Constraints = nil
 				} else {
-					attributes3.SelectAttribute.AllowAny = types.BoolNull()
+					attributes3.ComputedAttribute.Constraints = &Constraints{}
 				}
-				if attributes3.SelectAttribute.Constraints == nil && len(attributesItem1.SelectAttribute.Constraints) > 0 {
-					attributes3.SelectAttribute.Constraints = make(map[string]types.String)
-					for key33, value36 := range attributesItem1.SelectAttribute.Constraints {
-						result32, _ := json.Marshal(value36)
-						attributes3.SelectAttribute.Constraints[key33] = types.StringValue(string(result32))
-					}
-				}
-				if attributesItem1.SelectAttribute.DefaultValue == nil {
-					attributes3.SelectAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.ComputedAttribute.DefaultValue == nil {
+					attributes3.ComputedAttribute.DefaultValue = types.StringNull()
 				} else {
-					defaultValueResult32, _ := json.Marshal(attributesItem1.SelectAttribute.DefaultValue)
-					attributes3.SelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult32))
+					defaultValueResult30, _ := json.Marshal(attributesItem1.ComputedAttribute.DefaultValue)
+					attributes3.ComputedAttribute.DefaultValue = types.StringValue(string(defaultValueResult30))
 				}
-				if attributesItem1.SelectAttribute.Deprecated != nil {
-					attributes3.SelectAttribute.Deprecated = types.BoolValue(*attributesItem1.SelectAttribute.Deprecated)
+				if attributesItem1.ComputedAttribute.Deprecated != nil {
+					attributes3.ComputedAttribute.Deprecated = types.BoolValue(*attributesItem1.ComputedAttribute.Deprecated)
 				} else {
-					attributes3.SelectAttribute.Deprecated = types.BoolNull()
+					attributes3.ComputedAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.SelectAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.SelectAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.ComputedAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.ComputedAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.ComputedAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.SelectAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.ComputedAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.FeatureFlag != nil {
-					attributes3.SelectAttribute.FeatureFlag = types.StringValue(*attributesItem1.SelectAttribute.FeatureFlag)
+				if attributesItem1.ComputedAttribute.FeatureFlag != nil {
+					attributes3.ComputedAttribute.FeatureFlag = types.StringValue(*attributesItem1.ComputedAttribute.FeatureFlag)
 				} else {
-					attributes3.SelectAttribute.FeatureFlag = types.StringNull()
+					attributes3.ComputedAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.SelectAttribute.Group != nil {
-					attributes3.SelectAttribute.Group = types.StringValue(*attributesItem1.SelectAttribute.Group)
+				if attributesItem1.ComputedAttribute.Group != nil {
+					attributes3.ComputedAttribute.Group = types.StringValue(*attributesItem1.ComputedAttribute.Group)
 				} else {
-					attributes3.SelectAttribute.Group = types.StringNull()
+					attributes3.ComputedAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.SelectAttribute.Hidden != nil {
-					attributes3.SelectAttribute.Hidden = types.BoolValue(*attributesItem1.SelectAttribute.Hidden)
+				if attributesItem1.ComputedAttribute.Hidden != nil {
+					attributes3.ComputedAttribute.Hidden = types.BoolValue(*attributesItem1.ComputedAttribute.Hidden)
 				} else {
-					attributes3.SelectAttribute.Hidden = types.BoolNull()
+					attributes3.ComputedAttribute.Hidden = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.HideLabel != nil {
-					attributes3.SelectAttribute.HideLabel = types.BoolValue(*attributesItem1.SelectAttribute.HideLabel)
+				if attributesItem1.ComputedAttribute.HideLabel != nil {
+					attributes3.ComputedAttribute.HideLabel = types.BoolValue(*attributesItem1.ComputedAttribute.HideLabel)
 				} else {
-					attributes3.SelectAttribute.HideLabel = types.BoolNull()
+					attributes3.ComputedAttribute.HideLabel = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.Icon != nil {
-					attributes3.SelectAttribute.Icon = types.StringValue(*attributesItem1.SelectAttribute.Icon)
+				if attributesItem1.ComputedAttribute.Icon != nil {
+					attributes3.ComputedAttribute.Icon = types.StringValue(*attributesItem1.ComputedAttribute.Icon)
 				} else {
-					attributes3.SelectAttribute.Icon = types.StringNull()
+					attributes3.ComputedAttribute.Icon = types.StringNull()
 				}
-				attributes3.SelectAttribute.Label = types.StringValue(attributesItem1.SelectAttribute.Label)
-				if attributesItem1.SelectAttribute.Layout != nil {
-					attributes3.SelectAttribute.Layout = types.StringValue(*attributesItem1.SelectAttribute.Layout)
+				attributes3.ComputedAttribute.Label = types.StringValue(attributesItem1.ComputedAttribute.Label)
+				if attributesItem1.ComputedAttribute.Layout != nil {
+					attributes3.ComputedAttribute.Layout = types.StringValue(*attributesItem1.ComputedAttribute.Layout)
 				} else {
-					attributes3.SelectAttribute.Layout = types.StringNull()
+					attributes3.ComputedAttribute.Layout = types.StringNull()
 				}
-				attributes3.SelectAttribute.Name = types.StringValue(attributesItem1.SelectAttribute.Name)
-				attributes3.SelectAttribute.Options = nil
-				for _, optionsItem3 := range attributesItem1.SelectAttribute.Options {
-					var options8 SelectAttributeOptions
-					if optionsItem3.SelectAttributeOptionsOption != nil {
-						options8.SelectAttributeOptionsOption = &SelectAttributeOptionsOption{}
-						if optionsItem3.SelectAttributeOptionsOption.Title != nil {
-							options8.SelectAttributeOptionsOption.Title = types.StringValue(*optionsItem3.SelectAttributeOptionsOption.Title)
+				attributes3.ComputedAttribute.Name = types.StringValue(attributesItem1.ComputedAttribute.Name)
+				if attributesItem1.ComputedAttribute.Order != nil {
+					attributes3.ComputedAttribute.Order = types.Int64Value(*attributesItem1.ComputedAttribute.Order)
+				} else {
+					attributes3.ComputedAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.ComputedAttribute.Placeholder != nil {
+					attributes3.ComputedAttribute.Placeholder = types.StringValue(*attributesItem1.ComputedAttribute.Placeholder)
+				} else {
+					attributes3.ComputedAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.ComputedAttribute.PreviewValueFormatter != nil {
+					attributes3.ComputedAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.ComputedAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.ComputedAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.ComputedAttribute.Protected != nil {
+					attributes3.ComputedAttribute.Protected = types.BoolValue(*attributesItem1.ComputedAttribute.Protected)
+				} else {
+					attributes3.ComputedAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.ComputedAttribute.Readonly != nil {
+					attributes3.ComputedAttribute.Readonly = types.BoolValue(*attributesItem1.ComputedAttribute.Readonly)
+				} else {
+					attributes3.ComputedAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.ComputedAttribute.RenderCondition != nil {
+					attributes3.ComputedAttribute.RenderCondition = types.StringValue(*attributesItem1.ComputedAttribute.RenderCondition)
+				} else {
+					attributes3.ComputedAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.ComputedAttribute.Required != nil {
+					attributes3.ComputedAttribute.Required = types.BoolValue(*attributesItem1.ComputedAttribute.Required)
+				} else {
+					attributes3.ComputedAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.ComputedAttribute.SettingFlag != nil {
+					attributes3.ComputedAttribute.SettingFlag = types.StringValue(*attributesItem1.ComputedAttribute.SettingFlag)
+				} else {
+					attributes3.ComputedAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.ComputedAttribute.ShowInTable != nil {
+					attributes3.ComputedAttribute.ShowInTable = types.BoolValue(*attributesItem1.ComputedAttribute.ShowInTable)
+				} else {
+					attributes3.ComputedAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.ComputedAttribute.Type != nil {
+					attributes3.ComputedAttribute.Type = types.StringValue(string(*attributesItem1.ComputedAttribute.Type))
+				} else {
+					attributes3.ComputedAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.ComputedAttribute.ValueFormatter != nil {
+					attributes3.ComputedAttribute.ValueFormatter = types.StringValue(*attributesItem1.ComputedAttribute.ValueFormatter)
+				} else {
+					attributes3.ComputedAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.ConsentAttribute != nil {
+				attributes3.ConsentAttribute = &ConsentAttribute{}
+				attributes3.ConsentAttribute.Purpose = nil
+				for _, v := range attributesItem1.ConsentAttribute.Purpose {
+					attributes3.ConsentAttribute.Purpose = append(attributes3.ConsentAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.ConsentAttribute.Constraints == nil {
+					attributes3.ConsentAttribute.Constraints = nil
+				} else {
+					attributes3.ConsentAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.ConsentAttribute.DefaultValue == nil {
+					attributes3.ConsentAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult31, _ := json.Marshal(attributesItem1.ConsentAttribute.DefaultValue)
+					attributes3.ConsentAttribute.DefaultValue = types.StringValue(string(defaultValueResult31))
+				}
+				if attributesItem1.ConsentAttribute.Deprecated != nil {
+					attributes3.ConsentAttribute.Deprecated = types.BoolValue(*attributesItem1.ConsentAttribute.Deprecated)
+				} else {
+					attributes3.ConsentAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.ConsentAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.ConsentAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.ConsentAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.FeatureFlag != nil {
+					attributes3.ConsentAttribute.FeatureFlag = types.StringValue(*attributesItem1.ConsentAttribute.FeatureFlag)
+				} else {
+					attributes3.ConsentAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.ConsentAttribute.Group != nil {
+					attributes3.ConsentAttribute.Group = types.StringValue(*attributesItem1.ConsentAttribute.Group)
+				} else {
+					attributes3.ConsentAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.ConsentAttribute.Hidden != nil {
+					attributes3.ConsentAttribute.Hidden = types.BoolValue(*attributesItem1.ConsentAttribute.Hidden)
+				} else {
+					attributes3.ConsentAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.HideLabel != nil {
+					attributes3.ConsentAttribute.HideLabel = types.BoolValue(*attributesItem1.ConsentAttribute.HideLabel)
+				} else {
+					attributes3.ConsentAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.Icon != nil {
+					attributes3.ConsentAttribute.Icon = types.StringValue(*attributesItem1.ConsentAttribute.Icon)
+				} else {
+					attributes3.ConsentAttribute.Icon = types.StringNull()
+				}
+				attributes3.ConsentAttribute.Identifiers = nil
+				for _, v := range attributesItem1.ConsentAttribute.Identifiers {
+					attributes3.ConsentAttribute.Identifiers = append(attributes3.ConsentAttribute.Identifiers, types.StringValue(v))
+				}
+				attributes3.ConsentAttribute.Label = types.StringValue(attributesItem1.ConsentAttribute.Label)
+				if attributesItem1.ConsentAttribute.Layout != nil {
+					attributes3.ConsentAttribute.Layout = types.StringValue(*attributesItem1.ConsentAttribute.Layout)
+				} else {
+					attributes3.ConsentAttribute.Layout = types.StringNull()
+				}
+				attributes3.ConsentAttribute.Name = types.StringValue(attributesItem1.ConsentAttribute.Name)
+				if attributesItem1.ConsentAttribute.Order != nil {
+					attributes3.ConsentAttribute.Order = types.Int64Value(*attributesItem1.ConsentAttribute.Order)
+				} else {
+					attributes3.ConsentAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.ConsentAttribute.Placeholder != nil {
+					attributes3.ConsentAttribute.Placeholder = types.StringValue(*attributesItem1.ConsentAttribute.Placeholder)
+				} else {
+					attributes3.ConsentAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.ConsentAttribute.PreviewValueFormatter != nil {
+					attributes3.ConsentAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.ConsentAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.ConsentAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.ConsentAttribute.Protected != nil {
+					attributes3.ConsentAttribute.Protected = types.BoolValue(*attributesItem1.ConsentAttribute.Protected)
+				} else {
+					attributes3.ConsentAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.Readonly != nil {
+					attributes3.ConsentAttribute.Readonly = types.BoolValue(*attributesItem1.ConsentAttribute.Readonly)
+				} else {
+					attributes3.ConsentAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.RenderCondition != nil {
+					attributes3.ConsentAttribute.RenderCondition = types.StringValue(*attributesItem1.ConsentAttribute.RenderCondition)
+				} else {
+					attributes3.ConsentAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.ConsentAttribute.Required != nil {
+					attributes3.ConsentAttribute.Required = types.BoolValue(*attributesItem1.ConsentAttribute.Required)
+				} else {
+					attributes3.ConsentAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.ConsentAttribute.SettingFlag != nil {
+					attributes3.ConsentAttribute.SettingFlag = types.StringValue(*attributesItem1.ConsentAttribute.SettingFlag)
+				} else {
+					attributes3.ConsentAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.ConsentAttribute.ShowInTable != nil {
+					attributes3.ConsentAttribute.ShowInTable = types.BoolValue(*attributesItem1.ConsentAttribute.ShowInTable)
+				} else {
+					attributes3.ConsentAttribute.ShowInTable = types.BoolNull()
+				}
+				attributes3.ConsentAttribute.Topic = types.StringValue(attributesItem1.ConsentAttribute.Topic)
+				attributes3.ConsentAttribute.Type = types.StringValue(string(attributesItem1.ConsentAttribute.Type))
+				if attributesItem1.ConsentAttribute.ValueFormatter != nil {
+					attributes3.ConsentAttribute.ValueFormatter = types.StringValue(*attributesItem1.ConsentAttribute.ValueFormatter)
+				} else {
+					attributes3.ConsentAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.CountryAttribute != nil {
+				attributes3.CountryAttribute = &CountryAttribute{}
+				attributes3.CountryAttribute.Purpose = nil
+				for _, v := range attributesItem1.CountryAttribute.Purpose {
+					attributes3.CountryAttribute.Purpose = append(attributes3.CountryAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.CountryAttribute.Constraints == nil {
+					attributes3.CountryAttribute.Constraints = nil
+				} else {
+					attributes3.CountryAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.CountryAttribute.DefaultValue == nil {
+					attributes3.CountryAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult32, _ := json.Marshal(attributesItem1.CountryAttribute.DefaultValue)
+					attributes3.CountryAttribute.DefaultValue = types.StringValue(string(defaultValueResult32))
+				}
+				if attributesItem1.CountryAttribute.Deprecated != nil {
+					attributes3.CountryAttribute.Deprecated = types.BoolValue(*attributesItem1.CountryAttribute.Deprecated)
+				} else {
+					attributes3.CountryAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.CountryAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.CountryAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.CountryAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.FeatureFlag != nil {
+					attributes3.CountryAttribute.FeatureFlag = types.StringValue(*attributesItem1.CountryAttribute.FeatureFlag)
+				} else {
+					attributes3.CountryAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.Group != nil {
+					attributes3.CountryAttribute.Group = types.StringValue(*attributesItem1.CountryAttribute.Group)
+				} else {
+					attributes3.CountryAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.Hidden != nil {
+					attributes3.CountryAttribute.Hidden = types.BoolValue(*attributesItem1.CountryAttribute.Hidden)
+				} else {
+					attributes3.CountryAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.HideLabel != nil {
+					attributes3.CountryAttribute.HideLabel = types.BoolValue(*attributesItem1.CountryAttribute.HideLabel)
+				} else {
+					attributes3.CountryAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.Icon != nil {
+					attributes3.CountryAttribute.Icon = types.StringValue(*attributesItem1.CountryAttribute.Icon)
+				} else {
+					attributes3.CountryAttribute.Icon = types.StringNull()
+				}
+				attributes3.CountryAttribute.Label = types.StringValue(attributesItem1.CountryAttribute.Label)
+				if attributesItem1.CountryAttribute.Layout != nil {
+					attributes3.CountryAttribute.Layout = types.StringValue(*attributesItem1.CountryAttribute.Layout)
+				} else {
+					attributes3.CountryAttribute.Layout = types.StringNull()
+				}
+				attributes3.CountryAttribute.Name = types.StringValue(attributesItem1.CountryAttribute.Name)
+				if attributesItem1.CountryAttribute.Order != nil {
+					attributes3.CountryAttribute.Order = types.Int64Value(*attributesItem1.CountryAttribute.Order)
+				} else {
+					attributes3.CountryAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.CountryAttribute.Placeholder != nil {
+					attributes3.CountryAttribute.Placeholder = types.StringValue(*attributesItem1.CountryAttribute.Placeholder)
+				} else {
+					attributes3.CountryAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.PreviewValueFormatter != nil {
+					attributes3.CountryAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.CountryAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.CountryAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.Protected != nil {
+					attributes3.CountryAttribute.Protected = types.BoolValue(*attributesItem1.CountryAttribute.Protected)
+				} else {
+					attributes3.CountryAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.Readonly != nil {
+					attributes3.CountryAttribute.Readonly = types.BoolValue(*attributesItem1.CountryAttribute.Readonly)
+				} else {
+					attributes3.CountryAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.RenderCondition != nil {
+					attributes3.CountryAttribute.RenderCondition = types.StringValue(*attributesItem1.CountryAttribute.RenderCondition)
+				} else {
+					attributes3.CountryAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.Required != nil {
+					attributes3.CountryAttribute.Required = types.BoolValue(*attributesItem1.CountryAttribute.Required)
+				} else {
+					attributes3.CountryAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.SettingFlag != nil {
+					attributes3.CountryAttribute.SettingFlag = types.StringValue(*attributesItem1.CountryAttribute.SettingFlag)
+				} else {
+					attributes3.CountryAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.ShowInTable != nil {
+					attributes3.CountryAttribute.ShowInTable = types.BoolValue(*attributesItem1.CountryAttribute.ShowInTable)
+				} else {
+					attributes3.CountryAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.CountryAttribute.Type != nil {
+					attributes3.CountryAttribute.Type = types.StringValue(string(*attributesItem1.CountryAttribute.Type))
+				} else {
+					attributes3.CountryAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.CountryAttribute.ValueFormatter != nil {
+					attributes3.CountryAttribute.ValueFormatter = types.StringValue(*attributesItem1.CountryAttribute.ValueFormatter)
+				} else {
+					attributes3.CountryAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.CurrencyAttribute != nil {
+				attributes3.CurrencyAttribute = &CurrencyAttribute{}
+				attributes3.CurrencyAttribute.Purpose = nil
+				for _, v := range attributesItem1.CurrencyAttribute.Purpose {
+					attributes3.CurrencyAttribute.Purpose = append(attributes3.CurrencyAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.CurrencyAttribute.Constraints == nil {
+					attributes3.CurrencyAttribute.Constraints = nil
+				} else {
+					attributes3.CurrencyAttribute.Constraints = &Constraints{}
+				}
+				if len(attributes3.CurrencyAttribute.Currency) > len(attributesItem1.CurrencyAttribute.Currency) {
+					attributes3.CurrencyAttribute.Currency = attributes3.CurrencyAttribute.Currency[:len(attributesItem1.CurrencyAttribute.Currency)]
+				}
+				for currencyCount1, currencyItem1 := range attributesItem1.CurrencyAttribute.Currency {
+					var currency3 Currency
+					if currencyItem1.One != nil {
+						currency3.One = &One{}
+						currency3.One.Code = types.StringValue(currencyItem1.One.Code)
+						currency3.One.Description = types.StringValue(currencyItem1.One.Description)
+						if currencyItem1.One.Flag != nil {
+							currency3.One.Flag = types.StringValue(*currencyItem1.One.Flag)
 						} else {
-							options8.SelectAttributeOptionsOption.Title = types.StringNull()
+							currency3.One.Flag = types.StringNull()
 						}
-						options8.SelectAttributeOptionsOption.Value = types.StringValue(optionsItem3.SelectAttributeOptionsOption.Value)
+						currency3.One.Symbol = types.StringValue(currencyItem1.One.Symbol)
 					}
-					if optionsItem3.Str != nil {
-						if optionsItem3.Str != nil {
-							options8.Str = types.StringValue(*optionsItem3.Str)
-						} else {
-							options8.Str = types.StringNull()
-						}
+					if currencyCount1+1 > len(attributes3.CurrencyAttribute.Currency) {
+						attributes3.CurrencyAttribute.Currency = append(attributes3.CurrencyAttribute.Currency, currency3)
+					} else {
 					}
-					attributes3.SelectAttribute.Options = append(attributes3.SelectAttribute.Options, options8)
 				}
-				if attributesItem1.SelectAttribute.Order != nil {
-					attributes3.SelectAttribute.Order = types.Int64Value(*attributesItem1.SelectAttribute.Order)
+				if attributesItem1.CurrencyAttribute.CurrencySelectorOnly != nil {
+					attributes3.CurrencyAttribute.CurrencySelectorOnly = types.BoolValue(*attributesItem1.CurrencyAttribute.CurrencySelectorOnly)
 				} else {
-					attributes3.SelectAttribute.Order = types.Int64Null()
+					attributes3.CurrencyAttribute.CurrencySelectorOnly = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.Placeholder != nil {
-					attributes3.SelectAttribute.Placeholder = types.StringValue(*attributesItem1.SelectAttribute.Placeholder)
+				if attributesItem1.CurrencyAttribute.DefaultValue == nil {
+					attributes3.CurrencyAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.SelectAttribute.Placeholder = types.StringNull()
+					defaultValueResult33, _ := json.Marshal(attributesItem1.CurrencyAttribute.DefaultValue)
+					attributes3.CurrencyAttribute.DefaultValue = types.StringValue(string(defaultValueResult33))
 				}
-				if attributesItem1.SelectAttribute.PreviewValueFormatter != nil {
-					attributes3.SelectAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.SelectAttribute.PreviewValueFormatter)
+				if attributesItem1.CurrencyAttribute.Deprecated != nil {
+					attributes3.CurrencyAttribute.Deprecated = types.BoolValue(*attributesItem1.CurrencyAttribute.Deprecated)
 				} else {
-					attributes3.SelectAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.CurrencyAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.Protected != nil {
-					attributes3.SelectAttribute.Protected = types.BoolValue(*attributesItem1.SelectAttribute.Protected)
+				if attributesItem1.CurrencyAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.CurrencyAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.SelectAttribute.Protected = types.BoolNull()
+					attributes3.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.Readonly != nil {
-					attributes3.SelectAttribute.Readonly = types.BoolValue(*attributesItem1.SelectAttribute.Readonly)
+				if attributesItem1.CurrencyAttribute.FeatureFlag != nil {
+					attributes3.CurrencyAttribute.FeatureFlag = types.StringValue(*attributesItem1.CurrencyAttribute.FeatureFlag)
 				} else {
-					attributes3.SelectAttribute.Readonly = types.BoolNull()
+					attributes3.CurrencyAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.SelectAttribute.RenderCondition != nil {
-					attributes3.SelectAttribute.RenderCondition = types.StringValue(*attributesItem1.SelectAttribute.RenderCondition)
+				if attributesItem1.CurrencyAttribute.Group != nil {
+					attributes3.CurrencyAttribute.Group = types.StringValue(*attributesItem1.CurrencyAttribute.Group)
 				} else {
-					attributes3.SelectAttribute.RenderCondition = types.StringNull()
+					attributes3.CurrencyAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.SelectAttribute.Required != nil {
-					attributes3.SelectAttribute.Required = types.BoolValue(*attributesItem1.SelectAttribute.Required)
+				if attributesItem1.CurrencyAttribute.Hidden != nil {
+					attributes3.CurrencyAttribute.Hidden = types.BoolValue(*attributesItem1.CurrencyAttribute.Hidden)
 				} else {
-					attributes3.SelectAttribute.Required = types.BoolNull()
+					attributes3.CurrencyAttribute.Hidden = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.SettingFlag != nil {
-					attributes3.SelectAttribute.SettingFlag = types.StringValue(*attributesItem1.SelectAttribute.SettingFlag)
+				if attributesItem1.CurrencyAttribute.HideLabel != nil {
+					attributes3.CurrencyAttribute.HideLabel = types.BoolValue(*attributesItem1.CurrencyAttribute.HideLabel)
 				} else {
-					attributes3.SelectAttribute.SettingFlag = types.StringNull()
+					attributes3.CurrencyAttribute.HideLabel = types.BoolNull()
 				}
-				if attributesItem1.SelectAttribute.ShowInTable != nil {
-					attributes3.SelectAttribute.ShowInTable = types.BoolValue(*attributesItem1.SelectAttribute.ShowInTable)
+				if attributesItem1.CurrencyAttribute.Icon != nil {
+					attributes3.CurrencyAttribute.Icon = types.StringValue(*attributesItem1.CurrencyAttribute.Icon)
 				} else {
-					attributes3.SelectAttribute.ShowInTable = types.BoolNull()
+					attributes3.CurrencyAttribute.Icon = types.StringNull()
 				}
-				if attributesItem1.SelectAttribute.Type != nil {
-					attributes3.SelectAttribute.Type = types.StringValue(string(*attributesItem1.SelectAttribute.Type))
+				attributes3.CurrencyAttribute.Label = types.StringValue(attributesItem1.CurrencyAttribute.Label)
+				if attributesItem1.CurrencyAttribute.Layout != nil {
+					attributes3.CurrencyAttribute.Layout = types.StringValue(*attributesItem1.CurrencyAttribute.Layout)
 				} else {
-					attributes3.SelectAttribute.Type = types.StringNull()
+					attributes3.CurrencyAttribute.Layout = types.StringNull()
 				}
-				if attributesItem1.SelectAttribute.ValueFormatter != nil {
-					attributes3.SelectAttribute.ValueFormatter = types.StringValue(*attributesItem1.SelectAttribute.ValueFormatter)
+				attributes3.CurrencyAttribute.Name = types.StringValue(attributesItem1.CurrencyAttribute.Name)
+				if attributesItem1.CurrencyAttribute.Order != nil {
+					attributes3.CurrencyAttribute.Order = types.Int64Value(*attributesItem1.CurrencyAttribute.Order)
 				} else {
-					attributes3.SelectAttribute.ValueFormatter = types.StringNull()
+					attributes3.CurrencyAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.CurrencyAttribute.Placeholder != nil {
+					attributes3.CurrencyAttribute.Placeholder = types.StringValue(*attributesItem1.CurrencyAttribute.Placeholder)
+				} else {
+					attributes3.CurrencyAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.CurrencyAttribute.PreviewValueFormatter != nil {
+					attributes3.CurrencyAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.CurrencyAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.CurrencyAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.CurrencyAttribute.Protected != nil {
+					attributes3.CurrencyAttribute.Protected = types.BoolValue(*attributesItem1.CurrencyAttribute.Protected)
+				} else {
+					attributes3.CurrencyAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.CurrencyAttribute.Readonly != nil {
+					attributes3.CurrencyAttribute.Readonly = types.BoolValue(*attributesItem1.CurrencyAttribute.Readonly)
+				} else {
+					attributes3.CurrencyAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.CurrencyAttribute.RenderCondition != nil {
+					attributes3.CurrencyAttribute.RenderCondition = types.StringValue(*attributesItem1.CurrencyAttribute.RenderCondition)
+				} else {
+					attributes3.CurrencyAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.CurrencyAttribute.Required != nil {
+					attributes3.CurrencyAttribute.Required = types.BoolValue(*attributesItem1.CurrencyAttribute.Required)
+				} else {
+					attributes3.CurrencyAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.CurrencyAttribute.SettingFlag != nil {
+					attributes3.CurrencyAttribute.SettingFlag = types.StringValue(*attributesItem1.CurrencyAttribute.SettingFlag)
+				} else {
+					attributes3.CurrencyAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.CurrencyAttribute.ShowInTable != nil {
+					attributes3.CurrencyAttribute.ShowInTable = types.BoolValue(*attributesItem1.CurrencyAttribute.ShowInTable)
+				} else {
+					attributes3.CurrencyAttribute.ShowInTable = types.BoolNull()
+				}
+				attributes3.CurrencyAttribute.Type = types.StringValue(string(attributesItem1.CurrencyAttribute.Type))
+				if attributesItem1.CurrencyAttribute.ValueFormatter != nil {
+					attributes3.CurrencyAttribute.ValueFormatter = types.StringValue(*attributesItem1.CurrencyAttribute.ValueFormatter)
+				} else {
+					attributes3.CurrencyAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.DateAttribute != nil {
+				attributes3.DateAttribute = &DateAttribute{}
+				attributes3.DateAttribute.Purpose = nil
+				for _, v := range attributesItem1.DateAttribute.Purpose {
+					attributes3.DateAttribute.Purpose = append(attributes3.DateAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.DateAttribute.Constraints == nil {
+					attributes3.DateAttribute.Constraints = nil
+				} else {
+					attributes3.DateAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.DateAttribute.DefaultValue == nil {
+					attributes3.DateAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult34, _ := json.Marshal(attributesItem1.DateAttribute.DefaultValue)
+					attributes3.DateAttribute.DefaultValue = types.StringValue(string(defaultValueResult34))
+				}
+				if attributesItem1.DateAttribute.Deprecated != nil {
+					attributes3.DateAttribute.Deprecated = types.BoolValue(*attributesItem1.DateAttribute.Deprecated)
+				} else {
+					attributes3.DateAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.DateAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.DateAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.DateAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.FeatureFlag != nil {
+					attributes3.DateAttribute.FeatureFlag = types.StringValue(*attributesItem1.DateAttribute.FeatureFlag)
+				} else {
+					attributes3.DateAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.Group != nil {
+					attributes3.DateAttribute.Group = types.StringValue(*attributesItem1.DateAttribute.Group)
+				} else {
+					attributes3.DateAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.Hidden != nil {
+					attributes3.DateAttribute.Hidden = types.BoolValue(*attributesItem1.DateAttribute.Hidden)
+				} else {
+					attributes3.DateAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.HideLabel != nil {
+					attributes3.DateAttribute.HideLabel = types.BoolValue(*attributesItem1.DateAttribute.HideLabel)
+				} else {
+					attributes3.DateAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.Icon != nil {
+					attributes3.DateAttribute.Icon = types.StringValue(*attributesItem1.DateAttribute.Icon)
+				} else {
+					attributes3.DateAttribute.Icon = types.StringNull()
+				}
+				attributes3.DateAttribute.Label = types.StringValue(attributesItem1.DateAttribute.Label)
+				if attributesItem1.DateAttribute.Layout != nil {
+					attributes3.DateAttribute.Layout = types.StringValue(*attributesItem1.DateAttribute.Layout)
+				} else {
+					attributes3.DateAttribute.Layout = types.StringNull()
+				}
+				attributes3.DateAttribute.Name = types.StringValue(attributesItem1.DateAttribute.Name)
+				if attributesItem1.DateAttribute.Order != nil {
+					attributes3.DateAttribute.Order = types.Int64Value(*attributesItem1.DateAttribute.Order)
+				} else {
+					attributes3.DateAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.DateAttribute.Placeholder != nil {
+					attributes3.DateAttribute.Placeholder = types.StringValue(*attributesItem1.DateAttribute.Placeholder)
+				} else {
+					attributes3.DateAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.PreviewValueFormatter != nil {
+					attributes3.DateAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.DateAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.DateAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.Protected != nil {
+					attributes3.DateAttribute.Protected = types.BoolValue(*attributesItem1.DateAttribute.Protected)
+				} else {
+					attributes3.DateAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.Readonly != nil {
+					attributes3.DateAttribute.Readonly = types.BoolValue(*attributesItem1.DateAttribute.Readonly)
+				} else {
+					attributes3.DateAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.RenderCondition != nil {
+					attributes3.DateAttribute.RenderCondition = types.StringValue(*attributesItem1.DateAttribute.RenderCondition)
+				} else {
+					attributes3.DateAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.Required != nil {
+					attributes3.DateAttribute.Required = types.BoolValue(*attributesItem1.DateAttribute.Required)
+				} else {
+					attributes3.DateAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.SettingFlag != nil {
+					attributes3.DateAttribute.SettingFlag = types.StringValue(*attributesItem1.DateAttribute.SettingFlag)
+				} else {
+					attributes3.DateAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.ShowInTable != nil {
+					attributes3.DateAttribute.ShowInTable = types.BoolValue(*attributesItem1.DateAttribute.ShowInTable)
+				} else {
+					attributes3.DateAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.DateAttribute.Type != nil {
+					attributes3.DateAttribute.Type = types.StringValue(string(*attributesItem1.DateAttribute.Type))
+				} else {
+					attributes3.DateAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.DateAttribute.ValueFormatter != nil {
+					attributes3.DateAttribute.ValueFormatter = types.StringValue(*attributesItem1.DateAttribute.ValueFormatter)
+				} else {
+					attributes3.DateAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.FileAttribute != nil {
+				attributes3.FileAttribute = &FileAttribute{}
+				attributes3.FileAttribute.Purpose = nil
+				for _, v := range attributesItem1.FileAttribute.Purpose {
+					attributes3.FileAttribute.Purpose = append(attributes3.FileAttribute.Purpose, types.StringValue(v))
+				}
+				attributes3.FileAttribute.AllowedExtensions = nil
+				for _, v := range attributesItem1.FileAttribute.AllowedExtensions {
+					attributes3.FileAttribute.AllowedExtensions = append(attributes3.FileAttribute.AllowedExtensions, types.StringValue(v))
+				}
+				if attributesItem1.FileAttribute.Constraints == nil {
+					attributes3.FileAttribute.Constraints = nil
+				} else {
+					attributes3.FileAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.FileAttribute.DefaultAccessControl != nil {
+					attributes3.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem1.FileAttribute.DefaultAccessControl))
+				} else {
+					attributes3.FileAttribute.DefaultAccessControl = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.DefaultValue == nil {
+					attributes3.FileAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult35, _ := json.Marshal(attributesItem1.FileAttribute.DefaultValue)
+					attributes3.FileAttribute.DefaultValue = types.StringValue(string(defaultValueResult35))
+				}
+				if attributesItem1.FileAttribute.Deprecated != nil {
+					attributes3.FileAttribute.Deprecated = types.BoolValue(*attributesItem1.FileAttribute.Deprecated)
+				} else {
+					attributes3.FileAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.DisplayImagesLandscaped != nil {
+					attributes3.FileAttribute.DisplayImagesLandscaped = types.BoolValue(*attributesItem1.FileAttribute.DisplayImagesLandscaped)
+				} else {
+					attributes3.FileAttribute.DisplayImagesLandscaped = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.EnableDescription != nil {
+					attributes3.FileAttribute.EnableDescription = types.BoolValue(*attributesItem1.FileAttribute.EnableDescription)
+				} else {
+					attributes3.FileAttribute.EnableDescription = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.FileAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.FileAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.FileAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.FeatureFlag != nil {
+					attributes3.FileAttribute.FeatureFlag = types.StringValue(*attributesItem1.FileAttribute.FeatureFlag)
+				} else {
+					attributes3.FileAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.Group != nil {
+					attributes3.FileAttribute.Group = types.StringValue(*attributesItem1.FileAttribute.Group)
+				} else {
+					attributes3.FileAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.Hidden != nil {
+					attributes3.FileAttribute.Hidden = types.BoolValue(*attributesItem1.FileAttribute.Hidden)
+				} else {
+					attributes3.FileAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.HideLabel != nil {
+					attributes3.FileAttribute.HideLabel = types.BoolValue(*attributesItem1.FileAttribute.HideLabel)
+				} else {
+					attributes3.FileAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.Icon != nil {
+					attributes3.FileAttribute.Icon = types.StringValue(*attributesItem1.FileAttribute.Icon)
+				} else {
+					attributes3.FileAttribute.Icon = types.StringNull()
+				}
+				attributes3.FileAttribute.Label = types.StringValue(attributesItem1.FileAttribute.Label)
+				if attributesItem1.FileAttribute.Layout != nil {
+					attributes3.FileAttribute.Layout = types.StringValue(*attributesItem1.FileAttribute.Layout)
+				} else {
+					attributes3.FileAttribute.Layout = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.Multiple != nil {
+					attributes3.FileAttribute.Multiple = types.BoolValue(*attributesItem1.FileAttribute.Multiple)
+				} else {
+					attributes3.FileAttribute.Multiple = types.BoolNull()
+				}
+				attributes3.FileAttribute.Name = types.StringValue(attributesItem1.FileAttribute.Name)
+				if attributesItem1.FileAttribute.Order != nil {
+					attributes3.FileAttribute.Order = types.Int64Value(*attributesItem1.FileAttribute.Order)
+				} else {
+					attributes3.FileAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.FileAttribute.Placeholder != nil {
+					attributes3.FileAttribute.Placeholder = types.StringValue(*attributesItem1.FileAttribute.Placeholder)
+				} else {
+					attributes3.FileAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.PreviewValueFormatter != nil {
+					attributes3.FileAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.FileAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.FileAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.Protected != nil {
+					attributes3.FileAttribute.Protected = types.BoolValue(*attributesItem1.FileAttribute.Protected)
+				} else {
+					attributes3.FileAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.Readonly != nil {
+					attributes3.FileAttribute.Readonly = types.BoolValue(*attributesItem1.FileAttribute.Readonly)
+				} else {
+					attributes3.FileAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.RenderCondition != nil {
+					attributes3.FileAttribute.RenderCondition = types.StringValue(*attributesItem1.FileAttribute.RenderCondition)
+				} else {
+					attributes3.FileAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.Required != nil {
+					attributes3.FileAttribute.Required = types.BoolValue(*attributesItem1.FileAttribute.Required)
+				} else {
+					attributes3.FileAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.FileAttribute.SettingFlag != nil {
+					attributes3.FileAttribute.SettingFlag = types.StringValue(*attributesItem1.FileAttribute.SettingFlag)
+				} else {
+					attributes3.FileAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.FileAttribute.ShowInTable != nil {
+					attributes3.FileAttribute.ShowInTable = types.BoolValue(*attributesItem1.FileAttribute.ShowInTable)
+				} else {
+					attributes3.FileAttribute.ShowInTable = types.BoolNull()
+				}
+				attributes3.FileAttribute.Type = types.StringValue(string(attributesItem1.FileAttribute.Type))
+				if attributesItem1.FileAttribute.ValueFormatter != nil {
+					attributes3.FileAttribute.ValueFormatter = types.StringValue(*attributesItem1.FileAttribute.ValueFormatter)
+				} else {
+					attributes3.FileAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.InternalAttribute != nil {
+				attributes3.InternalAttribute = &InternalAttribute{}
+				attributes3.InternalAttribute.Purpose = nil
+				for _, v := range attributesItem1.InternalAttribute.Purpose {
+					attributes3.InternalAttribute.Purpose = append(attributes3.InternalAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.InternalAttribute.Constraints == nil {
+					attributes3.InternalAttribute.Constraints = nil
+				} else {
+					attributes3.InternalAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.InternalAttribute.DefaultValue == nil {
+					attributes3.InternalAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult36, _ := json.Marshal(attributesItem1.InternalAttribute.DefaultValue)
+					attributes3.InternalAttribute.DefaultValue = types.StringValue(string(defaultValueResult36))
+				}
+				if attributesItem1.InternalAttribute.Deprecated != nil {
+					attributes3.InternalAttribute.Deprecated = types.BoolValue(*attributesItem1.InternalAttribute.Deprecated)
+				} else {
+					attributes3.InternalAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.InternalAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.InternalAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.InternalAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.FeatureFlag != nil {
+					attributes3.InternalAttribute.FeatureFlag = types.StringValue(*attributesItem1.InternalAttribute.FeatureFlag)
+				} else {
+					attributes3.InternalAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.Group != nil {
+					attributes3.InternalAttribute.Group = types.StringValue(*attributesItem1.InternalAttribute.Group)
+				} else {
+					attributes3.InternalAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.Hidden != nil {
+					attributes3.InternalAttribute.Hidden = types.BoolValue(*attributesItem1.InternalAttribute.Hidden)
+				} else {
+					attributes3.InternalAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.HideLabel != nil {
+					attributes3.InternalAttribute.HideLabel = types.BoolValue(*attributesItem1.InternalAttribute.HideLabel)
+				} else {
+					attributes3.InternalAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.Icon != nil {
+					attributes3.InternalAttribute.Icon = types.StringValue(*attributesItem1.InternalAttribute.Icon)
+				} else {
+					attributes3.InternalAttribute.Icon = types.StringNull()
+				}
+				attributes3.InternalAttribute.Label = types.StringValue(attributesItem1.InternalAttribute.Label)
+				if attributesItem1.InternalAttribute.Layout != nil {
+					attributes3.InternalAttribute.Layout = types.StringValue(*attributesItem1.InternalAttribute.Layout)
+				} else {
+					attributes3.InternalAttribute.Layout = types.StringNull()
+				}
+				attributes3.InternalAttribute.Name = types.StringValue(attributesItem1.InternalAttribute.Name)
+				if attributesItem1.InternalAttribute.Order != nil {
+					attributes3.InternalAttribute.Order = types.Int64Value(*attributesItem1.InternalAttribute.Order)
+				} else {
+					attributes3.InternalAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.InternalAttribute.Placeholder != nil {
+					attributes3.InternalAttribute.Placeholder = types.StringValue(*attributesItem1.InternalAttribute.Placeholder)
+				} else {
+					attributes3.InternalAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.PreviewValueFormatter != nil {
+					attributes3.InternalAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.InternalAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.InternalAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.Protected != nil {
+					attributes3.InternalAttribute.Protected = types.BoolValue(*attributesItem1.InternalAttribute.Protected)
+				} else {
+					attributes3.InternalAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.Readonly != nil {
+					attributes3.InternalAttribute.Readonly = types.BoolValue(*attributesItem1.InternalAttribute.Readonly)
+				} else {
+					attributes3.InternalAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.RenderCondition != nil {
+					attributes3.InternalAttribute.RenderCondition = types.StringValue(*attributesItem1.InternalAttribute.RenderCondition)
+				} else {
+					attributes3.InternalAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.Required != nil {
+					attributes3.InternalAttribute.Required = types.BoolValue(*attributesItem1.InternalAttribute.Required)
+				} else {
+					attributes3.InternalAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.SettingFlag != nil {
+					attributes3.InternalAttribute.SettingFlag = types.StringValue(*attributesItem1.InternalAttribute.SettingFlag)
+				} else {
+					attributes3.InternalAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.ShowInTable != nil {
+					attributes3.InternalAttribute.ShowInTable = types.BoolValue(*attributesItem1.InternalAttribute.ShowInTable)
+				} else {
+					attributes3.InternalAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.InternalAttribute.Type != nil {
+					attributes3.InternalAttribute.Type = types.StringValue(string(*attributesItem1.InternalAttribute.Type))
+				} else {
+					attributes3.InternalAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.InternalAttribute.ValueFormatter != nil {
+					attributes3.InternalAttribute.ValueFormatter = types.StringValue(*attributesItem1.InternalAttribute.ValueFormatter)
+				} else {
+					attributes3.InternalAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.InternalUserAttribute != nil {
+				attributes3.InternalUserAttribute = &InternalUserAttribute{}
+				attributes3.InternalUserAttribute.Purpose = nil
+				for _, v := range attributesItem1.InternalUserAttribute.Purpose {
+					attributes3.InternalUserAttribute.Purpose = append(attributes3.InternalUserAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.InternalUserAttribute.Constraints == nil {
+					attributes3.InternalUserAttribute.Constraints = nil
+				} else {
+					attributes3.InternalUserAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.InternalUserAttribute.DefaultValue == nil {
+					attributes3.InternalUserAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult37, _ := json.Marshal(attributesItem1.InternalUserAttribute.DefaultValue)
+					attributes3.InternalUserAttribute.DefaultValue = types.StringValue(string(defaultValueResult37))
+				}
+				if attributesItem1.InternalUserAttribute.Deprecated != nil {
+					attributes3.InternalUserAttribute.Deprecated = types.BoolValue(*attributesItem1.InternalUserAttribute.Deprecated)
+				} else {
+					attributes3.InternalUserAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.InternalUserAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.FeatureFlag != nil {
+					attributes3.InternalUserAttribute.FeatureFlag = types.StringValue(*attributesItem1.InternalUserAttribute.FeatureFlag)
+				} else {
+					attributes3.InternalUserAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.Group != nil {
+					attributes3.InternalUserAttribute.Group = types.StringValue(*attributesItem1.InternalUserAttribute.Group)
+				} else {
+					attributes3.InternalUserAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.Hidden != nil {
+					attributes3.InternalUserAttribute.Hidden = types.BoolValue(*attributesItem1.InternalUserAttribute.Hidden)
+				} else {
+					attributes3.InternalUserAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.HideLabel != nil {
+					attributes3.InternalUserAttribute.HideLabel = types.BoolValue(*attributesItem1.InternalUserAttribute.HideLabel)
+				} else {
+					attributes3.InternalUserAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.Icon != nil {
+					attributes3.InternalUserAttribute.Icon = types.StringValue(*attributesItem1.InternalUserAttribute.Icon)
+				} else {
+					attributes3.InternalUserAttribute.Icon = types.StringNull()
+				}
+				attributes3.InternalUserAttribute.Label = types.StringValue(attributesItem1.InternalUserAttribute.Label)
+				if attributesItem1.InternalUserAttribute.Layout != nil {
+					attributes3.InternalUserAttribute.Layout = types.StringValue(*attributesItem1.InternalUserAttribute.Layout)
+				} else {
+					attributes3.InternalUserAttribute.Layout = types.StringNull()
+				}
+				attributes3.InternalUserAttribute.Name = types.StringValue(attributesItem1.InternalUserAttribute.Name)
+				if attributesItem1.InternalUserAttribute.Order != nil {
+					attributes3.InternalUserAttribute.Order = types.Int64Value(*attributesItem1.InternalUserAttribute.Order)
+				} else {
+					attributes3.InternalUserAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.InternalUserAttribute.Placeholder != nil {
+					attributes3.InternalUserAttribute.Placeholder = types.StringValue(*attributesItem1.InternalUserAttribute.Placeholder)
+				} else {
+					attributes3.InternalUserAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.PreviewValueFormatter != nil {
+					attributes3.InternalUserAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.InternalUserAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.InternalUserAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.Protected != nil {
+					attributes3.InternalUserAttribute.Protected = types.BoolValue(*attributesItem1.InternalUserAttribute.Protected)
+				} else {
+					attributes3.InternalUserAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.Readonly != nil {
+					attributes3.InternalUserAttribute.Readonly = types.BoolValue(*attributesItem1.InternalUserAttribute.Readonly)
+				} else {
+					attributes3.InternalUserAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.RenderCondition != nil {
+					attributes3.InternalUserAttribute.RenderCondition = types.StringValue(*attributesItem1.InternalUserAttribute.RenderCondition)
+				} else {
+					attributes3.InternalUserAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.Required != nil {
+					attributes3.InternalUserAttribute.Required = types.BoolValue(*attributesItem1.InternalUserAttribute.Required)
+				} else {
+					attributes3.InternalUserAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.SettingFlag != nil {
+					attributes3.InternalUserAttribute.SettingFlag = types.StringValue(*attributesItem1.InternalUserAttribute.SettingFlag)
+				} else {
+					attributes3.InternalUserAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.ShowInTable != nil {
+					attributes3.InternalUserAttribute.ShowInTable = types.BoolValue(*attributesItem1.InternalUserAttribute.ShowInTable)
+				} else {
+					attributes3.InternalUserAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.InternalUserAttribute.Type != nil {
+					attributes3.InternalUserAttribute.Type = types.StringValue(string(*attributesItem1.InternalUserAttribute.Type))
+				} else {
+					attributes3.InternalUserAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.InternalUserAttribute.ValueFormatter != nil {
+					attributes3.InternalUserAttribute.ValueFormatter = types.StringValue(*attributesItem1.InternalUserAttribute.ValueFormatter)
+				} else {
+					attributes3.InternalUserAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.InvitationEmailAttribute != nil {
+				attributes3.InvitationEmailAttribute = &InvitationEmailAttribute{}
+				attributes3.InvitationEmailAttribute.Purpose = nil
+				for _, v := range attributesItem1.InvitationEmailAttribute.Purpose {
+					attributes3.InvitationEmailAttribute.Purpose = append(attributes3.InvitationEmailAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.InvitationEmailAttribute.Constraints == nil {
+					attributes3.InvitationEmailAttribute.Constraints = nil
+				} else {
+					attributes3.InvitationEmailAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.InvitationEmailAttribute.DefaultValue == nil {
+					attributes3.InvitationEmailAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult38, _ := json.Marshal(attributesItem1.InvitationEmailAttribute.DefaultValue)
+					attributes3.InvitationEmailAttribute.DefaultValue = types.StringValue(string(defaultValueResult38))
+				}
+				if attributesItem1.InvitationEmailAttribute.Deprecated != nil {
+					attributes3.InvitationEmailAttribute.Deprecated = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Deprecated)
+				} else {
+					attributes3.InvitationEmailAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.InvitationEmailAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.FeatureFlag != nil {
+					attributes3.InvitationEmailAttribute.FeatureFlag = types.StringValue(*attributesItem1.InvitationEmailAttribute.FeatureFlag)
+				} else {
+					attributes3.InvitationEmailAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Group != nil {
+					attributes3.InvitationEmailAttribute.Group = types.StringValue(*attributesItem1.InvitationEmailAttribute.Group)
+				} else {
+					attributes3.InvitationEmailAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Hidden != nil {
+					attributes3.InvitationEmailAttribute.Hidden = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Hidden)
+				} else {
+					attributes3.InvitationEmailAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.HideLabel != nil {
+					attributes3.InvitationEmailAttribute.HideLabel = types.BoolValue(*attributesItem1.InvitationEmailAttribute.HideLabel)
+				} else {
+					attributes3.InvitationEmailAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Icon != nil {
+					attributes3.InvitationEmailAttribute.Icon = types.StringValue(*attributesItem1.InvitationEmailAttribute.Icon)
+				} else {
+					attributes3.InvitationEmailAttribute.Icon = types.StringNull()
+				}
+				attributes3.InvitationEmailAttribute.Label = types.StringValue(attributesItem1.InvitationEmailAttribute.Label)
+				if attributesItem1.InvitationEmailAttribute.Layout != nil {
+					attributes3.InvitationEmailAttribute.Layout = types.StringValue(*attributesItem1.InvitationEmailAttribute.Layout)
+				} else {
+					attributes3.InvitationEmailAttribute.Layout = types.StringNull()
+				}
+				attributes3.InvitationEmailAttribute.Name = types.StringValue(attributesItem1.InvitationEmailAttribute.Name)
+				if attributesItem1.InvitationEmailAttribute.Order != nil {
+					attributes3.InvitationEmailAttribute.Order = types.Int64Value(*attributesItem1.InvitationEmailAttribute.Order)
+				} else {
+					attributes3.InvitationEmailAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.InvitationEmailAttribute.Placeholder != nil {
+					attributes3.InvitationEmailAttribute.Placeholder = types.StringValue(*attributesItem1.InvitationEmailAttribute.Placeholder)
+				} else {
+					attributes3.InvitationEmailAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.PreviewValueFormatter != nil {
+					attributes3.InvitationEmailAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.InvitationEmailAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.InvitationEmailAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Protected != nil {
+					attributes3.InvitationEmailAttribute.Protected = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Protected)
+				} else {
+					attributes3.InvitationEmailAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Readonly != nil {
+					attributes3.InvitationEmailAttribute.Readonly = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Readonly)
+				} else {
+					attributes3.InvitationEmailAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.RenderCondition != nil {
+					attributes3.InvitationEmailAttribute.RenderCondition = types.StringValue(*attributesItem1.InvitationEmailAttribute.RenderCondition)
+				} else {
+					attributes3.InvitationEmailAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Required != nil {
+					attributes3.InvitationEmailAttribute.Required = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Required)
+				} else {
+					attributes3.InvitationEmailAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.SettingFlag != nil {
+					attributes3.InvitationEmailAttribute.SettingFlag = types.StringValue(*attributesItem1.InvitationEmailAttribute.SettingFlag)
+				} else {
+					attributes3.InvitationEmailAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.ShowInTable != nil {
+					attributes3.InvitationEmailAttribute.ShowInTable = types.BoolValue(*attributesItem1.InvitationEmailAttribute.ShowInTable)
+				} else {
+					attributes3.InvitationEmailAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.Type != nil {
+					attributes3.InvitationEmailAttribute.Type = types.StringValue(string(*attributesItem1.InvitationEmailAttribute.Type))
+				} else {
+					attributes3.InvitationEmailAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.InvitationEmailAttribute.ValueFormatter != nil {
+					attributes3.InvitationEmailAttribute.ValueFormatter = types.StringValue(*attributesItem1.InvitationEmailAttribute.ValueFormatter)
+				} else {
+					attributes3.InvitationEmailAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.LinkAttribute != nil {
+				attributes3.LinkAttribute = &LinkAttribute{}
+				attributes3.LinkAttribute.Purpose = nil
+				for _, v := range attributesItem1.LinkAttribute.Purpose {
+					attributes3.LinkAttribute.Purpose = append(attributes3.LinkAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.LinkAttribute.Constraints == nil {
+					attributes3.LinkAttribute.Constraints = nil
+				} else {
+					attributes3.LinkAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.LinkAttribute.DefaultValue == nil {
+					attributes3.LinkAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult39, _ := json.Marshal(attributesItem1.LinkAttribute.DefaultValue)
+					attributes3.LinkAttribute.DefaultValue = types.StringValue(string(defaultValueResult39))
+				}
+				if attributesItem1.LinkAttribute.Deprecated != nil {
+					attributes3.LinkAttribute.Deprecated = types.BoolValue(*attributesItem1.LinkAttribute.Deprecated)
+				} else {
+					attributes3.LinkAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.LinkAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.LinkAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.LinkAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.FeatureFlag != nil {
+					attributes3.LinkAttribute.FeatureFlag = types.StringValue(*attributesItem1.LinkAttribute.FeatureFlag)
+				} else {
+					attributes3.LinkAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.Group != nil {
+					attributes3.LinkAttribute.Group = types.StringValue(*attributesItem1.LinkAttribute.Group)
+				} else {
+					attributes3.LinkAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.Hidden != nil {
+					attributes3.LinkAttribute.Hidden = types.BoolValue(*attributesItem1.LinkAttribute.Hidden)
+				} else {
+					attributes3.LinkAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.HideLabel != nil {
+					attributes3.LinkAttribute.HideLabel = types.BoolValue(*attributesItem1.LinkAttribute.HideLabel)
+				} else {
+					attributes3.LinkAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.Icon != nil {
+					attributes3.LinkAttribute.Icon = types.StringValue(*attributesItem1.LinkAttribute.Icon)
+				} else {
+					attributes3.LinkAttribute.Icon = types.StringNull()
+				}
+				attributes3.LinkAttribute.Label = types.StringValue(attributesItem1.LinkAttribute.Label)
+				if attributesItem1.LinkAttribute.Layout != nil {
+					attributes3.LinkAttribute.Layout = types.StringValue(*attributesItem1.LinkAttribute.Layout)
+				} else {
+					attributes3.LinkAttribute.Layout = types.StringNull()
+				}
+				attributes3.LinkAttribute.Name = types.StringValue(attributesItem1.LinkAttribute.Name)
+				if attributesItem1.LinkAttribute.Order != nil {
+					attributes3.LinkAttribute.Order = types.Int64Value(*attributesItem1.LinkAttribute.Order)
+				} else {
+					attributes3.LinkAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.LinkAttribute.Placeholder != nil {
+					attributes3.LinkAttribute.Placeholder = types.StringValue(*attributesItem1.LinkAttribute.Placeholder)
+				} else {
+					attributes3.LinkAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.PreviewValueFormatter != nil {
+					attributes3.LinkAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.LinkAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.LinkAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.Protected != nil {
+					attributes3.LinkAttribute.Protected = types.BoolValue(*attributesItem1.LinkAttribute.Protected)
+				} else {
+					attributes3.LinkAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.Readonly != nil {
+					attributes3.LinkAttribute.Readonly = types.BoolValue(*attributesItem1.LinkAttribute.Readonly)
+				} else {
+					attributes3.LinkAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.RenderCondition != nil {
+					attributes3.LinkAttribute.RenderCondition = types.StringValue(*attributesItem1.LinkAttribute.RenderCondition)
+				} else {
+					attributes3.LinkAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.Required != nil {
+					attributes3.LinkAttribute.Required = types.BoolValue(*attributesItem1.LinkAttribute.Required)
+				} else {
+					attributes3.LinkAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.SettingFlag != nil {
+					attributes3.LinkAttribute.SettingFlag = types.StringValue(*attributesItem1.LinkAttribute.SettingFlag)
+				} else {
+					attributes3.LinkAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.ShowInTable != nil {
+					attributes3.LinkAttribute.ShowInTable = types.BoolValue(*attributesItem1.LinkAttribute.ShowInTable)
+				} else {
+					attributes3.LinkAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.LinkAttribute.Type != nil {
+					attributes3.LinkAttribute.Type = types.StringValue(string(*attributesItem1.LinkAttribute.Type))
+				} else {
+					attributes3.LinkAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.LinkAttribute.ValueFormatter != nil {
+					attributes3.LinkAttribute.ValueFormatter = types.StringValue(*attributesItem1.LinkAttribute.ValueFormatter)
+				} else {
+					attributes3.LinkAttribute.ValueFormatter = types.StringNull()
 				}
 			}
 			if attributesItem1.MultiSelectAttribute != nil {
@@ -14760,18 +15499,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				} else {
 					attributes3.MultiSelectAttribute.AllowExtraOptions = types.BoolNull()
 				}
-				if attributes3.MultiSelectAttribute.Constraints == nil && len(attributesItem1.MultiSelectAttribute.Constraints) > 0 {
-					attributes3.MultiSelectAttribute.Constraints = make(map[string]types.String)
-					for key34, value38 := range attributesItem1.MultiSelectAttribute.Constraints {
-						result33, _ := json.Marshal(value38)
-						attributes3.MultiSelectAttribute.Constraints[key34] = types.StringValue(string(result33))
-					}
+				if attributesItem1.MultiSelectAttribute.Constraints == nil {
+					attributes3.MultiSelectAttribute.Constraints = nil
+				} else {
+					attributes3.MultiSelectAttribute.Constraints = &Constraints{}
 				}
 				if attributesItem1.MultiSelectAttribute.DefaultValue == nil {
 					attributes3.MultiSelectAttribute.DefaultValue = types.StringNull()
 				} else {
-					defaultValueResult33, _ := json.Marshal(attributesItem1.MultiSelectAttribute.DefaultValue)
-					attributes3.MultiSelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult33))
+					defaultValueResult40, _ := json.Marshal(attributesItem1.MultiSelectAttribute.DefaultValue)
+					attributes3.MultiSelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult40))
 				}
 				if attributesItem1.MultiSelectAttribute.Deprecated != nil {
 					attributes3.MultiSelectAttribute.Deprecated = types.BoolValue(*attributesItem1.MultiSelectAttribute.Deprecated)
@@ -14820,26 +15557,31 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					attributes3.MultiSelectAttribute.Layout = types.StringNull()
 				}
 				attributes3.MultiSelectAttribute.Name = types.StringValue(attributesItem1.MultiSelectAttribute.Name)
-				attributes3.MultiSelectAttribute.Options = nil
-				for _, optionsItem4 := range attributesItem1.MultiSelectAttribute.Options {
-					var options10 MultiSelectAttributeOptions
-					if optionsItem4.Str != nil {
-						if optionsItem4.Str != nil {
-							options10.Str = types.StringValue(*optionsItem4.Str)
+				if len(attributes3.MultiSelectAttribute.Options) > len(attributesItem1.MultiSelectAttribute.Options) {
+					attributes3.MultiSelectAttribute.Options = attributes3.MultiSelectAttribute.Options[:len(attributesItem1.MultiSelectAttribute.Options)]
+				}
+				for optionsCount3, optionsItem3 := range attributesItem1.MultiSelectAttribute.Options {
+					var options8 Options
+					if optionsItem3.Str != nil {
+						if optionsItem3.Str != nil {
+							options8.Str = types.StringValue(*optionsItem3.Str)
 						} else {
-							options10.Str = types.StringNull()
+							options8.Str = types.StringNull()
 						}
 					}
-					if optionsItem4.MultiSelectAttributeOptions2 != nil {
-						options10.MultiSelectAttributeOptions2 = &SelectAttributeOptionsOption{}
-						if optionsItem4.MultiSelectAttributeOptions2.Title != nil {
-							options10.MultiSelectAttributeOptions2.Title = types.StringValue(*optionsItem4.MultiSelectAttributeOptions2.Title)
+					if optionsItem3.MultiSelectAttribute2 != nil {
+						options8.Two = &MultiSelectAttribute2{}
+						if optionsItem3.MultiSelectAttribute2.Title != nil {
+							options8.Two.Title = types.StringValue(*optionsItem3.MultiSelectAttribute2.Title)
 						} else {
-							options10.MultiSelectAttributeOptions2.Title = types.StringNull()
+							options8.Two.Title = types.StringNull()
 						}
-						options10.MultiSelectAttributeOptions2.Value = types.StringValue(optionsItem4.MultiSelectAttributeOptions2.Value)
+						options8.Two.Value = types.StringValue(optionsItem3.MultiSelectAttribute2.Value)
 					}
-					attributes3.MultiSelectAttribute.Options = append(attributes3.MultiSelectAttribute.Options, options10)
+					if optionsCount3+1 > len(attributes3.MultiSelectAttribute.Options) {
+						attributes3.MultiSelectAttribute.Options = append(attributes3.MultiSelectAttribute.Options, options8)
+					} else {
+					}
 				}
 				if attributesItem1.MultiSelectAttribute.Order != nil {
 					attributes3.MultiSelectAttribute.Order = types.Int64Value(*attributesItem1.MultiSelectAttribute.Order)
@@ -14897,280 +15639,621 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					attributes3.MultiSelectAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.StatusAttribute != nil {
-				attributes3.StatusAttribute = &StatusAttribute{}
-				attributes3.StatusAttribute.Purpose = nil
-				for _, v := range attributesItem1.StatusAttribute.Purpose {
-					attributes3.StatusAttribute.Purpose = append(attributes3.StatusAttribute.Purpose, types.StringValue(v))
+			if attributesItem1.NumberAttribute != nil {
+				attributes3.NumberAttribute = &NumberAttribute{}
+				attributes3.NumberAttribute.Purpose = nil
+				for _, v := range attributesItem1.NumberAttribute.Purpose {
+					attributes3.NumberAttribute.Purpose = append(attributes3.NumberAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.StatusAttribute.Constraints == nil && len(attributesItem1.StatusAttribute.Constraints) > 0 {
-					attributes3.StatusAttribute.Constraints = make(map[string]types.String)
-					for key35, value40 := range attributesItem1.StatusAttribute.Constraints {
-						result34, _ := json.Marshal(value40)
-						attributes3.StatusAttribute.Constraints[key35] = types.StringValue(string(result34))
-					}
-				}
-				if attributesItem1.StatusAttribute.DefaultValue == nil {
-					attributes3.StatusAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.NumberAttribute.Constraints == nil {
+					attributes3.NumberAttribute.Constraints = nil
 				} else {
-					defaultValueResult34, _ := json.Marshal(attributesItem1.StatusAttribute.DefaultValue)
-					attributes3.StatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult34))
+					attributes3.NumberAttribute.Constraints = &Constraints{}
 				}
-				if attributesItem1.StatusAttribute.Deprecated != nil {
-					attributes3.StatusAttribute.Deprecated = types.BoolValue(*attributesItem1.StatusAttribute.Deprecated)
+				if attributesItem1.NumberAttribute.DefaultValue == nil {
+					attributes3.NumberAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.StatusAttribute.Deprecated = types.BoolNull()
+					defaultValueResult41, _ := json.Marshal(attributesItem1.NumberAttribute.DefaultValue)
+					attributes3.NumberAttribute.DefaultValue = types.StringValue(string(defaultValueResult41))
 				}
-				if attributesItem1.StatusAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.StatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.StatusAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.NumberAttribute.Deprecated != nil {
+					attributes3.NumberAttribute.Deprecated = types.BoolValue(*attributesItem1.NumberAttribute.Deprecated)
 				} else {
-					attributes3.StatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.NumberAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.StatusAttribute.FeatureFlag != nil {
-					attributes3.StatusAttribute.FeatureFlag = types.StringValue(*attributesItem1.StatusAttribute.FeatureFlag)
+				if attributesItem1.NumberAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.NumberAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.NumberAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.StatusAttribute.FeatureFlag = types.StringNull()
+					attributes3.NumberAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.StatusAttribute.Group != nil {
-					attributes3.StatusAttribute.Group = types.StringValue(*attributesItem1.StatusAttribute.Group)
+				if attributesItem1.NumberAttribute.FeatureFlag != nil {
+					attributes3.NumberAttribute.FeatureFlag = types.StringValue(*attributesItem1.NumberAttribute.FeatureFlag)
 				} else {
-					attributes3.StatusAttribute.Group = types.StringNull()
+					attributes3.NumberAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.Hidden != nil {
-					attributes3.StatusAttribute.Hidden = types.BoolValue(*attributesItem1.StatusAttribute.Hidden)
+				if attributesItem1.NumberAttribute.Format != nil {
+					attributes3.NumberAttribute.Format = types.StringValue(*attributesItem1.NumberAttribute.Format)
 				} else {
-					attributes3.StatusAttribute.Hidden = types.BoolNull()
+					attributes3.NumberAttribute.Format = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.HideLabel != nil {
-					attributes3.StatusAttribute.HideLabel = types.BoolValue(*attributesItem1.StatusAttribute.HideLabel)
+				if attributesItem1.NumberAttribute.Group != nil {
+					attributes3.NumberAttribute.Group = types.StringValue(*attributesItem1.NumberAttribute.Group)
 				} else {
-					attributes3.StatusAttribute.HideLabel = types.BoolNull()
+					attributes3.NumberAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.Icon != nil {
-					attributes3.StatusAttribute.Icon = types.StringValue(*attributesItem1.StatusAttribute.Icon)
+				if attributesItem1.NumberAttribute.Hidden != nil {
+					attributes3.NumberAttribute.Hidden = types.BoolValue(*attributesItem1.NumberAttribute.Hidden)
 				} else {
-					attributes3.StatusAttribute.Icon = types.StringNull()
+					attributes3.NumberAttribute.Hidden = types.BoolNull()
 				}
-				attributes3.StatusAttribute.Label = types.StringValue(attributesItem1.StatusAttribute.Label)
-				if attributesItem1.StatusAttribute.Layout != nil {
-					attributes3.StatusAttribute.Layout = types.StringValue(*attributesItem1.StatusAttribute.Layout)
+				if attributesItem1.NumberAttribute.HideLabel != nil {
+					attributes3.NumberAttribute.HideLabel = types.BoolValue(*attributesItem1.NumberAttribute.HideLabel)
 				} else {
-					attributes3.StatusAttribute.Layout = types.StringNull()
+					attributes3.NumberAttribute.HideLabel = types.BoolNull()
 				}
-				attributes3.StatusAttribute.Name = types.StringValue(attributesItem1.StatusAttribute.Name)
-				attributes3.StatusAttribute.Options = nil
-				for _, optionsItem5 := range attributesItem1.StatusAttribute.Options {
-					var options12 StatusAttributeOptions
-					if optionsItem5.Str != nil {
-						if optionsItem5.Str != nil {
-							options12.Str = types.StringValue(*optionsItem5.Str)
-						} else {
-							options12.Str = types.StringNull()
-						}
-					}
-					if optionsItem5.StatusAttributeOptions2 != nil {
-						options12.StatusAttributeOptions2 = &SelectAttributeOptionsOption{}
-						if optionsItem5.StatusAttributeOptions2.Title != nil {
-							options12.StatusAttributeOptions2.Title = types.StringValue(*optionsItem5.StatusAttributeOptions2.Title)
-						} else {
-							options12.StatusAttributeOptions2.Title = types.StringNull()
-						}
-						options12.StatusAttributeOptions2.Value = types.StringValue(optionsItem5.StatusAttributeOptions2.Value)
-					}
-					attributes3.StatusAttribute.Options = append(attributes3.StatusAttribute.Options, options12)
-				}
-				if attributesItem1.StatusAttribute.Order != nil {
-					attributes3.StatusAttribute.Order = types.Int64Value(*attributesItem1.StatusAttribute.Order)
+				if attributesItem1.NumberAttribute.Icon != nil {
+					attributes3.NumberAttribute.Icon = types.StringValue(*attributesItem1.NumberAttribute.Icon)
 				} else {
-					attributes3.StatusAttribute.Order = types.Int64Null()
+					attributes3.NumberAttribute.Icon = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.Placeholder != nil {
-					attributes3.StatusAttribute.Placeholder = types.StringValue(*attributesItem1.StatusAttribute.Placeholder)
+				attributes3.NumberAttribute.Label = types.StringValue(attributesItem1.NumberAttribute.Label)
+				if attributesItem1.NumberAttribute.Layout != nil {
+					attributes3.NumberAttribute.Layout = types.StringValue(*attributesItem1.NumberAttribute.Layout)
 				} else {
-					attributes3.StatusAttribute.Placeholder = types.StringNull()
+					attributes3.NumberAttribute.Layout = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.PreviewValueFormatter != nil {
-					attributes3.StatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.StatusAttribute.PreviewValueFormatter)
+				attributes3.NumberAttribute.Name = types.StringValue(attributesItem1.NumberAttribute.Name)
+				if attributesItem1.NumberAttribute.Order != nil {
+					attributes3.NumberAttribute.Order = types.Int64Value(*attributesItem1.NumberAttribute.Order)
 				} else {
-					attributes3.StatusAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.NumberAttribute.Order = types.Int64Null()
 				}
-				if attributesItem1.StatusAttribute.Protected != nil {
-					attributes3.StatusAttribute.Protected = types.BoolValue(*attributesItem1.StatusAttribute.Protected)
+				if attributesItem1.NumberAttribute.Placeholder != nil {
+					attributes3.NumberAttribute.Placeholder = types.StringValue(*attributesItem1.NumberAttribute.Placeholder)
 				} else {
-					attributes3.StatusAttribute.Protected = types.BoolNull()
+					attributes3.NumberAttribute.Placeholder = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.Readonly != nil {
-					attributes3.StatusAttribute.Readonly = types.BoolValue(*attributesItem1.StatusAttribute.Readonly)
+				if attributesItem1.NumberAttribute.PreviewValueFormatter != nil {
+					attributes3.NumberAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.NumberAttribute.PreviewValueFormatter)
 				} else {
-					attributes3.StatusAttribute.Readonly = types.BoolNull()
+					attributes3.NumberAttribute.PreviewValueFormatter = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.RenderCondition != nil {
-					attributes3.StatusAttribute.RenderCondition = types.StringValue(*attributesItem1.StatusAttribute.RenderCondition)
+				if attributesItem1.NumberAttribute.Protected != nil {
+					attributes3.NumberAttribute.Protected = types.BoolValue(*attributesItem1.NumberAttribute.Protected)
 				} else {
-					attributes3.StatusAttribute.RenderCondition = types.StringNull()
+					attributes3.NumberAttribute.Protected = types.BoolNull()
 				}
-				if attributesItem1.StatusAttribute.Required != nil {
-					attributes3.StatusAttribute.Required = types.BoolValue(*attributesItem1.StatusAttribute.Required)
+				if attributesItem1.NumberAttribute.Readonly != nil {
+					attributes3.NumberAttribute.Readonly = types.BoolValue(*attributesItem1.NumberAttribute.Readonly)
 				} else {
-					attributes3.StatusAttribute.Required = types.BoolNull()
+					attributes3.NumberAttribute.Readonly = types.BoolNull()
 				}
-				if attributesItem1.StatusAttribute.SettingFlag != nil {
-					attributes3.StatusAttribute.SettingFlag = types.StringValue(*attributesItem1.StatusAttribute.SettingFlag)
+				if attributesItem1.NumberAttribute.RenderCondition != nil {
+					attributes3.NumberAttribute.RenderCondition = types.StringValue(*attributesItem1.NumberAttribute.RenderCondition)
 				} else {
-					attributes3.StatusAttribute.SettingFlag = types.StringNull()
+					attributes3.NumberAttribute.RenderCondition = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.ShowInTable != nil {
-					attributes3.StatusAttribute.ShowInTable = types.BoolValue(*attributesItem1.StatusAttribute.ShowInTable)
+				if attributesItem1.NumberAttribute.Required != nil {
+					attributes3.NumberAttribute.Required = types.BoolValue(*attributesItem1.NumberAttribute.Required)
 				} else {
-					attributes3.StatusAttribute.ShowInTable = types.BoolNull()
+					attributes3.NumberAttribute.Required = types.BoolNull()
 				}
-				if attributesItem1.StatusAttribute.Type != nil {
-					attributes3.StatusAttribute.Type = types.StringValue(string(*attributesItem1.StatusAttribute.Type))
+				if attributesItem1.NumberAttribute.SettingFlag != nil {
+					attributes3.NumberAttribute.SettingFlag = types.StringValue(*attributesItem1.NumberAttribute.SettingFlag)
 				} else {
-					attributes3.StatusAttribute.Type = types.StringNull()
+					attributes3.NumberAttribute.SettingFlag = types.StringNull()
 				}
-				if attributesItem1.StatusAttribute.ValueFormatter != nil {
-					attributes3.StatusAttribute.ValueFormatter = types.StringValue(*attributesItem1.StatusAttribute.ValueFormatter)
+				if attributesItem1.NumberAttribute.ShowInTable != nil {
+					attributes3.NumberAttribute.ShowInTable = types.BoolValue(*attributesItem1.NumberAttribute.ShowInTable)
 				} else {
-					attributes3.StatusAttribute.ValueFormatter = types.StringNull()
+					attributes3.NumberAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.NumberAttribute.Type != nil {
+					attributes3.NumberAttribute.Type = types.StringValue(string(*attributesItem1.NumberAttribute.Type))
+				} else {
+					attributes3.NumberAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.NumberAttribute.ValueFormatter != nil {
+					attributes3.NumberAttribute.ValueFormatter = types.StringValue(*attributesItem1.NumberAttribute.ValueFormatter)
+				} else {
+					attributes3.NumberAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.SequenceAttribute != nil {
-				attributes3.SequenceAttribute = &SequenceAttribute{}
-				attributes3.SequenceAttribute.Purpose = nil
-				for _, v := range attributesItem1.SequenceAttribute.Purpose {
-					attributes3.SequenceAttribute.Purpose = append(attributes3.SequenceAttribute.Purpose, types.StringValue(v))
+			if attributesItem1.OrderedListAttribute != nil {
+				attributes3.OrderedListAttribute = &OrderedListAttribute{}
+				attributes3.OrderedListAttribute.Purpose = nil
+				for _, v := range attributesItem1.OrderedListAttribute.Purpose {
+					attributes3.OrderedListAttribute.Purpose = append(attributes3.OrderedListAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.SequenceAttribute.Constraints == nil && len(attributesItem1.SequenceAttribute.Constraints) > 0 {
-					attributes3.SequenceAttribute.Constraints = make(map[string]types.String)
-					for key36, value42 := range attributesItem1.SequenceAttribute.Constraints {
-						result35, _ := json.Marshal(value42)
-						attributes3.SequenceAttribute.Constraints[key36] = types.StringValue(string(result35))
-					}
-				}
-				if attributesItem1.SequenceAttribute.DefaultValue == nil {
-					attributes3.SequenceAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.OrderedListAttribute.Constraints == nil {
+					attributes3.OrderedListAttribute.Constraints = nil
 				} else {
-					defaultValueResult35, _ := json.Marshal(attributesItem1.SequenceAttribute.DefaultValue)
-					attributes3.SequenceAttribute.DefaultValue = types.StringValue(string(defaultValueResult35))
+					attributes3.OrderedListAttribute.Constraints = &Constraints{}
 				}
-				if attributesItem1.SequenceAttribute.Deprecated != nil {
-					attributes3.SequenceAttribute.Deprecated = types.BoolValue(*attributesItem1.SequenceAttribute.Deprecated)
+				if attributesItem1.OrderedListAttribute.DefaultValue == nil {
+					attributes3.OrderedListAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.SequenceAttribute.Deprecated = types.BoolNull()
+					defaultValueResult42, _ := json.Marshal(attributesItem1.OrderedListAttribute.DefaultValue)
+					attributes3.OrderedListAttribute.DefaultValue = types.StringValue(string(defaultValueResult42))
 				}
-				if attributesItem1.SequenceAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.SequenceAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.SequenceAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.OrderedListAttribute.Deprecated != nil {
+					attributes3.OrderedListAttribute.Deprecated = types.BoolValue(*attributesItem1.OrderedListAttribute.Deprecated)
 				} else {
-					attributes3.SequenceAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.OrderedListAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.FeatureFlag != nil {
-					attributes3.SequenceAttribute.FeatureFlag = types.StringValue(*attributesItem1.SequenceAttribute.FeatureFlag)
+				if attributesItem1.OrderedListAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.OrderedListAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.SequenceAttribute.FeatureFlag = types.StringNull()
+					attributes3.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.Group != nil {
-					attributes3.SequenceAttribute.Group = types.StringValue(*attributesItem1.SequenceAttribute.Group)
+				if attributesItem1.OrderedListAttribute.FeatureFlag != nil {
+					attributes3.OrderedListAttribute.FeatureFlag = types.StringValue(*attributesItem1.OrderedListAttribute.FeatureFlag)
 				} else {
-					attributes3.SequenceAttribute.Group = types.StringNull()
+					attributes3.OrderedListAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.Hidden != nil {
-					attributes3.SequenceAttribute.Hidden = types.BoolValue(*attributesItem1.SequenceAttribute.Hidden)
+				if attributesItem1.OrderedListAttribute.Group != nil {
+					attributes3.OrderedListAttribute.Group = types.StringValue(*attributesItem1.OrderedListAttribute.Group)
 				} else {
-					attributes3.SequenceAttribute.Hidden = types.BoolNull()
+					attributes3.OrderedListAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.HideLabel != nil {
-					attributes3.SequenceAttribute.HideLabel = types.BoolValue(*attributesItem1.SequenceAttribute.HideLabel)
+				if attributesItem1.OrderedListAttribute.Hidden != nil {
+					attributes3.OrderedListAttribute.Hidden = types.BoolValue(*attributesItem1.OrderedListAttribute.Hidden)
 				} else {
-					attributes3.SequenceAttribute.HideLabel = types.BoolNull()
+					attributes3.OrderedListAttribute.Hidden = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.Icon != nil {
-					attributes3.SequenceAttribute.Icon = types.StringValue(*attributesItem1.SequenceAttribute.Icon)
+				if attributesItem1.OrderedListAttribute.HideLabel != nil {
+					attributes3.OrderedListAttribute.HideLabel = types.BoolValue(*attributesItem1.OrderedListAttribute.HideLabel)
 				} else {
-					attributes3.SequenceAttribute.Icon = types.StringNull()
+					attributes3.OrderedListAttribute.HideLabel = types.BoolNull()
 				}
-				attributes3.SequenceAttribute.Label = types.StringValue(attributesItem1.SequenceAttribute.Label)
-				if attributesItem1.SequenceAttribute.Layout != nil {
-					attributes3.SequenceAttribute.Layout = types.StringValue(*attributesItem1.SequenceAttribute.Layout)
+				if attributesItem1.OrderedListAttribute.Icon != nil {
+					attributes3.OrderedListAttribute.Icon = types.StringValue(*attributesItem1.OrderedListAttribute.Icon)
 				} else {
-					attributes3.SequenceAttribute.Layout = types.StringNull()
+					attributes3.OrderedListAttribute.Icon = types.StringNull()
 				}
-				attributes3.SequenceAttribute.Name = types.StringValue(attributesItem1.SequenceAttribute.Name)
-				if attributesItem1.SequenceAttribute.Order != nil {
-					attributes3.SequenceAttribute.Order = types.Int64Value(*attributesItem1.SequenceAttribute.Order)
+				attributes3.OrderedListAttribute.Label = types.StringValue(attributesItem1.OrderedListAttribute.Label)
+				if attributesItem1.OrderedListAttribute.Layout != nil {
+					attributes3.OrderedListAttribute.Layout = types.StringValue(*attributesItem1.OrderedListAttribute.Layout)
 				} else {
-					attributes3.SequenceAttribute.Order = types.Int64Null()
+					attributes3.OrderedListAttribute.Layout = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.Placeholder != nil {
-					attributes3.SequenceAttribute.Placeholder = types.StringValue(*attributesItem1.SequenceAttribute.Placeholder)
+				attributes3.OrderedListAttribute.Name = types.StringValue(attributesItem1.OrderedListAttribute.Name)
+				if attributesItem1.OrderedListAttribute.Order != nil {
+					attributes3.OrderedListAttribute.Order = types.Int64Value(*attributesItem1.OrderedListAttribute.Order)
 				} else {
-					attributes3.SequenceAttribute.Placeholder = types.StringNull()
+					attributes3.OrderedListAttribute.Order = types.Int64Null()
 				}
-				if attributesItem1.SequenceAttribute.Prefix != nil {
-					attributes3.SequenceAttribute.Prefix = types.StringValue(*attributesItem1.SequenceAttribute.Prefix)
+				if attributesItem1.OrderedListAttribute.Placeholder != nil {
+					attributes3.OrderedListAttribute.Placeholder = types.StringValue(*attributesItem1.OrderedListAttribute.Placeholder)
 				} else {
-					attributes3.SequenceAttribute.Prefix = types.StringNull()
+					attributes3.OrderedListAttribute.Placeholder = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.PreviewValueFormatter != nil {
-					attributes3.SequenceAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.SequenceAttribute.PreviewValueFormatter)
+				if attributesItem1.OrderedListAttribute.PreviewValueFormatter != nil {
+					attributes3.OrderedListAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.OrderedListAttribute.PreviewValueFormatter)
 				} else {
-					attributes3.SequenceAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.OrderedListAttribute.PreviewValueFormatter = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.Protected != nil {
-					attributes3.SequenceAttribute.Protected = types.BoolValue(*attributesItem1.SequenceAttribute.Protected)
+				if attributesItem1.OrderedListAttribute.Protected != nil {
+					attributes3.OrderedListAttribute.Protected = types.BoolValue(*attributesItem1.OrderedListAttribute.Protected)
 				} else {
-					attributes3.SequenceAttribute.Protected = types.BoolNull()
+					attributes3.OrderedListAttribute.Protected = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.Readonly != nil {
-					attributes3.SequenceAttribute.Readonly = types.BoolValue(*attributesItem1.SequenceAttribute.Readonly)
+				if attributesItem1.OrderedListAttribute.Readonly != nil {
+					attributes3.OrderedListAttribute.Readonly = types.BoolValue(*attributesItem1.OrderedListAttribute.Readonly)
 				} else {
-					attributes3.SequenceAttribute.Readonly = types.BoolNull()
+					attributes3.OrderedListAttribute.Readonly = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.RenderCondition != nil {
-					attributes3.SequenceAttribute.RenderCondition = types.StringValue(*attributesItem1.SequenceAttribute.RenderCondition)
+				if attributesItem1.OrderedListAttribute.RenderCondition != nil {
+					attributes3.OrderedListAttribute.RenderCondition = types.StringValue(*attributesItem1.OrderedListAttribute.RenderCondition)
 				} else {
-					attributes3.SequenceAttribute.RenderCondition = types.StringNull()
+					attributes3.OrderedListAttribute.RenderCondition = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.Required != nil {
-					attributes3.SequenceAttribute.Required = types.BoolValue(*attributesItem1.SequenceAttribute.Required)
+				if attributesItem1.OrderedListAttribute.Required != nil {
+					attributes3.OrderedListAttribute.Required = types.BoolValue(*attributesItem1.OrderedListAttribute.Required)
 				} else {
-					attributes3.SequenceAttribute.Required = types.BoolNull()
+					attributes3.OrderedListAttribute.Required = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.SettingFlag != nil {
-					attributes3.SequenceAttribute.SettingFlag = types.StringValue(*attributesItem1.SequenceAttribute.SettingFlag)
+				if attributesItem1.OrderedListAttribute.SettingFlag != nil {
+					attributes3.OrderedListAttribute.SettingFlag = types.StringValue(*attributesItem1.OrderedListAttribute.SettingFlag)
 				} else {
-					attributes3.SequenceAttribute.SettingFlag = types.StringNull()
+					attributes3.OrderedListAttribute.SettingFlag = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.ShowInTable != nil {
-					attributes3.SequenceAttribute.ShowInTable = types.BoolValue(*attributesItem1.SequenceAttribute.ShowInTable)
+				if attributesItem1.OrderedListAttribute.ShowInTable != nil {
+					attributes3.OrderedListAttribute.ShowInTable = types.BoolValue(*attributesItem1.OrderedListAttribute.ShowInTable)
 				} else {
-					attributes3.SequenceAttribute.ShowInTable = types.BoolNull()
+					attributes3.OrderedListAttribute.ShowInTable = types.BoolNull()
 				}
-				if attributesItem1.SequenceAttribute.StartNumber != nil {
-					attributes3.SequenceAttribute.StartNumber = types.Int64Value(*attributesItem1.SequenceAttribute.StartNumber)
+				if attributesItem1.OrderedListAttribute.Type != nil {
+					attributes3.OrderedListAttribute.Type = types.StringValue(string(*attributesItem1.OrderedListAttribute.Type))
 				} else {
-					attributes3.SequenceAttribute.StartNumber = types.Int64Null()
+					attributes3.OrderedListAttribute.Type = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.Type != nil {
-					attributes3.SequenceAttribute.Type = types.StringValue(string(*attributesItem1.SequenceAttribute.Type))
+				if attributesItem1.OrderedListAttribute.ValueFormatter != nil {
+					attributes3.OrderedListAttribute.ValueFormatter = types.StringValue(*attributesItem1.OrderedListAttribute.ValueFormatter)
 				} else {
-					attributes3.SequenceAttribute.Type = types.StringNull()
+					attributes3.OrderedListAttribute.ValueFormatter = types.StringNull()
 				}
-				if attributesItem1.SequenceAttribute.ValueFormatter != nil {
-					attributes3.SequenceAttribute.ValueFormatter = types.StringValue(*attributesItem1.SequenceAttribute.ValueFormatter)
+			}
+			if attributesItem1.PartnerStatusAttribute != nil {
+				attributes3.PartnerStatusAttribute = &PartnerStatusAttribute{}
+				attributes3.PartnerStatusAttribute.Purpose = nil
+				for _, v := range attributesItem1.PartnerStatusAttribute.Purpose {
+					attributes3.PartnerStatusAttribute.Purpose = append(attributes3.PartnerStatusAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.PartnerStatusAttribute.Constraints == nil {
+					attributes3.PartnerStatusAttribute.Constraints = nil
 				} else {
-					attributes3.SequenceAttribute.ValueFormatter = types.StringNull()
+					attributes3.PartnerStatusAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.PartnerStatusAttribute.DefaultValue == nil {
+					attributes3.PartnerStatusAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult43, _ := json.Marshal(attributesItem1.PartnerStatusAttribute.DefaultValue)
+					attributes3.PartnerStatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult43))
+				}
+				if attributesItem1.PartnerStatusAttribute.Deprecated != nil {
+					attributes3.PartnerStatusAttribute.Deprecated = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Deprecated)
+				} else {
+					attributes3.PartnerStatusAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.PartnerStatusAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.FeatureFlag != nil {
+					attributes3.PartnerStatusAttribute.FeatureFlag = types.StringValue(*attributesItem1.PartnerStatusAttribute.FeatureFlag)
+				} else {
+					attributes3.PartnerStatusAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Group != nil {
+					attributes3.PartnerStatusAttribute.Group = types.StringValue(*attributesItem1.PartnerStatusAttribute.Group)
+				} else {
+					attributes3.PartnerStatusAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Hidden != nil {
+					attributes3.PartnerStatusAttribute.Hidden = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Hidden)
+				} else {
+					attributes3.PartnerStatusAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.HideLabel != nil {
+					attributes3.PartnerStatusAttribute.HideLabel = types.BoolValue(*attributesItem1.PartnerStatusAttribute.HideLabel)
+				} else {
+					attributes3.PartnerStatusAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Icon != nil {
+					attributes3.PartnerStatusAttribute.Icon = types.StringValue(*attributesItem1.PartnerStatusAttribute.Icon)
+				} else {
+					attributes3.PartnerStatusAttribute.Icon = types.StringNull()
+				}
+				attributes3.PartnerStatusAttribute.Label = types.StringValue(attributesItem1.PartnerStatusAttribute.Label)
+				if attributesItem1.PartnerStatusAttribute.Layout != nil {
+					attributes3.PartnerStatusAttribute.Layout = types.StringValue(*attributesItem1.PartnerStatusAttribute.Layout)
+				} else {
+					attributes3.PartnerStatusAttribute.Layout = types.StringNull()
+				}
+				attributes3.PartnerStatusAttribute.Name = types.StringValue(attributesItem1.PartnerStatusAttribute.Name)
+				if attributesItem1.PartnerStatusAttribute.Order != nil {
+					attributes3.PartnerStatusAttribute.Order = types.Int64Value(*attributesItem1.PartnerStatusAttribute.Order)
+				} else {
+					attributes3.PartnerStatusAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.PartnerStatusAttribute.Placeholder != nil {
+					attributes3.PartnerStatusAttribute.Placeholder = types.StringValue(*attributesItem1.PartnerStatusAttribute.Placeholder)
+				} else {
+					attributes3.PartnerStatusAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.PreviewValueFormatter != nil {
+					attributes3.PartnerStatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.PartnerStatusAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.PartnerStatusAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Protected != nil {
+					attributes3.PartnerStatusAttribute.Protected = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Protected)
+				} else {
+					attributes3.PartnerStatusAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Readonly != nil {
+					attributes3.PartnerStatusAttribute.Readonly = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Readonly)
+				} else {
+					attributes3.PartnerStatusAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.RenderCondition != nil {
+					attributes3.PartnerStatusAttribute.RenderCondition = types.StringValue(*attributesItem1.PartnerStatusAttribute.RenderCondition)
+				} else {
+					attributes3.PartnerStatusAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Required != nil {
+					attributes3.PartnerStatusAttribute.Required = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Required)
+				} else {
+					attributes3.PartnerStatusAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.SettingFlag != nil {
+					attributes3.PartnerStatusAttribute.SettingFlag = types.StringValue(*attributesItem1.PartnerStatusAttribute.SettingFlag)
+				} else {
+					attributes3.PartnerStatusAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.ShowInTable != nil {
+					attributes3.PartnerStatusAttribute.ShowInTable = types.BoolValue(*attributesItem1.PartnerStatusAttribute.ShowInTable)
+				} else {
+					attributes3.PartnerStatusAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.Type != nil {
+					attributes3.PartnerStatusAttribute.Type = types.StringValue(string(*attributesItem1.PartnerStatusAttribute.Type))
+				} else {
+					attributes3.PartnerStatusAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.PartnerStatusAttribute.ValueFormatter != nil {
+					attributes3.PartnerStatusAttribute.ValueFormatter = types.StringValue(*attributesItem1.PartnerStatusAttribute.ValueFormatter)
+				} else {
+					attributes3.PartnerStatusAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.PaymentMethodRelationAttribute != nil {
+				attributes3.PaymentMethodRelationAttribute = &PaymentMethodRelationAttribute{}
+				attributes3.PaymentMethodRelationAttribute.Purpose = nil
+				for _, v := range attributesItem1.PaymentMethodRelationAttribute.Purpose {
+					attributes3.PaymentMethodRelationAttribute.Purpose = append(attributes3.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Constraints == nil {
+					attributes3.PaymentMethodRelationAttribute.Constraints = nil
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.DefaultValue == nil {
+					attributes3.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult44, _ := json.Marshal(attributesItem1.PaymentMethodRelationAttribute.DefaultValue)
+					attributes3.PaymentMethodRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult44))
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Deprecated != nil {
+					attributes3.PaymentMethodRelationAttribute.Deprecated = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Deprecated)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.FeatureFlag != nil {
+					attributes3.PaymentMethodRelationAttribute.FeatureFlag = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.FeatureFlag)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Group != nil {
+					attributes3.PaymentMethodRelationAttribute.Group = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Group)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.HasPrimary != nil {
+					attributes3.PaymentMethodRelationAttribute.HasPrimary = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.HasPrimary)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.HasPrimary = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Hidden != nil {
+					attributes3.PaymentMethodRelationAttribute.Hidden = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Hidden)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.HideLabel != nil {
+					attributes3.PaymentMethodRelationAttribute.HideLabel = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.HideLabel)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Icon != nil {
+					attributes3.PaymentMethodRelationAttribute.Icon = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Icon)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Icon = types.StringNull()
+				}
+				attributes3.PaymentMethodRelationAttribute.Label = types.StringValue(attributesItem1.PaymentMethodRelationAttribute.Label)
+				if attributesItem1.PaymentMethodRelationAttribute.Layout != nil {
+					attributes3.PaymentMethodRelationAttribute.Layout = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Layout)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Layout = types.StringNull()
+				}
+				attributes3.PaymentMethodRelationAttribute.Name = types.StringValue(attributesItem1.PaymentMethodRelationAttribute.Name)
+				if attributesItem1.PaymentMethodRelationAttribute.Order != nil {
+					attributes3.PaymentMethodRelationAttribute.Order = types.Int64Value(*attributesItem1.PaymentMethodRelationAttribute.Order)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Placeholder != nil {
+					attributes3.PaymentMethodRelationAttribute.Placeholder = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Placeholder)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.PreviewValueFormatter != nil {
+					attributes3.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Protected != nil {
+					attributes3.PaymentMethodRelationAttribute.Protected = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Protected)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Readonly != nil {
+					attributes3.PaymentMethodRelationAttribute.Readonly = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Readonly)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.RenderCondition != nil {
+					attributes3.PaymentMethodRelationAttribute.RenderCondition = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.RenderCondition)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Required != nil {
+					attributes3.PaymentMethodRelationAttribute.Required = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Required)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.SettingFlag != nil {
+					attributes3.PaymentMethodRelationAttribute.SettingFlag = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.SettingFlag)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.ShowInTable != nil {
+					attributes3.PaymentMethodRelationAttribute.ShowInTable = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.ShowInTable)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.Type != nil {
+					attributes3.PaymentMethodRelationAttribute.Type = types.StringValue(string(*attributesItem1.PaymentMethodRelationAttribute.Type))
+				} else {
+					attributes3.PaymentMethodRelationAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.PaymentMethodRelationAttribute.ValueFormatter != nil {
+					attributes3.PaymentMethodRelationAttribute.ValueFormatter = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.ValueFormatter)
+				} else {
+					attributes3.PaymentMethodRelationAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.PurposeAttribute != nil {
+				attributes3.PurposeAttribute = &PurposeAttribute{}
+				attributes3.PurposeAttribute.Purpose = nil
+				for _, v := range attributesItem1.PurposeAttribute.Purpose {
+					attributes3.PurposeAttribute.Purpose = append(attributes3.PurposeAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.PurposeAttribute.Constraints == nil {
+					attributes3.PurposeAttribute.Constraints = nil
+				} else {
+					attributes3.PurposeAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.PurposeAttribute.CreatedAt != nil {
+					attributes3.PurposeAttribute.CreatedAt = types.StringValue(attributesItem1.PurposeAttribute.CreatedAt.Format(time.RFC3339Nano))
+				} else {
+					attributes3.PurposeAttribute.CreatedAt = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.DefaultValue == nil {
+					attributes3.PurposeAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult45, _ := json.Marshal(attributesItem1.PurposeAttribute.DefaultValue)
+					attributes3.PurposeAttribute.DefaultValue = types.StringValue(string(defaultValueResult45))
+				}
+				if attributesItem1.PurposeAttribute.Deprecated != nil {
+					attributes3.PurposeAttribute.Deprecated = types.BoolValue(*attributesItem1.PurposeAttribute.Deprecated)
+				} else {
+					attributes3.PurposeAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.PurposeAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.PurposeAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.PurposeAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.FeatureFlag != nil {
+					attributes3.PurposeAttribute.FeatureFlag = types.StringValue(*attributesItem1.PurposeAttribute.FeatureFlag)
+				} else {
+					attributes3.PurposeAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.Group != nil {
+					attributes3.PurposeAttribute.Group = types.StringValue(*attributesItem1.PurposeAttribute.Group)
+				} else {
+					attributes3.PurposeAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.Hidden != nil {
+					attributes3.PurposeAttribute.Hidden = types.BoolValue(*attributesItem1.PurposeAttribute.Hidden)
+				} else {
+					attributes3.PurposeAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.HideLabel != nil {
+					attributes3.PurposeAttribute.HideLabel = types.BoolValue(*attributesItem1.PurposeAttribute.HideLabel)
+				} else {
+					attributes3.PurposeAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.Icon != nil {
+					attributes3.PurposeAttribute.Icon = types.StringValue(*attributesItem1.PurposeAttribute.Icon)
+				} else {
+					attributes3.PurposeAttribute.Icon = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.ID != nil {
+					attributes3.PurposeAttribute.ID = types.StringValue(*attributesItem1.PurposeAttribute.ID)
+				} else {
+					attributes3.PurposeAttribute.ID = types.StringNull()
+				}
+				attributes3.PurposeAttribute.Label = types.StringValue(attributesItem1.PurposeAttribute.Label)
+				if attributesItem1.PurposeAttribute.Layout != nil {
+					attributes3.PurposeAttribute.Layout = types.StringValue(*attributesItem1.PurposeAttribute.Layout)
+				} else {
+					attributes3.PurposeAttribute.Layout = types.StringNull()
+				}
+				attributes3.PurposeAttribute.Name = types.StringValue(attributesItem1.PurposeAttribute.Name)
+				if attributesItem1.PurposeAttribute.Order != nil {
+					attributes3.PurposeAttribute.Order = types.Int64Value(*attributesItem1.PurposeAttribute.Order)
+				} else {
+					attributes3.PurposeAttribute.Order = types.Int64Null()
+				}
+				attributes3.PurposeAttribute.Parents = nil
+				for _, v := range attributesItem1.PurposeAttribute.Parents {
+					attributes3.PurposeAttribute.Parents = append(attributes3.PurposeAttribute.Parents, types.StringValue(v))
+				}
+				if attributesItem1.PurposeAttribute.Placeholder != nil {
+					attributes3.PurposeAttribute.Placeholder = types.StringValue(*attributesItem1.PurposeAttribute.Placeholder)
+				} else {
+					attributes3.PurposeAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.PreviewValueFormatter != nil {
+					attributes3.PurposeAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.PurposeAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.PurposeAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.Protected != nil {
+					attributes3.PurposeAttribute.Protected = types.BoolValue(*attributesItem1.PurposeAttribute.Protected)
+				} else {
+					attributes3.PurposeAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.Readonly != nil {
+					attributes3.PurposeAttribute.Readonly = types.BoolValue(*attributesItem1.PurposeAttribute.Readonly)
+				} else {
+					attributes3.PurposeAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.RenderCondition != nil {
+					attributes3.PurposeAttribute.RenderCondition = types.StringValue(*attributesItem1.PurposeAttribute.RenderCondition)
+				} else {
+					attributes3.PurposeAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.Required != nil {
+					attributes3.PurposeAttribute.Required = types.BoolValue(*attributesItem1.PurposeAttribute.Required)
+				} else {
+					attributes3.PurposeAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.SettingFlag != nil {
+					attributes3.PurposeAttribute.SettingFlag = types.StringValue(*attributesItem1.PurposeAttribute.SettingFlag)
+				} else {
+					attributes3.PurposeAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.ShowInTable != nil {
+					attributes3.PurposeAttribute.ShowInTable = types.BoolValue(*attributesItem1.PurposeAttribute.ShowInTable)
+				} else {
+					attributes3.PurposeAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.PurposeAttribute.Type != nil {
+					attributes3.PurposeAttribute.Type = types.StringValue(string(*attributesItem1.PurposeAttribute.Type))
+				} else {
+					attributes3.PurposeAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.UpdatedAt != nil {
+					attributes3.PurposeAttribute.UpdatedAt = types.StringValue(attributesItem1.PurposeAttribute.UpdatedAt.Format(time.RFC3339Nano))
+				} else {
+					attributes3.PurposeAttribute.UpdatedAt = types.StringNull()
+				}
+				if attributesItem1.PurposeAttribute.ValueFormatter != nil {
+					attributes3.PurposeAttribute.ValueFormatter = types.StringValue(*attributesItem1.PurposeAttribute.ValueFormatter)
+				} else {
+					attributes3.PurposeAttribute.ValueFormatter = types.StringNull()
 				}
 			}
 			if attributesItem1.RelationAttribute != nil {
-				attributes3.RelationAttribute = &RelationAttribute1{}
+				attributes3.RelationAttribute = &RelationAttribute{}
 				attributes3.RelationAttribute.Purpose = nil
 				for _, v := range attributesItem1.RelationAttribute.Purpose {
 					attributes3.RelationAttribute.Purpose = append(attributes3.RelationAttribute.Purpose, types.StringValue(v))
 				}
-				attributes3.RelationAttribute.Actions = nil
-				for _, actionsItem1 := range attributesItem1.RelationAttribute.Actions {
-					var actions3 RelationAttributeActions1
+				if len(attributes3.RelationAttribute.Actions) > len(attributesItem1.RelationAttribute.Actions) {
+					attributes3.RelationAttribute.Actions = attributes3.RelationAttribute.Actions[:len(attributesItem1.RelationAttribute.Actions)]
+				}
+				for actionsCount1, actionsItem1 := range attributesItem1.RelationAttribute.Actions {
+					var actions3 Actions
 					if actionsItem1.ActionType != nil {
 						actions3.ActionType = types.StringValue(string(*actionsItem1.ActionType))
 					} else {
@@ -15194,8 +16277,12 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					if actionsItem1.NewEntityItem == nil {
 						actions3.NewEntityItem = nil
 					} else {
-						actions3.NewEntityItem = &RelationAttributeActionsNewEntityItem1{}
-						actions3.NewEntityItem.CreatedAt = types.StringValue(actionsItem1.NewEntityItem.CreatedAt.Format(time.RFC3339))
+						actions3.NewEntityItem = &NewEntityItem{}
+						if actionsItem1.NewEntityItem.CreatedAt != nil {
+							actions3.NewEntityItem.CreatedAt = types.StringValue(actionsItem1.NewEntityItem.CreatedAt.Format(time.RFC3339Nano))
+						} else {
+							actions3.NewEntityItem.CreatedAt = types.StringNull()
+						}
 						actions3.NewEntityItem.ID = types.StringValue(actionsItem1.NewEntityItem.ID)
 						actions3.NewEntityItem.Org = types.StringValue(actionsItem1.NewEntityItem.Org)
 						actions3.NewEntityItem.Schema = types.StringValue(actionsItem1.NewEntityItem.Schema)
@@ -15203,15 +16290,21 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 						for _, v := range actionsItem1.NewEntityItem.Tags {
 							actions3.NewEntityItem.Tags = append(actions3.NewEntityItem.Tags, types.StringValue(v))
 						}
-						actions3.NewEntityItem.Title = types.StringValue(actionsItem1.NewEntityItem.Title)
-						actions3.NewEntityItem.UpdatedAt = types.StringValue(actionsItem1.NewEntityItem.UpdatedAt.Format(time.RFC3339))
-						if actions3.NewEntityItem.Entity.IsUnknown() {
-							if actionsItem1.NewEntityItem.Entity == nil {
-								actions3.NewEntityItem.Entity = types.StringNull()
-							} else {
-								entityResult1, _ := json.Marshal(actionsItem1.NewEntityItem.Entity)
-								actions3.NewEntityItem.Entity = types.StringValue(string(entityResult1))
-							}
+						if actionsItem1.NewEntityItem.Title != nil {
+							actions3.NewEntityItem.Title = types.StringValue(*actionsItem1.NewEntityItem.Title)
+						} else {
+							actions3.NewEntityItem.Title = types.StringNull()
+						}
+						if actionsItem1.NewEntityItem.UpdatedAt != nil {
+							actions3.NewEntityItem.UpdatedAt = types.StringValue(actionsItem1.NewEntityItem.UpdatedAt.Format(time.RFC3339Nano))
+						} else {
+							actions3.NewEntityItem.UpdatedAt = types.StringNull()
+						}
+						if actionsItem1.NewEntityItem.Entity == nil {
+							actions3.NewEntityItem.Entity = types.StringNull()
+						} else {
+							entityResult1, _ := json.Marshal(actionsItem1.NewEntityItem.Entity)
+							actions3.NewEntityItem.Entity = types.StringValue(string(entityResult1))
 						}
 					}
 					if actionsItem1.SettingFlag != nil {
@@ -15219,7 +16312,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					} else {
 						actions3.SettingFlag = types.StringNull()
 					}
-					attributes3.RelationAttribute.Actions = append(attributes3.RelationAttribute.Actions, actions3)
+					if actionsCount1+1 > len(attributes3.RelationAttribute.Actions) {
+						attributes3.RelationAttribute.Actions = append(attributes3.RelationAttribute.Actions, actions3)
+					} else {
+						attributes3.RelationAttribute.Actions[actionsCount1].ActionType = actions3.ActionType
+						attributes3.RelationAttribute.Actions[actionsCount1].Default = actions3.Default
+						attributes3.RelationAttribute.Actions[actionsCount1].FeatureFlag = actions3.FeatureFlag
+						attributes3.RelationAttribute.Actions[actionsCount1].Label = actions3.Label
+						attributes3.RelationAttribute.Actions[actionsCount1].NewEntityItem = actions3.NewEntityItem
+						attributes3.RelationAttribute.Actions[actionsCount1].SettingFlag = actions3.SettingFlag
+					}
 				}
 				if attributesItem1.RelationAttribute.AddButtonLabel != nil {
 					attributes3.RelationAttribute.AddButtonLabel = types.StringValue(*attributesItem1.RelationAttribute.AddButtonLabel)
@@ -15230,18 +16332,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				for _, v := range attributesItem1.RelationAttribute.AllowedSchemas {
 					attributes3.RelationAttribute.AllowedSchemas = append(attributes3.RelationAttribute.AllowedSchemas, types.StringValue(v))
 				}
-				if attributes3.RelationAttribute.Constraints == nil && len(attributesItem1.RelationAttribute.Constraints) > 0 {
-					attributes3.RelationAttribute.Constraints = make(map[string]types.String)
-					for key37, value43 := range attributesItem1.RelationAttribute.Constraints {
-						result36, _ := json.Marshal(value43)
-						attributes3.RelationAttribute.Constraints[key37] = types.StringValue(string(result36))
-					}
+				if attributesItem1.RelationAttribute.Constraints == nil {
+					attributes3.RelationAttribute.Constraints = nil
+				} else {
+					attributes3.RelationAttribute.Constraints = &Constraints{}
 				}
 				if attributesItem1.RelationAttribute.DefaultValue == nil {
 					attributes3.RelationAttribute.DefaultValue = types.StringNull()
 				} else {
-					defaultValueResult36, _ := json.Marshal(attributesItem1.RelationAttribute.DefaultValue)
-					attributes3.RelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult36))
+					defaultValueResult46, _ := json.Marshal(attributesItem1.RelationAttribute.DefaultValue)
+					attributes3.RelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult46))
 				}
 				if attributesItem1.RelationAttribute.Deprecated != nil {
 					attributes3.RelationAttribute.Deprecated = types.BoolValue(*attributesItem1.RelationAttribute.Deprecated)
@@ -15362,8 +16462,8 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				}
 				if attributes3.RelationAttribute.ReverseAttributes == nil && len(attributesItem1.RelationAttribute.ReverseAttributes) > 0 {
 					attributes3.RelationAttribute.ReverseAttributes = make(map[string]types.String)
-					for key38, value44 := range attributesItem1.RelationAttribute.ReverseAttributes {
-						attributes3.RelationAttribute.ReverseAttributes[key38] = types.StringValue(value44)
+					for key1, value5 := range attributesItem1.RelationAttribute.ReverseAttributes {
+						attributes3.RelationAttribute.ReverseAttributes[key1] = types.StringValue(value5)
 					}
 				}
 				if attributesItem1.RelationAttribute.SearchPlaceholder != nil {
@@ -15381,9 +16481,11 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				} else {
 					attributes3.RelationAttribute.ShowInTable = types.BoolNull()
 				}
-				attributes3.RelationAttribute.SummaryFields = nil
-				for _, summaryFieldsItem1 := range attributesItem1.RelationAttribute.SummaryFields {
-					var summaryFields3 RelationAttributeSummaryFields
+				if len(attributes3.RelationAttribute.SummaryFields) > len(attributesItem1.RelationAttribute.SummaryFields) {
+					attributes3.RelationAttribute.SummaryFields = attributes3.RelationAttribute.SummaryFields[:len(attributesItem1.RelationAttribute.SummaryFields)]
+				}
+				for summaryFieldsCount1, summaryFieldsItem1 := range attributesItem1.RelationAttribute.SummaryFields {
+					var summaryFields3 SummaryFields
 					if summaryFieldsItem1.Str != nil {
 						if summaryFieldsItem1.Str != nil {
 							summaryFields3.Str = types.StringValue(*summaryFieldsItem1.Str)
@@ -15404,7 +16506,10 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 							summaryFields3.SummaryField.Field = types.StringNull()
 						}
 					}
-					attributes3.RelationAttribute.SummaryFields = append(attributes3.RelationAttribute.SummaryFields, summaryFields3)
+					if summaryFieldsCount1+1 > len(attributes3.RelationAttribute.SummaryFields) {
+						attributes3.RelationAttribute.SummaryFields = append(attributes3.RelationAttribute.SummaryFields, summaryFields3)
+					} else {
+					}
 				}
 				if attributesItem1.RelationAttribute.Type != nil {
 					attributes3.RelationAttribute.Type = types.StringValue(string(*attributesItem1.RelationAttribute.Type))
@@ -15417,524 +16522,22 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					attributes3.RelationAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.UserRelationAttribute != nil {
-				attributes3.UserRelationAttribute = &UserRelationAttribute{}
-				attributes3.UserRelationAttribute.Purpose = nil
-				for _, v := range attributesItem1.UserRelationAttribute.Purpose {
-					attributes3.UserRelationAttribute.Purpose = append(attributes3.UserRelationAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.UserRelationAttribute.Constraints == nil && len(attributesItem1.UserRelationAttribute.Constraints) > 0 {
-					attributes3.UserRelationAttribute.Constraints = make(map[string]types.String)
-					for key39, value45 := range attributesItem1.UserRelationAttribute.Constraints {
-						result37, _ := json.Marshal(value45)
-						attributes3.UserRelationAttribute.Constraints[key39] = types.StringValue(string(result37))
-					}
-				}
-				if attributesItem1.UserRelationAttribute.DefaultValue == nil {
-					attributes3.UserRelationAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult37, _ := json.Marshal(attributesItem1.UserRelationAttribute.DefaultValue)
-					attributes3.UserRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult37))
-				}
-				if attributesItem1.UserRelationAttribute.Deprecated != nil {
-					attributes3.UserRelationAttribute.Deprecated = types.BoolValue(*attributesItem1.UserRelationAttribute.Deprecated)
-				} else {
-					attributes3.UserRelationAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.UserRelationAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.FeatureFlag != nil {
-					attributes3.UserRelationAttribute.FeatureFlag = types.StringValue(*attributesItem1.UserRelationAttribute.FeatureFlag)
-				} else {
-					attributes3.UserRelationAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.Group != nil {
-					attributes3.UserRelationAttribute.Group = types.StringValue(*attributesItem1.UserRelationAttribute.Group)
-				} else {
-					attributes3.UserRelationAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.Hidden != nil {
-					attributes3.UserRelationAttribute.Hidden = types.BoolValue(*attributesItem1.UserRelationAttribute.Hidden)
-				} else {
-					attributes3.UserRelationAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.HideLabel != nil {
-					attributes3.UserRelationAttribute.HideLabel = types.BoolValue(*attributesItem1.UserRelationAttribute.HideLabel)
-				} else {
-					attributes3.UserRelationAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.Icon != nil {
-					attributes3.UserRelationAttribute.Icon = types.StringValue(*attributesItem1.UserRelationAttribute.Icon)
-				} else {
-					attributes3.UserRelationAttribute.Icon = types.StringNull()
-				}
-				attributes3.UserRelationAttribute.Label = types.StringValue(attributesItem1.UserRelationAttribute.Label)
-				if attributesItem1.UserRelationAttribute.Layout != nil {
-					attributes3.UserRelationAttribute.Layout = types.StringValue(*attributesItem1.UserRelationAttribute.Layout)
-				} else {
-					attributes3.UserRelationAttribute.Layout = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.Multiple != nil {
-					attributes3.UserRelationAttribute.Multiple = types.BoolValue(*attributesItem1.UserRelationAttribute.Multiple)
-				} else {
-					attributes3.UserRelationAttribute.Multiple = types.BoolNull()
-				}
-				attributes3.UserRelationAttribute.Name = types.StringValue(attributesItem1.UserRelationAttribute.Name)
-				if attributesItem1.UserRelationAttribute.Order != nil {
-					attributes3.UserRelationAttribute.Order = types.Int64Value(*attributesItem1.UserRelationAttribute.Order)
-				} else {
-					attributes3.UserRelationAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.UserRelationAttribute.Placeholder != nil {
-					attributes3.UserRelationAttribute.Placeholder = types.StringValue(*attributesItem1.UserRelationAttribute.Placeholder)
-				} else {
-					attributes3.UserRelationAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.PreviewValueFormatter != nil {
-					attributes3.UserRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.UserRelationAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.UserRelationAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.Protected != nil {
-					attributes3.UserRelationAttribute.Protected = types.BoolValue(*attributesItem1.UserRelationAttribute.Protected)
-				} else {
-					attributes3.UserRelationAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.Readonly != nil {
-					attributes3.UserRelationAttribute.Readonly = types.BoolValue(*attributesItem1.UserRelationAttribute.Readonly)
-				} else {
-					attributes3.UserRelationAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.RenderCondition != nil {
-					attributes3.UserRelationAttribute.RenderCondition = types.StringValue(*attributesItem1.UserRelationAttribute.RenderCondition)
-				} else {
-					attributes3.UserRelationAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.Required != nil {
-					attributes3.UserRelationAttribute.Required = types.BoolValue(*attributesItem1.UserRelationAttribute.Required)
-				} else {
-					attributes3.UserRelationAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.SettingFlag != nil {
-					attributes3.UserRelationAttribute.SettingFlag = types.StringValue(*attributesItem1.UserRelationAttribute.SettingFlag)
-				} else {
-					attributes3.UserRelationAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.ShowInTable != nil {
-					attributes3.UserRelationAttribute.ShowInTable = types.BoolValue(*attributesItem1.UserRelationAttribute.ShowInTable)
-				} else {
-					attributes3.UserRelationAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.UserRelationAttribute.Type != nil {
-					attributes3.UserRelationAttribute.Type = types.StringValue(string(*attributesItem1.UserRelationAttribute.Type))
-				} else {
-					attributes3.UserRelationAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.UserRelationAttribute.ValueFormatter != nil {
-					attributes3.UserRelationAttribute.ValueFormatter = types.StringValue(*attributesItem1.UserRelationAttribute.ValueFormatter)
-				} else {
-					attributes3.UserRelationAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.AddressRelationAttribute != nil {
-				attributes3.AddressRelationAttribute = &AddressRelationAttribute{}
-				attributes3.AddressRelationAttribute.Purpose = nil
-				for _, v := range attributesItem1.AddressRelationAttribute.Purpose {
-					attributes3.AddressRelationAttribute.Purpose = append(attributes3.AddressRelationAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.AddressRelationAttribute.Constraints == nil && len(attributesItem1.AddressRelationAttribute.Constraints) > 0 {
-					attributes3.AddressRelationAttribute.Constraints = make(map[string]types.String)
-					for key40, value46 := range attributesItem1.AddressRelationAttribute.Constraints {
-						result38, _ := json.Marshal(value46)
-						attributes3.AddressRelationAttribute.Constraints[key40] = types.StringValue(string(result38))
-					}
-				}
-				if attributesItem1.AddressRelationAttribute.DefaultValue == nil {
-					attributes3.AddressRelationAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult38, _ := json.Marshal(attributesItem1.AddressRelationAttribute.DefaultValue)
-					attributes3.AddressRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult38))
-				}
-				if attributesItem1.AddressRelationAttribute.Deprecated != nil {
-					attributes3.AddressRelationAttribute.Deprecated = types.BoolValue(*attributesItem1.AddressRelationAttribute.Deprecated)
-				} else {
-					attributes3.AddressRelationAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.AddressRelationAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.AddressRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.FeatureFlag != nil {
-					attributes3.AddressRelationAttribute.FeatureFlag = types.StringValue(*attributesItem1.AddressRelationAttribute.FeatureFlag)
-				} else {
-					attributes3.AddressRelationAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Group != nil {
-					attributes3.AddressRelationAttribute.Group = types.StringValue(*attributesItem1.AddressRelationAttribute.Group)
-				} else {
-					attributes3.AddressRelationAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.HasPrimary != nil {
-					attributes3.AddressRelationAttribute.HasPrimary = types.BoolValue(*attributesItem1.AddressRelationAttribute.HasPrimary)
-				} else {
-					attributes3.AddressRelationAttribute.HasPrimary = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Hidden != nil {
-					attributes3.AddressRelationAttribute.Hidden = types.BoolValue(*attributesItem1.AddressRelationAttribute.Hidden)
-				} else {
-					attributes3.AddressRelationAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.HideLabel != nil {
-					attributes3.AddressRelationAttribute.HideLabel = types.BoolValue(*attributesItem1.AddressRelationAttribute.HideLabel)
-				} else {
-					attributes3.AddressRelationAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Icon != nil {
-					attributes3.AddressRelationAttribute.Icon = types.StringValue(*attributesItem1.AddressRelationAttribute.Icon)
-				} else {
-					attributes3.AddressRelationAttribute.Icon = types.StringNull()
-				}
-				attributes3.AddressRelationAttribute.Label = types.StringValue(attributesItem1.AddressRelationAttribute.Label)
-				if attributesItem1.AddressRelationAttribute.Layout != nil {
-					attributes3.AddressRelationAttribute.Layout = types.StringValue(*attributesItem1.AddressRelationAttribute.Layout)
-				} else {
-					attributes3.AddressRelationAttribute.Layout = types.StringNull()
-				}
-				attributes3.AddressRelationAttribute.Name = types.StringValue(attributesItem1.AddressRelationAttribute.Name)
-				if attributesItem1.AddressRelationAttribute.Order != nil {
-					attributes3.AddressRelationAttribute.Order = types.Int64Value(*attributesItem1.AddressRelationAttribute.Order)
-				} else {
-					attributes3.AddressRelationAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.AddressRelationAttribute.Placeholder != nil {
-					attributes3.AddressRelationAttribute.Placeholder = types.StringValue(*attributesItem1.AddressRelationAttribute.Placeholder)
-				} else {
-					attributes3.AddressRelationAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.PreviewValueFormatter != nil {
-					attributes3.AddressRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.AddressRelationAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.AddressRelationAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Protected != nil {
-					attributes3.AddressRelationAttribute.Protected = types.BoolValue(*attributesItem1.AddressRelationAttribute.Protected)
-				} else {
-					attributes3.AddressRelationAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Readonly != nil {
-					attributes3.AddressRelationAttribute.Readonly = types.BoolValue(*attributesItem1.AddressRelationAttribute.Readonly)
-				} else {
-					attributes3.AddressRelationAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.RenderCondition != nil {
-					attributes3.AddressRelationAttribute.RenderCondition = types.StringValue(*attributesItem1.AddressRelationAttribute.RenderCondition)
-				} else {
-					attributes3.AddressRelationAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Required != nil {
-					attributes3.AddressRelationAttribute.Required = types.BoolValue(*attributesItem1.AddressRelationAttribute.Required)
-				} else {
-					attributes3.AddressRelationAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.SettingFlag != nil {
-					attributes3.AddressRelationAttribute.SettingFlag = types.StringValue(*attributesItem1.AddressRelationAttribute.SettingFlag)
-				} else {
-					attributes3.AddressRelationAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.ShowInTable != nil {
-					attributes3.AddressRelationAttribute.ShowInTable = types.BoolValue(*attributesItem1.AddressRelationAttribute.ShowInTable)
-				} else {
-					attributes3.AddressRelationAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.AddressRelationAttribute.Type != nil {
-					attributes3.AddressRelationAttribute.Type = types.StringValue(string(*attributesItem1.AddressRelationAttribute.Type))
-				} else {
-					attributes3.AddressRelationAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.AddressRelationAttribute.ValueFormatter != nil {
-					attributes3.AddressRelationAttribute.ValueFormatter = types.StringValue(*attributesItem1.AddressRelationAttribute.ValueFormatter)
-				} else {
-					attributes3.AddressRelationAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.PaymentMethodRelationAttribute != nil {
-				attributes3.PaymentMethodRelationAttribute = &PaymentMethodRelationAttribute{}
-				attributes3.PaymentMethodRelationAttribute.Purpose = nil
-				for _, v := range attributesItem1.PaymentMethodRelationAttribute.Purpose {
-					attributes3.PaymentMethodRelationAttribute.Purpose = append(attributes3.PaymentMethodRelationAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.PaymentMethodRelationAttribute.Constraints == nil && len(attributesItem1.PaymentMethodRelationAttribute.Constraints) > 0 {
-					attributes3.PaymentMethodRelationAttribute.Constraints = make(map[string]types.String)
-					for key41, value47 := range attributesItem1.PaymentMethodRelationAttribute.Constraints {
-						result39, _ := json.Marshal(value47)
-						attributes3.PaymentMethodRelationAttribute.Constraints[key41] = types.StringValue(string(result39))
-					}
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.DefaultValue == nil {
-					attributes3.PaymentMethodRelationAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult39, _ := json.Marshal(attributesItem1.PaymentMethodRelationAttribute.DefaultValue)
-					attributes3.PaymentMethodRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult39))
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Deprecated != nil {
-					attributes3.PaymentMethodRelationAttribute.Deprecated = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Deprecated)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.FeatureFlag != nil {
-					attributes3.PaymentMethodRelationAttribute.FeatureFlag = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.FeatureFlag)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Group != nil {
-					attributes3.PaymentMethodRelationAttribute.Group = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Group)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.HasPrimary != nil {
-					attributes3.PaymentMethodRelationAttribute.HasPrimary = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.HasPrimary)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.HasPrimary = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Hidden != nil {
-					attributes3.PaymentMethodRelationAttribute.Hidden = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Hidden)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.HideLabel != nil {
-					attributes3.PaymentMethodRelationAttribute.HideLabel = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.HideLabel)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Icon != nil {
-					attributes3.PaymentMethodRelationAttribute.Icon = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Icon)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Icon = types.StringNull()
-				}
-				attributes3.PaymentMethodRelationAttribute.Label = types.StringValue(attributesItem1.PaymentMethodRelationAttribute.Label)
-				if attributesItem1.PaymentMethodRelationAttribute.Layout != nil {
-					attributes3.PaymentMethodRelationAttribute.Layout = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Layout)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Layout = types.StringNull()
-				}
-				attributes3.PaymentMethodRelationAttribute.Name = types.StringValue(attributesItem1.PaymentMethodRelationAttribute.Name)
-				if attributesItem1.PaymentMethodRelationAttribute.Order != nil {
-					attributes3.PaymentMethodRelationAttribute.Order = types.Int64Value(*attributesItem1.PaymentMethodRelationAttribute.Order)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Placeholder != nil {
-					attributes3.PaymentMethodRelationAttribute.Placeholder = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.Placeholder)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.PreviewValueFormatter != nil {
-					attributes3.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Protected != nil {
-					attributes3.PaymentMethodRelationAttribute.Protected = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Protected)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Readonly != nil {
-					attributes3.PaymentMethodRelationAttribute.Readonly = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Readonly)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.RenderCondition != nil {
-					attributes3.PaymentMethodRelationAttribute.RenderCondition = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.RenderCondition)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Required != nil {
-					attributes3.PaymentMethodRelationAttribute.Required = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.Required)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.SettingFlag != nil {
-					attributes3.PaymentMethodRelationAttribute.SettingFlag = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.SettingFlag)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.ShowInTable != nil {
-					attributes3.PaymentMethodRelationAttribute.ShowInTable = types.BoolValue(*attributesItem1.PaymentMethodRelationAttribute.ShowInTable)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.Type != nil {
-					attributes3.PaymentMethodRelationAttribute.Type = types.StringValue(string(*attributesItem1.PaymentMethodRelationAttribute.Type))
-				} else {
-					attributes3.PaymentMethodRelationAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.PaymentMethodRelationAttribute.ValueFormatter != nil {
-					attributes3.PaymentMethodRelationAttribute.ValueFormatter = types.StringValue(*attributesItem1.PaymentMethodRelationAttribute.ValueFormatter)
-				} else {
-					attributes3.PaymentMethodRelationAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.CurrencyAttribute != nil {
-				attributes3.CurrencyAttribute = &CurrencyAttribute{}
-				attributes3.CurrencyAttribute.Purpose = nil
-				for _, v := range attributesItem1.CurrencyAttribute.Purpose {
-					attributes3.CurrencyAttribute.Purpose = append(attributes3.CurrencyAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.CurrencyAttribute.Constraints == nil && len(attributesItem1.CurrencyAttribute.Constraints) > 0 {
-					attributes3.CurrencyAttribute.Constraints = make(map[string]types.String)
-					for key42, value48 := range attributesItem1.CurrencyAttribute.Constraints {
-						result40, _ := json.Marshal(value48)
-						attributes3.CurrencyAttribute.Constraints[key42] = types.StringValue(string(result40))
-					}
-				}
-				attributes3.CurrencyAttribute.Currency = nil
-				for _, currencyItem1 := range attributesItem1.CurrencyAttribute.Currency {
-					var currency3 CurrencyAttributeCurrency
-					if currencyItem1.CurrencyAttributeCurrency1 != nil {
-						currency3.CurrencyAttributeCurrency1 = &CurrencyAttributeCurrency1{}
-						currency3.CurrencyAttributeCurrency1.Code = types.StringValue(currencyItem1.CurrencyAttributeCurrency1.Code)
-						currency3.CurrencyAttributeCurrency1.Description = types.StringValue(currencyItem1.CurrencyAttributeCurrency1.Description)
-						if currencyItem1.CurrencyAttributeCurrency1.Flag != nil {
-							currency3.CurrencyAttributeCurrency1.Flag = types.StringValue(*currencyItem1.CurrencyAttributeCurrency1.Flag)
-						} else {
-							currency3.CurrencyAttributeCurrency1.Flag = types.StringNull()
-						}
-						currency3.CurrencyAttributeCurrency1.Symbol = types.StringValue(currencyItem1.CurrencyAttributeCurrency1.Symbol)
-					}
-					attributes3.CurrencyAttribute.Currency = append(attributes3.CurrencyAttribute.Currency, currency3)
-				}
-				if attributesItem1.CurrencyAttribute.CurrencySelectorOnly != nil {
-					attributes3.CurrencyAttribute.CurrencySelectorOnly = types.BoolValue(*attributesItem1.CurrencyAttribute.CurrencySelectorOnly)
-				} else {
-					attributes3.CurrencyAttribute.CurrencySelectorOnly = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.DefaultValue == nil {
-					attributes3.CurrencyAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult40, _ := json.Marshal(attributesItem1.CurrencyAttribute.DefaultValue)
-					attributes3.CurrencyAttribute.DefaultValue = types.StringValue(string(defaultValueResult40))
-				}
-				if attributesItem1.CurrencyAttribute.Deprecated != nil {
-					attributes3.CurrencyAttribute.Deprecated = types.BoolValue(*attributesItem1.CurrencyAttribute.Deprecated)
-				} else {
-					attributes3.CurrencyAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.CurrencyAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.CurrencyAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.FeatureFlag != nil {
-					attributes3.CurrencyAttribute.FeatureFlag = types.StringValue(*attributesItem1.CurrencyAttribute.FeatureFlag)
-				} else {
-					attributes3.CurrencyAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.CurrencyAttribute.Group != nil {
-					attributes3.CurrencyAttribute.Group = types.StringValue(*attributesItem1.CurrencyAttribute.Group)
-				} else {
-					attributes3.CurrencyAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.CurrencyAttribute.Hidden != nil {
-					attributes3.CurrencyAttribute.Hidden = types.BoolValue(*attributesItem1.CurrencyAttribute.Hidden)
-				} else {
-					attributes3.CurrencyAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.HideLabel != nil {
-					attributes3.CurrencyAttribute.HideLabel = types.BoolValue(*attributesItem1.CurrencyAttribute.HideLabel)
-				} else {
-					attributes3.CurrencyAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.Icon != nil {
-					attributes3.CurrencyAttribute.Icon = types.StringValue(*attributesItem1.CurrencyAttribute.Icon)
-				} else {
-					attributes3.CurrencyAttribute.Icon = types.StringNull()
-				}
-				attributes3.CurrencyAttribute.Label = types.StringValue(attributesItem1.CurrencyAttribute.Label)
-				if attributesItem1.CurrencyAttribute.Layout != nil {
-					attributes3.CurrencyAttribute.Layout = types.StringValue(*attributesItem1.CurrencyAttribute.Layout)
-				} else {
-					attributes3.CurrencyAttribute.Layout = types.StringNull()
-				}
-				attributes3.CurrencyAttribute.Name = types.StringValue(attributesItem1.CurrencyAttribute.Name)
-				if attributesItem1.CurrencyAttribute.Order != nil {
-					attributes3.CurrencyAttribute.Order = types.Int64Value(*attributesItem1.CurrencyAttribute.Order)
-				} else {
-					attributes3.CurrencyAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.CurrencyAttribute.Placeholder != nil {
-					attributes3.CurrencyAttribute.Placeholder = types.StringValue(*attributesItem1.CurrencyAttribute.Placeholder)
-				} else {
-					attributes3.CurrencyAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.CurrencyAttribute.PreviewValueFormatter != nil {
-					attributes3.CurrencyAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.CurrencyAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.CurrencyAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.CurrencyAttribute.Protected != nil {
-					attributes3.CurrencyAttribute.Protected = types.BoolValue(*attributesItem1.CurrencyAttribute.Protected)
-				} else {
-					attributes3.CurrencyAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.Readonly != nil {
-					attributes3.CurrencyAttribute.Readonly = types.BoolValue(*attributesItem1.CurrencyAttribute.Readonly)
-				} else {
-					attributes3.CurrencyAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.RenderCondition != nil {
-					attributes3.CurrencyAttribute.RenderCondition = types.StringValue(*attributesItem1.CurrencyAttribute.RenderCondition)
-				} else {
-					attributes3.CurrencyAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.CurrencyAttribute.Required != nil {
-					attributes3.CurrencyAttribute.Required = types.BoolValue(*attributesItem1.CurrencyAttribute.Required)
-				} else {
-					attributes3.CurrencyAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.CurrencyAttribute.SettingFlag != nil {
-					attributes3.CurrencyAttribute.SettingFlag = types.StringValue(*attributesItem1.CurrencyAttribute.SettingFlag)
-				} else {
-					attributes3.CurrencyAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.CurrencyAttribute.ShowInTable != nil {
-					attributes3.CurrencyAttribute.ShowInTable = types.BoolValue(*attributesItem1.CurrencyAttribute.ShowInTable)
-				} else {
-					attributes3.CurrencyAttribute.ShowInTable = types.BoolNull()
-				}
-				attributes3.CurrencyAttribute.Type = types.StringValue(string(attributesItem1.CurrencyAttribute.Type))
-				if attributesItem1.CurrencyAttribute.ValueFormatter != nil {
-					attributes3.CurrencyAttribute.ValueFormatter = types.StringValue(*attributesItem1.CurrencyAttribute.ValueFormatter)
-				} else {
-					attributes3.CurrencyAttribute.ValueFormatter = types.StringNull()
-				}
-			}
 			if attributesItem1.RepeatableAttribute != nil {
 				attributes3.RepeatableAttribute = &RepeatableAttribute{}
 				attributes3.RepeatableAttribute.Purpose = nil
 				for _, v := range attributesItem1.RepeatableAttribute.Purpose {
 					attributes3.RepeatableAttribute.Purpose = append(attributes3.RepeatableAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.RepeatableAttribute.Constraints == nil && len(attributesItem1.RepeatableAttribute.Constraints) > 0 {
-					attributes3.RepeatableAttribute.Constraints = make(map[string]types.String)
-					for key43, value49 := range attributesItem1.RepeatableAttribute.Constraints {
-						result41, _ := json.Marshal(value49)
-						attributes3.RepeatableAttribute.Constraints[key43] = types.StringValue(string(result41))
-					}
+				if attributesItem1.RepeatableAttribute.Constraints == nil {
+					attributes3.RepeatableAttribute.Constraints = nil
+				} else {
+					attributes3.RepeatableAttribute.Constraints = &Constraints{}
 				}
 				if attributesItem1.RepeatableAttribute.DefaultValue == nil {
 					attributes3.RepeatableAttribute.DefaultValue = types.StringNull()
 				} else {
-					defaultValueResult41, _ := json.Marshal(attributesItem1.RepeatableAttribute.DefaultValue)
-					attributes3.RepeatableAttribute.DefaultValue = types.StringValue(string(defaultValueResult41))
+					defaultValueResult47, _ := json.Marshal(attributesItem1.RepeatableAttribute.DefaultValue)
+					attributes3.RepeatableAttribute.DefaultValue = types.StringValue(string(defaultValueResult47))
 				}
 				if attributesItem1.RepeatableAttribute.Deprecated != nil {
 					attributes3.RepeatableAttribute.Deprecated = types.BoolValue(*attributesItem1.RepeatableAttribute.Deprecated)
@@ -16054,24 +16657,434 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					attributes3.RepeatableAttribute.ValueFormatter = types.StringNull()
 				}
 			}
+			if attributesItem1.SelectAttribute != nil {
+				attributes3.SelectAttribute = &SelectAttribute{}
+				attributes3.SelectAttribute.Purpose = nil
+				for _, v := range attributesItem1.SelectAttribute.Purpose {
+					attributes3.SelectAttribute.Purpose = append(attributes3.SelectAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.SelectAttribute.AllowAny != nil {
+					attributes3.SelectAttribute.AllowAny = types.BoolValue(*attributesItem1.SelectAttribute.AllowAny)
+				} else {
+					attributes3.SelectAttribute.AllowAny = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.Constraints == nil {
+					attributes3.SelectAttribute.Constraints = nil
+				} else {
+					attributes3.SelectAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.SelectAttribute.DefaultValue == nil {
+					attributes3.SelectAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult48, _ := json.Marshal(attributesItem1.SelectAttribute.DefaultValue)
+					attributes3.SelectAttribute.DefaultValue = types.StringValue(string(defaultValueResult48))
+				}
+				if attributesItem1.SelectAttribute.Deprecated != nil {
+					attributes3.SelectAttribute.Deprecated = types.BoolValue(*attributesItem1.SelectAttribute.Deprecated)
+				} else {
+					attributes3.SelectAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.SelectAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.SelectAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.SelectAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.FeatureFlag != nil {
+					attributes3.SelectAttribute.FeatureFlag = types.StringValue(*attributesItem1.SelectAttribute.FeatureFlag)
+				} else {
+					attributes3.SelectAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.Group != nil {
+					attributes3.SelectAttribute.Group = types.StringValue(*attributesItem1.SelectAttribute.Group)
+				} else {
+					attributes3.SelectAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.Hidden != nil {
+					attributes3.SelectAttribute.Hidden = types.BoolValue(*attributesItem1.SelectAttribute.Hidden)
+				} else {
+					attributes3.SelectAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.HideLabel != nil {
+					attributes3.SelectAttribute.HideLabel = types.BoolValue(*attributesItem1.SelectAttribute.HideLabel)
+				} else {
+					attributes3.SelectAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.Icon != nil {
+					attributes3.SelectAttribute.Icon = types.StringValue(*attributesItem1.SelectAttribute.Icon)
+				} else {
+					attributes3.SelectAttribute.Icon = types.StringNull()
+				}
+				attributes3.SelectAttribute.Label = types.StringValue(attributesItem1.SelectAttribute.Label)
+				if attributesItem1.SelectAttribute.Layout != nil {
+					attributes3.SelectAttribute.Layout = types.StringValue(*attributesItem1.SelectAttribute.Layout)
+				} else {
+					attributes3.SelectAttribute.Layout = types.StringNull()
+				}
+				attributes3.SelectAttribute.Name = types.StringValue(attributesItem1.SelectAttribute.Name)
+				if len(attributes3.SelectAttribute.Options) > len(attributesItem1.SelectAttribute.Options) {
+					attributes3.SelectAttribute.Options = attributes3.SelectAttribute.Options[:len(attributesItem1.SelectAttribute.Options)]
+				}
+				for optionsCount4, optionsItem4 := range attributesItem1.SelectAttribute.Options {
+					var options10 SelectAttributeOptions
+					if optionsItem4.Str != nil {
+						if optionsItem4.Str != nil {
+							options10.Str = types.StringValue(*optionsItem4.Str)
+						} else {
+							options10.Str = types.StringNull()
+						}
+					}
+					if optionsItem4.Option != nil {
+						options10.Option = &MultiSelectAttribute2{}
+						if optionsItem4.Option.Title != nil {
+							options10.Option.Title = types.StringValue(*optionsItem4.Option.Title)
+						} else {
+							options10.Option.Title = types.StringNull()
+						}
+						options10.Option.Value = types.StringValue(optionsItem4.Option.Value)
+					}
+					if optionsCount4+1 > len(attributes3.SelectAttribute.Options) {
+						attributes3.SelectAttribute.Options = append(attributes3.SelectAttribute.Options, options10)
+					} else {
+					}
+				}
+				if attributesItem1.SelectAttribute.Order != nil {
+					attributes3.SelectAttribute.Order = types.Int64Value(*attributesItem1.SelectAttribute.Order)
+				} else {
+					attributes3.SelectAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.SelectAttribute.Placeholder != nil {
+					attributes3.SelectAttribute.Placeholder = types.StringValue(*attributesItem1.SelectAttribute.Placeholder)
+				} else {
+					attributes3.SelectAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.PreviewValueFormatter != nil {
+					attributes3.SelectAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.SelectAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.SelectAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.Protected != nil {
+					attributes3.SelectAttribute.Protected = types.BoolValue(*attributesItem1.SelectAttribute.Protected)
+				} else {
+					attributes3.SelectAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.Readonly != nil {
+					attributes3.SelectAttribute.Readonly = types.BoolValue(*attributesItem1.SelectAttribute.Readonly)
+				} else {
+					attributes3.SelectAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.RenderCondition != nil {
+					attributes3.SelectAttribute.RenderCondition = types.StringValue(*attributesItem1.SelectAttribute.RenderCondition)
+				} else {
+					attributes3.SelectAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.Required != nil {
+					attributes3.SelectAttribute.Required = types.BoolValue(*attributesItem1.SelectAttribute.Required)
+				} else {
+					attributes3.SelectAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.SettingFlag != nil {
+					attributes3.SelectAttribute.SettingFlag = types.StringValue(*attributesItem1.SelectAttribute.SettingFlag)
+				} else {
+					attributes3.SelectAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.ShowInTable != nil {
+					attributes3.SelectAttribute.ShowInTable = types.BoolValue(*attributesItem1.SelectAttribute.ShowInTable)
+				} else {
+					attributes3.SelectAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.SelectAttribute.Type != nil {
+					attributes3.SelectAttribute.Type = types.StringValue(string(*attributesItem1.SelectAttribute.Type))
+				} else {
+					attributes3.SelectAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.SelectAttribute.ValueFormatter != nil {
+					attributes3.SelectAttribute.ValueFormatter = types.StringValue(*attributesItem1.SelectAttribute.ValueFormatter)
+				} else {
+					attributes3.SelectAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.SequenceAttribute != nil {
+				attributes3.SequenceAttribute = &SequenceAttribute{}
+				attributes3.SequenceAttribute.Purpose = nil
+				for _, v := range attributesItem1.SequenceAttribute.Purpose {
+					attributes3.SequenceAttribute.Purpose = append(attributes3.SequenceAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.SequenceAttribute.Constraints == nil {
+					attributes3.SequenceAttribute.Constraints = nil
+				} else {
+					attributes3.SequenceAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.SequenceAttribute.DefaultValue == nil {
+					attributes3.SequenceAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult49, _ := json.Marshal(attributesItem1.SequenceAttribute.DefaultValue)
+					attributes3.SequenceAttribute.DefaultValue = types.StringValue(string(defaultValueResult49))
+				}
+				if attributesItem1.SequenceAttribute.Deprecated != nil {
+					attributes3.SequenceAttribute.Deprecated = types.BoolValue(*attributesItem1.SequenceAttribute.Deprecated)
+				} else {
+					attributes3.SequenceAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.SequenceAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.SequenceAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.SequenceAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.FeatureFlag != nil {
+					attributes3.SequenceAttribute.FeatureFlag = types.StringValue(*attributesItem1.SequenceAttribute.FeatureFlag)
+				} else {
+					attributes3.SequenceAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.Group != nil {
+					attributes3.SequenceAttribute.Group = types.StringValue(*attributesItem1.SequenceAttribute.Group)
+				} else {
+					attributes3.SequenceAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.Hidden != nil {
+					attributes3.SequenceAttribute.Hidden = types.BoolValue(*attributesItem1.SequenceAttribute.Hidden)
+				} else {
+					attributes3.SequenceAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.HideLabel != nil {
+					attributes3.SequenceAttribute.HideLabel = types.BoolValue(*attributesItem1.SequenceAttribute.HideLabel)
+				} else {
+					attributes3.SequenceAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.Icon != nil {
+					attributes3.SequenceAttribute.Icon = types.StringValue(*attributesItem1.SequenceAttribute.Icon)
+				} else {
+					attributes3.SequenceAttribute.Icon = types.StringNull()
+				}
+				attributes3.SequenceAttribute.Label = types.StringValue(attributesItem1.SequenceAttribute.Label)
+				if attributesItem1.SequenceAttribute.Layout != nil {
+					attributes3.SequenceAttribute.Layout = types.StringValue(*attributesItem1.SequenceAttribute.Layout)
+				} else {
+					attributes3.SequenceAttribute.Layout = types.StringNull()
+				}
+				attributes3.SequenceAttribute.Name = types.StringValue(attributesItem1.SequenceAttribute.Name)
+				if attributesItem1.SequenceAttribute.Order != nil {
+					attributes3.SequenceAttribute.Order = types.Int64Value(*attributesItem1.SequenceAttribute.Order)
+				} else {
+					attributes3.SequenceAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.SequenceAttribute.Placeholder != nil {
+					attributes3.SequenceAttribute.Placeholder = types.StringValue(*attributesItem1.SequenceAttribute.Placeholder)
+				} else {
+					attributes3.SequenceAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.Prefix != nil {
+					attributes3.SequenceAttribute.Prefix = types.StringValue(*attributesItem1.SequenceAttribute.Prefix)
+				} else {
+					attributes3.SequenceAttribute.Prefix = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.PreviewValueFormatter != nil {
+					attributes3.SequenceAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.SequenceAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.SequenceAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.Protected != nil {
+					attributes3.SequenceAttribute.Protected = types.BoolValue(*attributesItem1.SequenceAttribute.Protected)
+				} else {
+					attributes3.SequenceAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.Readonly != nil {
+					attributes3.SequenceAttribute.Readonly = types.BoolValue(*attributesItem1.SequenceAttribute.Readonly)
+				} else {
+					attributes3.SequenceAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.RenderCondition != nil {
+					attributes3.SequenceAttribute.RenderCondition = types.StringValue(*attributesItem1.SequenceAttribute.RenderCondition)
+				} else {
+					attributes3.SequenceAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.Required != nil {
+					attributes3.SequenceAttribute.Required = types.BoolValue(*attributesItem1.SequenceAttribute.Required)
+				} else {
+					attributes3.SequenceAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.SettingFlag != nil {
+					attributes3.SequenceAttribute.SettingFlag = types.StringValue(*attributesItem1.SequenceAttribute.SettingFlag)
+				} else {
+					attributes3.SequenceAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.ShowInTable != nil {
+					attributes3.SequenceAttribute.ShowInTable = types.BoolValue(*attributesItem1.SequenceAttribute.ShowInTable)
+				} else {
+					attributes3.SequenceAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.SequenceAttribute.StartNumber != nil {
+					attributes3.SequenceAttribute.StartNumber = types.Int64Value(*attributesItem1.SequenceAttribute.StartNumber)
+				} else {
+					attributes3.SequenceAttribute.StartNumber = types.Int64Null()
+				}
+				if attributesItem1.SequenceAttribute.Type != nil {
+					attributes3.SequenceAttribute.Type = types.StringValue(string(*attributesItem1.SequenceAttribute.Type))
+				} else {
+					attributes3.SequenceAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.SequenceAttribute.ValueFormatter != nil {
+					attributes3.SequenceAttribute.ValueFormatter = types.StringValue(*attributesItem1.SequenceAttribute.ValueFormatter)
+				} else {
+					attributes3.SequenceAttribute.ValueFormatter = types.StringNull()
+				}
+			}
+			if attributesItem1.StatusAttribute != nil {
+				attributes3.StatusAttribute = &StatusAttribute{}
+				attributes3.StatusAttribute.Purpose = nil
+				for _, v := range attributesItem1.StatusAttribute.Purpose {
+					attributes3.StatusAttribute.Purpose = append(attributes3.StatusAttribute.Purpose, types.StringValue(v))
+				}
+				if attributesItem1.StatusAttribute.Constraints == nil {
+					attributes3.StatusAttribute.Constraints = nil
+				} else {
+					attributes3.StatusAttribute.Constraints = &Constraints{}
+				}
+				if attributesItem1.StatusAttribute.DefaultValue == nil {
+					attributes3.StatusAttribute.DefaultValue = types.StringNull()
+				} else {
+					defaultValueResult50, _ := json.Marshal(attributesItem1.StatusAttribute.DefaultValue)
+					attributes3.StatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult50))
+				}
+				if attributesItem1.StatusAttribute.Deprecated != nil {
+					attributes3.StatusAttribute.Deprecated = types.BoolValue(*attributesItem1.StatusAttribute.Deprecated)
+				} else {
+					attributes3.StatusAttribute.Deprecated = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.StatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.StatusAttribute.EntityBuilderDisableEdit)
+				} else {
+					attributes3.StatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.FeatureFlag != nil {
+					attributes3.StatusAttribute.FeatureFlag = types.StringValue(*attributesItem1.StatusAttribute.FeatureFlag)
+				} else {
+					attributes3.StatusAttribute.FeatureFlag = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.Group != nil {
+					attributes3.StatusAttribute.Group = types.StringValue(*attributesItem1.StatusAttribute.Group)
+				} else {
+					attributes3.StatusAttribute.Group = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.Hidden != nil {
+					attributes3.StatusAttribute.Hidden = types.BoolValue(*attributesItem1.StatusAttribute.Hidden)
+				} else {
+					attributes3.StatusAttribute.Hidden = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.HideLabel != nil {
+					attributes3.StatusAttribute.HideLabel = types.BoolValue(*attributesItem1.StatusAttribute.HideLabel)
+				} else {
+					attributes3.StatusAttribute.HideLabel = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.Icon != nil {
+					attributes3.StatusAttribute.Icon = types.StringValue(*attributesItem1.StatusAttribute.Icon)
+				} else {
+					attributes3.StatusAttribute.Icon = types.StringNull()
+				}
+				attributes3.StatusAttribute.Label = types.StringValue(attributesItem1.StatusAttribute.Label)
+				if attributesItem1.StatusAttribute.Layout != nil {
+					attributes3.StatusAttribute.Layout = types.StringValue(*attributesItem1.StatusAttribute.Layout)
+				} else {
+					attributes3.StatusAttribute.Layout = types.StringNull()
+				}
+				attributes3.StatusAttribute.Name = types.StringValue(attributesItem1.StatusAttribute.Name)
+				if len(attributes3.StatusAttribute.Options) > len(attributesItem1.StatusAttribute.Options) {
+					attributes3.StatusAttribute.Options = attributes3.StatusAttribute.Options[:len(attributesItem1.StatusAttribute.Options)]
+				}
+				for optionsCount5, optionsItem5 := range attributesItem1.StatusAttribute.Options {
+					var options12 Options
+					if optionsItem5.Str != nil {
+						if optionsItem5.Str != nil {
+							options12.Str = types.StringValue(*optionsItem5.Str)
+						} else {
+							options12.Str = types.StringNull()
+						}
+					}
+					if optionsItem5.StatusAttribute2 != nil {
+						options12.Two = &MultiSelectAttribute2{}
+						if optionsItem5.StatusAttribute2.Title != nil {
+							options12.Two.Title = types.StringValue(*optionsItem5.StatusAttribute2.Title)
+						} else {
+							options12.Two.Title = types.StringNull()
+						}
+						options12.Two.Value = types.StringValue(optionsItem5.StatusAttribute2.Value)
+					}
+					if optionsCount5+1 > len(attributes3.StatusAttribute.Options) {
+						attributes3.StatusAttribute.Options = append(attributes3.StatusAttribute.Options, options12)
+					} else {
+					}
+				}
+				if attributesItem1.StatusAttribute.Order != nil {
+					attributes3.StatusAttribute.Order = types.Int64Value(*attributesItem1.StatusAttribute.Order)
+				} else {
+					attributes3.StatusAttribute.Order = types.Int64Null()
+				}
+				if attributesItem1.StatusAttribute.Placeholder != nil {
+					attributes3.StatusAttribute.Placeholder = types.StringValue(*attributesItem1.StatusAttribute.Placeholder)
+				} else {
+					attributes3.StatusAttribute.Placeholder = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.PreviewValueFormatter != nil {
+					attributes3.StatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.StatusAttribute.PreviewValueFormatter)
+				} else {
+					attributes3.StatusAttribute.PreviewValueFormatter = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.Protected != nil {
+					attributes3.StatusAttribute.Protected = types.BoolValue(*attributesItem1.StatusAttribute.Protected)
+				} else {
+					attributes3.StatusAttribute.Protected = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.Readonly != nil {
+					attributes3.StatusAttribute.Readonly = types.BoolValue(*attributesItem1.StatusAttribute.Readonly)
+				} else {
+					attributes3.StatusAttribute.Readonly = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.RenderCondition != nil {
+					attributes3.StatusAttribute.RenderCondition = types.StringValue(*attributesItem1.StatusAttribute.RenderCondition)
+				} else {
+					attributes3.StatusAttribute.RenderCondition = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.Required != nil {
+					attributes3.StatusAttribute.Required = types.BoolValue(*attributesItem1.StatusAttribute.Required)
+				} else {
+					attributes3.StatusAttribute.Required = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.SettingFlag != nil {
+					attributes3.StatusAttribute.SettingFlag = types.StringValue(*attributesItem1.StatusAttribute.SettingFlag)
+				} else {
+					attributes3.StatusAttribute.SettingFlag = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.ShowInTable != nil {
+					attributes3.StatusAttribute.ShowInTable = types.BoolValue(*attributesItem1.StatusAttribute.ShowInTable)
+				} else {
+					attributes3.StatusAttribute.ShowInTable = types.BoolNull()
+				}
+				if attributesItem1.StatusAttribute.Type != nil {
+					attributes3.StatusAttribute.Type = types.StringValue(string(*attributesItem1.StatusAttribute.Type))
+				} else {
+					attributes3.StatusAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.StatusAttribute.ValueFormatter != nil {
+					attributes3.StatusAttribute.ValueFormatter = types.StringValue(*attributesItem1.StatusAttribute.ValueFormatter)
+				} else {
+					attributes3.StatusAttribute.ValueFormatter = types.StringNull()
+				}
+			}
 			if attributesItem1.TagsAttribute != nil {
 				attributes3.TagsAttribute = &TagsAttribute{}
 				attributes3.TagsAttribute.Purpose = nil
 				for _, v := range attributesItem1.TagsAttribute.Purpose {
 					attributes3.TagsAttribute.Purpose = append(attributes3.TagsAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.TagsAttribute.Constraints == nil && len(attributesItem1.TagsAttribute.Constraints) > 0 {
-					attributes3.TagsAttribute.Constraints = make(map[string]types.String)
-					for key44, value50 := range attributesItem1.TagsAttribute.Constraints {
-						result42, _ := json.Marshal(value50)
-						attributes3.TagsAttribute.Constraints[key44] = types.StringValue(string(result42))
-					}
+				if attributesItem1.TagsAttribute.Constraints == nil {
+					attributes3.TagsAttribute.Constraints = nil
+				} else {
+					attributes3.TagsAttribute.Constraints = &Constraints{}
 				}
 				if attributesItem1.TagsAttribute.DefaultValue == nil {
 					attributes3.TagsAttribute.DefaultValue = types.StringNull()
 				} else {
-					defaultValueResult42, _ := json.Marshal(attributesItem1.TagsAttribute.DefaultValue)
-					attributes3.TagsAttribute.DefaultValue = types.StringValue(string(defaultValueResult42))
+					defaultValueResult51, _ := json.Marshal(attributesItem1.TagsAttribute.DefaultValue)
+					attributes3.TagsAttribute.DefaultValue = types.StringValue(string(defaultValueResult51))
 				}
 				if attributesItem1.TagsAttribute.Deprecated != nil {
 					attributes3.TagsAttribute.Deprecated = types.BoolValue(*attributesItem1.TagsAttribute.Deprecated)
@@ -16179,1339 +17192,250 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					attributes3.TagsAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.NumberAttribute != nil {
-				attributes3.NumberAttribute = &NumberAttribute{}
-				attributes3.NumberAttribute.Purpose = nil
-				for _, v := range attributesItem1.NumberAttribute.Purpose {
-					attributes3.NumberAttribute.Purpose = append(attributes3.NumberAttribute.Purpose, types.StringValue(v))
+			if attributesItem1.TextAttribute != nil {
+				attributes3.TextAttribute = &TextAttribute{}
+				attributes3.TextAttribute.Purpose = nil
+				for _, v := range attributesItem1.TextAttribute.Purpose {
+					attributes3.TextAttribute.Purpose = append(attributes3.TextAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.NumberAttribute.Constraints == nil && len(attributesItem1.NumberAttribute.Constraints) > 0 {
-					attributes3.NumberAttribute.Constraints = make(map[string]types.String)
-					for key45, value51 := range attributesItem1.NumberAttribute.Constraints {
-						result43, _ := json.Marshal(value51)
-						attributes3.NumberAttribute.Constraints[key45] = types.StringValue(string(result43))
-					}
-				}
-				if attributesItem1.NumberAttribute.DefaultValue == nil {
-					attributes3.NumberAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.TextAttribute.Constraints == nil {
+					attributes3.TextAttribute.Constraints = nil
 				} else {
-					defaultValueResult43, _ := json.Marshal(attributesItem1.NumberAttribute.DefaultValue)
-					attributes3.NumberAttribute.DefaultValue = types.StringValue(string(defaultValueResult43))
+					attributes3.TextAttribute.Constraints = &Constraints{}
 				}
-				if attributesItem1.NumberAttribute.Deprecated != nil {
-					attributes3.NumberAttribute.Deprecated = types.BoolValue(*attributesItem1.NumberAttribute.Deprecated)
+				if attributesItem1.TextAttribute.DefaultValue == nil {
+					attributes3.TextAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.NumberAttribute.Deprecated = types.BoolNull()
+					defaultValueResult52, _ := json.Marshal(attributesItem1.TextAttribute.DefaultValue)
+					attributes3.TextAttribute.DefaultValue = types.StringValue(string(defaultValueResult52))
 				}
-				if attributesItem1.NumberAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.NumberAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.NumberAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.TextAttribute.Deprecated != nil {
+					attributes3.TextAttribute.Deprecated = types.BoolValue(*attributesItem1.TextAttribute.Deprecated)
 				} else {
-					attributes3.NumberAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.TextAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.FeatureFlag != nil {
-					attributes3.NumberAttribute.FeatureFlag = types.StringValue(*attributesItem1.NumberAttribute.FeatureFlag)
+				if attributesItem1.TextAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.TextAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.TextAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.NumberAttribute.FeatureFlag = types.StringNull()
+					attributes3.TextAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.Format != nil {
-					attributes3.NumberAttribute.Format = types.StringValue(*attributesItem1.NumberAttribute.Format)
+				if attributesItem1.TextAttribute.FeatureFlag != nil {
+					attributes3.TextAttribute.FeatureFlag = types.StringValue(*attributesItem1.TextAttribute.FeatureFlag)
 				} else {
-					attributes3.NumberAttribute.Format = types.StringNull()
+					attributes3.TextAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.NumberAttribute.Group != nil {
-					attributes3.NumberAttribute.Group = types.StringValue(*attributesItem1.NumberAttribute.Group)
+				if attributesItem1.TextAttribute.Group != nil {
+					attributes3.TextAttribute.Group = types.StringValue(*attributesItem1.TextAttribute.Group)
 				} else {
-					attributes3.NumberAttribute.Group = types.StringNull()
+					attributes3.TextAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.NumberAttribute.Hidden != nil {
-					attributes3.NumberAttribute.Hidden = types.BoolValue(*attributesItem1.NumberAttribute.Hidden)
+				if attributesItem1.TextAttribute.Hidden != nil {
+					attributes3.TextAttribute.Hidden = types.BoolValue(*attributesItem1.TextAttribute.Hidden)
 				} else {
-					attributes3.NumberAttribute.Hidden = types.BoolNull()
+					attributes3.TextAttribute.Hidden = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.HideLabel != nil {
-					attributes3.NumberAttribute.HideLabel = types.BoolValue(*attributesItem1.NumberAttribute.HideLabel)
+				if attributesItem1.TextAttribute.HideLabel != nil {
+					attributes3.TextAttribute.HideLabel = types.BoolValue(*attributesItem1.TextAttribute.HideLabel)
 				} else {
-					attributes3.NumberAttribute.HideLabel = types.BoolNull()
+					attributes3.TextAttribute.HideLabel = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.Icon != nil {
-					attributes3.NumberAttribute.Icon = types.StringValue(*attributesItem1.NumberAttribute.Icon)
+				if attributesItem1.TextAttribute.Icon != nil {
+					attributes3.TextAttribute.Icon = types.StringValue(*attributesItem1.TextAttribute.Icon)
 				} else {
-					attributes3.NumberAttribute.Icon = types.StringNull()
+					attributes3.TextAttribute.Icon = types.StringNull()
 				}
-				attributes3.NumberAttribute.Label = types.StringValue(attributesItem1.NumberAttribute.Label)
-				if attributesItem1.NumberAttribute.Layout != nil {
-					attributes3.NumberAttribute.Layout = types.StringValue(*attributesItem1.NumberAttribute.Layout)
+				attributes3.TextAttribute.Label = types.StringValue(attributesItem1.TextAttribute.Label)
+				if attributesItem1.TextAttribute.Layout != nil {
+					attributes3.TextAttribute.Layout = types.StringValue(*attributesItem1.TextAttribute.Layout)
 				} else {
-					attributes3.NumberAttribute.Layout = types.StringNull()
+					attributes3.TextAttribute.Layout = types.StringNull()
 				}
-				attributes3.NumberAttribute.Name = types.StringValue(attributesItem1.NumberAttribute.Name)
-				if attributesItem1.NumberAttribute.Order != nil {
-					attributes3.NumberAttribute.Order = types.Int64Value(*attributesItem1.NumberAttribute.Order)
+				if attributesItem1.TextAttribute.Multiline != nil {
+					attributes3.TextAttribute.Multiline = types.BoolValue(*attributesItem1.TextAttribute.Multiline)
 				} else {
-					attributes3.NumberAttribute.Order = types.Int64Null()
+					attributes3.TextAttribute.Multiline = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.Placeholder != nil {
-					attributes3.NumberAttribute.Placeholder = types.StringValue(*attributesItem1.NumberAttribute.Placeholder)
+				attributes3.TextAttribute.Name = types.StringValue(attributesItem1.TextAttribute.Name)
+				if attributesItem1.TextAttribute.Order != nil {
+					attributes3.TextAttribute.Order = types.Int64Value(*attributesItem1.TextAttribute.Order)
 				} else {
-					attributes3.NumberAttribute.Placeholder = types.StringNull()
+					attributes3.TextAttribute.Order = types.Int64Null()
 				}
-				if attributesItem1.NumberAttribute.PreviewValueFormatter != nil {
-					attributes3.NumberAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.NumberAttribute.PreviewValueFormatter)
+				if attributesItem1.TextAttribute.Placeholder != nil {
+					attributes3.TextAttribute.Placeholder = types.StringValue(*attributesItem1.TextAttribute.Placeholder)
 				} else {
-					attributes3.NumberAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.TextAttribute.Placeholder = types.StringNull()
 				}
-				if attributesItem1.NumberAttribute.Protected != nil {
-					attributes3.NumberAttribute.Protected = types.BoolValue(*attributesItem1.NumberAttribute.Protected)
+				if attributesItem1.TextAttribute.PreviewValueFormatter != nil {
+					attributes3.TextAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.TextAttribute.PreviewValueFormatter)
 				} else {
-					attributes3.NumberAttribute.Protected = types.BoolNull()
+					attributes3.TextAttribute.PreviewValueFormatter = types.StringNull()
 				}
-				if attributesItem1.NumberAttribute.Readonly != nil {
-					attributes3.NumberAttribute.Readonly = types.BoolValue(*attributesItem1.NumberAttribute.Readonly)
+				if attributesItem1.TextAttribute.Protected != nil {
+					attributes3.TextAttribute.Protected = types.BoolValue(*attributesItem1.TextAttribute.Protected)
 				} else {
-					attributes3.NumberAttribute.Readonly = types.BoolNull()
+					attributes3.TextAttribute.Protected = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.RenderCondition != nil {
-					attributes3.NumberAttribute.RenderCondition = types.StringValue(*attributesItem1.NumberAttribute.RenderCondition)
+				if attributesItem1.TextAttribute.Readonly != nil {
+					attributes3.TextAttribute.Readonly = types.BoolValue(*attributesItem1.TextAttribute.Readonly)
 				} else {
-					attributes3.NumberAttribute.RenderCondition = types.StringNull()
+					attributes3.TextAttribute.Readonly = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.Required != nil {
-					attributes3.NumberAttribute.Required = types.BoolValue(*attributesItem1.NumberAttribute.Required)
+				if attributesItem1.TextAttribute.RenderCondition != nil {
+					attributes3.TextAttribute.RenderCondition = types.StringValue(*attributesItem1.TextAttribute.RenderCondition)
 				} else {
-					attributes3.NumberAttribute.Required = types.BoolNull()
+					attributes3.TextAttribute.RenderCondition = types.StringNull()
 				}
-				if attributesItem1.NumberAttribute.SettingFlag != nil {
-					attributes3.NumberAttribute.SettingFlag = types.StringValue(*attributesItem1.NumberAttribute.SettingFlag)
+				if attributesItem1.TextAttribute.Required != nil {
+					attributes3.TextAttribute.Required = types.BoolValue(*attributesItem1.TextAttribute.Required)
 				} else {
-					attributes3.NumberAttribute.SettingFlag = types.StringNull()
+					attributes3.TextAttribute.Required = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.ShowInTable != nil {
-					attributes3.NumberAttribute.ShowInTable = types.BoolValue(*attributesItem1.NumberAttribute.ShowInTable)
+				if attributesItem1.TextAttribute.SettingFlag != nil {
+					attributes3.TextAttribute.SettingFlag = types.StringValue(*attributesItem1.TextAttribute.SettingFlag)
 				} else {
-					attributes3.NumberAttribute.ShowInTable = types.BoolNull()
+					attributes3.TextAttribute.SettingFlag = types.StringNull()
 				}
-				if attributesItem1.NumberAttribute.Type != nil {
-					attributes3.NumberAttribute.Type = types.StringValue(string(*attributesItem1.NumberAttribute.Type))
+				if attributesItem1.TextAttribute.ShowInTable != nil {
+					attributes3.TextAttribute.ShowInTable = types.BoolValue(*attributesItem1.TextAttribute.ShowInTable)
 				} else {
-					attributes3.NumberAttribute.Type = types.StringNull()
+					attributes3.TextAttribute.ShowInTable = types.BoolNull()
 				}
-				if attributesItem1.NumberAttribute.ValueFormatter != nil {
-					attributes3.NumberAttribute.ValueFormatter = types.StringValue(*attributesItem1.NumberAttribute.ValueFormatter)
+				if attributesItem1.TextAttribute.Type != nil {
+					attributes3.TextAttribute.Type = types.StringValue(string(*attributesItem1.TextAttribute.Type))
 				} else {
-					attributes3.NumberAttribute.ValueFormatter = types.StringNull()
+					attributes3.TextAttribute.Type = types.StringNull()
+				}
+				if attributesItem1.TextAttribute.ValueFormatter != nil {
+					attributes3.TextAttribute.ValueFormatter = types.StringValue(*attributesItem1.TextAttribute.ValueFormatter)
+				} else {
+					attributes3.TextAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.ConsentAttribute != nil {
-				attributes3.ConsentAttribute = &ConsentAttribute{}
-				attributes3.ConsentAttribute.Purpose = nil
-				for _, v := range attributesItem1.ConsentAttribute.Purpose {
-					attributes3.ConsentAttribute.Purpose = append(attributes3.ConsentAttribute.Purpose, types.StringValue(v))
+			if attributesItem1.UserRelationAttribute != nil {
+				attributes3.UserRelationAttribute = &UserRelationAttribute{}
+				attributes3.UserRelationAttribute.Purpose = nil
+				for _, v := range attributesItem1.UserRelationAttribute.Purpose {
+					attributes3.UserRelationAttribute.Purpose = append(attributes3.UserRelationAttribute.Purpose, types.StringValue(v))
 				}
-				if attributes3.ConsentAttribute.Constraints == nil && len(attributesItem1.ConsentAttribute.Constraints) > 0 {
-					attributes3.ConsentAttribute.Constraints = make(map[string]types.String)
-					for key46, value52 := range attributesItem1.ConsentAttribute.Constraints {
-						result44, _ := json.Marshal(value52)
-						attributes3.ConsentAttribute.Constraints[key46] = types.StringValue(string(result44))
-					}
-				}
-				if attributesItem1.ConsentAttribute.DefaultValue == nil {
-					attributes3.ConsentAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.UserRelationAttribute.Constraints == nil {
+					attributes3.UserRelationAttribute.Constraints = nil
 				} else {
-					defaultValueResult44, _ := json.Marshal(attributesItem1.ConsentAttribute.DefaultValue)
-					attributes3.ConsentAttribute.DefaultValue = types.StringValue(string(defaultValueResult44))
+					attributes3.UserRelationAttribute.Constraints = &Constraints{}
 				}
-				if attributesItem1.ConsentAttribute.Deprecated != nil {
-					attributes3.ConsentAttribute.Deprecated = types.BoolValue(*attributesItem1.ConsentAttribute.Deprecated)
+				if attributesItem1.UserRelationAttribute.DefaultValue == nil {
+					attributes3.UserRelationAttribute.DefaultValue = types.StringNull()
 				} else {
-					attributes3.ConsentAttribute.Deprecated = types.BoolNull()
+					defaultValueResult53, _ := json.Marshal(attributesItem1.UserRelationAttribute.DefaultValue)
+					attributes3.UserRelationAttribute.DefaultValue = types.StringValue(string(defaultValueResult53))
 				}
-				if attributesItem1.ConsentAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.ConsentAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.ConsentAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.UserRelationAttribute.Deprecated != nil {
+					attributes3.UserRelationAttribute.Deprecated = types.BoolValue(*attributesItem1.UserRelationAttribute.Deprecated)
 				} else {
-					attributes3.ConsentAttribute.EntityBuilderDisableEdit = types.BoolNull()
+					attributes3.UserRelationAttribute.Deprecated = types.BoolNull()
 				}
-				if attributesItem1.ConsentAttribute.FeatureFlag != nil {
-					attributes3.ConsentAttribute.FeatureFlag = types.StringValue(*attributesItem1.ConsentAttribute.FeatureFlag)
+				if attributesItem1.UserRelationAttribute.EntityBuilderDisableEdit != nil {
+					attributes3.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.UserRelationAttribute.EntityBuilderDisableEdit)
 				} else {
-					attributes3.ConsentAttribute.FeatureFlag = types.StringNull()
+					attributes3.UserRelationAttribute.EntityBuilderDisableEdit = types.BoolNull()
 				}
-				if attributesItem1.ConsentAttribute.Group != nil {
-					attributes3.ConsentAttribute.Group = types.StringValue(*attributesItem1.ConsentAttribute.Group)
+				if attributesItem1.UserRelationAttribute.FeatureFlag != nil {
+					attributes3.UserRelationAttribute.FeatureFlag = types.StringValue(*attributesItem1.UserRelationAttribute.FeatureFlag)
 				} else {
-					attributes3.ConsentAttribute.Group = types.StringNull()
+					attributes3.UserRelationAttribute.FeatureFlag = types.StringNull()
 				}
-				if attributesItem1.ConsentAttribute.Hidden != nil {
-					attributes3.ConsentAttribute.Hidden = types.BoolValue(*attributesItem1.ConsentAttribute.Hidden)
+				if attributesItem1.UserRelationAttribute.Group != nil {
+					attributes3.UserRelationAttribute.Group = types.StringValue(*attributesItem1.UserRelationAttribute.Group)
 				} else {
-					attributes3.ConsentAttribute.Hidden = types.BoolNull()
+					attributes3.UserRelationAttribute.Group = types.StringNull()
 				}
-				if attributesItem1.ConsentAttribute.HideLabel != nil {
-					attributes3.ConsentAttribute.HideLabel = types.BoolValue(*attributesItem1.ConsentAttribute.HideLabel)
+				if attributesItem1.UserRelationAttribute.Hidden != nil {
+					attributes3.UserRelationAttribute.Hidden = types.BoolValue(*attributesItem1.UserRelationAttribute.Hidden)
 				} else {
-					attributes3.ConsentAttribute.HideLabel = types.BoolNull()
+					attributes3.UserRelationAttribute.Hidden = types.BoolNull()
 				}
-				if attributesItem1.ConsentAttribute.Icon != nil {
-					attributes3.ConsentAttribute.Icon = types.StringValue(*attributesItem1.ConsentAttribute.Icon)
+				if attributesItem1.UserRelationAttribute.HideLabel != nil {
+					attributes3.UserRelationAttribute.HideLabel = types.BoolValue(*attributesItem1.UserRelationAttribute.HideLabel)
 				} else {
-					attributes3.ConsentAttribute.Icon = types.StringNull()
+					attributes3.UserRelationAttribute.HideLabel = types.BoolNull()
 				}
-				attributes3.ConsentAttribute.Identifiers = nil
-				for _, v := range attributesItem1.ConsentAttribute.Identifiers {
-					attributes3.ConsentAttribute.Identifiers = append(attributes3.ConsentAttribute.Identifiers, types.StringValue(v))
-				}
-				attributes3.ConsentAttribute.Label = types.StringValue(attributesItem1.ConsentAttribute.Label)
-				if attributesItem1.ConsentAttribute.Layout != nil {
-					attributes3.ConsentAttribute.Layout = types.StringValue(*attributesItem1.ConsentAttribute.Layout)
+				if attributesItem1.UserRelationAttribute.Icon != nil {
+					attributes3.UserRelationAttribute.Icon = types.StringValue(*attributesItem1.UserRelationAttribute.Icon)
 				} else {
-					attributes3.ConsentAttribute.Layout = types.StringNull()
+					attributes3.UserRelationAttribute.Icon = types.StringNull()
 				}
-				attributes3.ConsentAttribute.Name = types.StringValue(attributesItem1.ConsentAttribute.Name)
-				if attributesItem1.ConsentAttribute.Order != nil {
-					attributes3.ConsentAttribute.Order = types.Int64Value(*attributesItem1.ConsentAttribute.Order)
+				attributes3.UserRelationAttribute.Label = types.StringValue(attributesItem1.UserRelationAttribute.Label)
+				if attributesItem1.UserRelationAttribute.Layout != nil {
+					attributes3.UserRelationAttribute.Layout = types.StringValue(*attributesItem1.UserRelationAttribute.Layout)
 				} else {
-					attributes3.ConsentAttribute.Order = types.Int64Null()
+					attributes3.UserRelationAttribute.Layout = types.StringNull()
 				}
-				if attributesItem1.ConsentAttribute.Placeholder != nil {
-					attributes3.ConsentAttribute.Placeholder = types.StringValue(*attributesItem1.ConsentAttribute.Placeholder)
+				if attributesItem1.UserRelationAttribute.Multiple != nil {
+					attributes3.UserRelationAttribute.Multiple = types.BoolValue(*attributesItem1.UserRelationAttribute.Multiple)
 				} else {
-					attributes3.ConsentAttribute.Placeholder = types.StringNull()
+					attributes3.UserRelationAttribute.Multiple = types.BoolNull()
 				}
-				if attributesItem1.ConsentAttribute.PreviewValueFormatter != nil {
-					attributes3.ConsentAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.ConsentAttribute.PreviewValueFormatter)
+				attributes3.UserRelationAttribute.Name = types.StringValue(attributesItem1.UserRelationAttribute.Name)
+				if attributesItem1.UserRelationAttribute.Order != nil {
+					attributes3.UserRelationAttribute.Order = types.Int64Value(*attributesItem1.UserRelationAttribute.Order)
 				} else {
-					attributes3.ConsentAttribute.PreviewValueFormatter = types.StringNull()
+					attributes3.UserRelationAttribute.Order = types.Int64Null()
 				}
-				if attributesItem1.ConsentAttribute.Protected != nil {
-					attributes3.ConsentAttribute.Protected = types.BoolValue(*attributesItem1.ConsentAttribute.Protected)
+				if attributesItem1.UserRelationAttribute.Placeholder != nil {
+					attributes3.UserRelationAttribute.Placeholder = types.StringValue(*attributesItem1.UserRelationAttribute.Placeholder)
 				} else {
-					attributes3.ConsentAttribute.Protected = types.BoolNull()
+					attributes3.UserRelationAttribute.Placeholder = types.StringNull()
 				}
-				if attributesItem1.ConsentAttribute.Readonly != nil {
-					attributes3.ConsentAttribute.Readonly = types.BoolValue(*attributesItem1.ConsentAttribute.Readonly)
+				if attributesItem1.UserRelationAttribute.PreviewValueFormatter != nil {
+					attributes3.UserRelationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.UserRelationAttribute.PreviewValueFormatter)
 				} else {
-					attributes3.ConsentAttribute.Readonly = types.BoolNull()
+					attributes3.UserRelationAttribute.PreviewValueFormatter = types.StringNull()
 				}
-				if attributesItem1.ConsentAttribute.RenderCondition != nil {
-					attributes3.ConsentAttribute.RenderCondition = types.StringValue(*attributesItem1.ConsentAttribute.RenderCondition)
+				if attributesItem1.UserRelationAttribute.Protected != nil {
+					attributes3.UserRelationAttribute.Protected = types.BoolValue(*attributesItem1.UserRelationAttribute.Protected)
 				} else {
-					attributes3.ConsentAttribute.RenderCondition = types.StringNull()
+					attributes3.UserRelationAttribute.Protected = types.BoolNull()
 				}
-				if attributesItem1.ConsentAttribute.Required != nil {
-					attributes3.ConsentAttribute.Required = types.BoolValue(*attributesItem1.ConsentAttribute.Required)
+				if attributesItem1.UserRelationAttribute.Readonly != nil {
+					attributes3.UserRelationAttribute.Readonly = types.BoolValue(*attributesItem1.UserRelationAttribute.Readonly)
 				} else {
-					attributes3.ConsentAttribute.Required = types.BoolNull()
+					attributes3.UserRelationAttribute.Readonly = types.BoolNull()
 				}
-				if attributesItem1.ConsentAttribute.SettingFlag != nil {
-					attributes3.ConsentAttribute.SettingFlag = types.StringValue(*attributesItem1.ConsentAttribute.SettingFlag)
+				if attributesItem1.UserRelationAttribute.RenderCondition != nil {
+					attributes3.UserRelationAttribute.RenderCondition = types.StringValue(*attributesItem1.UserRelationAttribute.RenderCondition)
 				} else {
-					attributes3.ConsentAttribute.SettingFlag = types.StringNull()
+					attributes3.UserRelationAttribute.RenderCondition = types.StringNull()
 				}
-				if attributesItem1.ConsentAttribute.ShowInTable != nil {
-					attributes3.ConsentAttribute.ShowInTable = types.BoolValue(*attributesItem1.ConsentAttribute.ShowInTable)
+				if attributesItem1.UserRelationAttribute.Required != nil {
+					attributes3.UserRelationAttribute.Required = types.BoolValue(*attributesItem1.UserRelationAttribute.Required)
 				} else {
-					attributes3.ConsentAttribute.ShowInTable = types.BoolNull()
+					attributes3.UserRelationAttribute.Required = types.BoolNull()
 				}
-				attributes3.ConsentAttribute.Topic = types.StringValue(attributesItem1.ConsentAttribute.Topic)
-				attributes3.ConsentAttribute.Type = types.StringValue(string(attributesItem1.ConsentAttribute.Type))
-				if attributesItem1.ConsentAttribute.ValueFormatter != nil {
-					attributes3.ConsentAttribute.ValueFormatter = types.StringValue(*attributesItem1.ConsentAttribute.ValueFormatter)
+				if attributesItem1.UserRelationAttribute.SettingFlag != nil {
+					attributes3.UserRelationAttribute.SettingFlag = types.StringValue(*attributesItem1.UserRelationAttribute.SettingFlag)
 				} else {
-					attributes3.ConsentAttribute.ValueFormatter = types.StringNull()
+					attributes3.UserRelationAttribute.SettingFlag = types.StringNull()
 				}
-			}
-			if attributesItem1.InternalAttribute != nil {
-				attributes3.InternalAttribute = &InternalAttribute{}
-				attributes3.InternalAttribute.Purpose = nil
-				for _, v := range attributesItem1.InternalAttribute.Purpose {
-					attributes3.InternalAttribute.Purpose = append(attributes3.InternalAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.InternalAttribute.Constraints == nil && len(attributesItem1.InternalAttribute.Constraints) > 0 {
-					attributes3.InternalAttribute.Constraints = make(map[string]types.String)
-					for key47, value53 := range attributesItem1.InternalAttribute.Constraints {
-						result45, _ := json.Marshal(value53)
-						attributes3.InternalAttribute.Constraints[key47] = types.StringValue(string(result45))
-					}
-				}
-				if attributesItem1.InternalAttribute.DefaultValue == nil {
-					attributes3.InternalAttribute.DefaultValue = types.StringNull()
+				if attributesItem1.UserRelationAttribute.ShowInTable != nil {
+					attributes3.UserRelationAttribute.ShowInTable = types.BoolValue(*attributesItem1.UserRelationAttribute.ShowInTable)
 				} else {
-					defaultValueResult45, _ := json.Marshal(attributesItem1.InternalAttribute.DefaultValue)
-					attributes3.InternalAttribute.DefaultValue = types.StringValue(string(defaultValueResult45))
+					attributes3.UserRelationAttribute.ShowInTable = types.BoolNull()
 				}
-				if attributesItem1.InternalAttribute.Deprecated != nil {
-					attributes3.InternalAttribute.Deprecated = types.BoolValue(*attributesItem1.InternalAttribute.Deprecated)
+				if attributesItem1.UserRelationAttribute.Type != nil {
+					attributes3.UserRelationAttribute.Type = types.StringValue(string(*attributesItem1.UserRelationAttribute.Type))
 				} else {
-					attributes3.InternalAttribute.Deprecated = types.BoolNull()
+					attributes3.UserRelationAttribute.Type = types.StringNull()
 				}
-				if attributesItem1.InternalAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.InternalAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.InternalAttribute.EntityBuilderDisableEdit)
+				if attributesItem1.UserRelationAttribute.ValueFormatter != nil {
+					attributes3.UserRelationAttribute.ValueFormatter = types.StringValue(*attributesItem1.UserRelationAttribute.ValueFormatter)
 				} else {
-					attributes3.InternalAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.FeatureFlag != nil {
-					attributes3.InternalAttribute.FeatureFlag = types.StringValue(*attributesItem1.InternalAttribute.FeatureFlag)
-				} else {
-					attributes3.InternalAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.Group != nil {
-					attributes3.InternalAttribute.Group = types.StringValue(*attributesItem1.InternalAttribute.Group)
-				} else {
-					attributes3.InternalAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.Hidden != nil {
-					attributes3.InternalAttribute.Hidden = types.BoolValue(*attributesItem1.InternalAttribute.Hidden)
-				} else {
-					attributes3.InternalAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.HideLabel != nil {
-					attributes3.InternalAttribute.HideLabel = types.BoolValue(*attributesItem1.InternalAttribute.HideLabel)
-				} else {
-					attributes3.InternalAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.Icon != nil {
-					attributes3.InternalAttribute.Icon = types.StringValue(*attributesItem1.InternalAttribute.Icon)
-				} else {
-					attributes3.InternalAttribute.Icon = types.StringNull()
-				}
-				attributes3.InternalAttribute.Label = types.StringValue(attributesItem1.InternalAttribute.Label)
-				if attributesItem1.InternalAttribute.Layout != nil {
-					attributes3.InternalAttribute.Layout = types.StringValue(*attributesItem1.InternalAttribute.Layout)
-				} else {
-					attributes3.InternalAttribute.Layout = types.StringNull()
-				}
-				attributes3.InternalAttribute.Name = types.StringValue(attributesItem1.InternalAttribute.Name)
-				if attributesItem1.InternalAttribute.Order != nil {
-					attributes3.InternalAttribute.Order = types.Int64Value(*attributesItem1.InternalAttribute.Order)
-				} else {
-					attributes3.InternalAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.InternalAttribute.Placeholder != nil {
-					attributes3.InternalAttribute.Placeholder = types.StringValue(*attributesItem1.InternalAttribute.Placeholder)
-				} else {
-					attributes3.InternalAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.PreviewValueFormatter != nil {
-					attributes3.InternalAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.InternalAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.InternalAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.Protected != nil {
-					attributes3.InternalAttribute.Protected = types.BoolValue(*attributesItem1.InternalAttribute.Protected)
-				} else {
-					attributes3.InternalAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.Readonly != nil {
-					attributes3.InternalAttribute.Readonly = types.BoolValue(*attributesItem1.InternalAttribute.Readonly)
-				} else {
-					attributes3.InternalAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.RenderCondition != nil {
-					attributes3.InternalAttribute.RenderCondition = types.StringValue(*attributesItem1.InternalAttribute.RenderCondition)
-				} else {
-					attributes3.InternalAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.Required != nil {
-					attributes3.InternalAttribute.Required = types.BoolValue(*attributesItem1.InternalAttribute.Required)
-				} else {
-					attributes3.InternalAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.SettingFlag != nil {
-					attributes3.InternalAttribute.SettingFlag = types.StringValue(*attributesItem1.InternalAttribute.SettingFlag)
-				} else {
-					attributes3.InternalAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.ShowInTable != nil {
-					attributes3.InternalAttribute.ShowInTable = types.BoolValue(*attributesItem1.InternalAttribute.ShowInTable)
-				} else {
-					attributes3.InternalAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.InternalAttribute.Type != nil {
-					attributes3.InternalAttribute.Type = types.StringValue(string(*attributesItem1.InternalAttribute.Type))
-				} else {
-					attributes3.InternalAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.InternalAttribute.ValueFormatter != nil {
-					attributes3.InternalAttribute.ValueFormatter = types.StringValue(*attributesItem1.InternalAttribute.ValueFormatter)
-				} else {
-					attributes3.InternalAttribute.ValueFormatter = types.StringNull()
+					attributes3.UserRelationAttribute.ValueFormatter = types.StringNull()
 				}
 			}
-			if attributesItem1.OrderedListAttribute != nil {
-				attributes3.OrderedListAttribute = &OrderedListAttribute{}
-				attributes3.OrderedListAttribute.Purpose = nil
-				for _, v := range attributesItem1.OrderedListAttribute.Purpose {
-					attributes3.OrderedListAttribute.Purpose = append(attributes3.OrderedListAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.OrderedListAttribute.Constraints == nil && len(attributesItem1.OrderedListAttribute.Constraints) > 0 {
-					attributes3.OrderedListAttribute.Constraints = make(map[string]types.String)
-					for key48, value54 := range attributesItem1.OrderedListAttribute.Constraints {
-						result46, _ := json.Marshal(value54)
-						attributes3.OrderedListAttribute.Constraints[key48] = types.StringValue(string(result46))
-					}
-				}
-				if attributesItem1.OrderedListAttribute.DefaultValue == nil {
-					attributes3.OrderedListAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult46, _ := json.Marshal(attributesItem1.OrderedListAttribute.DefaultValue)
-					attributes3.OrderedListAttribute.DefaultValue = types.StringValue(string(defaultValueResult46))
-				}
-				if attributesItem1.OrderedListAttribute.Deprecated != nil {
-					attributes3.OrderedListAttribute.Deprecated = types.BoolValue(*attributesItem1.OrderedListAttribute.Deprecated)
-				} else {
-					attributes3.OrderedListAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.OrderedListAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.OrderedListAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.FeatureFlag != nil {
-					attributes3.OrderedListAttribute.FeatureFlag = types.StringValue(*attributesItem1.OrderedListAttribute.FeatureFlag)
-				} else {
-					attributes3.OrderedListAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.Group != nil {
-					attributes3.OrderedListAttribute.Group = types.StringValue(*attributesItem1.OrderedListAttribute.Group)
-				} else {
-					attributes3.OrderedListAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.Hidden != nil {
-					attributes3.OrderedListAttribute.Hidden = types.BoolValue(*attributesItem1.OrderedListAttribute.Hidden)
-				} else {
-					attributes3.OrderedListAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.HideLabel != nil {
-					attributes3.OrderedListAttribute.HideLabel = types.BoolValue(*attributesItem1.OrderedListAttribute.HideLabel)
-				} else {
-					attributes3.OrderedListAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.Icon != nil {
-					attributes3.OrderedListAttribute.Icon = types.StringValue(*attributesItem1.OrderedListAttribute.Icon)
-				} else {
-					attributes3.OrderedListAttribute.Icon = types.StringNull()
-				}
-				attributes3.OrderedListAttribute.Label = types.StringValue(attributesItem1.OrderedListAttribute.Label)
-				if attributesItem1.OrderedListAttribute.Layout != nil {
-					attributes3.OrderedListAttribute.Layout = types.StringValue(*attributesItem1.OrderedListAttribute.Layout)
-				} else {
-					attributes3.OrderedListAttribute.Layout = types.StringNull()
-				}
-				attributes3.OrderedListAttribute.Name = types.StringValue(attributesItem1.OrderedListAttribute.Name)
-				if attributesItem1.OrderedListAttribute.Order != nil {
-					attributes3.OrderedListAttribute.Order = types.Int64Value(*attributesItem1.OrderedListAttribute.Order)
-				} else {
-					attributes3.OrderedListAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.OrderedListAttribute.Placeholder != nil {
-					attributes3.OrderedListAttribute.Placeholder = types.StringValue(*attributesItem1.OrderedListAttribute.Placeholder)
-				} else {
-					attributes3.OrderedListAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.PreviewValueFormatter != nil {
-					attributes3.OrderedListAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.OrderedListAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.OrderedListAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.Protected != nil {
-					attributes3.OrderedListAttribute.Protected = types.BoolValue(*attributesItem1.OrderedListAttribute.Protected)
-				} else {
-					attributes3.OrderedListAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.Readonly != nil {
-					attributes3.OrderedListAttribute.Readonly = types.BoolValue(*attributesItem1.OrderedListAttribute.Readonly)
-				} else {
-					attributes3.OrderedListAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.RenderCondition != nil {
-					attributes3.OrderedListAttribute.RenderCondition = types.StringValue(*attributesItem1.OrderedListAttribute.RenderCondition)
-				} else {
-					attributes3.OrderedListAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.Required != nil {
-					attributes3.OrderedListAttribute.Required = types.BoolValue(*attributesItem1.OrderedListAttribute.Required)
-				} else {
-					attributes3.OrderedListAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.SettingFlag != nil {
-					attributes3.OrderedListAttribute.SettingFlag = types.StringValue(*attributesItem1.OrderedListAttribute.SettingFlag)
-				} else {
-					attributes3.OrderedListAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.ShowInTable != nil {
-					attributes3.OrderedListAttribute.ShowInTable = types.BoolValue(*attributesItem1.OrderedListAttribute.ShowInTable)
-				} else {
-					attributes3.OrderedListAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.OrderedListAttribute.Type != nil {
-					attributes3.OrderedListAttribute.Type = types.StringValue(string(*attributesItem1.OrderedListAttribute.Type))
-				} else {
-					attributes3.OrderedListAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.OrderedListAttribute.ValueFormatter != nil {
-					attributes3.OrderedListAttribute.ValueFormatter = types.StringValue(*attributesItem1.OrderedListAttribute.ValueFormatter)
-				} else {
-					attributes3.OrderedListAttribute.ValueFormatter = types.StringNull()
-				}
+			if attributesCount1+1 > len(capabilities1.Attributes) {
+				capabilities1.Attributes = append(capabilities1.Attributes, attributes3)
+			} else {
 			}
-			if attributesItem1.FileAttribute != nil {
-				attributes3.FileAttribute = &FileAttribute{}
-				attributes3.FileAttribute.Purpose = nil
-				for _, v := range attributesItem1.FileAttribute.Purpose {
-					attributes3.FileAttribute.Purpose = append(attributes3.FileAttribute.Purpose, types.StringValue(v))
-				}
-				attributes3.FileAttribute.AllowedExtensions = nil
-				for _, v := range attributesItem1.FileAttribute.AllowedExtensions {
-					attributes3.FileAttribute.AllowedExtensions = append(attributes3.FileAttribute.AllowedExtensions, types.StringValue(v))
-				}
-				if attributes3.FileAttribute.Constraints == nil && len(attributesItem1.FileAttribute.Constraints) > 0 {
-					attributes3.FileAttribute.Constraints = make(map[string]types.String)
-					for key49, value55 := range attributesItem1.FileAttribute.Constraints {
-						result47, _ := json.Marshal(value55)
-						attributes3.FileAttribute.Constraints[key49] = types.StringValue(string(result47))
-					}
-				}
-				if attributesItem1.FileAttribute.DefaultAccessControl != nil {
-					attributes3.FileAttribute.DefaultAccessControl = types.StringValue(string(*attributesItem1.FileAttribute.DefaultAccessControl))
-				} else {
-					attributes3.FileAttribute.DefaultAccessControl = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.DefaultValue == nil {
-					attributes3.FileAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult47, _ := json.Marshal(attributesItem1.FileAttribute.DefaultValue)
-					attributes3.FileAttribute.DefaultValue = types.StringValue(string(defaultValueResult47))
-				}
-				if attributesItem1.FileAttribute.Deprecated != nil {
-					attributes3.FileAttribute.Deprecated = types.BoolValue(*attributesItem1.FileAttribute.Deprecated)
-				} else {
-					attributes3.FileAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.DisplayImagesLandscaped != nil {
-					attributes3.FileAttribute.DisplayImagesLandscaped = types.BoolValue(*attributesItem1.FileAttribute.DisplayImagesLandscaped)
-				} else {
-					attributes3.FileAttribute.DisplayImagesLandscaped = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.EnableDescription != nil {
-					attributes3.FileAttribute.EnableDescription = types.BoolValue(*attributesItem1.FileAttribute.EnableDescription)
-				} else {
-					attributes3.FileAttribute.EnableDescription = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.FileAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.FileAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.FileAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.FeatureFlag != nil {
-					attributes3.FileAttribute.FeatureFlag = types.StringValue(*attributesItem1.FileAttribute.FeatureFlag)
-				} else {
-					attributes3.FileAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.Group != nil {
-					attributes3.FileAttribute.Group = types.StringValue(*attributesItem1.FileAttribute.Group)
-				} else {
-					attributes3.FileAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.Hidden != nil {
-					attributes3.FileAttribute.Hidden = types.BoolValue(*attributesItem1.FileAttribute.Hidden)
-				} else {
-					attributes3.FileAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.HideLabel != nil {
-					attributes3.FileAttribute.HideLabel = types.BoolValue(*attributesItem1.FileAttribute.HideLabel)
-				} else {
-					attributes3.FileAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.Icon != nil {
-					attributes3.FileAttribute.Icon = types.StringValue(*attributesItem1.FileAttribute.Icon)
-				} else {
-					attributes3.FileAttribute.Icon = types.StringNull()
-				}
-				attributes3.FileAttribute.Label = types.StringValue(attributesItem1.FileAttribute.Label)
-				if attributesItem1.FileAttribute.Layout != nil {
-					attributes3.FileAttribute.Layout = types.StringValue(*attributesItem1.FileAttribute.Layout)
-				} else {
-					attributes3.FileAttribute.Layout = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.Multiple != nil {
-					attributes3.FileAttribute.Multiple = types.BoolValue(*attributesItem1.FileAttribute.Multiple)
-				} else {
-					attributes3.FileAttribute.Multiple = types.BoolNull()
-				}
-				attributes3.FileAttribute.Name = types.StringValue(attributesItem1.FileAttribute.Name)
-				if attributesItem1.FileAttribute.Order != nil {
-					attributes3.FileAttribute.Order = types.Int64Value(*attributesItem1.FileAttribute.Order)
-				} else {
-					attributes3.FileAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.FileAttribute.Placeholder != nil {
-					attributes3.FileAttribute.Placeholder = types.StringValue(*attributesItem1.FileAttribute.Placeholder)
-				} else {
-					attributes3.FileAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.PreviewValueFormatter != nil {
-					attributes3.FileAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.FileAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.FileAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.Protected != nil {
-					attributes3.FileAttribute.Protected = types.BoolValue(*attributesItem1.FileAttribute.Protected)
-				} else {
-					attributes3.FileAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.Readonly != nil {
-					attributes3.FileAttribute.Readonly = types.BoolValue(*attributesItem1.FileAttribute.Readonly)
-				} else {
-					attributes3.FileAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.RenderCondition != nil {
-					attributes3.FileAttribute.RenderCondition = types.StringValue(*attributesItem1.FileAttribute.RenderCondition)
-				} else {
-					attributes3.FileAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.Required != nil {
-					attributes3.FileAttribute.Required = types.BoolValue(*attributesItem1.FileAttribute.Required)
-				} else {
-					attributes3.FileAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.FileAttribute.SettingFlag != nil {
-					attributes3.FileAttribute.SettingFlag = types.StringValue(*attributesItem1.FileAttribute.SettingFlag)
-				} else {
-					attributes3.FileAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.FileAttribute.ShowInTable != nil {
-					attributes3.FileAttribute.ShowInTable = types.BoolValue(*attributesItem1.FileAttribute.ShowInTable)
-				} else {
-					attributes3.FileAttribute.ShowInTable = types.BoolNull()
-				}
-				attributes3.FileAttribute.Type = types.StringValue(string(attributesItem1.FileAttribute.Type))
-				if attributesItem1.FileAttribute.ValueFormatter != nil {
-					attributes3.FileAttribute.ValueFormatter = types.StringValue(*attributesItem1.FileAttribute.ValueFormatter)
-				} else {
-					attributes3.FileAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.ComputedAttribute != nil {
-				attributes3.ComputedAttribute = &ComputedAttribute{}
-				attributes3.ComputedAttribute.Purpose = nil
-				for _, v := range attributesItem1.ComputedAttribute.Purpose {
-					attributes3.ComputedAttribute.Purpose = append(attributes3.ComputedAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.ComputedAttribute.Constraints == nil && len(attributesItem1.ComputedAttribute.Constraints) > 0 {
-					attributes3.ComputedAttribute.Constraints = make(map[string]types.String)
-					for key50, value56 := range attributesItem1.ComputedAttribute.Constraints {
-						result48, _ := json.Marshal(value56)
-						attributes3.ComputedAttribute.Constraints[key50] = types.StringValue(string(result48))
-					}
-				}
-				if attributesItem1.ComputedAttribute.DefaultValue == nil {
-					attributes3.ComputedAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult48, _ := json.Marshal(attributesItem1.ComputedAttribute.DefaultValue)
-					attributes3.ComputedAttribute.DefaultValue = types.StringValue(string(defaultValueResult48))
-				}
-				if attributesItem1.ComputedAttribute.Deprecated != nil {
-					attributes3.ComputedAttribute.Deprecated = types.BoolValue(*attributesItem1.ComputedAttribute.Deprecated)
-				} else {
-					attributes3.ComputedAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.ComputedAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.ComputedAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.ComputedAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.FeatureFlag != nil {
-					attributes3.ComputedAttribute.FeatureFlag = types.StringValue(*attributesItem1.ComputedAttribute.FeatureFlag)
-				} else {
-					attributes3.ComputedAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.Group != nil {
-					attributes3.ComputedAttribute.Group = types.StringValue(*attributesItem1.ComputedAttribute.Group)
-				} else {
-					attributes3.ComputedAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.Hidden != nil {
-					attributes3.ComputedAttribute.Hidden = types.BoolValue(*attributesItem1.ComputedAttribute.Hidden)
-				} else {
-					attributes3.ComputedAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.HideLabel != nil {
-					attributes3.ComputedAttribute.HideLabel = types.BoolValue(*attributesItem1.ComputedAttribute.HideLabel)
-				} else {
-					attributes3.ComputedAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.Icon != nil {
-					attributes3.ComputedAttribute.Icon = types.StringValue(*attributesItem1.ComputedAttribute.Icon)
-				} else {
-					attributes3.ComputedAttribute.Icon = types.StringNull()
-				}
-				attributes3.ComputedAttribute.Label = types.StringValue(attributesItem1.ComputedAttribute.Label)
-				if attributesItem1.ComputedAttribute.Layout != nil {
-					attributes3.ComputedAttribute.Layout = types.StringValue(*attributesItem1.ComputedAttribute.Layout)
-				} else {
-					attributes3.ComputedAttribute.Layout = types.StringNull()
-				}
-				attributes3.ComputedAttribute.Name = types.StringValue(attributesItem1.ComputedAttribute.Name)
-				if attributesItem1.ComputedAttribute.Order != nil {
-					attributes3.ComputedAttribute.Order = types.Int64Value(*attributesItem1.ComputedAttribute.Order)
-				} else {
-					attributes3.ComputedAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.ComputedAttribute.Placeholder != nil {
-					attributes3.ComputedAttribute.Placeholder = types.StringValue(*attributesItem1.ComputedAttribute.Placeholder)
-				} else {
-					attributes3.ComputedAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.PreviewValueFormatter != nil {
-					attributes3.ComputedAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.ComputedAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.ComputedAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.Protected != nil {
-					attributes3.ComputedAttribute.Protected = types.BoolValue(*attributesItem1.ComputedAttribute.Protected)
-				} else {
-					attributes3.ComputedAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.Readonly != nil {
-					attributes3.ComputedAttribute.Readonly = types.BoolValue(*attributesItem1.ComputedAttribute.Readonly)
-				} else {
-					attributes3.ComputedAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.RenderCondition != nil {
-					attributes3.ComputedAttribute.RenderCondition = types.StringValue(*attributesItem1.ComputedAttribute.RenderCondition)
-				} else {
-					attributes3.ComputedAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.Required != nil {
-					attributes3.ComputedAttribute.Required = types.BoolValue(*attributesItem1.ComputedAttribute.Required)
-				} else {
-					attributes3.ComputedAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.SettingFlag != nil {
-					attributes3.ComputedAttribute.SettingFlag = types.StringValue(*attributesItem1.ComputedAttribute.SettingFlag)
-				} else {
-					attributes3.ComputedAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.ShowInTable != nil {
-					attributes3.ComputedAttribute.ShowInTable = types.BoolValue(*attributesItem1.ComputedAttribute.ShowInTable)
-				} else {
-					attributes3.ComputedAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.ComputedAttribute.Type != nil {
-					attributes3.ComputedAttribute.Type = types.StringValue(string(*attributesItem1.ComputedAttribute.Type))
-				} else {
-					attributes3.ComputedAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.ComputedAttribute.ValueFormatter != nil {
-					attributes3.ComputedAttribute.ValueFormatter = types.StringValue(*attributesItem1.ComputedAttribute.ValueFormatter)
-				} else {
-					attributes3.ComputedAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.PartnerStatusAttribute != nil {
-				attributes3.PartnerStatusAttribute = &PartnerStatusAttribute{}
-				attributes3.PartnerStatusAttribute.Purpose = nil
-				for _, v := range attributesItem1.PartnerStatusAttribute.Purpose {
-					attributes3.PartnerStatusAttribute.Purpose = append(attributes3.PartnerStatusAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.PartnerStatusAttribute.Constraints == nil && len(attributesItem1.PartnerStatusAttribute.Constraints) > 0 {
-					attributes3.PartnerStatusAttribute.Constraints = make(map[string]types.String)
-					for key51, value57 := range attributesItem1.PartnerStatusAttribute.Constraints {
-						result49, _ := json.Marshal(value57)
-						attributes3.PartnerStatusAttribute.Constraints[key51] = types.StringValue(string(result49))
-					}
-				}
-				if attributesItem1.PartnerStatusAttribute.DefaultValue == nil {
-					attributes3.PartnerStatusAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult49, _ := json.Marshal(attributesItem1.PartnerStatusAttribute.DefaultValue)
-					attributes3.PartnerStatusAttribute.DefaultValue = types.StringValue(string(defaultValueResult49))
-				}
-				if attributesItem1.PartnerStatusAttribute.Deprecated != nil {
-					attributes3.PartnerStatusAttribute.Deprecated = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Deprecated)
-				} else {
-					attributes3.PartnerStatusAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.PartnerStatusAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.PartnerStatusAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.FeatureFlag != nil {
-					attributes3.PartnerStatusAttribute.FeatureFlag = types.StringValue(*attributesItem1.PartnerStatusAttribute.FeatureFlag)
-				} else {
-					attributes3.PartnerStatusAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Group != nil {
-					attributes3.PartnerStatusAttribute.Group = types.StringValue(*attributesItem1.PartnerStatusAttribute.Group)
-				} else {
-					attributes3.PartnerStatusAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Hidden != nil {
-					attributes3.PartnerStatusAttribute.Hidden = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Hidden)
-				} else {
-					attributes3.PartnerStatusAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.HideLabel != nil {
-					attributes3.PartnerStatusAttribute.HideLabel = types.BoolValue(*attributesItem1.PartnerStatusAttribute.HideLabel)
-				} else {
-					attributes3.PartnerStatusAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Icon != nil {
-					attributes3.PartnerStatusAttribute.Icon = types.StringValue(*attributesItem1.PartnerStatusAttribute.Icon)
-				} else {
-					attributes3.PartnerStatusAttribute.Icon = types.StringNull()
-				}
-				attributes3.PartnerStatusAttribute.Label = types.StringValue(attributesItem1.PartnerStatusAttribute.Label)
-				if attributesItem1.PartnerStatusAttribute.Layout != nil {
-					attributes3.PartnerStatusAttribute.Layout = types.StringValue(*attributesItem1.PartnerStatusAttribute.Layout)
-				} else {
-					attributes3.PartnerStatusAttribute.Layout = types.StringNull()
-				}
-				attributes3.PartnerStatusAttribute.Name = types.StringValue(attributesItem1.PartnerStatusAttribute.Name)
-				if attributesItem1.PartnerStatusAttribute.Order != nil {
-					attributes3.PartnerStatusAttribute.Order = types.Int64Value(*attributesItem1.PartnerStatusAttribute.Order)
-				} else {
-					attributes3.PartnerStatusAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.PartnerStatusAttribute.Placeholder != nil {
-					attributes3.PartnerStatusAttribute.Placeholder = types.StringValue(*attributesItem1.PartnerStatusAttribute.Placeholder)
-				} else {
-					attributes3.PartnerStatusAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.PreviewValueFormatter != nil {
-					attributes3.PartnerStatusAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.PartnerStatusAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.PartnerStatusAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Protected != nil {
-					attributes3.PartnerStatusAttribute.Protected = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Protected)
-				} else {
-					attributes3.PartnerStatusAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Readonly != nil {
-					attributes3.PartnerStatusAttribute.Readonly = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Readonly)
-				} else {
-					attributes3.PartnerStatusAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.RenderCondition != nil {
-					attributes3.PartnerStatusAttribute.RenderCondition = types.StringValue(*attributesItem1.PartnerStatusAttribute.RenderCondition)
-				} else {
-					attributes3.PartnerStatusAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Required != nil {
-					attributes3.PartnerStatusAttribute.Required = types.BoolValue(*attributesItem1.PartnerStatusAttribute.Required)
-				} else {
-					attributes3.PartnerStatusAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.SettingFlag != nil {
-					attributes3.PartnerStatusAttribute.SettingFlag = types.StringValue(*attributesItem1.PartnerStatusAttribute.SettingFlag)
-				} else {
-					attributes3.PartnerStatusAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.ShowInTable != nil {
-					attributes3.PartnerStatusAttribute.ShowInTable = types.BoolValue(*attributesItem1.PartnerStatusAttribute.ShowInTable)
-				} else {
-					attributes3.PartnerStatusAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.Type != nil {
-					attributes3.PartnerStatusAttribute.Type = types.StringValue(string(*attributesItem1.PartnerStatusAttribute.Type))
-				} else {
-					attributes3.PartnerStatusAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.PartnerStatusAttribute.ValueFormatter != nil {
-					attributes3.PartnerStatusAttribute.ValueFormatter = types.StringValue(*attributesItem1.PartnerStatusAttribute.ValueFormatter)
-				} else {
-					attributes3.PartnerStatusAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.InvitationEmailAttribute != nil {
-				attributes3.InvitationEmailAttribute = &InvitationEmailAttribute{}
-				attributes3.InvitationEmailAttribute.Purpose = nil
-				for _, v := range attributesItem1.InvitationEmailAttribute.Purpose {
-					attributes3.InvitationEmailAttribute.Purpose = append(attributes3.InvitationEmailAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.InvitationEmailAttribute.Constraints == nil && len(attributesItem1.InvitationEmailAttribute.Constraints) > 0 {
-					attributes3.InvitationEmailAttribute.Constraints = make(map[string]types.String)
-					for key52, value58 := range attributesItem1.InvitationEmailAttribute.Constraints {
-						result50, _ := json.Marshal(value58)
-						attributes3.InvitationEmailAttribute.Constraints[key52] = types.StringValue(string(result50))
-					}
-				}
-				if attributesItem1.InvitationEmailAttribute.DefaultValue == nil {
-					attributes3.InvitationEmailAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult50, _ := json.Marshal(attributesItem1.InvitationEmailAttribute.DefaultValue)
-					attributes3.InvitationEmailAttribute.DefaultValue = types.StringValue(string(defaultValueResult50))
-				}
-				if attributesItem1.InvitationEmailAttribute.Deprecated != nil {
-					attributes3.InvitationEmailAttribute.Deprecated = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Deprecated)
-				} else {
-					attributes3.InvitationEmailAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.InvitationEmailAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.InvitationEmailAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.FeatureFlag != nil {
-					attributes3.InvitationEmailAttribute.FeatureFlag = types.StringValue(*attributesItem1.InvitationEmailAttribute.FeatureFlag)
-				} else {
-					attributes3.InvitationEmailAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Group != nil {
-					attributes3.InvitationEmailAttribute.Group = types.StringValue(*attributesItem1.InvitationEmailAttribute.Group)
-				} else {
-					attributes3.InvitationEmailAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Hidden != nil {
-					attributes3.InvitationEmailAttribute.Hidden = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Hidden)
-				} else {
-					attributes3.InvitationEmailAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.HideLabel != nil {
-					attributes3.InvitationEmailAttribute.HideLabel = types.BoolValue(*attributesItem1.InvitationEmailAttribute.HideLabel)
-				} else {
-					attributes3.InvitationEmailAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Icon != nil {
-					attributes3.InvitationEmailAttribute.Icon = types.StringValue(*attributesItem1.InvitationEmailAttribute.Icon)
-				} else {
-					attributes3.InvitationEmailAttribute.Icon = types.StringNull()
-				}
-				attributes3.InvitationEmailAttribute.Label = types.StringValue(attributesItem1.InvitationEmailAttribute.Label)
-				if attributesItem1.InvitationEmailAttribute.Layout != nil {
-					attributes3.InvitationEmailAttribute.Layout = types.StringValue(*attributesItem1.InvitationEmailAttribute.Layout)
-				} else {
-					attributes3.InvitationEmailAttribute.Layout = types.StringNull()
-				}
-				attributes3.InvitationEmailAttribute.Name = types.StringValue(attributesItem1.InvitationEmailAttribute.Name)
-				if attributesItem1.InvitationEmailAttribute.Order != nil {
-					attributes3.InvitationEmailAttribute.Order = types.Int64Value(*attributesItem1.InvitationEmailAttribute.Order)
-				} else {
-					attributes3.InvitationEmailAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.InvitationEmailAttribute.Placeholder != nil {
-					attributes3.InvitationEmailAttribute.Placeholder = types.StringValue(*attributesItem1.InvitationEmailAttribute.Placeholder)
-				} else {
-					attributes3.InvitationEmailAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.PreviewValueFormatter != nil {
-					attributes3.InvitationEmailAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.InvitationEmailAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.InvitationEmailAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Protected != nil {
-					attributes3.InvitationEmailAttribute.Protected = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Protected)
-				} else {
-					attributes3.InvitationEmailAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Readonly != nil {
-					attributes3.InvitationEmailAttribute.Readonly = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Readonly)
-				} else {
-					attributes3.InvitationEmailAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.RenderCondition != nil {
-					attributes3.InvitationEmailAttribute.RenderCondition = types.StringValue(*attributesItem1.InvitationEmailAttribute.RenderCondition)
-				} else {
-					attributes3.InvitationEmailAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Required != nil {
-					attributes3.InvitationEmailAttribute.Required = types.BoolValue(*attributesItem1.InvitationEmailAttribute.Required)
-				} else {
-					attributes3.InvitationEmailAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.SettingFlag != nil {
-					attributes3.InvitationEmailAttribute.SettingFlag = types.StringValue(*attributesItem1.InvitationEmailAttribute.SettingFlag)
-				} else {
-					attributes3.InvitationEmailAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.ShowInTable != nil {
-					attributes3.InvitationEmailAttribute.ShowInTable = types.BoolValue(*attributesItem1.InvitationEmailAttribute.ShowInTable)
-				} else {
-					attributes3.InvitationEmailAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.Type != nil {
-					attributes3.InvitationEmailAttribute.Type = types.StringValue(string(*attributesItem1.InvitationEmailAttribute.Type))
-				} else {
-					attributes3.InvitationEmailAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.InvitationEmailAttribute.ValueFormatter != nil {
-					attributes3.InvitationEmailAttribute.ValueFormatter = types.StringValue(*attributesItem1.InvitationEmailAttribute.ValueFormatter)
-				} else {
-					attributes3.InvitationEmailAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.AutomationAttribute != nil {
-				attributes3.AutomationAttribute = &AutomationAttribute{}
-				attributes3.AutomationAttribute.Purpose = nil
-				for _, v := range attributesItem1.AutomationAttribute.Purpose {
-					attributes3.AutomationAttribute.Purpose = append(attributes3.AutomationAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.AutomationAttribute.Constraints == nil && len(attributesItem1.AutomationAttribute.Constraints) > 0 {
-					attributes3.AutomationAttribute.Constraints = make(map[string]types.String)
-					for key53, value59 := range attributesItem1.AutomationAttribute.Constraints {
-						result51, _ := json.Marshal(value59)
-						attributes3.AutomationAttribute.Constraints[key53] = types.StringValue(string(result51))
-					}
-				}
-				if attributesItem1.AutomationAttribute.DefaultValue == nil {
-					attributes3.AutomationAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult51, _ := json.Marshal(attributesItem1.AutomationAttribute.DefaultValue)
-					attributes3.AutomationAttribute.DefaultValue = types.StringValue(string(defaultValueResult51))
-				}
-				if attributesItem1.AutomationAttribute.Deprecated != nil {
-					attributes3.AutomationAttribute.Deprecated = types.BoolValue(*attributesItem1.AutomationAttribute.Deprecated)
-				} else {
-					attributes3.AutomationAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.AutomationAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.AutomationAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.AutomationAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.FeatureFlag != nil {
-					attributes3.AutomationAttribute.FeatureFlag = types.StringValue(*attributesItem1.AutomationAttribute.FeatureFlag)
-				} else {
-					attributes3.AutomationAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.Group != nil {
-					attributes3.AutomationAttribute.Group = types.StringValue(*attributesItem1.AutomationAttribute.Group)
-				} else {
-					attributes3.AutomationAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.Hidden != nil {
-					attributes3.AutomationAttribute.Hidden = types.BoolValue(*attributesItem1.AutomationAttribute.Hidden)
-				} else {
-					attributes3.AutomationAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.HideLabel != nil {
-					attributes3.AutomationAttribute.HideLabel = types.BoolValue(*attributesItem1.AutomationAttribute.HideLabel)
-				} else {
-					attributes3.AutomationAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.Icon != nil {
-					attributes3.AutomationAttribute.Icon = types.StringValue(*attributesItem1.AutomationAttribute.Icon)
-				} else {
-					attributes3.AutomationAttribute.Icon = types.StringNull()
-				}
-				attributes3.AutomationAttribute.Label = types.StringValue(attributesItem1.AutomationAttribute.Label)
-				if attributesItem1.AutomationAttribute.Layout != nil {
-					attributes3.AutomationAttribute.Layout = types.StringValue(*attributesItem1.AutomationAttribute.Layout)
-				} else {
-					attributes3.AutomationAttribute.Layout = types.StringNull()
-				}
-				attributes3.AutomationAttribute.Name = types.StringValue(attributesItem1.AutomationAttribute.Name)
-				if attributesItem1.AutomationAttribute.Order != nil {
-					attributes3.AutomationAttribute.Order = types.Int64Value(*attributesItem1.AutomationAttribute.Order)
-				} else {
-					attributes3.AutomationAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.AutomationAttribute.Placeholder != nil {
-					attributes3.AutomationAttribute.Placeholder = types.StringValue(*attributesItem1.AutomationAttribute.Placeholder)
-				} else {
-					attributes3.AutomationAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.PreviewValueFormatter != nil {
-					attributes3.AutomationAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.AutomationAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.AutomationAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.Protected != nil {
-					attributes3.AutomationAttribute.Protected = types.BoolValue(*attributesItem1.AutomationAttribute.Protected)
-				} else {
-					attributes3.AutomationAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.Readonly != nil {
-					attributes3.AutomationAttribute.Readonly = types.BoolValue(*attributesItem1.AutomationAttribute.Readonly)
-				} else {
-					attributes3.AutomationAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.RenderCondition != nil {
-					attributes3.AutomationAttribute.RenderCondition = types.StringValue(*attributesItem1.AutomationAttribute.RenderCondition)
-				} else {
-					attributes3.AutomationAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.Required != nil {
-					attributes3.AutomationAttribute.Required = types.BoolValue(*attributesItem1.AutomationAttribute.Required)
-				} else {
-					attributes3.AutomationAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.SettingFlag != nil {
-					attributes3.AutomationAttribute.SettingFlag = types.StringValue(*attributesItem1.AutomationAttribute.SettingFlag)
-				} else {
-					attributes3.AutomationAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.ShowInTable != nil {
-					attributes3.AutomationAttribute.ShowInTable = types.BoolValue(*attributesItem1.AutomationAttribute.ShowInTable)
-				} else {
-					attributes3.AutomationAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.AutomationAttribute.Type != nil {
-					attributes3.AutomationAttribute.Type = types.StringValue(string(*attributesItem1.AutomationAttribute.Type))
-				} else {
-					attributes3.AutomationAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.AutomationAttribute.ValueFormatter != nil {
-					attributes3.AutomationAttribute.ValueFormatter = types.StringValue(*attributesItem1.AutomationAttribute.ValueFormatter)
-				} else {
-					attributes3.AutomationAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.InternalUserAttribute != nil {
-				attributes3.InternalUserAttribute = &InternalUserAttribute{}
-				attributes3.InternalUserAttribute.Purpose = nil
-				for _, v := range attributesItem1.InternalUserAttribute.Purpose {
-					attributes3.InternalUserAttribute.Purpose = append(attributes3.InternalUserAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.InternalUserAttribute.Constraints == nil && len(attributesItem1.InternalUserAttribute.Constraints) > 0 {
-					attributes3.InternalUserAttribute.Constraints = make(map[string]types.String)
-					for key54, value60 := range attributesItem1.InternalUserAttribute.Constraints {
-						result52, _ := json.Marshal(value60)
-						attributes3.InternalUserAttribute.Constraints[key54] = types.StringValue(string(result52))
-					}
-				}
-				if attributesItem1.InternalUserAttribute.DefaultValue == nil {
-					attributes3.InternalUserAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult52, _ := json.Marshal(attributesItem1.InternalUserAttribute.DefaultValue)
-					attributes3.InternalUserAttribute.DefaultValue = types.StringValue(string(defaultValueResult52))
-				}
-				if attributesItem1.InternalUserAttribute.Deprecated != nil {
-					attributes3.InternalUserAttribute.Deprecated = types.BoolValue(*attributesItem1.InternalUserAttribute.Deprecated)
-				} else {
-					attributes3.InternalUserAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.InternalUserAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.InternalUserAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.FeatureFlag != nil {
-					attributes3.InternalUserAttribute.FeatureFlag = types.StringValue(*attributesItem1.InternalUserAttribute.FeatureFlag)
-				} else {
-					attributes3.InternalUserAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.Group != nil {
-					attributes3.InternalUserAttribute.Group = types.StringValue(*attributesItem1.InternalUserAttribute.Group)
-				} else {
-					attributes3.InternalUserAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.Hidden != nil {
-					attributes3.InternalUserAttribute.Hidden = types.BoolValue(*attributesItem1.InternalUserAttribute.Hidden)
-				} else {
-					attributes3.InternalUserAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.HideLabel != nil {
-					attributes3.InternalUserAttribute.HideLabel = types.BoolValue(*attributesItem1.InternalUserAttribute.HideLabel)
-				} else {
-					attributes3.InternalUserAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.Icon != nil {
-					attributes3.InternalUserAttribute.Icon = types.StringValue(*attributesItem1.InternalUserAttribute.Icon)
-				} else {
-					attributes3.InternalUserAttribute.Icon = types.StringNull()
-				}
-				attributes3.InternalUserAttribute.Label = types.StringValue(attributesItem1.InternalUserAttribute.Label)
-				if attributesItem1.InternalUserAttribute.Layout != nil {
-					attributes3.InternalUserAttribute.Layout = types.StringValue(*attributesItem1.InternalUserAttribute.Layout)
-				} else {
-					attributes3.InternalUserAttribute.Layout = types.StringNull()
-				}
-				attributes3.InternalUserAttribute.Name = types.StringValue(attributesItem1.InternalUserAttribute.Name)
-				if attributesItem1.InternalUserAttribute.Order != nil {
-					attributes3.InternalUserAttribute.Order = types.Int64Value(*attributesItem1.InternalUserAttribute.Order)
-				} else {
-					attributes3.InternalUserAttribute.Order = types.Int64Null()
-				}
-				if attributesItem1.InternalUserAttribute.Placeholder != nil {
-					attributes3.InternalUserAttribute.Placeholder = types.StringValue(*attributesItem1.InternalUserAttribute.Placeholder)
-				} else {
-					attributes3.InternalUserAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.PreviewValueFormatter != nil {
-					attributes3.InternalUserAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.InternalUserAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.InternalUserAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.Protected != nil {
-					attributes3.InternalUserAttribute.Protected = types.BoolValue(*attributesItem1.InternalUserAttribute.Protected)
-				} else {
-					attributes3.InternalUserAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.Readonly != nil {
-					attributes3.InternalUserAttribute.Readonly = types.BoolValue(*attributesItem1.InternalUserAttribute.Readonly)
-				} else {
-					attributes3.InternalUserAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.RenderCondition != nil {
-					attributes3.InternalUserAttribute.RenderCondition = types.StringValue(*attributesItem1.InternalUserAttribute.RenderCondition)
-				} else {
-					attributes3.InternalUserAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.Required != nil {
-					attributes3.InternalUserAttribute.Required = types.BoolValue(*attributesItem1.InternalUserAttribute.Required)
-				} else {
-					attributes3.InternalUserAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.SettingFlag != nil {
-					attributes3.InternalUserAttribute.SettingFlag = types.StringValue(*attributesItem1.InternalUserAttribute.SettingFlag)
-				} else {
-					attributes3.InternalUserAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.ShowInTable != nil {
-					attributes3.InternalUserAttribute.ShowInTable = types.BoolValue(*attributesItem1.InternalUserAttribute.ShowInTable)
-				} else {
-					attributes3.InternalUserAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.InternalUserAttribute.Type != nil {
-					attributes3.InternalUserAttribute.Type = types.StringValue(string(*attributesItem1.InternalUserAttribute.Type))
-				} else {
-					attributes3.InternalUserAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.InternalUserAttribute.ValueFormatter != nil {
-					attributes3.InternalUserAttribute.ValueFormatter = types.StringValue(*attributesItem1.InternalUserAttribute.ValueFormatter)
-				} else {
-					attributes3.InternalUserAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			if attributesItem1.PurposeAttribute != nil {
-				attributes3.PurposeAttribute = &PurposeAttribute{}
-				attributes3.PurposeAttribute.Purpose = nil
-				for _, v := range attributesItem1.PurposeAttribute.Purpose {
-					attributes3.PurposeAttribute.Purpose = append(attributes3.PurposeAttribute.Purpose, types.StringValue(v))
-				}
-				if attributes3.PurposeAttribute.Constraints == nil && len(attributesItem1.PurposeAttribute.Constraints) > 0 {
-					attributes3.PurposeAttribute.Constraints = make(map[string]types.String)
-					for key55, value61 := range attributesItem1.PurposeAttribute.Constraints {
-						result53, _ := json.Marshal(value61)
-						attributes3.PurposeAttribute.Constraints[key55] = types.StringValue(string(result53))
-					}
-				}
-				if attributesItem1.PurposeAttribute.CreatedAt != nil {
-					attributes3.PurposeAttribute.CreatedAt = types.StringValue(attributesItem1.PurposeAttribute.CreatedAt.Format(time.RFC3339))
-				} else {
-					attributes3.PurposeAttribute.CreatedAt = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.DefaultValue == nil {
-					attributes3.PurposeAttribute.DefaultValue = types.StringNull()
-				} else {
-					defaultValueResult53, _ := json.Marshal(attributesItem1.PurposeAttribute.DefaultValue)
-					attributes3.PurposeAttribute.DefaultValue = types.StringValue(string(defaultValueResult53))
-				}
-				if attributesItem1.PurposeAttribute.Deprecated != nil {
-					attributes3.PurposeAttribute.Deprecated = types.BoolValue(*attributesItem1.PurposeAttribute.Deprecated)
-				} else {
-					attributes3.PurposeAttribute.Deprecated = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.EntityBuilderDisableEdit != nil {
-					attributes3.PurposeAttribute.EntityBuilderDisableEdit = types.BoolValue(*attributesItem1.PurposeAttribute.EntityBuilderDisableEdit)
-				} else {
-					attributes3.PurposeAttribute.EntityBuilderDisableEdit = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.FeatureFlag != nil {
-					attributes3.PurposeAttribute.FeatureFlag = types.StringValue(*attributesItem1.PurposeAttribute.FeatureFlag)
-				} else {
-					attributes3.PurposeAttribute.FeatureFlag = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.Group != nil {
-					attributes3.PurposeAttribute.Group = types.StringValue(*attributesItem1.PurposeAttribute.Group)
-				} else {
-					attributes3.PurposeAttribute.Group = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.Hidden != nil {
-					attributes3.PurposeAttribute.Hidden = types.BoolValue(*attributesItem1.PurposeAttribute.Hidden)
-				} else {
-					attributes3.PurposeAttribute.Hidden = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.HideLabel != nil {
-					attributes3.PurposeAttribute.HideLabel = types.BoolValue(*attributesItem1.PurposeAttribute.HideLabel)
-				} else {
-					attributes3.PurposeAttribute.HideLabel = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.Icon != nil {
-					attributes3.PurposeAttribute.Icon = types.StringValue(*attributesItem1.PurposeAttribute.Icon)
-				} else {
-					attributes3.PurposeAttribute.Icon = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.ID != nil {
-					attributes3.PurposeAttribute.ID = types.StringValue(*attributesItem1.PurposeAttribute.ID)
-				} else {
-					attributes3.PurposeAttribute.ID = types.StringNull()
-				}
-				attributes3.PurposeAttribute.Label = types.StringValue(attributesItem1.PurposeAttribute.Label)
-				if attributesItem1.PurposeAttribute.Layout != nil {
-					attributes3.PurposeAttribute.Layout = types.StringValue(*attributesItem1.PurposeAttribute.Layout)
-				} else {
-					attributes3.PurposeAttribute.Layout = types.StringNull()
-				}
-				attributes3.PurposeAttribute.Name = types.StringValue(attributesItem1.PurposeAttribute.Name)
-				if attributesItem1.PurposeAttribute.Order != nil {
-					attributes3.PurposeAttribute.Order = types.Int64Value(*attributesItem1.PurposeAttribute.Order)
-				} else {
-					attributes3.PurposeAttribute.Order = types.Int64Null()
-				}
-				attributes3.PurposeAttribute.Parents = nil
-				for _, v := range attributesItem1.PurposeAttribute.Parents {
-					attributes3.PurposeAttribute.Parents = append(attributes3.PurposeAttribute.Parents, types.StringValue(v))
-				}
-				if attributesItem1.PurposeAttribute.Placeholder != nil {
-					attributes3.PurposeAttribute.Placeholder = types.StringValue(*attributesItem1.PurposeAttribute.Placeholder)
-				} else {
-					attributes3.PurposeAttribute.Placeholder = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.PreviewValueFormatter != nil {
-					attributes3.PurposeAttribute.PreviewValueFormatter = types.StringValue(*attributesItem1.PurposeAttribute.PreviewValueFormatter)
-				} else {
-					attributes3.PurposeAttribute.PreviewValueFormatter = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.Protected != nil {
-					attributes3.PurposeAttribute.Protected = types.BoolValue(*attributesItem1.PurposeAttribute.Protected)
-				} else {
-					attributes3.PurposeAttribute.Protected = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.Readonly != nil {
-					attributes3.PurposeAttribute.Readonly = types.BoolValue(*attributesItem1.PurposeAttribute.Readonly)
-				} else {
-					attributes3.PurposeAttribute.Readonly = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.RenderCondition != nil {
-					attributes3.PurposeAttribute.RenderCondition = types.StringValue(*attributesItem1.PurposeAttribute.RenderCondition)
-				} else {
-					attributes3.PurposeAttribute.RenderCondition = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.Required != nil {
-					attributes3.PurposeAttribute.Required = types.BoolValue(*attributesItem1.PurposeAttribute.Required)
-				} else {
-					attributes3.PurposeAttribute.Required = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.SettingFlag != nil {
-					attributes3.PurposeAttribute.SettingFlag = types.StringValue(*attributesItem1.PurposeAttribute.SettingFlag)
-				} else {
-					attributes3.PurposeAttribute.SettingFlag = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.ShowInTable != nil {
-					attributes3.PurposeAttribute.ShowInTable = types.BoolValue(*attributesItem1.PurposeAttribute.ShowInTable)
-				} else {
-					attributes3.PurposeAttribute.ShowInTable = types.BoolNull()
-				}
-				if attributesItem1.PurposeAttribute.Type != nil {
-					attributes3.PurposeAttribute.Type = types.StringValue(string(*attributesItem1.PurposeAttribute.Type))
-				} else {
-					attributes3.PurposeAttribute.Type = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.UpdatedAt != nil {
-					attributes3.PurposeAttribute.UpdatedAt = types.StringValue(attributesItem1.PurposeAttribute.UpdatedAt.Format(time.RFC3339))
-				} else {
-					attributes3.PurposeAttribute.UpdatedAt = types.StringNull()
-				}
-				if attributesItem1.PurposeAttribute.ValueFormatter != nil {
-					attributes3.PurposeAttribute.ValueFormatter = types.StringValue(*attributesItem1.PurposeAttribute.ValueFormatter)
-				} else {
-					attributes3.PurposeAttribute.ValueFormatter = types.StringNull()
-				}
-			}
-			capabilities1.Attributes = append(capabilities1.Attributes, attributes3)
 		}
 		if capabilitiesItem.FeatureFlag != nil {
 			capabilities1.FeatureFlag = types.StringValue(*capabilitiesItem.FeatureFlag)
@@ -17534,9 +17458,11 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 		} else {
 			capabilities1.Title = types.StringNull()
 		}
-		capabilities1.UIHooks = nil
-		for _, uiHooksItem := range capabilitiesItem.UIHooks {
-			var uiHooks1 EntityCapabilityUIHooks
+		if len(capabilities1.UIHooks) > len(capabilitiesItem.UIHooks) {
+			capabilities1.UIHooks = capabilities1.UIHooks[:len(capabilitiesItem.UIHooks)]
+		}
+		for uiHooksCount, uiHooksItem := range capabilitiesItem.UIHooks {
+			var uiHooks1 UIHooks
 			if uiHooksItem.Component != nil {
 				uiHooks1.Component = types.StringValue(*uiHooksItem.Component)
 			} else {
@@ -17581,7 +17507,7 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			if uiHooksItem.RequiredPermission == nil {
 				uiHooks1.RequiredPermission = nil
 			} else {
-				uiHooks1.RequiredPermission = &EntityCapabilityUIHooksRequiredPermission{}
+				uiHooks1.RequiredPermission = &RequiredPermission{}
 				uiHooks1.RequiredPermission.Action = types.StringValue(uiHooksItem.RequiredPermission.Action)
 				if uiHooksItem.RequiredPermission.Resource != nil {
 					uiHooks1.RequiredPermission.Resource = types.StringValue(*uiHooksItem.RequiredPermission.Resource)
@@ -17599,9 +17525,35 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			} else {
 				uiHooks1.Title = types.StringNull()
 			}
-			capabilities1.UIHooks = append(capabilities1.UIHooks, uiHooks1)
+			if uiHooksCount+1 > len(capabilities1.UIHooks) {
+				capabilities1.UIHooks = append(capabilities1.UIHooks, uiHooks1)
+			} else {
+				capabilities1.UIHooks[uiHooksCount].Component = uiHooks1.Component
+				capabilities1.UIHooks[uiHooksCount].Disabled = uiHooks1.Disabled
+				capabilities1.UIHooks[uiHooksCount].GroupExpanded = uiHooks1.GroupExpanded
+				capabilities1.UIHooks[uiHooksCount].Header = uiHooks1.Header
+				capabilities1.UIHooks[uiHooksCount].Hook = uiHooks1.Hook
+				capabilities1.UIHooks[uiHooksCount].Icon = uiHooks1.Icon
+				capabilities1.UIHooks[uiHooksCount].Import = uiHooks1.Import
+				capabilities1.UIHooks[uiHooksCount].Order = uiHooks1.Order
+				capabilities1.UIHooks[uiHooksCount].RenderCondition = uiHooks1.RenderCondition
+				capabilities1.UIHooks[uiHooksCount].RequiredPermission = uiHooks1.RequiredPermission
+				capabilities1.UIHooks[uiHooksCount].Route = uiHooks1.Route
+				capabilities1.UIHooks[uiHooksCount].Title = uiHooks1.Title
+			}
 		}
-		r.Capabilities = append(r.Capabilities, capabilities1)
+		if capabilitiesCount+1 > len(r.Capabilities) {
+			r.Capabilities = append(r.Capabilities, capabilities1)
+		} else {
+			r.Capabilities[capabilitiesCount].Purpose = capabilities1.Purpose
+			r.Capabilities[capabilitiesCount].Attributes = capabilities1.Attributes
+			r.Capabilities[capabilitiesCount].FeatureFlag = capabilities1.FeatureFlag
+			r.Capabilities[capabilitiesCount].Legacy = capabilities1.Legacy
+			r.Capabilities[capabilitiesCount].Name = capabilities1.Name
+			r.Capabilities[capabilitiesCount].SettingFlag = capabilities1.SettingFlag
+			r.Capabilities[capabilitiesCount].Title = capabilities1.Title
+			r.Capabilities[capabilitiesCount].UIHooks = capabilities1.UIHooks
+		}
 	}
 	if resp.Comment != nil {
 		r.Comment = types.StringValue(*resp.Comment)
@@ -17615,9 +17567,9 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 	}
 	if r.DialogConfig == nil && len(resp.DialogConfig) > 0 {
 		r.DialogConfig = make(map[string]types.String)
-		for key56, value62 := range resp.DialogConfig {
-			result54, _ := json.Marshal(value62)
-			r.DialogConfig[key56] = types.StringValue(string(result54))
+		for key2, value8 := range resp.DialogConfig {
+			result, _ := json.Marshal(value8)
+			r.DialogConfig[key2] = types.StringValue(string(result))
 		}
 	}
 	if resp.Draft != nil {
@@ -17635,9 +17587,9 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			var searchMappingsResult SearchMappings
 			if searchMappingsResult.Fields == nil && len(searchMappingsValue.Fields) > 0 {
 				searchMappingsResult.Fields = make(map[string]types.String)
-				for key57, value63 := range searchMappingsValue.Fields {
-					result55, _ := json.Marshal(value63)
-					searchMappingsResult.Fields[key57] = types.StringValue(string(result55))
+				for key3, value9 := range searchMappingsValue.Fields {
+					result1, _ := json.Marshal(value9)
+					searchMappingsResult.Fields[key3] = types.StringValue(string(result1))
 				}
 			}
 			if searchMappingsValue.Index != nil {
@@ -17658,9 +17610,11 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 	} else {
 		r.FeatureFlag = types.StringNull()
 	}
-	r.GroupSettings = nil
-	for _, groupSettingsItem := range resp.GroupSettings {
-		var groupSettings1 EntitySchemaGroupSettings
+	if len(r.GroupSettings) > len(resp.GroupSettings) {
+		r.GroupSettings = r.GroupSettings[:len(resp.GroupSettings)]
+	}
+	for groupSettingsCount, groupSettingsItem := range resp.GroupSettings {
+		var groupSettings1 GroupSettings
 		groupSettings1.Purpose = nil
 		for _, v := range groupSettingsItem.Purpose {
 			groupSettings1.Purpose = append(groupSettings1.Purpose, types.StringValue(v))
@@ -17679,7 +17633,7 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 		if groupSettingsItem.InfoTooltipTitle == nil {
 			groupSettings1.InfoTooltipTitle = nil
 		} else {
-			groupSettings1.InfoTooltipTitle = &EntitySchemaGroupSettingsInfoTooltipTitle{}
+			groupSettings1.InfoTooltipTitle = &InfoTooltipTitle{}
 			if groupSettingsItem.InfoTooltipTitle.Default != nil {
 				groupSettings1.InfoTooltipTitle.Default = types.StringValue(*groupSettingsItem.InfoTooltipTitle.Default)
 			} else {
@@ -17707,7 +17661,19 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 		} else {
 			groupSettings1.SettingFlag = types.StringNull()
 		}
-		r.GroupSettings = append(r.GroupSettings, groupSettings1)
+		if groupSettingsCount+1 > len(r.GroupSettings) {
+			r.GroupSettings = append(r.GroupSettings, groupSettings1)
+		} else {
+			r.GroupSettings[groupSettingsCount].Purpose = groupSettings1.Purpose
+			r.GroupSettings[groupSettingsCount].Expanded = groupSettings1.Expanded
+			r.GroupSettings[groupSettingsCount].FeatureFlag = groupSettings1.FeatureFlag
+			r.GroupSettings[groupSettingsCount].ID = groupSettings1.ID
+			r.GroupSettings[groupSettingsCount].InfoTooltipTitle = groupSettings1.InfoTooltipTitle
+			r.GroupSettings[groupSettingsCount].Label = groupSettings1.Label
+			r.GroupSettings[groupSettingsCount].Order = groupSettings1.Order
+			r.GroupSettings[groupSettingsCount].RenderCondition = groupSettings1.RenderCondition
+			r.GroupSettings[groupSettingsCount].SettingFlag = groupSettings1.SettingFlag
+		}
 	}
 	if resp.Icon != nil {
 		r.Icon = types.StringValue(*resp.Icon)
@@ -17722,7 +17688,13 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 	if resp.LayoutSettings == nil {
 		r.LayoutSettings = nil
 	} else {
-		r.LayoutSettings = &EntitySchemaLayoutSettings{}
+		r.LayoutSettings = &LayoutSettings{}
+		if resp.LayoutSettings.AdditionalProperties == nil {
+			r.LayoutSettings.AdditionalProperties = types.StringNull()
+		} else {
+			additionalPropertiesResult, _ := json.Marshal(resp.LayoutSettings.AdditionalProperties)
+			r.LayoutSettings.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
+		}
 		if resp.LayoutSettings.GridGap != nil {
 			r.LayoutSettings.GridGap = types.StringValue(*resp.LayoutSettings.GridGap)
 		} else {
@@ -17732,14 +17704,6 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 			r.LayoutSettings.GridTemplateColumns = types.StringValue(*resp.LayoutSettings.GridTemplateColumns)
 		} else {
 			r.LayoutSettings.GridTemplateColumns = types.StringNull()
-		}
-		if r.LayoutSettings.AdditionalProperties.IsUnknown() {
-			if resp.LayoutSettings.AdditionalProperties == nil {
-				r.LayoutSettings.AdditionalProperties = types.StringNull()
-			} else {
-				additionalPropertiesResult, _ := json.Marshal(resp.LayoutSettings.AdditionalProperties)
-				r.LayoutSettings.AdditionalProperties = types.StringValue(string(additionalPropertiesResult))
-			}
 		}
 	}
 	r.Name = types.StringValue(resp.Name)
@@ -17753,7 +17717,7 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 	if resp.Source == nil {
 		r.Source = nil
 	} else {
-		r.Source = &EntitySchemaItemSource{}
+		r.Source = &Source{}
 		if resp.Source.ID != nil {
 			r.Source.ID = types.StringValue(*resp.Source.ID)
 		} else {
@@ -17773,23 +17737,23 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 	if resp.UIConfig == nil {
 		r.UIConfig = nil
 	} else {
-		r.UIConfig = &EntitySchemaUIConfig{}
+		r.UIConfig = &UIConfig{}
 		if resp.UIConfig.CreateView == nil {
 			r.UIConfig.CreateView = nil
 		} else {
-			r.UIConfig.CreateView = &EntitySchemaUIConfigCreateView{}
+			r.UIConfig.CreateView = &CreateView{}
 			if resp.UIConfig.CreateView.EntityDefaultCreate != nil {
 				r.UIConfig.CreateView.EntityDefaultCreate = &EntityDefaultCreate{}
 				if r.UIConfig.CreateView.EntityDefaultCreate.SearchParams == nil && len(resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams) > 0 {
 					r.UIConfig.CreateView.EntityDefaultCreate.SearchParams = make(map[string]types.String)
-					for key59, value64 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
-						r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key59] = types.StringValue(value64)
+					for key5, value10 := range resp.UIConfig.CreateView.EntityDefaultCreate.SearchParams {
+						r.UIConfig.CreateView.EntityDefaultCreate.SearchParams[key5] = types.StringValue(value10)
 					}
 				}
 				if resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions == nil {
 					r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions = nil
 				} else {
-					r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions = &EntityDefaultCreateTableMenuOptions{}
+					r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions = &TableMenuOptions{}
 					if resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon != nil {
 						r.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon = types.StringValue(*resp.UIConfig.CreateView.EntityDefaultCreate.TableMenuOptions.Icon)
 					} else {
@@ -17807,6 +17771,14 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.CreateView.EntityDefaultCreate.ViewType = types.StringNull()
 				}
 			}
+			if resp.UIConfig.CreateView.EntityViewDisabled != nil {
+				r.UIConfig.CreateView.EntityViewDisabled = &EntityViewDisabled{}
+				if resp.UIConfig.CreateView.EntityViewDisabled.ViewType != nil {
+					r.UIConfig.CreateView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.CreateView.EntityViewDisabled.ViewType))
+				} else {
+					r.UIConfig.CreateView.EntityViewDisabled.ViewType = types.StringNull()
+				}
+			}
 			if resp.UIConfig.CreateView.RedirectEntityView != nil {
 				r.UIConfig.CreateView.RedirectEntityView = &RedirectEntityView{}
 				if resp.UIConfig.CreateView.RedirectEntityView.Route != nil {
@@ -17820,31 +17792,23 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.CreateView.RedirectEntityView.ViewType = types.StringNull()
 				}
 			}
-			if resp.UIConfig.CreateView.EntityViewDisabled != nil {
-				r.UIConfig.CreateView.EntityViewDisabled = &EntityViewDisabled{}
-				if resp.UIConfig.CreateView.EntityViewDisabled.ViewType != nil {
-					r.UIConfig.CreateView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.CreateView.EntityViewDisabled.ViewType))
-				} else {
-					r.UIConfig.CreateView.EntityViewDisabled.ViewType = types.StringNull()
-				}
-			}
 		}
 		if resp.UIConfig.EditView == nil {
 			r.UIConfig.EditView = nil
 		} else {
-			r.UIConfig.EditView = &EntitySchemaUIConfigEditView{}
+			r.UIConfig.EditView = &EditView{}
 			if resp.UIConfig.EditView.EntityDefaultEdit != nil {
 				r.UIConfig.EditView.EntityDefaultEdit = &EntityDefaultCreate{}
 				if r.UIConfig.EditView.EntityDefaultEdit.SearchParams == nil && len(resp.UIConfig.EditView.EntityDefaultEdit.SearchParams) > 0 {
 					r.UIConfig.EditView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-					for key60, value65 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
-						r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key60] = types.StringValue(value65)
+					for key6, value11 := range resp.UIConfig.EditView.EntityDefaultEdit.SearchParams {
+						r.UIConfig.EditView.EntityDefaultEdit.SearchParams[key6] = types.StringValue(value11)
 					}
 				}
 				if resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions = nil
 				} else {
-					r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions = &EntityDefaultCreateTableMenuOptions{}
+					r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions = &TableMenuOptions{}
 					if resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon != nil {
 						r.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon = types.StringValue(*resp.UIConfig.EditView.EntityDefaultEdit.TableMenuOptions.Icon)
 					} else {
@@ -17862,6 +17826,14 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.EditView.EntityDefaultEdit.ViewType = types.StringNull()
 				}
 			}
+			if resp.UIConfig.EditView.EntityViewDisabled != nil {
+				r.UIConfig.EditView.EntityViewDisabled = &EntityViewDisabled{}
+				if resp.UIConfig.EditView.EntityViewDisabled.ViewType != nil {
+					r.UIConfig.EditView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.EditView.EntityViewDisabled.ViewType))
+				} else {
+					r.UIConfig.EditView.EntityViewDisabled.ViewType = types.StringNull()
+				}
+			}
 			if resp.UIConfig.EditView.RedirectEntityView != nil {
 				r.UIConfig.EditView.RedirectEntityView = &RedirectEntityView{}
 				if resp.UIConfig.EditView.RedirectEntityView.Route != nil {
@@ -17875,22 +17847,23 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.EditView.RedirectEntityView.ViewType = types.StringNull()
 				}
 			}
-			if resp.UIConfig.EditView.EntityViewDisabled != nil {
-				r.UIConfig.EditView.EntityViewDisabled = &EntityViewDisabled{}
-				if resp.UIConfig.EditView.EntityViewDisabled.ViewType != nil {
-					r.UIConfig.EditView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.EditView.EntityViewDisabled.ViewType))
-				} else {
-					r.UIConfig.EditView.EntityViewDisabled.ViewType = types.StringNull()
-				}
-			}
 		}
 		if resp.UIConfig.ListItem == nil {
 			r.UIConfig.ListItem = nil
 		} else {
-			r.UIConfig.ListItem = &EntitySchemaUIConfigListItem{}
-			r.UIConfig.ListItem.SummaryAttributes = nil
-			for _, summaryAttributesItem := range resp.UIConfig.ListItem.SummaryAttributes {
-				var summaryAttributes1 EntitySchemaUIConfigListItemSummaryAttributes
+			r.UIConfig.ListItem = &ListItem{}
+			if len(r.UIConfig.ListItem.SummaryAttributes) > len(resp.UIConfig.ListItem.SummaryAttributes) {
+				r.UIConfig.ListItem.SummaryAttributes = r.UIConfig.ListItem.SummaryAttributes[:len(resp.UIConfig.ListItem.SummaryAttributes)]
+			}
+			for summaryAttributesCount, summaryAttributesItem := range resp.UIConfig.ListItem.SummaryAttributes {
+				var summaryAttributes1 SummaryAttributes
+				if summaryAttributesItem.Str != nil {
+					if summaryAttributesItem.Str != nil {
+						summaryAttributes1.Str = types.StringValue(*summaryAttributesItem.Str)
+					} else {
+						summaryAttributes1.Str = types.StringNull()
+					}
+				}
 				if summaryAttributesItem.SummaryAttribute != nil {
 					summaryAttributes1.SummaryAttribute = &SummaryAttribute{}
 					if summaryAttributesItem.SummaryAttribute.FeatureFlag != nil {
@@ -17921,20 +17894,16 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					}
 					summaryAttributes1.SummaryAttribute.Value = types.StringValue(summaryAttributesItem.SummaryAttribute.Value)
 				}
-				if summaryAttributesItem.Str != nil {
-					if summaryAttributesItem.Str != nil {
-						summaryAttributes1.Str = types.StringValue(*summaryAttributesItem.Str)
-					} else {
-						summaryAttributes1.Str = types.StringNull()
-					}
+				if summaryAttributesCount+1 > len(r.UIConfig.ListItem.SummaryAttributes) {
+					r.UIConfig.ListItem.SummaryAttributes = append(r.UIConfig.ListItem.SummaryAttributes, summaryAttributes1)
+				} else {
 				}
-				r.UIConfig.ListItem.SummaryAttributes = append(r.UIConfig.ListItem.SummaryAttributes, summaryAttributes1)
 			}
 		}
 		if resp.UIConfig.Sharing == nil {
 			r.UIConfig.Sharing = nil
 		} else {
-			r.UIConfig.Sharing = &EntitySchemaUIConfigSharing{}
+			r.UIConfig.Sharing = &Sharing{}
 			if resp.UIConfig.Sharing.ShowSharingButton != nil {
 				r.UIConfig.Sharing.ShowSharingButton = types.BoolValue(*resp.UIConfig.Sharing.ShowSharingButton)
 			} else {
@@ -17944,19 +17913,19 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 		if resp.UIConfig.SingleView == nil {
 			r.UIConfig.SingleView = nil
 		} else {
-			r.UIConfig.SingleView = &EntitySchemaUIConfigEditView{}
+			r.UIConfig.SingleView = &EditView{}
 			if resp.UIConfig.SingleView.EntityDefaultEdit != nil {
 				r.UIConfig.SingleView.EntityDefaultEdit = &EntityDefaultCreate{}
 				if r.UIConfig.SingleView.EntityDefaultEdit.SearchParams == nil && len(resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams) > 0 {
 					r.UIConfig.SingleView.EntityDefaultEdit.SearchParams = make(map[string]types.String)
-					for key61, value67 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
-						r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key61] = types.StringValue(value67)
+					for key7, value13 := range resp.UIConfig.SingleView.EntityDefaultEdit.SearchParams {
+						r.UIConfig.SingleView.EntityDefaultEdit.SearchParams[key7] = types.StringValue(value13)
 					}
 				}
 				if resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions == nil {
 					r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions = nil
 				} else {
-					r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions = &EntityDefaultCreateTableMenuOptions{}
+					r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions = &TableMenuOptions{}
 					if resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon != nil {
 						r.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon = types.StringValue(*resp.UIConfig.SingleView.EntityDefaultEdit.TableMenuOptions.Icon)
 					} else {
@@ -17974,6 +17943,14 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.SingleView.EntityDefaultEdit.ViewType = types.StringNull()
 				}
 			}
+			if resp.UIConfig.SingleView.EntityViewDisabled != nil {
+				r.UIConfig.SingleView.EntityViewDisabled = &EntityViewDisabled{}
+				if resp.UIConfig.SingleView.EntityViewDisabled.ViewType != nil {
+					r.UIConfig.SingleView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.SingleView.EntityViewDisabled.ViewType))
+				} else {
+					r.UIConfig.SingleView.EntityViewDisabled.ViewType = types.StringNull()
+				}
+			}
 			if resp.UIConfig.SingleView.RedirectEntityView != nil {
 				r.UIConfig.SingleView.RedirectEntityView = &RedirectEntityView{}
 				if resp.UIConfig.SingleView.RedirectEntityView.Route != nil {
@@ -17987,19 +17964,11 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.SingleView.RedirectEntityView.ViewType = types.StringNull()
 				}
 			}
-			if resp.UIConfig.SingleView.EntityViewDisabled != nil {
-				r.UIConfig.SingleView.EntityViewDisabled = &EntityViewDisabled{}
-				if resp.UIConfig.SingleView.EntityViewDisabled.ViewType != nil {
-					r.UIConfig.SingleView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.SingleView.EntityViewDisabled.ViewType))
-				} else {
-					r.UIConfig.SingleView.EntityViewDisabled.ViewType = types.StringNull()
-				}
-			}
 		}
 		if resp.UIConfig.TableView == nil {
 			r.UIConfig.TableView = nil
 		} else {
-			r.UIConfig.TableView = &EntitySchemaUIConfigTableView{}
+			r.UIConfig.TableView = &TableView{}
 			if resp.UIConfig.TableView.EntityDefaultTable != nil {
 				r.UIConfig.TableView.EntityDefaultTable = &EntityDefaultTable{}
 				if resp.UIConfig.TableView.EntityDefaultTable.ClassicView != nil {
@@ -18007,85 +17976,102 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 				} else {
 					r.UIConfig.TableView.EntityDefaultTable.ClassicView = types.StringNull()
 				}
-				r.UIConfig.TableView.EntityDefaultTable.DropdownItems = nil
-				for _, dropdownItemsItem := range resp.UIConfig.TableView.EntityDefaultTable.DropdownItems {
-					var dropdownItems1 EntityDefaultTableDropdownItems
-					if dropdownItemsItem.EntityDefaultTableDropdownItems1 != nil {
-						dropdownItems1.EntityDefaultTableDropdownItems1 = &EntityDefaultTableDropdownItems1{}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems1.Entity = types.StringValue(*dropdownItemsItem.EntityDefaultTableDropdownItems1.Entity)
+				if len(r.UIConfig.TableView.EntityDefaultTable.DropdownItems) > len(resp.UIConfig.TableView.EntityDefaultTable.DropdownItems) {
+					r.UIConfig.TableView.EntityDefaultTable.DropdownItems = r.UIConfig.TableView.EntityDefaultTable.DropdownItems[:len(resp.UIConfig.TableView.EntityDefaultTable.DropdownItems)]
+				}
+				for dropdownItemsCount, dropdownItemsItem := range resp.UIConfig.TableView.EntityDefaultTable.DropdownItems {
+					var dropdownItems1 DropdownItems
+					if dropdownItemsItem.EntityDefaultTable1 != nil {
+						dropdownItems1.One = &EntityDefaultTable1{}
+						if dropdownItemsItem.EntityDefaultTable1.Entity != nil {
+							dropdownItems1.One.Entity = types.StringValue(*dropdownItemsItem.EntityDefaultTable1.Entity)
 						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems1.Entity = types.StringNull()
+							dropdownItems1.One.Entity = types.StringNull()
 						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems1.FeatureFlag = types.StringValue(*dropdownItemsItem.EntityDefaultTableDropdownItems1.FeatureFlag)
+						if dropdownItemsItem.EntityDefaultTable1.FeatureFlag != nil {
+							dropdownItems1.One.FeatureFlag = types.StringValue(*dropdownItemsItem.EntityDefaultTable1.FeatureFlag)
 						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems1.FeatureFlag = types.StringNull()
+							dropdownItems1.One.FeatureFlag = types.StringNull()
 						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems1.Legacy != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems1.Legacy = types.BoolValue(*dropdownItemsItem.EntityDefaultTableDropdownItems1.Legacy)
+						if dropdownItemsItem.EntityDefaultTable1.Legacy != nil {
+							dropdownItems1.One.Legacy = types.BoolValue(*dropdownItemsItem.EntityDefaultTable1.Legacy)
 						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems1.Legacy = types.BoolNull()
+							dropdownItems1.One.Legacy = types.BoolNull()
 						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems1.Type != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems1.Type = types.StringValue(string(*dropdownItemsItem.EntityDefaultTableDropdownItems1.Type))
+						if dropdownItemsItem.EntityDefaultTable1.Type != nil {
+							dropdownItems1.One.Type = types.StringValue(string(*dropdownItemsItem.EntityDefaultTable1.Type))
 						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems1.Type = types.StringNull()
-						}
-					}
-					if dropdownItemsItem.EntityDefaultTableDropdownItems2 != nil {
-						dropdownItems1.EntityDefaultTableDropdownItems2 = &EntityDefaultTableDropdownItems2{}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems2.FeatureFlag != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems2.FeatureFlag = types.StringValue(*dropdownItemsItem.EntityDefaultTableDropdownItems2.FeatureFlag)
-						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems2.FeatureFlag = types.StringNull()
-						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems2.Legacy != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems2.Legacy = types.BoolValue(*dropdownItemsItem.EntityDefaultTableDropdownItems2.Legacy)
-						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems2.Legacy = types.BoolNull()
-						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems2.Title != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems2.Title = types.StringValue(*dropdownItemsItem.EntityDefaultTableDropdownItems2.Title)
-						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems2.Title = types.StringNull()
-						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems2.Type != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems2.Type = types.StringValue(string(*dropdownItemsItem.EntityDefaultTableDropdownItems2.Type))
-						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems2.Type = types.StringNull()
-						}
-						if dropdownItemsItem.EntityDefaultTableDropdownItems2.URI != nil {
-							dropdownItems1.EntityDefaultTableDropdownItems2.URI = types.StringValue(*dropdownItemsItem.EntityDefaultTableDropdownItems2.URI)
-						} else {
-							dropdownItems1.EntityDefaultTableDropdownItems2.URI = types.StringNull()
+							dropdownItems1.One.Type = types.StringNull()
 						}
 					}
-					r.UIConfig.TableView.EntityDefaultTable.DropdownItems = append(r.UIConfig.TableView.EntityDefaultTable.DropdownItems, dropdownItems1)
+					if dropdownItemsItem.Two != nil {
+						dropdownItems1.Two = &Two{}
+						if dropdownItemsItem.Two.FeatureFlag != nil {
+							dropdownItems1.Two.FeatureFlag = types.StringValue(*dropdownItemsItem.Two.FeatureFlag)
+						} else {
+							dropdownItems1.Two.FeatureFlag = types.StringNull()
+						}
+						if dropdownItemsItem.Two.Legacy != nil {
+							dropdownItems1.Two.Legacy = types.BoolValue(*dropdownItemsItem.Two.Legacy)
+						} else {
+							dropdownItems1.Two.Legacy = types.BoolNull()
+						}
+						if dropdownItemsItem.Two.Title != nil {
+							dropdownItems1.Two.Title = types.StringValue(*dropdownItemsItem.Two.Title)
+						} else {
+							dropdownItems1.Two.Title = types.StringNull()
+						}
+						if dropdownItemsItem.Two.Type != nil {
+							dropdownItems1.Two.Type = types.StringValue(string(*dropdownItemsItem.Two.Type))
+						} else {
+							dropdownItems1.Two.Type = types.StringNull()
+						}
+						if dropdownItemsItem.Two.URI != nil {
+							dropdownItems1.Two.URI = types.StringValue(*dropdownItemsItem.Two.URI)
+						} else {
+							dropdownItems1.Two.URI = types.StringNull()
+						}
+					}
+					if dropdownItemsCount+1 > len(r.UIConfig.TableView.EntityDefaultTable.DropdownItems) {
+						r.UIConfig.TableView.EntityDefaultTable.DropdownItems = append(r.UIConfig.TableView.EntityDefaultTable.DropdownItems, dropdownItems1)
+					} else {
+					}
 				}
 				if resp.UIConfig.TableView.EntityDefaultTable.EnableThumbnails != nil {
 					r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails = types.BoolValue(*resp.UIConfig.TableView.EntityDefaultTable.EnableThumbnails)
 				} else {
 					r.UIConfig.TableView.EntityDefaultTable.EnableThumbnails = types.BoolNull()
 				}
-				r.UIConfig.TableView.EntityDefaultTable.NavbarActions = nil
-				for _, navbarActionsItem := range resp.UIConfig.TableView.EntityDefaultTable.NavbarActions {
-					var navbarActions1 EntityDefaultTableNavbarActions
-					navbarActions1.Options = nil
-					for _, optionsItem6 := range navbarActionsItem.Options {
-						var options15 EntityDefaultTableNavbarActionsOptions
+				if len(r.UIConfig.TableView.EntityDefaultTable.NavbarActions) > len(resp.UIConfig.TableView.EntityDefaultTable.NavbarActions) {
+					r.UIConfig.TableView.EntityDefaultTable.NavbarActions = r.UIConfig.TableView.EntityDefaultTable.NavbarActions[:len(resp.UIConfig.TableView.EntityDefaultTable.NavbarActions)]
+				}
+				for navbarActionsCount, navbarActionsItem := range resp.UIConfig.TableView.EntityDefaultTable.NavbarActions {
+					var navbarActions1 NavbarActions
+					if len(navbarActions1.Options) > len(navbarActionsItem.Options) {
+						navbarActions1.Options = navbarActions1.Options[:len(navbarActionsItem.Options)]
+					}
+					for optionsCount6, optionsItem6 := range navbarActionsItem.Options {
+						var options15 EntityDefaultTableOptions
 						options15.Label = types.StringValue(optionsItem6.Label)
-						if options15.Params == nil && len(optionsItem6.Params) > 0 {
-							options15.Params = make(map[string]types.String)
-							for key62, value68 := range optionsItem6.Params {
-								result56, _ := json.Marshal(value68)
-								options15.Params[key62] = types.StringValue(string(result56))
-							}
+						if optionsItem6.Params == nil {
+							options15.Params = nil
+						} else {
+							options15.Params = &Constraints{}
 						}
-						navbarActions1.Options = append(navbarActions1.Options, options15)
+						if optionsCount6+1 > len(navbarActions1.Options) {
+							navbarActions1.Options = append(navbarActions1.Options, options15)
+						} else {
+							navbarActions1.Options[optionsCount6].Label = options15.Label
+							navbarActions1.Options[optionsCount6].Params = options15.Params
+						}
 					}
 					navbarActions1.Type = types.StringValue(navbarActionsItem.Type)
-					r.UIConfig.TableView.EntityDefaultTable.NavbarActions = append(r.UIConfig.TableView.EntityDefaultTable.NavbarActions, navbarActions1)
+					if navbarActionsCount+1 > len(r.UIConfig.TableView.EntityDefaultTable.NavbarActions) {
+						r.UIConfig.TableView.EntityDefaultTable.NavbarActions = append(r.UIConfig.TableView.EntityDefaultTable.NavbarActions, navbarActions1)
+					} else {
+						r.UIConfig.TableView.EntityDefaultTable.NavbarActions[navbarActionsCount].Options = navbarActions1.Options
+						r.UIConfig.TableView.EntityDefaultTable.NavbarActions[navbarActionsCount].Type = navbarActions1.Type
+					}
 				}
 				r.UIConfig.TableView.EntityDefaultTable.RowActions = nil
 				for _, v := range resp.UIConfig.TableView.EntityDefaultTable.RowActions {
@@ -18095,6 +18081,14 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.TableView.EntityDefaultTable.ViewType = types.StringValue(string(*resp.UIConfig.TableView.EntityDefaultTable.ViewType))
 				} else {
 					r.UIConfig.TableView.EntityDefaultTable.ViewType = types.StringNull()
+				}
+			}
+			if resp.UIConfig.TableView.EntityViewDisabled != nil {
+				r.UIConfig.TableView.EntityViewDisabled = &EntityViewDisabled{}
+				if resp.UIConfig.TableView.EntityViewDisabled.ViewType != nil {
+					r.UIConfig.TableView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.TableView.EntityViewDisabled.ViewType))
+				} else {
+					r.UIConfig.TableView.EntityViewDisabled.ViewType = types.StringNull()
 				}
 			}
 			if resp.UIConfig.TableView.RedirectEntityView != nil {
@@ -18108,14 +18102,6 @@ func (r *SchemaResourceModel) RefreshFromGetResponse(resp *shared.EntitySchemaIt
 					r.UIConfig.TableView.RedirectEntityView.ViewType = types.StringValue(string(*resp.UIConfig.TableView.RedirectEntityView.ViewType))
 				} else {
 					r.UIConfig.TableView.RedirectEntityView.ViewType = types.StringNull()
-				}
-			}
-			if resp.UIConfig.TableView.EntityViewDisabled != nil {
-				r.UIConfig.TableView.EntityViewDisabled = &EntityViewDisabled{}
-				if resp.UIConfig.TableView.EntityViewDisabled.ViewType != nil {
-					r.UIConfig.TableView.EntityViewDisabled.ViewType = types.StringValue(string(*resp.UIConfig.TableView.EntityViewDisabled.ViewType))
-				} else {
-					r.UIConfig.TableView.EntityViewDisabled.ViewType = types.StringNull()
 				}
 			}
 		}

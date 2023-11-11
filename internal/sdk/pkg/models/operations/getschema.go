@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -12,10 +12,55 @@ type GetSchemaRequest struct {
 	Slug string  `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (o *GetSchemaRequest) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *GetSchemaRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type GetSchemaResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Success
 	EntitySchemaItem *shared.EntitySchemaItem
-	StatusCode       int
-	RawResponse      *http.Response
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *GetSchemaResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetSchemaResponse) GetEntitySchemaItem() *shared.EntitySchemaItem {
+	if o == nil {
+		return nil
+	}
+	return o.EntitySchemaItem
+}
+
+func (o *GetSchemaResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetSchemaResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

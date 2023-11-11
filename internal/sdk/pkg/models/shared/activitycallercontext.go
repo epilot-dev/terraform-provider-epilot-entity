@@ -3,66 +3,81 @@
 package shared
 
 import (
-	"encoding/json"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type ActivityCallerContextEpilotAuthToken struct {
+type Token struct {
 	CognitoUsername *string `json:"cognito:username,omitempty"`
 	CustomIvyUserID *string `json:"custom:ivy_user_id,omitempty"`
 	Email           *string `json:"email,omitempty"`
 	Sub             *string `json:"sub,omitempty"`
 }
 
-type ActivityCallerContextEpilotAuth struct {
-	Token *ActivityCallerContextEpilotAuthToken `json:"token,omitempty"`
+func (o *Token) GetCognitoUsername() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CognitoUsername
+}
+
+func (o *Token) GetCustomIvyUserID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CustomIvyUserID
+}
+
+func (o *Token) GetEmail() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Email
+}
+
+func (o *Token) GetSub() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Sub
+}
+
+type EpilotAuth struct {
+	Token *Token `json:"token,omitempty"`
+}
+
+func (o *EpilotAuth) GetToken() *Token {
+	if o == nil {
+		return nil
+	}
+	return o.Token
 }
 
 type ActivityCallerContext struct {
-	EpilotAuth *ActivityCallerContextEpilotAuth `json:"EpilotAuth,omitempty"`
-
-	AdditionalProperties interface{} `json:"-"`
+	AdditionalProperties interface{} `additionalProperties:"true" json:"-"`
+	EpilotAuth           *EpilotAuth `json:"EpilotAuth,omitempty"`
 }
-type _ActivityCallerContext ActivityCallerContext
 
-func (c *ActivityCallerContext) UnmarshalJSON(bs []byte) error {
-	data := _ActivityCallerContext{}
+func (a ActivityCallerContext) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
 
-	if err := json.Unmarshal(bs, &data); err != nil {
+func (a *ActivityCallerContext) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
 		return err
 	}
-	*c = ActivityCallerContext(data)
-
-	additionalFields := make(map[string]interface{})
-
-	if err := json.Unmarshal(bs, &additionalFields); err != nil {
-		return err
-	}
-	delete(additionalFields, "EpilotAuth")
-
-	c.AdditionalProperties = additionalFields
-
 	return nil
 }
 
-func (c ActivityCallerContext) MarshalJSON() ([]byte, error) {
-	out := map[string]interface{}{}
-	bs, err := json.Marshal(_ActivityCallerContext(c))
-	if err != nil {
-		return nil, err
+func (o *ActivityCallerContext) GetAdditionalProperties() interface{} {
+	if o == nil {
+		return nil
 	}
+	return o.AdditionalProperties
+}
 
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
+func (o *ActivityCallerContext) GetEpilotAuth() *EpilotAuth {
+	if o == nil {
+		return nil
 	}
-
-	bs, err = json.Marshal(c.AdditionalProperties)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	return json.Marshal(out)
+	return o.EpilotAuth
 }

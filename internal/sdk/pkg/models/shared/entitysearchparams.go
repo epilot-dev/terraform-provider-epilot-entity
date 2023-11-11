@@ -2,19 +2,94 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
+)
+
+// Aggs - Aggregation supported by ElasticSearch allows summarizing data as metrics, statistics, or other analytics.
+type Aggs struct {
+}
+
 type EntitySearchParams struct {
 	// Aggregation supported by ElasticSearch allows summarizing data as metrics, statistics, or other analytics.
-	Aggs map[string]interface{} `json:"aggs,omitempty"`
+	Aggs *Aggs `json:"aggs,omitempty"`
 	// List of entity fields to include in search results
 	Fields []string `json:"fields,omitempty"`
-	From   *int64   `json:"from,omitempty"`
+	From   *int64   `default:"0" json:"from"`
 	// When true, enables entity hydration to resolve nested $relation & $relation_ref references in-place.
-	Hydrate *bool `json:"hydrate,omitempty"`
+	Hydrate *bool `default:"false" json:"hydrate"`
 	// Adds a `_score` number field to results that can be used to rank by match score
-	IncludeScores *bool `json:"include_scores,omitempty"`
+	IncludeScores *bool `default:"false" json:"include_scores"`
 	// Lucene queries supported with ElasticSearch
 	Q string `json:"q"`
 	// Max search size is 1000 with higher values defaulting to 1000
-	Size *int64  `json:"size,omitempty"`
+	Size *int64  `default:"10" json:"size"`
 	Sort *string `json:"sort,omitempty"`
+}
+
+func (e EntitySearchParams) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *EntitySearchParams) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *EntitySearchParams) GetAggs() *Aggs {
+	if o == nil {
+		return nil
+	}
+	return o.Aggs
+}
+
+func (o *EntitySearchParams) GetFields() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Fields
+}
+
+func (o *EntitySearchParams) GetFrom() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.From
+}
+
+func (o *EntitySearchParams) GetHydrate() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hydrate
+}
+
+func (o *EntitySearchParams) GetIncludeScores() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IncludeScores
+}
+
+func (o *EntitySearchParams) GetQ() string {
+	if o == nil {
+		return ""
+	}
+	return o.Q
+}
+
+func (o *EntitySearchParams) GetSize() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *EntitySearchParams) GetSort() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Sort
 }

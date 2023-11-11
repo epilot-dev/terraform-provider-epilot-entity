@@ -3,7 +3,8 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
@@ -12,16 +13,79 @@ type GetActivityRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Pagination offset for operations
 	//
-	OperationsFrom *int64 `queryParam:"style=form,explode=true,name=operations_from"`
+	OperationsFrom *int64 `default:"0" queryParam:"style=form,explode=true,name=operations_from"`
 	// Maximum number of operations to include in response (default: 10)
 	//
-	OperationsSize *int64 `queryParam:"style=form,explode=true,name=operations_size"`
+	OperationsSize *int64 `default:"25" queryParam:"style=form,explode=true,name=operations_size"`
+}
+
+func (g GetActivityRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GetActivityRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GetActivityRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *GetActivityRequest) GetOperationsFrom() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.OperationsFrom
+}
+
+func (o *GetActivityRequest) GetOperationsSize() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.OperationsSize
 }
 
 type GetActivityResponse struct {
 	// Success
 	ActivityItem *shared.ActivityItem
-	ContentType  string
-	StatusCode   int
-	RawResponse  *http.Response
+	// HTTP response content type for this operation
+	ContentType string
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *GetActivityResponse) GetActivityItem() *shared.ActivityItem {
+	if o == nil {
+		return nil
+	}
+	return o.ActivityItem
+}
+
+func (o *GetActivityResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetActivityResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetActivityResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

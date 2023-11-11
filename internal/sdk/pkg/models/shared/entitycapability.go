@@ -2,13 +2,27 @@
 
 package shared
 
-// EntityCapabilityUIHooksRequiredPermission - Require a permission to display UI hook
-type EntityCapabilityUIHooksRequiredPermission struct {
+// RequiredPermission - Require a permission to display UI hook
+type RequiredPermission struct {
 	Action   string  `json:"action"`
 	Resource *string `json:"resource,omitempty"`
 }
 
-type EntityCapabilityUIHooks struct {
+func (o *RequiredPermission) GetAction() string {
+	if o == nil {
+		return ""
+	}
+	return o.Action
+}
+
+func (o *RequiredPermission) GetResource() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Resource
+}
+
+type UIHooks struct {
 	// the component to be dynamically loaded
 	Component *string `json:"component,omitempty"`
 	// Whether capability should be disabled
@@ -27,10 +41,94 @@ type EntityCapabilityUIHooks struct {
 	Order           *int64  `json:"order,omitempty"`
 	RenderCondition *string `json:"render_condition,omitempty"`
 	// Require a permission to display UI hook
-	RequiredPermission *EntityCapabilityUIHooksRequiredPermission `json:"requiredPermission,omitempty"`
+	RequiredPermission *RequiredPermission `json:"requiredPermission,omitempty"`
 	// route for specified capability
 	Route *string `json:"route,omitempty"`
 	Title *string `json:"title,omitempty"`
+}
+
+func (o *UIHooks) GetComponent() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Component
+}
+
+func (o *UIHooks) GetDisabled() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Disabled
+}
+
+func (o *UIHooks) GetGroupExpanded() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.GroupExpanded
+}
+
+func (o *UIHooks) GetHeader() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Header
+}
+
+func (o *UIHooks) GetHook() string {
+	if o == nil {
+		return ""
+	}
+	return o.Hook
+}
+
+func (o *UIHooks) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *UIHooks) GetImport() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Import
+}
+
+func (o *UIHooks) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *UIHooks) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *UIHooks) GetRequiredPermission() *RequiredPermission {
+	if o == nil {
+		return nil
+	}
+	return o.RequiredPermission
+}
+
+func (o *UIHooks) GetRoute() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Route
+}
+
+func (o *UIHooks) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
 }
 
 // EntityCapability - Capabilities the Entity has. Turn features on/off for entities.
@@ -46,6 +144,62 @@ type EntityCapability struct {
 	// This capability should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Human readable title of the capability
-	Title   *string                   `json:"title,omitempty"`
-	UIHooks []EntityCapabilityUIHooks `json:"ui_hooks,omitempty"`
+	Title   *string   `json:"title,omitempty"`
+	UIHooks []UIHooks `json:"ui_hooks,omitempty"`
+}
+
+func (o *EntityCapability) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *EntityCapability) GetAttributes() []Attribute {
+	if o == nil {
+		return nil
+	}
+	return o.Attributes
+}
+
+func (o *EntityCapability) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *EntityCapability) GetLegacy() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Legacy
+}
+
+func (o *EntityCapability) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *EntityCapability) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *EntityCapability) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
+}
+
+func (o *EntityCapability) GetUIHooks() []UIHooks {
+	if o == nil {
+		return nil
+	}
+	return o.UIHooks
 }

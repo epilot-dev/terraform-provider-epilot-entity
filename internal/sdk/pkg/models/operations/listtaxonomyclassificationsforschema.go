@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -14,15 +14,81 @@ type ListTaxonomyClassificationsForSchemaRequest struct {
 	TaxonomySlug string   `pathParam:"style=simple,explode=false,name=taxonomySlug"`
 }
 
-// ListTaxonomyClassificationsForSchema200ApplicationJSON - List of taxonomy classifications
-type ListTaxonomyClassificationsForSchema200ApplicationJSON struct {
+func (o *ListTaxonomyClassificationsForSchemaRequest) GetQuery() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Query
+}
+
+func (o *ListTaxonomyClassificationsForSchemaRequest) GetSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *ListTaxonomyClassificationsForSchemaRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+func (o *ListTaxonomyClassificationsForSchemaRequest) GetTaxonomySlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.TaxonomySlug
+}
+
+// ListTaxonomyClassificationsForSchemaResponseBody - List of taxonomy classifications
+type ListTaxonomyClassificationsForSchemaResponseBody struct {
 	Results []shared.TaxonomyClassification `json:"results,omitempty"`
 }
 
+func (o *ListTaxonomyClassificationsForSchemaResponseBody) GetResults() []shared.TaxonomyClassification {
+	if o == nil {
+		return nil
+	}
+	return o.Results
+}
+
 type ListTaxonomyClassificationsForSchemaResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// List of taxonomy classifications
-	ListTaxonomyClassificationsForSchema200ApplicationJSONObject *ListTaxonomyClassificationsForSchema200ApplicationJSON
+	Object *ListTaxonomyClassificationsForSchemaResponseBody
+}
+
+func (o *ListTaxonomyClassificationsForSchemaResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *ListTaxonomyClassificationsForSchemaResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *ListTaxonomyClassificationsForSchemaResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *ListTaxonomyClassificationsForSchemaResponse) GetObject() *ListTaxonomyClassificationsForSchemaResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

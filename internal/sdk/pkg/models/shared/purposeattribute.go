@@ -5,8 +5,14 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"time"
 )
+
+// PurposeAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type PurposeAttributeConstraints struct {
+}
 
 type PurposeAttributeType string
 
@@ -38,18 +44,18 @@ type PurposeAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	CreatedAt    *time.Time             `json:"created_at,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	Constraints  *PurposeAttributeConstraints `json:"constraints,omitempty"`
+	CreatedAt    *time.Time                   `json:"created_at,omitempty"`
+	DefaultValue interface{}                  `json:"default_value,omitempty"`
+	Deprecated   *bool                        `default:"false" json:"deprecated"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
-	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
+	EntityBuilderDisableEdit *bool `default:"false" json:"entity_builder_disable_edit"`
 	// This attribute should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Which group the attribute should appear in. Accepts group ID or group name
 	Group *string `json:"group,omitempty"`
 	// Do not render attribute in entity views
-	Hidden *bool `json:"hidden,omitempty"`
+	Hidden *bool `default:"false" json:"hidden"`
 	// When set to true, will hide the label of the field.
 	HideLabel *bool `json:"hide_label,omitempty"`
 	// Code name of the icon to used to represent this attribute.
@@ -66,14 +72,14 @@ type PurposeAttribute struct {
 	Placeholder           *string  `json:"placeholder,omitempty"`
 	PreviewValueFormatter *string  `json:"preview_value_formatter,omitempty"`
 	// Setting to `true` prevents the attribute from being modified / deleted
-	Protected *bool `json:"protected,omitempty"`
-	Readonly  *bool `json:"readonly,omitempty"`
+	Protected *bool `default:"true" json:"protected"`
+	Readonly  *bool `default:"false" json:"readonly"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
 	//
 	RenderCondition *string `json:"render_condition,omitempty"`
-	Required        *bool   `json:"required,omitempty"`
+	Required        *bool   `default:"false" json:"required"`
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
@@ -81,4 +87,211 @@ type PurposeAttribute struct {
 	Type           *PurposeAttributeType `json:"type,omitempty"`
 	UpdatedAt      *time.Time            `json:"updated_at,omitempty"`
 	ValueFormatter *string               `json:"value_formatter,omitempty"`
+}
+
+func (p PurposeAttribute) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PurposeAttribute) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *PurposeAttribute) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *PurposeAttribute) GetConstraints() *PurposeAttributeConstraints {
+	if o == nil {
+		return nil
+	}
+	return o.Constraints
+}
+
+func (o *PurposeAttribute) GetCreatedAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *PurposeAttribute) GetDefaultValue() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultValue
+}
+
+func (o *PurposeAttribute) GetDeprecated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deprecated
+}
+
+func (o *PurposeAttribute) GetEntityBuilderDisableEdit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EntityBuilderDisableEdit
+}
+
+func (o *PurposeAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *PurposeAttribute) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
+}
+
+func (o *PurposeAttribute) GetHidden() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hidden
+}
+
+func (o *PurposeAttribute) GetHideLabel() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HideLabel
+}
+
+func (o *PurposeAttribute) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *PurposeAttribute) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *PurposeAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *PurposeAttribute) GetLayout() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Layout
+}
+
+func (o *PurposeAttribute) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *PurposeAttribute) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *PurposeAttribute) GetParents() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Parents
+}
+
+func (o *PurposeAttribute) GetPlaceholder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Placeholder
+}
+
+func (o *PurposeAttribute) GetPreviewValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PreviewValueFormatter
+}
+
+func (o *PurposeAttribute) GetProtected() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Protected
+}
+
+func (o *PurposeAttribute) GetReadonly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Readonly
+}
+
+func (o *PurposeAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *PurposeAttribute) GetRequired() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Required
+}
+
+func (o *PurposeAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *PurposeAttribute) GetShowInTable() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowInTable
+}
+
+func (o *PurposeAttribute) GetType() *PurposeAttributeType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *PurposeAttribute) GetUpdatedAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
+}
+
+func (o *PurposeAttribute) GetValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ValueFormatter
 }

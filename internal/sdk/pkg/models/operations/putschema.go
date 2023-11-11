@@ -3,25 +3,96 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
 type PutSchemaRequest struct {
 	EntitySchema *shared.EntitySchema `request:"mediaType=application/json"`
-	Draft        *bool                `queryParam:"style=form,explode=true,name=draft"`
+	Draft        *bool                `default:"false" queryParam:"style=form,explode=true,name=draft"`
 	Slug         string               `pathParam:"style=simple,explode=false,name=slug"`
 }
 
-// PutSchema200ApplicationJSON - Success
-type PutSchema200ApplicationJSON struct {
+func (p PutSchemaRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PutSchemaRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *PutSchemaRequest) GetEntitySchema() *shared.EntitySchema {
+	if o == nil {
+		return nil
+	}
+	return o.EntitySchema
+}
+
+func (o *PutSchemaRequest) GetDraft() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Draft
+}
+
+func (o *PutSchemaRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
+// PutSchemaResponseBody - Success
+type PutSchemaResponseBody struct {
 	Results *shared.EntitySchemaItem `json:"results,omitempty"`
 }
 
+func (o *PutSchemaResponseBody) GetResults() *shared.EntitySchemaItem {
+	if o == nil {
+		return nil
+	}
+	return o.Results
+}
+
 type PutSchemaResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	PutSchema200ApplicationJSONObject *PutSchema200ApplicationJSON
+	Object *PutSchemaResponseBody
+}
+
+func (o *PutSchemaResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *PutSchemaResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *PutSchemaResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *PutSchemaResponse) GetObject() *PutSchemaResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

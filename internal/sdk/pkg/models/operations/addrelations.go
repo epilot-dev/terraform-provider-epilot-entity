@@ -3,24 +3,95 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
 type AddRelationsRequest struct {
 	RequestBody []shared.RelationItem `request:"mediaType=application/json"`
 	// Don't wait for updated entity to become available in Search API. Useful for large migrations
-	Async *bool `queryParam:"style=form,explode=true,name=async"`
+	Async *bool `default:"false" queryParam:"style=form,explode=true,name=async"`
 	// Entity id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Entity Type
 	Slug string `pathParam:"style=simple,explode=false,name=slug"`
 }
 
+func (a AddRelationsRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AddRelationsRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *AddRelationsRequest) GetRequestBody() []shared.RelationItem {
+	if o == nil {
+		return nil
+	}
+	return o.RequestBody
+}
+
+func (o *AddRelationsRequest) GetAsync() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Async
+}
+
+func (o *AddRelationsRequest) GetID() string {
+	if o == nil {
+		return ""
+	}
+	return o.ID
+}
+
+func (o *AddRelationsRequest) GetSlug() string {
+	if o == nil {
+		return ""
+	}
+	return o.Slug
+}
+
 type AddRelationsResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
 	// Success
 	RelationItem *shared.RelationItem
-	StatusCode   int
-	RawResponse  *http.Response
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
+	RawResponse *http.Response
+}
+
+func (o *AddRelationsResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *AddRelationsResponse) GetRelationItem() *shared.RelationItem {
+	if o == nil {
+		return nil
+	}
+	return o.RelationItem
+}
+
+func (o *AddRelationsResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *AddRelationsResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

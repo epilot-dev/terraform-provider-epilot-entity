@@ -5,20 +5,26 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type FileAttributeDefaultAccessControl string
+// FileAttributeConstraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type FileAttributeConstraints struct {
+}
+
+type DefaultAccessControl string
 
 const (
-	FileAttributeDefaultAccessControlPublicRead FileAttributeDefaultAccessControl = "public-read"
-	FileAttributeDefaultAccessControlPrivate    FileAttributeDefaultAccessControl = "private"
+	DefaultAccessControlPublicRead DefaultAccessControl = "public-read"
+	DefaultAccessControlPrivate    DefaultAccessControl = "private"
 )
 
-func (e FileAttributeDefaultAccessControl) ToPointer() *FileAttributeDefaultAccessControl {
+func (e DefaultAccessControl) ToPointer() *DefaultAccessControl {
 	return &e
 }
 
-func (e *FileAttributeDefaultAccessControl) UnmarshalJSON(data []byte) error {
+func (e *DefaultAccessControl) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -27,10 +33,10 @@ func (e *FileAttributeDefaultAccessControl) UnmarshalJSON(data []byte) error {
 	case "public-read":
 		fallthrough
 	case "private":
-		*e = FileAttributeDefaultAccessControl(v)
+		*e = DefaultAccessControl(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for FileAttributeDefaultAccessControl: %v", v)
+		return fmt.Errorf("invalid value for DefaultAccessControl: %v", v)
 	}
 }
 
@@ -69,10 +75,10 @@ type FileAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints          map[string]interface{}             `json:"constraints,omitempty"`
-	DefaultAccessControl *FileAttributeDefaultAccessControl `json:"default_access_control,omitempty"`
-	DefaultValue         interface{}                        `json:"default_value,omitempty"`
-	Deprecated           *bool                              `json:"deprecated,omitempty"`
+	Constraints          *FileAttributeConstraints `json:"constraints,omitempty"`
+	DefaultAccessControl *DefaultAccessControl     `json:"default_access_control,omitempty"`
+	DefaultValue         interface{}               `json:"default_value,omitempty"`
+	Deprecated           *bool                     `default:"false" json:"deprecated"`
 	// Controls how the images are presented to the user during upload on the Entity Details view.
 	DisplayImagesLandscaped *bool `json:"display_images_landscaped,omitempty"`
 	// When set to true, an i18n description will be used alongside the attribute label.
@@ -80,13 +86,13 @@ type FileAttribute struct {
 	//
 	EnableDescription *bool `json:"enable_description,omitempty"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
-	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
+	EntityBuilderDisableEdit *bool `default:"false" json:"entity_builder_disable_edit"`
 	// This attribute should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Which group the attribute should appear in. Accepts group ID or group name
 	Group *string `json:"group,omitempty"`
 	// Do not render attribute in entity views
-	Hidden *bool `json:"hidden,omitempty"`
+	Hidden *bool `default:"false" json:"hidden"`
 	// When set to true, will hide the label of the field.
 	HideLabel *bool `json:"hide_label,omitempty"`
 	// Code name of the icon to used to represent this attribute.
@@ -102,18 +108,232 @@ type FileAttribute struct {
 	Placeholder           *string `json:"placeholder,omitempty"`
 	PreviewValueFormatter *string `json:"preview_value_formatter,omitempty"`
 	// Setting to `true` prevents the attribute from being modified / deleted
-	Protected *bool `json:"protected,omitempty"`
-	Readonly  *bool `json:"readonly,omitempty"`
+	Protected *bool `default:"true" json:"protected"`
+	Readonly  *bool `default:"false" json:"readonly"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
 	//
 	RenderCondition *string `json:"render_condition,omitempty"`
-	Required        *bool   `json:"required,omitempty"`
+	Required        *bool   `default:"false" json:"required"`
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
 	ShowInTable    *bool             `json:"show_in_table,omitempty"`
 	Type           FileAttributeType `json:"type"`
 	ValueFormatter *string           `json:"value_formatter,omitempty"`
+}
+
+func (f FileAttribute) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(f, "", false)
+}
+
+func (f *FileAttribute) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &f, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *FileAttribute) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *FileAttribute) GetAllowedExtensions() []string {
+	if o == nil {
+		return nil
+	}
+	return o.AllowedExtensions
+}
+
+func (o *FileAttribute) GetConstraints() *FileAttributeConstraints {
+	if o == nil {
+		return nil
+	}
+	return o.Constraints
+}
+
+func (o *FileAttribute) GetDefaultAccessControl() *DefaultAccessControl {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultAccessControl
+}
+
+func (o *FileAttribute) GetDefaultValue() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultValue
+}
+
+func (o *FileAttribute) GetDeprecated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deprecated
+}
+
+func (o *FileAttribute) GetDisplayImagesLandscaped() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.DisplayImagesLandscaped
+}
+
+func (o *FileAttribute) GetEnableDescription() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EnableDescription
+}
+
+func (o *FileAttribute) GetEntityBuilderDisableEdit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EntityBuilderDisableEdit
+}
+
+func (o *FileAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *FileAttribute) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
+}
+
+func (o *FileAttribute) GetHidden() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hidden
+}
+
+func (o *FileAttribute) GetHideLabel() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HideLabel
+}
+
+func (o *FileAttribute) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *FileAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *FileAttribute) GetLayout() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Layout
+}
+
+func (o *FileAttribute) GetMultiple() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Multiple
+}
+
+func (o *FileAttribute) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *FileAttribute) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *FileAttribute) GetPlaceholder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Placeholder
+}
+
+func (o *FileAttribute) GetPreviewValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PreviewValueFormatter
+}
+
+func (o *FileAttribute) GetProtected() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Protected
+}
+
+func (o *FileAttribute) GetReadonly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Readonly
+}
+
+func (o *FileAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *FileAttribute) GetRequired() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Required
+}
+
+func (o *FileAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *FileAttribute) GetShowInTable() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowInTable
+}
+
+func (o *FileAttribute) GetType() FileAttributeType {
+	if o == nil {
+		return FileAttributeType("")
+	}
+	return o.Type
+}
+
+func (o *FileAttribute) GetValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ValueFormatter
 }

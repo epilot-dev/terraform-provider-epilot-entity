@@ -5,29 +5,35 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type AddressRelationAttributeType string
+// Constraints - A set of constraints applicable to the attribute.
+// These constraints should and will be enforced by the attribute renderer.
+type Constraints struct {
+}
+
+type Type string
 
 const (
-	AddressRelationAttributeTypeRelationAddress AddressRelationAttributeType = "relation_address"
+	TypeRelationAddress Type = "relation_address"
 )
 
-func (e AddressRelationAttributeType) ToPointer() *AddressRelationAttributeType {
+func (e Type) ToPointer() *Type {
 	return &e
 }
 
-func (e *AddressRelationAttributeType) UnmarshalJSON(data []byte) error {
+func (e *Type) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "relation_address":
-		*e = AddressRelationAttributeType(v)
+		*e = Type(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for AddressRelationAttributeType: %v", v)
+		return fmt.Errorf("invalid value for Type: %v", v)
 	}
 }
 
@@ -37,18 +43,18 @@ type AddressRelationAttribute struct {
 	// A set of constraints applicable to the attribute.
 	// These constraints should and will be enforced by the attribute renderer.
 	//
-	Constraints  map[string]interface{} `json:"constraints,omitempty"`
-	DefaultValue interface{}            `json:"default_value,omitempty"`
-	Deprecated   *bool                  `json:"deprecated,omitempty"`
+	Constraints  *Constraints `json:"constraints,omitempty"`
+	DefaultValue interface{}  `json:"default_value,omitempty"`
+	Deprecated   *bool        `default:"false" json:"deprecated"`
 	// Setting to `true` disables editing the attribute on the entity builder UI
-	EntityBuilderDisableEdit *bool `json:"entity_builder_disable_edit,omitempty"`
+	EntityBuilderDisableEdit *bool `default:"false" json:"entity_builder_disable_edit"`
 	// This attribute should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Which group the attribute should appear in. Accepts group ID or group name
 	Group      *string `json:"group,omitempty"`
 	HasPrimary *bool   `json:"has_primary,omitempty"`
 	// Do not render attribute in entity views
-	Hidden *bool `json:"hidden,omitempty"`
+	Hidden *bool `default:"false" json:"hidden"`
 	// When set to true, will hide the label of the field.
 	HideLabel *bool `json:"hide_label,omitempty"`
 	// Code name of the icon to used to represent this attribute.
@@ -63,18 +69,204 @@ type AddressRelationAttribute struct {
 	Placeholder           *string `json:"placeholder,omitempty"`
 	PreviewValueFormatter *string `json:"preview_value_formatter,omitempty"`
 	// Setting to `true` prevents the attribute from being modified / deleted
-	Protected *bool `json:"protected,omitempty"`
-	Readonly  *bool `json:"readonly,omitempty"`
+	Protected *bool `default:"true" json:"protected"`
+	Readonly  *bool `default:"false" json:"readonly"`
 	// Defines the conditional rendering expression for showing this field.
 	// When a valid expression is parsed, their evaluation defines the visibility of this attribute.
 	// Note: Empty or invalid expression have no effect on the field visibility.
 	//
 	RenderCondition *string `json:"render_condition,omitempty"`
-	Required        *bool   `json:"required,omitempty"`
+	Required        *bool   `default:"false" json:"required"`
 	// This attribute should only be active when the setting is enabled
 	SettingFlag *string `json:"setting_flag,omitempty"`
 	// Render as a column in table views. When defined, overrides `hidden`
-	ShowInTable    *bool                         `json:"show_in_table,omitempty"`
-	Type           *AddressRelationAttributeType `json:"type,omitempty"`
-	ValueFormatter *string                       `json:"value_formatter,omitempty"`
+	ShowInTable    *bool   `json:"show_in_table,omitempty"`
+	Type           *Type   `json:"type,omitempty"`
+	ValueFormatter *string `json:"value_formatter,omitempty"`
+}
+
+func (a AddressRelationAttribute) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AddressRelationAttribute) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *AddressRelationAttribute) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
+}
+
+func (o *AddressRelationAttribute) GetConstraints() *Constraints {
+	if o == nil {
+		return nil
+	}
+	return o.Constraints
+}
+
+func (o *AddressRelationAttribute) GetDefaultValue() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.DefaultValue
+}
+
+func (o *AddressRelationAttribute) GetDeprecated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deprecated
+}
+
+func (o *AddressRelationAttribute) GetEntityBuilderDisableEdit() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EntityBuilderDisableEdit
+}
+
+func (o *AddressRelationAttribute) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *AddressRelationAttribute) GetGroup() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Group
+}
+
+func (o *AddressRelationAttribute) GetHasPrimary() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HasPrimary
+}
+
+func (o *AddressRelationAttribute) GetHidden() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Hidden
+}
+
+func (o *AddressRelationAttribute) GetHideLabel() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.HideLabel
+}
+
+func (o *AddressRelationAttribute) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *AddressRelationAttribute) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *AddressRelationAttribute) GetLayout() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Layout
+}
+
+func (o *AddressRelationAttribute) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *AddressRelationAttribute) GetOrder() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *AddressRelationAttribute) GetPlaceholder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Placeholder
+}
+
+func (o *AddressRelationAttribute) GetPreviewValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PreviewValueFormatter
+}
+
+func (o *AddressRelationAttribute) GetProtected() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Protected
+}
+
+func (o *AddressRelationAttribute) GetReadonly() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Readonly
+}
+
+func (o *AddressRelationAttribute) GetRenderCondition() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RenderCondition
+}
+
+func (o *AddressRelationAttribute) GetRequired() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Required
+}
+
+func (o *AddressRelationAttribute) GetSettingFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SettingFlag
+}
+
+func (o *AddressRelationAttribute) GetShowInTable() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShowInTable
+}
+
+func (o *AddressRelationAttribute) GetType() *Type {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *AddressRelationAttribute) GetValueFormatter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ValueFormatter
 }

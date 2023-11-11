@@ -2,9 +2,32 @@
 
 package shared
 
-// EntitySearchResults - Success
+type Aggregations struct {
+}
+
 type EntitySearchResults struct {
-	Aggregations map[string]interface{} `json:"aggregations,omitempty"`
-	Hits         *float64               `json:"hits,omitempty"`
-	Results      []EntityItem           `json:"results,omitempty"`
+	Aggregations *Aggregations `json:"aggregations,omitempty"`
+	Hits         *float64      `json:"hits,omitempty"`
+	Results      []EntityItem  `json:"results,omitempty"`
+}
+
+func (o *EntitySearchResults) GetAggregations() *Aggregations {
+	if o == nil {
+		return nil
+	}
+	return o.Aggregations
+}
+
+func (o *EntitySearchResults) GetHits() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Hits
+}
+
+func (o *EntitySearchResults) GetResults() []EntityItem {
+	if o == nil {
+		return nil
+	}
+	return o.Results
 }

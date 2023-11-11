@@ -4,21 +4,23 @@ package shared
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type SavedViewItemCreatedBy2Source string
+type SavedViewItemSource string
 
 const (
-	SavedViewItemCreatedBy2SourceSystem    SavedViewItemCreatedBy2Source = "SYSTEM"
-	SavedViewItemCreatedBy2SourceBlueprint SavedViewItemCreatedBy2Source = "BLUEPRINT"
+	SavedViewItemSourceSystem    SavedViewItemSource = "SYSTEM"
+	SavedViewItemSourceBlueprint SavedViewItemSource = "BLUEPRINT"
 )
 
-func (e SavedViewItemCreatedBy2Source) ToPointer() *SavedViewItemCreatedBy2Source {
+func (e SavedViewItemSource) ToPointer() *SavedViewItemSource {
 	return &e
 }
 
-func (e *SavedViewItemCreatedBy2Source) UnmarshalJSON(data []byte) error {
+func (e *SavedViewItemSource) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -27,73 +29,123 @@ func (e *SavedViewItemCreatedBy2Source) UnmarshalJSON(data []byte) error {
 	case "SYSTEM":
 		fallthrough
 	case "BLUEPRINT":
-		*e = SavedViewItemCreatedBy2Source(v)
+		*e = SavedViewItemSource(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SavedViewItemCreatedBy2Source: %v", v)
+		return fmt.Errorf("invalid value for SavedViewItemSource: %v", v)
 	}
 }
 
-// SavedViewItemCreatedBy2 - A system-created view
-type SavedViewItemCreatedBy2 struct {
-	Source *SavedViewItemCreatedBy2Source `json:"source,omitempty"`
-
-	AdditionalProperties interface{} `json:"-"`
+// SavedViewItem2 - A system-created view
+type SavedViewItem2 struct {
+	AdditionalProperties interface{}          `additionalProperties:"true" json:"-"`
+	Source               *SavedViewItemSource `json:"source,omitempty"`
 }
-type _SavedViewItemCreatedBy2 SavedViewItemCreatedBy2
 
-func (c *SavedViewItemCreatedBy2) UnmarshalJSON(bs []byte) error {
-	data := _SavedViewItemCreatedBy2{}
+func (s SavedViewItem2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
 
-	if err := json.Unmarshal(bs, &data); err != nil {
+func (s *SavedViewItem2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, true); err != nil {
 		return err
 	}
-	*c = SavedViewItemCreatedBy2(data)
-
-	additionalFields := make(map[string]interface{})
-
-	if err := json.Unmarshal(bs, &additionalFields); err != nil {
-		return err
-	}
-	delete(additionalFields, "source")
-
-	c.AdditionalProperties = additionalFields
-
 	return nil
 }
 
-func (c SavedViewItemCreatedBy2) MarshalJSON() ([]byte, error) {
-	out := map[string]interface{}{}
-	bs, err := json.Marshal(_SavedViewItemCreatedBy2(c))
-	if err != nil {
-		return nil, err
+func (o *SavedViewItem2) GetAdditionalProperties() interface{} {
+	if o == nil {
+		return nil
 	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	bs, err = json.Marshal(c.AdditionalProperties)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
-	}
-
-	return json.Marshal(out)
+	return o.AdditionalProperties
 }
 
-// SavedViewItemCreatedBy1 - A user that created the view
-type SavedViewItemCreatedBy1 struct {
+func (o *SavedViewItem2) GetSource() *SavedViewItemSource {
+	if o == nil {
+		return nil
+	}
+	return o.Source
+}
+
+// SavedViewItem1 - A user that created the view
+type SavedViewItem1 struct {
 	UserID *string `json:"user_id,omitempty"`
+}
+
+func (o *SavedViewItem1) GetUserID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UserID
+}
+
+type SavedViewItemCreatedByType string
+
+const (
+	SavedViewItemCreatedByTypeSavedViewItem1 SavedViewItemCreatedByType = "SavedViewItem_1"
+	SavedViewItemCreatedByTypeSavedViewItem2 SavedViewItemCreatedByType = "SavedViewItem_2"
+)
+
+type SavedViewItemCreatedBy struct {
+	SavedViewItem1 *SavedViewItem1
+	SavedViewItem2 *SavedViewItem2
+
+	Type SavedViewItemCreatedByType
+}
+
+func CreateSavedViewItemCreatedBySavedViewItem1(savedViewItem1 SavedViewItem1) SavedViewItemCreatedBy {
+	typ := SavedViewItemCreatedByTypeSavedViewItem1
+
+	return SavedViewItemCreatedBy{
+		SavedViewItem1: &savedViewItem1,
+		Type:           typ,
+	}
+}
+
+func CreateSavedViewItemCreatedBySavedViewItem2(savedViewItem2 SavedViewItem2) SavedViewItemCreatedBy {
+	typ := SavedViewItemCreatedByTypeSavedViewItem2
+
+	return SavedViewItemCreatedBy{
+		SavedViewItem2: &savedViewItem2,
+		Type:           typ,
+	}
+}
+
+func (u *SavedViewItemCreatedBy) UnmarshalJSON(data []byte) error {
+
+	savedViewItem1 := new(SavedViewItem1)
+	if err := utils.UnmarshalJSON(data, &savedViewItem1, "", true, true); err == nil {
+		u.SavedViewItem1 = savedViewItem1
+		u.Type = SavedViewItemCreatedByTypeSavedViewItem1
+		return nil
+	}
+
+	savedViewItem2 := new(SavedViewItem2)
+	if err := utils.UnmarshalJSON(data, &savedViewItem2, "", true, true); err == nil {
+		u.SavedViewItem2 = savedViewItem2
+		u.Type = SavedViewItemCreatedByTypeSavedViewItem2
+		return nil
+	}
+
+	return errors.New("could not unmarshal into supported union types")
+}
+
+func (u SavedViewItemCreatedBy) MarshalJSON() ([]byte, error) {
+	if u.SavedViewItem1 != nil {
+		return utils.MarshalJSON(u.SavedViewItem1, "", true)
+	}
+
+	if u.SavedViewItem2 != nil {
+		return utils.MarshalJSON(u.SavedViewItem2, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
 // SavedViewItem - A saved entity view
 type SavedViewItem struct {
-	CreatedAt *string     `json:"created_at,omitempty"`
-	CreatedBy interface{} `json:"created_by"`
+	CreatedAt *string                `json:"created_at,omitempty"`
+	CreatedBy SavedViewItemCreatedBy `json:"created_by"`
 	// Generated uuid for a saved view
 	ID *string `json:"id,omitempty"`
 	// User-friendly identifier for the saved view
@@ -106,4 +158,67 @@ type SavedViewItem struct {
 	Slug      []string               `json:"slug"`
 	UIConfig  map[string]interface{} `json:"ui_config"`
 	UpdatedAt *string                `json:"updated_at,omitempty"`
+}
+
+func (o *SavedViewItem) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *SavedViewItem) GetCreatedBy() SavedViewItemCreatedBy {
+	if o == nil {
+		return SavedViewItemCreatedBy{}
+	}
+	return o.CreatedBy
+}
+
+func (o *SavedViewItem) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *SavedViewItem) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *SavedViewItem) GetOrg() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Org
+}
+
+func (o *SavedViewItem) GetShared() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Shared
+}
+
+func (o *SavedViewItem) GetSlug() []string {
+	if o == nil {
+		return []string{}
+	}
+	return o.Slug
+}
+
+func (o *SavedViewItem) GetUIConfig() map[string]interface{} {
+	if o == nil {
+		return map[string]interface{}{}
+	}
+	return o.UIConfig
+}
+
+func (o *SavedViewItem) GetUpdatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
 }

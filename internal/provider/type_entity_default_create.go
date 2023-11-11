@@ -5,7 +5,7 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type EntityDefaultCreate struct {
-	SearchParams     map[string]types.String              `tfsdk:"search_params"`
-	TableMenuOptions *EntityDefaultCreateTableMenuOptions `tfsdk:"table_menu_options"`
-	ViewType         types.String                         `tfsdk:"view_type"`
+	SearchParams     map[string]types.String `tfsdk:"search_params"`
+	TableMenuOptions *TableMenuOptions       `tfsdk:"table_menu_options"`
+	ViewType         types.String            `tfsdk:"view_type"`
 }

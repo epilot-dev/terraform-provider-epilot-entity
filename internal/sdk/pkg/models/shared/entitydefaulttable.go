@@ -3,156 +3,245 @@
 package shared
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type EntityDefaultTableDropdownItems2Type string
+type EntityDefaultTableSchemasType string
 
 const (
-	EntityDefaultTableDropdownItems2TypeLink EntityDefaultTableDropdownItems2Type = "link"
+	EntityDefaultTableSchemasTypeLink EntityDefaultTableSchemasType = "link"
 )
 
-func (e EntityDefaultTableDropdownItems2Type) ToPointer() *EntityDefaultTableDropdownItems2Type {
+func (e EntityDefaultTableSchemasType) ToPointer() *EntityDefaultTableSchemasType {
 	return &e
 }
 
-func (e *EntityDefaultTableDropdownItems2Type) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultTableSchemasType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "link":
-		*e = EntityDefaultTableDropdownItems2Type(v)
+		*e = EntityDefaultTableSchemasType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems2Type: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultTableSchemasType: %v", v)
 	}
 }
 
-type EntityDefaultTableDropdownItems2 struct {
+type Two struct {
 	// This dropdown item should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Only show item for legacy tenants (ivy)
-	Legacy *bool                                 `json:"legacy,omitempty"`
-	Title  *string                               `json:"title,omitempty"`
-	Type   *EntityDefaultTableDropdownItems2Type `json:"type,omitempty"`
-	URI    *string                               `json:"uri,omitempty"`
+	Legacy *bool                          `json:"legacy,omitempty"`
+	Title  *string                        `json:"title,omitempty"`
+	Type   *EntityDefaultTableSchemasType `json:"type,omitempty"`
+	URI    *string                        `json:"uri,omitempty"`
 }
 
-type EntityDefaultTableDropdownItems1Type string
+func (o *Two) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *Two) GetLegacy() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Legacy
+}
+
+func (o *Two) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
+}
+
+func (o *Two) GetType() *EntityDefaultTableSchemasType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *Two) GetURI() *string {
+	if o == nil {
+		return nil
+	}
+	return o.URI
+}
+
+type EntityDefaultTableType string
 
 const (
-	EntityDefaultTableDropdownItems1TypeEntity EntityDefaultTableDropdownItems1Type = "entity"
+	EntityDefaultTableTypeEntity EntityDefaultTableType = "entity"
 )
 
-func (e EntityDefaultTableDropdownItems1Type) ToPointer() *EntityDefaultTableDropdownItems1Type {
+func (e EntityDefaultTableType) ToPointer() *EntityDefaultTableType {
 	return &e
 }
 
-func (e *EntityDefaultTableDropdownItems1Type) UnmarshalJSON(data []byte) error {
+func (e *EntityDefaultTableType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "entity":
-		*e = EntityDefaultTableDropdownItems1Type(v)
+		*e = EntityDefaultTableType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityDefaultTableDropdownItems1Type: %v", v)
+		return fmt.Errorf("invalid value for EntityDefaultTableType: %v", v)
 	}
 }
 
-type EntityDefaultTableDropdownItems1 struct {
+type EntityDefaultTable1 struct {
 	// URL-friendly identifier for the entity schema
 	Entity *string `json:"entity,omitempty"`
 	// This dropdown item should only be active when the feature flag is enabled
 	FeatureFlag *string `json:"feature_flag,omitempty"`
 	// Only show item for legacy tenants (ivy)
-	Legacy *bool                                 `json:"legacy,omitempty"`
-	Type   *EntityDefaultTableDropdownItems1Type `json:"type,omitempty"`
+	Legacy *bool                   `json:"legacy,omitempty"`
+	Type   *EntityDefaultTableType `json:"type,omitempty"`
 }
 
-type EntityDefaultTableDropdownItemsType string
+func (o *EntityDefaultTable1) GetEntity() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Entity
+}
+
+func (o *EntityDefaultTable1) GetFeatureFlag() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FeatureFlag
+}
+
+func (o *EntityDefaultTable1) GetLegacy() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Legacy
+}
+
+func (o *EntityDefaultTable1) GetType() *EntityDefaultTableType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+type DropdownItemsType string
 
 const (
-	EntityDefaultTableDropdownItemsTypeEntityDefaultTableDropdownItems1 EntityDefaultTableDropdownItemsType = "EntityDefaultTable_dropdown_items_1"
-	EntityDefaultTableDropdownItemsTypeEntityDefaultTableDropdownItems2 EntityDefaultTableDropdownItemsType = "EntityDefaultTable_dropdown_items_2"
+	DropdownItemsTypeEntityDefaultTable1 DropdownItemsType = "EntityDefaultTable_1"
+	DropdownItemsTypeTwo                 DropdownItemsType = "2"
 )
 
-type EntityDefaultTableDropdownItems struct {
-	EntityDefaultTableDropdownItems1 *EntityDefaultTableDropdownItems1
-	EntityDefaultTableDropdownItems2 *EntityDefaultTableDropdownItems2
+type DropdownItems struct {
+	EntityDefaultTable1 *EntityDefaultTable1
+	Two                 *Two
 
-	Type EntityDefaultTableDropdownItemsType
+	Type DropdownItemsType
 }
 
-func CreateEntityDefaultTableDropdownItemsEntityDefaultTableDropdownItems1(entityDefaultTableDropdownItems1 EntityDefaultTableDropdownItems1) EntityDefaultTableDropdownItems {
-	typ := EntityDefaultTableDropdownItemsTypeEntityDefaultTableDropdownItems1
+func CreateDropdownItemsEntityDefaultTable1(entityDefaultTable1 EntityDefaultTable1) DropdownItems {
+	typ := DropdownItemsTypeEntityDefaultTable1
 
-	return EntityDefaultTableDropdownItems{
-		EntityDefaultTableDropdownItems1: &entityDefaultTableDropdownItems1,
-		Type:                             typ,
+	return DropdownItems{
+		EntityDefaultTable1: &entityDefaultTable1,
+		Type:                typ,
 	}
 }
 
-func CreateEntityDefaultTableDropdownItemsEntityDefaultTableDropdownItems2(entityDefaultTableDropdownItems2 EntityDefaultTableDropdownItems2) EntityDefaultTableDropdownItems {
-	typ := EntityDefaultTableDropdownItemsTypeEntityDefaultTableDropdownItems2
+func CreateDropdownItemsTwo(two Two) DropdownItems {
+	typ := DropdownItemsTypeTwo
 
-	return EntityDefaultTableDropdownItems{
-		EntityDefaultTableDropdownItems2: &entityDefaultTableDropdownItems2,
-		Type:                             typ,
+	return DropdownItems{
+		Two:  &two,
+		Type: typ,
 	}
 }
 
-func (u *EntityDefaultTableDropdownItems) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
+func (u *DropdownItems) UnmarshalJSON(data []byte) error {
 
-	entityDefaultTableDropdownItems1 := new(EntityDefaultTableDropdownItems1)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityDefaultTableDropdownItems1); err == nil {
-		u.EntityDefaultTableDropdownItems1 = entityDefaultTableDropdownItems1
-		u.Type = EntityDefaultTableDropdownItemsTypeEntityDefaultTableDropdownItems1
+	entityDefaultTable1 := new(EntityDefaultTable1)
+	if err := utils.UnmarshalJSON(data, &entityDefaultTable1, "", true, true); err == nil {
+		u.EntityDefaultTable1 = entityDefaultTable1
+		u.Type = DropdownItemsTypeEntityDefaultTable1
 		return nil
 	}
 
-	entityDefaultTableDropdownItems2 := new(EntityDefaultTableDropdownItems2)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&entityDefaultTableDropdownItems2); err == nil {
-		u.EntityDefaultTableDropdownItems2 = entityDefaultTableDropdownItems2
-		u.Type = EntityDefaultTableDropdownItemsTypeEntityDefaultTableDropdownItems2
+	two := new(Two)
+	if err := utils.UnmarshalJSON(data, &two, "", true, true); err == nil {
+		u.Two = two
+		u.Type = DropdownItemsTypeTwo
 		return nil
 	}
 
 	return errors.New("could not unmarshal into supported union types")
 }
 
-func (u EntityDefaultTableDropdownItems) MarshalJSON() ([]byte, error) {
-	if u.EntityDefaultTableDropdownItems1 != nil {
-		return json.Marshal(u.EntityDefaultTableDropdownItems1)
+func (u DropdownItems) MarshalJSON() ([]byte, error) {
+	if u.EntityDefaultTable1 != nil {
+		return utils.MarshalJSON(u.EntityDefaultTable1, "", true)
 	}
 
-	if u.EntityDefaultTableDropdownItems2 != nil {
-		return json.Marshal(u.EntityDefaultTableDropdownItems2)
+	if u.Two != nil {
+		return utils.MarshalJSON(u.Two, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
 
-type EntityDefaultTableNavbarActionsOptions struct {
-	Label  string                 `json:"label"`
-	Params map[string]interface{} `json:"params,omitempty"`
+type EntityDefaultTableParams struct {
 }
 
-type EntityDefaultTableNavbarActions struct {
-	Options []EntityDefaultTableNavbarActionsOptions `json:"options,omitempty"`
-	Type    string                                   `json:"type"`
+type EntityDefaultTableOptions struct {
+	Label  string                    `json:"label"`
+	Params *EntityDefaultTableParams `json:"params,omitempty"`
+}
+
+func (o *EntityDefaultTableOptions) GetLabel() string {
+	if o == nil {
+		return ""
+	}
+	return o.Label
+}
+
+func (o *EntityDefaultTableOptions) GetParams() *EntityDefaultTableParams {
+	if o == nil {
+		return nil
+	}
+	return o.Params
+}
+
+type NavbarActions struct {
+	Options []EntityDefaultTableOptions `json:"options,omitempty"`
+	Type    string                      `json:"type"`
+}
+
+func (o *NavbarActions) GetOptions() []EntityDefaultTableOptions {
+	if o == nil {
+		return nil
+	}
+	return o.Options
+}
+
+func (o *NavbarActions) GetType() string {
+	if o == nil {
+		return ""
+	}
+	return o.Type
 }
 
 type EntityDefaultTableViewType string
@@ -180,11 +269,64 @@ func (e *EntityDefaultTableViewType) UnmarshalJSON(data []byte) error {
 }
 
 type EntityDefaultTable struct {
-	ClassicView   *string                           `json:"classic_view,omitempty"`
-	DropdownItems []EntityDefaultTableDropdownItems `json:"dropdown_items,omitempty"`
+	ClassicView   *string         `json:"classic_view,omitempty"`
+	DropdownItems []DropdownItems `json:"dropdown_items,omitempty"`
 	// Enable the thumbnail column
-	EnableThumbnails *bool                             `json:"enable_thumbnails,omitempty"`
-	NavbarActions    []EntityDefaultTableNavbarActions `json:"navbar_actions,omitempty"`
-	RowActions       []string                          `json:"row_actions,omitempty"`
-	ViewType         *EntityDefaultTableViewType       `json:"view_type,omitempty"`
+	EnableThumbnails *bool                       `default:"false" json:"enable_thumbnails"`
+	NavbarActions    []NavbarActions             `json:"navbar_actions,omitempty"`
+	RowActions       []string                    `json:"row_actions,omitempty"`
+	ViewType         *EntityDefaultTableViewType `json:"view_type,omitempty"`
+}
+
+func (e EntityDefaultTable) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *EntityDefaultTable) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *EntityDefaultTable) GetClassicView() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ClassicView
+}
+
+func (o *EntityDefaultTable) GetDropdownItems() []DropdownItems {
+	if o == nil {
+		return nil
+	}
+	return o.DropdownItems
+}
+
+func (o *EntityDefaultTable) GetEnableThumbnails() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EnableThumbnails
+}
+
+func (o *EntityDefaultTable) GetNavbarActions() []NavbarActions {
+	if o == nil {
+		return nil
+	}
+	return o.NavbarActions
+}
+
+func (o *EntityDefaultTable) GetRowActions() []string {
+	if o == nil {
+		return nil
+	}
+	return o.RowActions
+}
+
+func (o *EntityDefaultTable) GetViewType() *EntityDefaultTableViewType {
+	if o == nil {
+		return nil
+	}
+	return o.ViewType
 }

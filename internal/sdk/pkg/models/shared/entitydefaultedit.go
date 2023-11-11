@@ -12,6 +12,20 @@ type EntityDefaultEditTableMenuOptions struct {
 	Label *string `json:"label,omitempty"`
 }
 
+func (o *EntityDefaultEditTableMenuOptions) GetIcon() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Icon
+}
+
+func (o *EntityDefaultEditTableMenuOptions) GetLabel() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Label
+}
+
 type EntityDefaultEditViewType string
 
 const (
@@ -40,4 +54,25 @@ type EntityDefaultEdit struct {
 	SearchParams     map[string]string                  `json:"search_params,omitempty"`
 	TableMenuOptions *EntityDefaultEditTableMenuOptions `json:"table_menu_options,omitempty"`
 	ViewType         *EntityDefaultEditViewType         `json:"view_type,omitempty"`
+}
+
+func (o *EntityDefaultEdit) GetSearchParams() map[string]string {
+	if o == nil {
+		return nil
+	}
+	return o.SearchParams
+}
+
+func (o *EntityDefaultEdit) GetTableMenuOptions() *EntityDefaultEditTableMenuOptions {
+	if o == nil {
+		return nil
+	}
+	return o.TableMenuOptions
+}
+
+func (o *EntityDefaultEdit) GetViewType() *EntityDefaultEditViewType {
+	if o == nil {
+		return nil
+	}
+	return o.ViewType
 }

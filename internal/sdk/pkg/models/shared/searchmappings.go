@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
 type SearchMappingsType string
@@ -57,6 +58,38 @@ func (e *SearchMappingsType) UnmarshalJSON(data []byte) error {
 
 type SearchMappings struct {
 	Fields map[string]interface{} `json:"fields,omitempty"`
-	Index  *bool                  `json:"index,omitempty"`
+	Index  *bool                  `default:"true" json:"index"`
 	Type   *SearchMappingsType    `json:"type,omitempty"`
+}
+
+func (s SearchMappings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SearchMappings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *SearchMappings) GetFields() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.Fields
+}
+
+func (o *SearchMappings) GetIndex() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Index
+}
+
+func (o *SearchMappings) GetType() *SearchMappingsType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
 }

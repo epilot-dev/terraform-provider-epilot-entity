@@ -3,6 +3,8 @@
 package operations
 
 import (
+	"errors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
 
@@ -12,21 +14,190 @@ type AutocompleteRequest struct {
 	// Input to autocomplete
 	Input *string `queryParam:"style=form,explode=true,name=input"`
 	// Maximum number of results to return
-	Size *int64 `queryParam:"style=form,explode=true,name=size"`
+	Size *int64 `default:"10" queryParam:"style=form,explode=true,name=size"`
 	// Limit results to entity schema
 	Slug *string `queryParam:"style=form,explode=true,name=slug"`
 }
 
-// Autocomplete200ApplicationJSON - Success
-type Autocomplete200ApplicationJSON struct {
-	Hits    *float64      `json:"hits,omitempty"`
-	Results []interface{} `json:"results,omitempty"`
+func (a AutocompleteRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutocompleteRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *AutocompleteRequest) GetAttribute() string {
+	if o == nil {
+		return ""
+	}
+	return o.Attribute
+}
+
+func (o *AutocompleteRequest) GetInput() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Input
+}
+
+func (o *AutocompleteRequest) GetSize() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Size
+}
+
+func (o *AutocompleteRequest) GetSlug() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Slug
+}
+
+type ResultsType string
+
+const (
+	ResultsTypeStr      ResultsType = "str"
+	ResultsTypeBoolean  ResultsType = "boolean"
+	ResultsTypeMapOfany ResultsType = "mapOfany"
+)
+
+type Results struct {
+	Str      *string
+	Boolean  *bool
+	MapOfany map[string]interface{}
+
+	Type ResultsType
+}
+
+func CreateResultsStr(str string) Results {
+	typ := ResultsTypeStr
+
+	return Results{
+		Str:  &str,
+		Type: typ,
+	}
+}
+
+func CreateResultsBoolean(boolean bool) Results {
+	typ := ResultsTypeBoolean
+
+	return Results{
+		Boolean: &boolean,
+		Type:    typ,
+	}
+}
+
+func CreateResultsMapOfany(mapOfany map[string]interface{}) Results {
+	typ := ResultsTypeMapOfany
+
+	return Results{
+		MapOfany: mapOfany,
+		Type:     typ,
+	}
+}
+
+func (u *Results) UnmarshalJSON(data []byte) error {
+
+	str := new(string)
+	if err := utils.UnmarshalJSON(data, &str, "", true, true); err == nil {
+		u.Str = str
+		u.Type = ResultsTypeStr
+		return nil
+	}
+
+	boolean := new(bool)
+	if err := utils.UnmarshalJSON(data, &boolean, "", true, true); err == nil {
+		u.Boolean = boolean
+		u.Type = ResultsTypeBoolean
+		return nil
+	}
+
+	mapOfany := map[string]interface{}{}
+	if err := utils.UnmarshalJSON(data, &mapOfany, "", true, true); err == nil {
+		u.MapOfany = mapOfany
+		u.Type = ResultsTypeMapOfany
+		return nil
+	}
+
+	return errors.New("could not unmarshal into supported union types")
+}
+
+func (u Results) MarshalJSON() ([]byte, error) {
+	if u.Str != nil {
+		return utils.MarshalJSON(u.Str, "", true)
+	}
+
+	if u.Boolean != nil {
+		return utils.MarshalJSON(u.Boolean, "", true)
+	}
+
+	if u.MapOfany != nil {
+		return utils.MarshalJSON(u.MapOfany, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type: all fields are null")
+}
+
+// AutocompleteResponseBody - Success
+type AutocompleteResponseBody struct {
+	Hits    *float64  `json:"hits,omitempty"`
+	Results []Results `json:"results,omitempty"`
+}
+
+func (o *AutocompleteResponseBody) GetHits() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.Hits
+}
+
+func (o *AutocompleteResponseBody) GetResults() []Results {
+	if o == nil {
+		return nil
+	}
+	return o.Results
 }
 
 type AutocompleteResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Success
-	Autocomplete200ApplicationJSONObject *Autocomplete200ApplicationJSON
+	Object *AutocompleteResponseBody
+}
+
+func (o *AutocompleteResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *AutocompleteResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *AutocompleteResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *AutocompleteResponse) GetObject() *AutocompleteResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

@@ -7,7 +7,7 @@ import "github.com/hashicorp/terraform-plugin-framework/types"
 type SelectAttribute struct {
 	Purpose                  []types.String           `tfsdk:"purpose"`
 	AllowAny                 types.Bool               `tfsdk:"allow_any"`
-	Constraints              map[string]types.String  `tfsdk:"constraints"`
+	Constraints              *Constraints             `tfsdk:"constraints"`
 	DefaultValue             types.String             `tfsdk:"default_value"`
 	Deprecated               types.Bool               `tfsdk:"deprecated"`
 	EntityBuilderDisableEdit types.Bool               `tfsdk:"entity_builder_disable_edit"`

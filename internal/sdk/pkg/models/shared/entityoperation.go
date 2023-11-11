@@ -5,28 +5,50 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"time"
 )
 
-type EntityOperationDiff struct {
+type Diff struct {
 	Added   *Entity `json:"added,omitempty"`
 	Deleted *Entity `json:"deleted,omitempty"`
 	Updated *Entity `json:"updated,omitempty"`
 }
 
-type EntityOperationOperation string
+func (o *Diff) GetAdded() *Entity {
+	if o == nil {
+		return nil
+	}
+	return o.Added
+}
+
+func (o *Diff) GetDeleted() *Entity {
+	if o == nil {
+		return nil
+	}
+	return o.Deleted
+}
+
+func (o *Diff) GetUpdated() *Entity {
+	if o == nil {
+		return nil
+	}
+	return o.Updated
+}
+
+type Operation string
 
 const (
-	EntityOperationOperationCreateEntity EntityOperationOperation = "createEntity"
-	EntityOperationOperationUpdateEntity EntityOperationOperation = "updateEntity"
-	EntityOperationOperationDeleteEntity EntityOperationOperation = "deleteEntity"
+	OperationCreateEntity Operation = "createEntity"
+	OperationUpdateEntity Operation = "updateEntity"
+	OperationDeleteEntity Operation = "deleteEntity"
 )
 
-func (e EntityOperationOperation) ToPointer() *EntityOperationOperation {
+func (e Operation) ToPointer() *Operation {
 	return &e
 }
 
-func (e *EntityOperationOperation) UnmarshalJSON(data []byte) error {
+func (e *Operation) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -37,20 +59,34 @@ func (e *EntityOperationOperation) UnmarshalJSON(data []byte) error {
 	case "updateEntity":
 		fallthrough
 	case "deleteEntity":
-		*e = EntityOperationOperation(v)
+		*e = Operation(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for EntityOperationOperation: %v", v)
+		return fmt.Errorf("invalid value for Operation: %v", v)
 	}
 }
 
-type EntityOperationParams struct {
+type Params struct {
 	ID *string `json:"id,omitempty"`
 	// URL-friendly identifier for the entity schema
 	Slug *string `json:"slug,omitempty"`
 }
 
-type EntityOperationPayload struct {
+func (o *Params) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *Params) GetSlug() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Slug
+}
+
+type Payload struct {
 	CreatedAt *time.Time `json:"_created_at,omitempty"`
 	ID        *string    `json:"_id,omitempty"`
 	// Organization Id the entity belongs to
@@ -59,69 +95,134 @@ type EntityOperationPayload struct {
 	Schema *string  `json:"_schema,omitempty"`
 	Tags   []string `json:"_tags,omitempty"`
 	// Title of entity
-	Title     *string    `json:"_title,omitempty"`
-	UpdatedAt *time.Time `json:"_updated_at,omitempty"`
-
-	Entity interface{} `json:"-"`
+	Title     *string     `json:"_title,omitempty"`
+	UpdatedAt *time.Time  `json:"_updated_at,omitempty"`
+	Entity    interface{} `additionalProperties:"true" json:"-"`
 }
-type _EntityOperationPayload EntityOperationPayload
 
-func (c *EntityOperationPayload) UnmarshalJSON(bs []byte) error {
-	data := _EntityOperationPayload{}
+func (p Payload) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
 
-	if err := json.Unmarshal(bs, &data); err != nil {
+func (p *Payload) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
 		return err
 	}
-	*c = EntityOperationPayload(data)
-
-	additionalFields := make(map[string]interface{})
-
-	if err := json.Unmarshal(bs, &additionalFields); err != nil {
-		return err
-	}
-	delete(additionalFields, "_created_at")
-	delete(additionalFields, "_id")
-	delete(additionalFields, "_org")
-	delete(additionalFields, "_schema")
-	delete(additionalFields, "_tags")
-	delete(additionalFields, "_title")
-	delete(additionalFields, "_updated_at")
-
-	c.Entity = additionalFields
-
 	return nil
 }
 
-func (c EntityOperationPayload) MarshalJSON() ([]byte, error) {
-	out := map[string]interface{}{}
-	bs, err := json.Marshal(_EntityOperationPayload(c))
-	if err != nil {
-		return nil, err
+func (o *Payload) GetCreatedAt() *time.Time {
+	if o == nil {
+		return nil
 	}
+	return o.CreatedAt
+}
 
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
+func (o *Payload) GetID() *string {
+	if o == nil {
+		return nil
 	}
+	return o.ID
+}
 
-	bs, err = json.Marshal(c.Entity)
-	if err != nil {
-		return nil, err
+func (o *Payload) GetOrg() *string {
+	if o == nil {
+		return nil
 	}
+	return o.Org
+}
 
-	if err := json.Unmarshal([]byte(bs), &out); err != nil {
-		return nil, err
+func (o *Payload) GetSchema() *string {
+	if o == nil {
+		return nil
 	}
+	return o.Schema
+}
 
-	return json.Marshal(out)
+func (o *Payload) GetTags() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Tags
+}
+
+func (o *Payload) GetTitle() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Title
+}
+
+func (o *Payload) GetUpdatedAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
+}
+
+func (o *Payload) GetEntity() interface{} {
+	if o == nil {
+		return nil
+	}
+	return o.Entity
 }
 
 type EntityOperation struct {
 	// See https://github.com/ulid/spec
-	ActivityID *string                  `json:"activity_id,omitempty"`
-	Diff       *EntityOperationDiff     `json:"diff,omitempty"`
-	Entity     string                   `json:"entity"`
-	Operation  EntityOperationOperation `json:"operation"`
-	Org        string                   `json:"org"`
-	Params     *EntityOperationParams   `json:"params,omitempty"`
-	Payload    *EntityOperationPayload  `json:"payload,omitempty"`
+	ActivityID *string   `json:"activity_id,omitempty"`
+	Diff       *Diff     `json:"diff,omitempty"`
+	Entity     string    `json:"entity"`
+	Operation  Operation `json:"operation"`
+	Org        string    `json:"org"`
+	Params     *Params   `json:"params,omitempty"`
+	Payload    *Payload  `json:"payload,omitempty"`
+}
+
+func (o *EntityOperation) GetActivityID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ActivityID
+}
+
+func (o *EntityOperation) GetDiff() *Diff {
+	if o == nil {
+		return nil
+	}
+	return o.Diff
+}
+
+func (o *EntityOperation) GetEntity() string {
+	if o == nil {
+		return ""
+	}
+	return o.Entity
+}
+
+func (o *EntityOperation) GetOperation() Operation {
+	if o == nil {
+		return Operation("")
+	}
+	return o.Operation
+}
+
+func (o *EntityOperation) GetOrg() string {
+	if o == nil {
+		return ""
+	}
+	return o.Org
+}
+
+func (o *EntityOperation) GetParams() *Params {
+	if o == nil {
+		return nil
+	}
+	return o.Params
+}
+
+func (o *EntityOperation) GetPayload() *Payload {
+	if o == nil {
+		return nil
+	}
+	return o.Payload
 }

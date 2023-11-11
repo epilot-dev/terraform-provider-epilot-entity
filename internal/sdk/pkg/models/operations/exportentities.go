@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"epilot-entity/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -17,8 +17,60 @@ type ExportEntitiesRequest struct {
 	Language *string `queryParam:"style=form,explode=true,name=language"`
 }
 
+func (o *ExportEntitiesRequest) GetEntitySearchParams() *shared.EntitySearchParams {
+	if o == nil {
+		return nil
+	}
+	return o.EntitySearchParams
+}
+
+func (o *ExportEntitiesRequest) GetIsTemplate() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IsTemplate
+}
+
+func (o *ExportEntitiesRequest) GetJobID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.JobID
+}
+
+func (o *ExportEntitiesRequest) GetLanguage() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Language
+}
+
 type ExportEntitiesResponse struct {
+	// HTTP response content type for this operation
 	ContentType string
-	StatusCode  int
+	// HTTP response status code for this operation
+	StatusCode int
+	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+}
+
+func (o *ExportEntitiesResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *ExportEntitiesResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *ExportEntitiesResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
 }

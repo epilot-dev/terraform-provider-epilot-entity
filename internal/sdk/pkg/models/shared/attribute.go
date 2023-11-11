@@ -3,9 +3,8 @@
 package shared
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
+	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
 type AttributeType string
@@ -316,248 +315,193 @@ func CreateAttributePurposeAttribute(purposeAttribute PurposeAttribute) Attribut
 }
 
 func (u *Attribute) UnmarshalJSON(data []byte) error {
-	var d *json.Decoder
 
-	textAttribute := new(TextAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&textAttribute); err == nil {
-		u.TextAttribute = textAttribute
-		u.Type = AttributeTypeTextAttribute
+	internalAttribute := new(InternalAttribute)
+	if err := utils.UnmarshalJSON(data, &internalAttribute, "", true, true); err == nil {
+		u.InternalAttribute = internalAttribute
+		u.Type = AttributeTypeInternalAttribute
 		return nil
 	}
 
 	linkAttribute := new(LinkAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&linkAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &linkAttribute, "", true, true); err == nil {
 		u.LinkAttribute = linkAttribute
 		u.Type = AttributeTypeLinkAttribute
 		return nil
 	}
 
 	dateAttribute := new(DateAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&dateAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &dateAttribute, "", true, true); err == nil {
 		u.DateAttribute = dateAttribute
 		u.Type = AttributeTypeDateAttribute
 		return nil
 	}
 
 	countryAttribute := new(CountryAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&countryAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &countryAttribute, "", true, true); err == nil {
 		u.CountryAttribute = countryAttribute
 		u.Type = AttributeTypeCountryAttribute
 		return nil
 	}
 
 	booleanAttribute := new(BooleanAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&booleanAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &booleanAttribute, "", true, true); err == nil {
 		u.BooleanAttribute = booleanAttribute
 		u.Type = AttributeTypeBooleanAttribute
 		return nil
 	}
 
-	selectAttribute := new(SelectAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&selectAttribute); err == nil {
-		u.SelectAttribute = selectAttribute
-		u.Type = AttributeTypeSelectAttribute
-		return nil
-	}
-
-	multiSelectAttribute := new(MultiSelectAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&multiSelectAttribute); err == nil {
-		u.MultiSelectAttribute = multiSelectAttribute
-		u.Type = AttributeTypeMultiSelectAttribute
-		return nil
-	}
-
-	statusAttribute := new(StatusAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&statusAttribute); err == nil {
-		u.StatusAttribute = statusAttribute
-		u.Type = AttributeTypeStatusAttribute
-		return nil
-	}
-
-	sequenceAttribute := new(SequenceAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&sequenceAttribute); err == nil {
-		u.SequenceAttribute = sequenceAttribute
-		u.Type = AttributeTypeSequenceAttribute
-		return nil
-	}
-
-	relationAttribute := new(RelationAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&relationAttribute); err == nil {
-		u.RelationAttribute = relationAttribute
-		u.Type = AttributeTypeRelationAttribute
-		return nil
-	}
-
-	userRelationAttribute := new(UserRelationAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&userRelationAttribute); err == nil {
-		u.UserRelationAttribute = userRelationAttribute
-		u.Type = AttributeTypeUserRelationAttribute
-		return nil
-	}
-
-	addressRelationAttribute := new(AddressRelationAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&addressRelationAttribute); err == nil {
-		u.AddressRelationAttribute = addressRelationAttribute
-		u.Type = AttributeTypeAddressRelationAttribute
-		return nil
-	}
-
-	paymentMethodRelationAttribute := new(PaymentMethodRelationAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&paymentMethodRelationAttribute); err == nil {
-		u.PaymentMethodRelationAttribute = paymentMethodRelationAttribute
-		u.Type = AttributeTypePaymentMethodRelationAttribute
-		return nil
-	}
-
-	currencyAttribute := new(CurrencyAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&currencyAttribute); err == nil {
-		u.CurrencyAttribute = currencyAttribute
-		u.Type = AttributeTypeCurrencyAttribute
-		return nil
-	}
-
-	repeatableAttribute := new(RepeatableAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&repeatableAttribute); err == nil {
-		u.RepeatableAttribute = repeatableAttribute
-		u.Type = AttributeTypeRepeatableAttribute
-		return nil
-	}
-
-	tagsAttribute := new(TagsAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&tagsAttribute); err == nil {
-		u.TagsAttribute = tagsAttribute
-		u.Type = AttributeTypeTagsAttribute
-		return nil
-	}
-
-	numberAttribute := new(NumberAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&numberAttribute); err == nil {
-		u.NumberAttribute = numberAttribute
-		u.Type = AttributeTypeNumberAttribute
-		return nil
-	}
-
-	consentAttribute := new(ConsentAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&consentAttribute); err == nil {
-		u.ConsentAttribute = consentAttribute
-		u.Type = AttributeTypeConsentAttribute
-		return nil
-	}
-
-	internalAttribute := new(InternalAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&internalAttribute); err == nil {
-		u.InternalAttribute = internalAttribute
-		u.Type = AttributeTypeInternalAttribute
-		return nil
-	}
-
-	orderedListAttribute := new(OrderedListAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&orderedListAttribute); err == nil {
-		u.OrderedListAttribute = orderedListAttribute
-		u.Type = AttributeTypeOrderedListAttribute
-		return nil
-	}
-
-	fileAttribute := new(FileAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&fileAttribute); err == nil {
-		u.FileAttribute = fileAttribute
-		u.Type = AttributeTypeFileAttribute
-		return nil
-	}
-
-	computedAttribute := new(ComputedAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&computedAttribute); err == nil {
-		u.ComputedAttribute = computedAttribute
-		u.Type = AttributeTypeComputedAttribute
-		return nil
-	}
-
-	partnerStatusAttribute := new(PartnerStatusAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&partnerStatusAttribute); err == nil {
-		u.PartnerStatusAttribute = partnerStatusAttribute
-		u.Type = AttributeTypePartnerStatusAttribute
-		return nil
-	}
-
-	invitationEmailAttribute := new(InvitationEmailAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&invitationEmailAttribute); err == nil {
-		u.InvitationEmailAttribute = invitationEmailAttribute
-		u.Type = AttributeTypeInvitationEmailAttribute
-		return nil
-	}
-
-	automationAttribute := new(AutomationAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&automationAttribute); err == nil {
-		u.AutomationAttribute = automationAttribute
-		u.Type = AttributeTypeAutomationAttribute
-		return nil
-	}
-
 	internalUserAttribute := new(InternalUserAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&internalUserAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &internalUserAttribute, "", true, true); err == nil {
 		u.InternalUserAttribute = internalUserAttribute
 		u.Type = AttributeTypeInternalUserAttribute
 		return nil
 	}
 
+	automationAttribute := new(AutomationAttribute)
+	if err := utils.UnmarshalJSON(data, &automationAttribute, "", true, true); err == nil {
+		u.AutomationAttribute = automationAttribute
+		u.Type = AttributeTypeAutomationAttribute
+		return nil
+	}
+
+	invitationEmailAttribute := new(InvitationEmailAttribute)
+	if err := utils.UnmarshalJSON(data, &invitationEmailAttribute, "", true, true); err == nil {
+		u.InvitationEmailAttribute = invitationEmailAttribute
+		u.Type = AttributeTypeInvitationEmailAttribute
+		return nil
+	}
+
+	partnerStatusAttribute := new(PartnerStatusAttribute)
+	if err := utils.UnmarshalJSON(data, &partnerStatusAttribute, "", true, true); err == nil {
+		u.PartnerStatusAttribute = partnerStatusAttribute
+		u.Type = AttributeTypePartnerStatusAttribute
+		return nil
+	}
+
+	computedAttribute := new(ComputedAttribute)
+	if err := utils.UnmarshalJSON(data, &computedAttribute, "", true, true); err == nil {
+		u.ComputedAttribute = computedAttribute
+		u.Type = AttributeTypeComputedAttribute
+		return nil
+	}
+
+	orderedListAttribute := new(OrderedListAttribute)
+	if err := utils.UnmarshalJSON(data, &orderedListAttribute, "", true, true); err == nil {
+		u.OrderedListAttribute = orderedListAttribute
+		u.Type = AttributeTypeOrderedListAttribute
+		return nil
+	}
+
+	paymentMethodRelationAttribute := new(PaymentMethodRelationAttribute)
+	if err := utils.UnmarshalJSON(data, &paymentMethodRelationAttribute, "", true, true); err == nil {
+		u.PaymentMethodRelationAttribute = paymentMethodRelationAttribute
+		u.Type = AttributeTypePaymentMethodRelationAttribute
+		return nil
+	}
+
+	addressRelationAttribute := new(AddressRelationAttribute)
+	if err := utils.UnmarshalJSON(data, &addressRelationAttribute, "", true, true); err == nil {
+		u.AddressRelationAttribute = addressRelationAttribute
+		u.Type = AttributeTypeAddressRelationAttribute
+		return nil
+	}
+
+	statusAttribute := new(StatusAttribute)
+	if err := utils.UnmarshalJSON(data, &statusAttribute, "", true, true); err == nil {
+		u.StatusAttribute = statusAttribute
+		u.Type = AttributeTypeStatusAttribute
+		return nil
+	}
+
+	userRelationAttribute := new(UserRelationAttribute)
+	if err := utils.UnmarshalJSON(data, &userRelationAttribute, "", true, true); err == nil {
+		u.UserRelationAttribute = userRelationAttribute
+		u.Type = AttributeTypeUserRelationAttribute
+		return nil
+	}
+
+	textAttribute := new(TextAttribute)
+	if err := utils.UnmarshalJSON(data, &textAttribute, "", true, true); err == nil {
+		u.TextAttribute = textAttribute
+		u.Type = AttributeTypeTextAttribute
+		return nil
+	}
+
+	numberAttribute := new(NumberAttribute)
+	if err := utils.UnmarshalJSON(data, &numberAttribute, "", true, true); err == nil {
+		u.NumberAttribute = numberAttribute
+		u.Type = AttributeTypeNumberAttribute
+		return nil
+	}
+
+	tagsAttribute := new(TagsAttribute)
+	if err := utils.UnmarshalJSON(data, &tagsAttribute, "", true, true); err == nil {
+		u.TagsAttribute = tagsAttribute
+		u.Type = AttributeTypeTagsAttribute
+		return nil
+	}
+
+	consentAttribute := new(ConsentAttribute)
+	if err := utils.UnmarshalJSON(data, &consentAttribute, "", true, true); err == nil {
+		u.ConsentAttribute = consentAttribute
+		u.Type = AttributeTypeConsentAttribute
+		return nil
+	}
+
+	sequenceAttribute := new(SequenceAttribute)
+	if err := utils.UnmarshalJSON(data, &sequenceAttribute, "", true, true); err == nil {
+		u.SequenceAttribute = sequenceAttribute
+		u.Type = AttributeTypeSequenceAttribute
+		return nil
+	}
+
+	currencyAttribute := new(CurrencyAttribute)
+	if err := utils.UnmarshalJSON(data, &currencyAttribute, "", true, true); err == nil {
+		u.CurrencyAttribute = currencyAttribute
+		u.Type = AttributeTypeCurrencyAttribute
+		return nil
+	}
+
+	selectAttribute := new(SelectAttribute)
+	if err := utils.UnmarshalJSON(data, &selectAttribute, "", true, true); err == nil {
+		u.SelectAttribute = selectAttribute
+		u.Type = AttributeTypeSelectAttribute
+		return nil
+	}
+
+	repeatableAttribute := new(RepeatableAttribute)
+	if err := utils.UnmarshalJSON(data, &repeatableAttribute, "", true, true); err == nil {
+		u.RepeatableAttribute = repeatableAttribute
+		u.Type = AttributeTypeRepeatableAttribute
+		return nil
+	}
+
+	multiSelectAttribute := new(MultiSelectAttribute)
+	if err := utils.UnmarshalJSON(data, &multiSelectAttribute, "", true, true); err == nil {
+		u.MultiSelectAttribute = multiSelectAttribute
+		u.Type = AttributeTypeMultiSelectAttribute
+		return nil
+	}
+
 	purposeAttribute := new(PurposeAttribute)
-	d = json.NewDecoder(bytes.NewReader(data))
-	d.DisallowUnknownFields()
-	if err := d.Decode(&purposeAttribute); err == nil {
+	if err := utils.UnmarshalJSON(data, &purposeAttribute, "", true, true); err == nil {
 		u.PurposeAttribute = purposeAttribute
 		u.Type = AttributeTypePurposeAttribute
+		return nil
+	}
+
+	fileAttribute := new(FileAttribute)
+	if err := utils.UnmarshalJSON(data, &fileAttribute, "", true, true); err == nil {
+		u.FileAttribute = fileAttribute
+		u.Type = AttributeTypeFileAttribute
+		return nil
+	}
+
+	relationAttribute := new(RelationAttribute)
+	if err := utils.UnmarshalJSON(data, &relationAttribute, "", true, true); err == nil {
+		u.RelationAttribute = relationAttribute
+		u.Type = AttributeTypeRelationAttribute
 		return nil
 	}
 
@@ -566,112 +510,112 @@ func (u *Attribute) UnmarshalJSON(data []byte) error {
 
 func (u Attribute) MarshalJSON() ([]byte, error) {
 	if u.TextAttribute != nil {
-		return json.Marshal(u.TextAttribute)
+		return utils.MarshalJSON(u.TextAttribute, "", true)
 	}
 
 	if u.LinkAttribute != nil {
-		return json.Marshal(u.LinkAttribute)
+		return utils.MarshalJSON(u.LinkAttribute, "", true)
 	}
 
 	if u.DateAttribute != nil {
-		return json.Marshal(u.DateAttribute)
+		return utils.MarshalJSON(u.DateAttribute, "", true)
 	}
 
 	if u.CountryAttribute != nil {
-		return json.Marshal(u.CountryAttribute)
+		return utils.MarshalJSON(u.CountryAttribute, "", true)
 	}
 
 	if u.BooleanAttribute != nil {
-		return json.Marshal(u.BooleanAttribute)
+		return utils.MarshalJSON(u.BooleanAttribute, "", true)
 	}
 
 	if u.SelectAttribute != nil {
-		return json.Marshal(u.SelectAttribute)
+		return utils.MarshalJSON(u.SelectAttribute, "", true)
 	}
 
 	if u.MultiSelectAttribute != nil {
-		return json.Marshal(u.MultiSelectAttribute)
+		return utils.MarshalJSON(u.MultiSelectAttribute, "", true)
 	}
 
 	if u.StatusAttribute != nil {
-		return json.Marshal(u.StatusAttribute)
+		return utils.MarshalJSON(u.StatusAttribute, "", true)
 	}
 
 	if u.SequenceAttribute != nil {
-		return json.Marshal(u.SequenceAttribute)
+		return utils.MarshalJSON(u.SequenceAttribute, "", true)
 	}
 
 	if u.RelationAttribute != nil {
-		return json.Marshal(u.RelationAttribute)
+		return utils.MarshalJSON(u.RelationAttribute, "", true)
 	}
 
 	if u.UserRelationAttribute != nil {
-		return json.Marshal(u.UserRelationAttribute)
+		return utils.MarshalJSON(u.UserRelationAttribute, "", true)
 	}
 
 	if u.AddressRelationAttribute != nil {
-		return json.Marshal(u.AddressRelationAttribute)
+		return utils.MarshalJSON(u.AddressRelationAttribute, "", true)
 	}
 
 	if u.PaymentMethodRelationAttribute != nil {
-		return json.Marshal(u.PaymentMethodRelationAttribute)
+		return utils.MarshalJSON(u.PaymentMethodRelationAttribute, "", true)
 	}
 
 	if u.CurrencyAttribute != nil {
-		return json.Marshal(u.CurrencyAttribute)
+		return utils.MarshalJSON(u.CurrencyAttribute, "", true)
 	}
 
 	if u.RepeatableAttribute != nil {
-		return json.Marshal(u.RepeatableAttribute)
+		return utils.MarshalJSON(u.RepeatableAttribute, "", true)
 	}
 
 	if u.TagsAttribute != nil {
-		return json.Marshal(u.TagsAttribute)
+		return utils.MarshalJSON(u.TagsAttribute, "", true)
 	}
 
 	if u.NumberAttribute != nil {
-		return json.Marshal(u.NumberAttribute)
+		return utils.MarshalJSON(u.NumberAttribute, "", true)
 	}
 
 	if u.ConsentAttribute != nil {
-		return json.Marshal(u.ConsentAttribute)
+		return utils.MarshalJSON(u.ConsentAttribute, "", true)
 	}
 
 	if u.InternalAttribute != nil {
-		return json.Marshal(u.InternalAttribute)
+		return utils.MarshalJSON(u.InternalAttribute, "", true)
 	}
 
 	if u.OrderedListAttribute != nil {
-		return json.Marshal(u.OrderedListAttribute)
+		return utils.MarshalJSON(u.OrderedListAttribute, "", true)
 	}
 
 	if u.FileAttribute != nil {
-		return json.Marshal(u.FileAttribute)
+		return utils.MarshalJSON(u.FileAttribute, "", true)
 	}
 
 	if u.ComputedAttribute != nil {
-		return json.Marshal(u.ComputedAttribute)
+		return utils.MarshalJSON(u.ComputedAttribute, "", true)
 	}
 
 	if u.PartnerStatusAttribute != nil {
-		return json.Marshal(u.PartnerStatusAttribute)
+		return utils.MarshalJSON(u.PartnerStatusAttribute, "", true)
 	}
 
 	if u.InvitationEmailAttribute != nil {
-		return json.Marshal(u.InvitationEmailAttribute)
+		return utils.MarshalJSON(u.InvitationEmailAttribute, "", true)
 	}
 
 	if u.AutomationAttribute != nil {
-		return json.Marshal(u.AutomationAttribute)
+		return utils.MarshalJSON(u.AutomationAttribute, "", true)
 	}
 
 	if u.InternalUserAttribute != nil {
-		return json.Marshal(u.InternalUserAttribute)
+		return utils.MarshalJSON(u.InternalUserAttribute, "", true)
 	}
 
 	if u.PurposeAttribute != nil {
-		return json.Marshal(u.PurposeAttribute)
+		return utils.MarshalJSON(u.PurposeAttribute, "", true)
 	}
 
-	return nil, nil
+	return nil, errors.New("could not marshal union type: all fields are null")
 }
