@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (r *EntityResourceModel) ToCreateSDKType() *shared.Entity {
+func (r *EntityResourceModel) ToSharedEntity() *shared.Entity {
 	createdAt := new(time.Time)
 	if !r.CreatedAt.IsUnknown() && !r.CreatedAt.IsNull() {
 		*createdAt, _ = time.Parse(time.RFC3339Nano, r.CreatedAt.ValueString())
@@ -67,26 +67,17 @@ func (r *EntityResourceModel) ToCreateSDKType() *shared.Entity {
 	return &out
 }
 
-func (r *EntityResourceModel) ToGetSDKType() *shared.Entity {
-	out := r.ToCreateSDKType()
-	return out
-}
-
-func (r *EntityResourceModel) ToUpdateSDKType() *shared.Entity {
-	out := r.ToCreateSDKType()
-	return out
-}
-
-func (r *EntityResourceModel) ToDeleteSDKType() *shared.Entity {
-	out := r.ToCreateSDKType()
-	return out
-}
-
-func (r *EntityResourceModel) RefreshFromGetResponse(resp *shared.EntityItem) {
+func (r *EntityResourceModel) RefreshFromSharedEntityItem(resp *shared.EntityItem) {
 	if resp.CreatedAt != nil {
 		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
 	} else {
 		r.CreatedAt = types.StringNull()
+	}
+	if resp.Entity == nil {
+		r.Entity = types.StringNull()
+	} else {
+		entityResult, _ := json.Marshal(resp.Entity)
+		r.Entity = types.StringValue(string(entityResult))
 	}
 	r.ID = types.StringValue(resp.ID)
 	r.Org = types.StringValue(resp.Org)
@@ -95,28 +86,10 @@ func (r *EntityResourceModel) RefreshFromGetResponse(resp *shared.EntityItem) {
 	for _, v := range resp.Tags {
 		r.Tags = append(r.Tags, types.StringValue(v))
 	}
-	if resp.Title != nil {
-		r.Title = types.StringValue(*resp.Title)
-	} else {
-		r.Title = types.StringNull()
-	}
+	r.Title = types.StringPointerValue(resp.Title)
 	if resp.UpdatedAt != nil {
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339Nano))
 	} else {
 		r.UpdatedAt = types.StringNull()
 	}
-	if resp.Entity == nil {
-		r.Entity = types.StringNull()
-	} else {
-		entityResult, _ := json.Marshal(resp.Entity)
-		r.Entity = types.StringValue(string(entityResult))
-	}
-}
-
-func (r *EntityResourceModel) RefreshFromCreateResponse(resp *shared.EntityItem) {
-	r.RefreshFromGetResponse(resp)
-}
-
-func (r *EntityResourceModel) RefreshFromUpdateResponse(resp *shared.EntityItem) {
-	r.RefreshFromGetResponse(resp)
 }

@@ -48,10 +48,10 @@ func (o *PutSchemaRequest) GetSlug() string {
 
 // PutSchemaResponseBody - Success
 type PutSchemaResponseBody struct {
-	Results *shared.EntitySchemaItem `json:"results,omitempty"`
+	Results interface{} `json:"results,omitempty"`
 }
 
-func (o *PutSchemaResponseBody) GetResults() *shared.EntitySchemaItem {
+func (o *PutSchemaResponseBody) GetResults() interface{} {
 	if o == nil {
 		return nil
 	}

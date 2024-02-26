@@ -1,33 +1,35 @@
 resource "epilot-entity_schema" "my_schema" {
   attributes = [
     {
-      purpose = [
-        "caf7351b-352e-4984-aecb-2b1eab0d73fe",
-      ]
-      constraints                 = {}
-      default_value               = "{ \"see\": \"documentation\" }"
-      deprecated                  = true
-      entity_builder_disable_edit = true
-      feature_flag                = "FF_MY_FEATURE_FLAG"
-      group                       = "...my_group..."
-      has_primary                 = false
-      hidden                      = false
-      hide_label                  = true
-      icon                        = "...my_icon..."
-      label                       = "...my_label..."
-      layout                      = "full_width"
-      name                        = "Miss Mamie Dooley"
-      order                       = 0
-      placeholder                 = "...my_placeholder..."
-      preview_value_formatter     = "...my_preview_value_formatter..."
-      protected                   = false
-      readonly                    = true
-      render_condition            = "...my_render_condition..."
-      required                    = false
-      setting_flag                = "MY_SETTING"
-      show_in_table               = true
-      type                        = "relation_address"
-      value_formatter             = "...my_value_formatter..."
+      address_relation_attribute = {
+        purpose = [
+          "caf7351b-352e-4984-aecb-2b1eab0d73fe",
+        ]
+        constraints                 = {}
+        default_value               = "{ \"see\": \"documentation\" }"
+        deprecated                  = true
+        entity_builder_disable_edit = true
+        feature_flag                = "FF_MY_FEATURE_FLAG"
+        group                       = "...my_group..."
+        has_primary                 = false
+        hidden                      = false
+        hide_label                  = true
+        icon                        = "...my_icon..."
+        label                       = "...my_label..."
+        layout                      = "full_width"
+        name                        = "Miss Mamie Dooley"
+        order                       = 0
+        placeholder                 = "...my_placeholder..."
+        preview_value_formatter     = "...my_preview_value_formatter..."
+        protected                   = false
+        readonly                    = true
+        render_condition            = "...my_render_condition..."
+        required                    = false
+        setting_flag                = "MY_SETTING"
+        show_in_table               = true
+        type                        = "relation_address"
+        value_formatter             = "...my_value_formatter..."
+      }
     },
   ]
   blueprint = "8aa711d9-eed9-4891-8711-fd8d9d547bbc"
@@ -38,33 +40,35 @@ resource "epilot-entity_schema" "my_schema" {
       ]
       attributes = [
         {
-          purpose = [
-            "f67fd353-b397-4e7b-9d76-40e6321a646e",
-          ]
-          constraints                 = {}
-          default_value               = "{ \"see\": \"documentation\" }"
-          deprecated                  = false
-          entity_builder_disable_edit = false
-          feature_flag                = "FF_MY_FEATURE_FLAG"
-          group                       = "...my_group..."
-          has_primary                 = true
-          hidden                      = true
-          hide_label                  = false
-          icon                        = "...my_icon..."
-          label                       = "...my_label..."
-          layout                      = "full_width"
-          name                        = "Jeannette Marvin Jr."
-          order                       = 0
-          placeholder                 = "...my_placeholder..."
-          preview_value_formatter     = "...my_preview_value_formatter..."
-          protected                   = false
-          readonly                    = true
-          render_condition            = "...my_render_condition..."
-          required                    = false
-          setting_flag                = "MY_SETTING"
-          show_in_table               = true
-          type                        = "relation_address"
-          value_formatter             = "...my_value_formatter..."
+          address_relation_attribute = {
+            purpose = [
+              "f67fd353-b397-4e7b-9d76-40e6321a646e",
+            ]
+            constraints                 = {}
+            default_value               = "{ \"see\": \"documentation\" }"
+            deprecated                  = false
+            entity_builder_disable_edit = false
+            feature_flag                = "FF_MY_FEATURE_FLAG"
+            group                       = "...my_group..."
+            has_primary                 = true
+            hidden                      = true
+            hide_label                  = false
+            icon                        = "...my_icon..."
+            label                       = "...my_label..."
+            layout                      = "full_width"
+            name                        = "Jeannette Marvin Jr."
+            order                       = 0
+            placeholder                 = "...my_placeholder..."
+            preview_value_formatter     = "...my_preview_value_formatter..."
+            protected                   = false
+            readonly                    = true
+            render_condition            = "...my_render_condition..."
+            required                    = false
+            setting_flag                = "MY_SETTING"
+            show_in_table               = true
+            type                        = "relation_address"
+            value_formatter             = "...my_value_formatter..."
+          }
         },
       ]
       feature_flag = "FF_MY_FEATURE_FLAG"
@@ -178,7 +182,9 @@ resource "epilot-entity_schema" "my_schema" {
     }
     list_item = {
       summary_attributes = [
-        "email",
+        {
+          str = "email"
+        },
       ]
     }
     sharing = {
@@ -202,10 +208,12 @@ resource "epilot-entity_schema" "my_schema" {
         classic_view = "...my_classic_view..."
         dropdown_items = [
           {
-            entity       = "contact"
-            feature_flag = "FF_MY_FEATURE_FLAG"
-            legacy       = true
-            type         = "entity"
+            one = {
+              entity       = "contact"
+              feature_flag = "FF_MY_FEATURE_FLAG"
+              legacy       = true
+              type         = "entity"
+            }
           },
         ]
         enable_thumbnails = true

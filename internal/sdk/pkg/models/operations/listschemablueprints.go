@@ -3,16 +3,15 @@
 package operations
 
 import (
-	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
 // ListSchemaBlueprintsResponseBody - Success
 type ListSchemaBlueprintsResponseBody struct {
-	Results []shared.EntitySchemaItem `json:"results,omitempty"`
+	Results []interface{} `json:"results,omitempty"`
 }
 
-func (o *ListSchemaBlueprintsResponseBody) GetResults() []shared.EntitySchemaItem {
+func (o *ListSchemaBlueprintsResponseBody) GetResults() []interface{} {
 	if o == nil {
 		return nil
 	}

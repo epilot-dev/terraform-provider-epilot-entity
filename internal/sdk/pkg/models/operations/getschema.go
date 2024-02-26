@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -30,7 +29,7 @@ type GetSchemaResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// Success
-	EntitySchemaItem *shared.EntitySchemaItem
+	EntitySchemaItem interface{}
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
@@ -44,7 +43,7 @@ func (o *GetSchemaResponse) GetContentType() string {
 	return o.ContentType
 }
 
-func (o *GetSchemaResponse) GetEntitySchemaItem() *shared.EntitySchemaItem {
+func (o *GetSchemaResponse) GetEntitySchemaItem() interface{} {
 	if o == nil {
 		return nil
 	}

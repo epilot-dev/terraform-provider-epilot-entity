@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 
@@ -20,18 +19,18 @@ func (o *GetSchemaVersionsRequest) GetSlug() string {
 
 // GetSchemaVersionsResponseBody - Success
 type GetSchemaVersionsResponseBody struct {
-	Drafts   []shared.EntitySchemaItem `json:"drafts,omitempty"`
-	Versions []shared.EntitySchemaItem `json:"versions,omitempty"`
+	Drafts   []interface{} `json:"drafts,omitempty"`
+	Versions []interface{} `json:"versions,omitempty"`
 }
 
-func (o *GetSchemaVersionsResponseBody) GetDrafts() []shared.EntitySchemaItem {
+func (o *GetSchemaVersionsResponseBody) GetDrafts() []interface{} {
 	if o == nil {
 		return nil
 	}
 	return o.Drafts
 }
 
-func (o *GetSchemaVersionsResponseBody) GetVersions() []shared.EntitySchemaItem {
+func (o *GetSchemaVersionsResponseBody) GetVersions() []interface{} {
 	if o == nil {
 		return nil
 	}

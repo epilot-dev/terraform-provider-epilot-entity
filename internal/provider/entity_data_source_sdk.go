@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (r *EntityDataSourceModel) RefreshFromGetResponse(resp *shared.EntityItem) {
+func (r *EntityDataSourceModel) RefreshFromSharedEntityItem(resp *shared.EntityItem) {
 	if resp.CreatedAt != nil {
 		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
 	} else {
@@ -28,11 +28,7 @@ func (r *EntityDataSourceModel) RefreshFromGetResponse(resp *shared.EntityItem) 
 	for _, v := range resp.Tags {
 		r.Tags = append(r.Tags, types.StringValue(v))
 	}
-	if resp.Title != nil {
-		r.Title = types.StringValue(*resp.Title)
-	} else {
-		r.Title = types.StringNull()
-	}
+	r.Title = types.StringPointerValue(resp.Title)
 	if resp.UpdatedAt != nil {
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339Nano))
 	} else {

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
-
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -29,16 +28,15 @@ type EntityDataSource struct {
 
 // EntityDataSourceModel describes the data model.
 type EntityDataSourceModel struct {
-	CreatedAt types.String    `tfsdk:"created_at"`
-	Entity    types.String    `tfsdk:"entity"`
-	ID        types.String    `tfsdk:"id"`
-	Org       types.String    `tfsdk:"org"`
-	Relations []NewEntityItem `tfsdk:"relations"`
-	Schema    types.String    `tfsdk:"schema"`
-	Slug      types.String    `tfsdk:"slug"`
-	Tags      []types.String  `tfsdk:"tags"`
-	Title     types.String    `tfsdk:"title"`
-	UpdatedAt types.String    `tfsdk:"updated_at"`
+	CreatedAt types.String   `tfsdk:"created_at"`
+	Entity    types.String   `tfsdk:"entity"`
+	ID        types.String   `tfsdk:"id"`
+	Org       types.String   `tfsdk:"org"`
+	Schema    types.String   `tfsdk:"schema"`
+	Slug      types.String   `tfsdk:"slug"`
+	Tags      []types.String `tfsdk:"tags"`
+	Title     types.String   `tfsdk:"title"`
+	UpdatedAt types.String   `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -66,42 +64,6 @@ func (r *EntityDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"org": schema.StringAttribute{
 				Computed:    true,
 				Description: `Organization Id the entity belongs to`,
-			},
-			"relations": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"created_at": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"org": schema.StringAttribute{
-							Computed:    true,
-							Description: `Organization Id the entity belongs to`,
-						},
-						"schema": schema.StringAttribute{
-							Computed:    true,
-							Description: `URL-friendly identifier for the entity schema`,
-						},
-						"tags": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-						},
-						"title": schema.StringAttribute{
-							Computed:    true,
-							Description: `Title of entity`,
-						},
-						"updated_at": schema.StringAttribute{
-							Computed: true,
-						},
-						"entity": schema.StringAttribute{
-							Computed:    true,
-							Description: `Parsed as JSON.`,
-						},
-					},
-				},
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
@@ -186,11 +148,11 @@ func (r *EntityDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.Object == nil || res.Object.Entity == nil {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromGetResponse(res.Object.Entity)
+	data.RefreshFromSharedEntityItem(res.Object.Entity)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

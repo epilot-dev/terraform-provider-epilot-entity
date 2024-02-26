@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
-
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -37,8 +36,7 @@ type SchemaResourceModel struct {
 	Attributes             []Attribute               `tfsdk:"attributes"`
 	Blueprint              types.String              `tfsdk:"blueprint"`
 	Capabilities           []EntityCapability        `tfsdk:"capabilities"`
-	Comment                types.String              `tfsdk:"comment"`
-	CreatedAt              types.String              `tfsdk:"created_at"`
+	Data                   types.String              `tfsdk:"data"`
 	DialogConfig           map[string]types.String   `tfsdk:"dialog_config"`
 	Draft                  types.Bool                `tfsdk:"draft"`
 	EnableSetting          []types.String            `tfsdk:"enable_setting"`
@@ -46,16 +44,14 @@ type SchemaResourceModel struct {
 	FeatureFlag            types.String              `tfsdk:"feature_flag"`
 	GroupSettings          []GroupSettings           `tfsdk:"group_settings"`
 	Icon                   types.String              `tfsdk:"icon"`
-	ID                     types.String              `tfsdk:"id"`
 	LayoutSettings         *LayoutSettings           `tfsdk:"layout_settings"`
 	Name                   types.String              `tfsdk:"name"`
 	Plural                 types.String              `tfsdk:"plural"`
 	Published              types.Bool                `tfsdk:"published"`
+	Results                types.String              `tfsdk:"results"`
 	Slug                   types.String              `tfsdk:"slug"`
-	Source                 *Source                   `tfsdk:"source"`
 	TitleTemplate          types.String              `tfsdk:"title_template"`
 	UIConfig               *UIConfig                 `tfsdk:"ui_config"`
-	UpdatedAt              types.String              `tfsdk:"updated_at"`
 	Version                types.Int64               `tfsdk:"version"`
 }
 
@@ -69,21 +65,17 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 
 		Attributes: map[string]schema.Attribute{
 			"attributes": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"address_relation_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -91,7 +83,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -99,43 +90,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"has_primary": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -145,38 +126,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -184,22 +157,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["relation_address"]`,
 									Validators: []validator.String{
@@ -209,23 +178,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Reference to an address attribute of another entity`,
 						},
 						"automation_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -233,7 +198,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -241,39 +205,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -283,38 +238,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -322,22 +269,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["automation"]`,
 									Validators: []validator.String{
@@ -347,23 +290,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Automation entity`,
 						},
 						"boolean_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -371,7 +310,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -379,39 +317,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -421,38 +350,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -460,22 +381,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["boolean"]`,
 									Validators: []validator.String{
@@ -485,23 +402,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Yes / No Toggle`,
 						},
 						"computed_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -509,7 +422,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -517,39 +429,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -559,38 +462,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -598,22 +493,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["computed"]`,
 									Validators: []validator.String{
@@ -623,23 +514,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `An attribute that is computed from the entity data. For more details on how to use them, check the docs [here](https://e-pilot.atlassian.net/wiki/spaces/EO/pages/5642977476/How+To+Computed+Schema+Attributes)`,
 						},
 						"consent_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -647,7 +534,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -655,46 +541,36 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
 										``,
 								},
 								"identifiers": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
@@ -702,38 +578,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -741,17 +609,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
@@ -768,23 +633,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Consent Management`,
 						},
 						"country_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -792,7 +653,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -800,39 +660,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -842,38 +693,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -881,22 +724,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["country"]`,
 									Validators: []validator.String{
@@ -906,23 +745,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Country picker`,
 						},
 						"currency_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -934,7 +769,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"one": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"code": schema.StringAttribute{
@@ -944,7 +778,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Required: true,
 													},
 													"flag": schema.StringAttribute{
-														Computed: true,
 														Optional: true,
 													},
 													"symbol": schema.StringAttribute{
@@ -961,12 +794,10 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `An array of currency configurations with a country code (ISO-4217)`,
 								},
 								"currency_selector_only": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -974,39 +805,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1016,38 +838,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1055,17 +869,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
@@ -1079,23 +890,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Currency input`,
 						},
 						"date_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1103,7 +910,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1111,39 +917,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1153,38 +950,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1192,22 +981,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["date", "datetime"]`,
 									Validators: []validator.String{
@@ -1218,29 +1003,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Date or Datetime picker`,
 						},
 						"file_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"allowed_extensions": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `List of file extensions (without the dot suffix)`,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1248,7 +1028,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_access_control": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["public-read", "private"]`,
 									Validators: []validator.String{
@@ -1259,7 +1038,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1267,51 +1045,40 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"display_images_landscaped": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Controls how the images are presented to the user during upload on the Entity Details view.`,
 								},
 								"enable_description": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `When set to true, an i18n description will be used alongside the attribute label.` + "\n" +
 										`This description should be set through the platform locales in the form: ` + "`" + `file.{attribute_name}.description_text` + "`" + `.` + "\n" +
 										``,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1321,42 +1088,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"multiple": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1364,17 +1122,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
@@ -1389,23 +1144,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `File or Image Attachment`,
 						},
 						"internal_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1413,7 +1164,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1421,39 +1171,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1463,38 +1204,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1502,22 +1235,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["internal"]`,
 									Validators: []validator.String{
@@ -1527,23 +1256,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `No UI representation`,
 						},
 						"internal_user_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1551,7 +1276,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1559,39 +1283,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1601,38 +1316,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1640,22 +1347,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["internal_user"]`,
 									Validators: []validator.String{
@@ -1665,23 +1368,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Epilot internal user info`,
 						},
 						"invitation_email_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1689,7 +1388,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1697,39 +1395,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1739,38 +1428,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1778,22 +1459,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["invitation_email"]`,
 									Validators: []validator.String{
@@ -1803,23 +1480,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Email address for send invitation`,
 						},
 						"link_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1827,7 +1500,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1835,39 +1507,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -1877,38 +1540,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -1916,22 +1571,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["link"]`,
 									Validators: []validator.String{
@@ -1941,33 +1592,27 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Link with title and href`,
 						},
 						"multi_select_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"allow_any": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Allow arbitrary input values in addition to provided options`,
 								},
 								"allow_extra_options": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `controls if the 360 ui will allow the user to enter a value which is not defined by the options`,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -1975,7 +1620,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -1983,44 +1627,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"disable_case_sensitive": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `controls if the matching of values against the options is case sensitive or not`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -2030,27 +1664,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"options": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"str": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"multi_select_attribute_2": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"title": schema.StringAttribute{
-														Computed: true,
 														Optional: true,
 													},
 													"value": schema.StringAttribute{
@@ -2065,31 +1694,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -2097,22 +1719,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["multiselect", "checkbox"]`,
 									Validators: []validator.String{
@@ -2123,23 +1741,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Multi Choice Selection`,
 						},
 						"number_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -2147,7 +1761,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -2155,43 +1768,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"format": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -2201,38 +1804,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -2240,22 +1835,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["number"]`,
 									Validators: []validator.String{
@@ -2265,23 +1856,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Numeric input`,
 						},
 						"ordered_list_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -2289,7 +1876,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -2297,39 +1883,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -2339,38 +1916,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -2378,22 +1947,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["ordered_list"]`,
 									Validators: []validator.String{
@@ -2403,23 +1968,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Type of attribute to render N number of ordered fields`,
 						},
 						"partner_status_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -2427,7 +1988,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -2435,39 +1995,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -2477,38 +2028,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -2516,22 +2059,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["partner_status"]`,
 									Validators: []validator.String{
@@ -2541,23 +2080,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Partner Status`,
 						},
 						"payment_method_relation_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -2565,7 +2100,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -2573,43 +2107,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"has_primary": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -2619,38 +2143,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -2658,22 +2174,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["relation_payment_method"]`,
 									Validators: []validator.String{
@@ -2683,23 +2195,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Reference to a payment method attribute of another entity`,
 						},
 						"purpose_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -2707,14 +2215,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"created_at": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									Validators: []validator.String{
 										validators.IsRFC3339(),
 									},
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -2722,89 +2228,70 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
 										``,
 								},
 								"id": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"label": schema.StringAttribute{
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"parents": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -2812,22 +2299,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["purpose"]`,
 									Validators: []validator.String{
@@ -2837,45 +2320,39 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"updated_at": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									Validators: []validator.String{
 										validators.IsRFC3339(),
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Entity Taxonomy`,
 						},
 						"relation_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"actions": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"action_type": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
-												MarkdownDescription: `must be one of ["add_existing", "create_new", "create_from_existing"]` + "\n" +
-													`The action type. Currently supported actions:` + "\n" +
+												MarkdownDescription: `The action type. Currently supported actions:` + "\n" +
 													`` + "\n" +
 													`| action | description |` + "\n" +
 													`|--------|-------------|` + "\n" +
 													`| add_existing | Enables the user to pick an existing entity to link as relation |` + "\n" +
 													`| create_new | Enables the user to create a new entity using the first/main ` + "`" + `allowed_schemas` + "`" + ` schema` + "\n" +
 													`| create_from_existing | Enables the user to pick an existing entity to clone from, while creating a blank new entity to link as relation |` + "\n" +
-													``,
+													`` + "\n" +
+													`must be one of ["add_existing", "create_new", "create_from_existing"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"add_existing",
@@ -2885,22 +2362,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"default": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Sets the action as the default action, visible as the main action button.`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Name of the feature flag that enables this action`,
 											},
 											"label": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The action label or action translation key (i18n)`,
 											},
 											"new_entity_item": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"created_at": schema.StringAttribute{
@@ -2921,7 +2394,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Description: `URL-friendly identifier for the entity schema`,
 													},
 													"tags": schema.ListAttribute{
-														Computed:    true,
 														Optional:    true,
 														ElementType: types.StringType,
 													},
@@ -2936,7 +2408,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														},
 													},
 													"entity": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `Parsed as JSON.`,
 														Validators: []validator.String{
@@ -2946,7 +2417,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Name of the setting flag that enables this action`,
 											},
@@ -2954,17 +2424,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"add_button_label": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional label for the add button. The translated value for add_button_lable is used, if found else the string is used as is.`,
 								},
 								"allowed_schemas": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -2972,7 +2439,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -2980,18 +2446,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"details_view_mode_enabled": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Enables the preview, edition, and creation of relation items on a Master-Details view mode.`,
+									Optional:    true,
+									Description: `Enables the preview, edition, and creation of relation items on a Master-Details view mode. Default: false`,
 								},
 								"drawer_size": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["small", "medium", "large"]`,
 									Validators: []validator.String{
@@ -3003,7 +2465,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"edit_mode": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["list-view"]`,
 									Validators: []validator.String{
@@ -3013,91 +2474,69 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"enable_relation_picker": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.`,
+									Optional:    true,
+									Description: `When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link. Default: true`,
 								},
 								"enable_relation_tags": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item.`,
+									Optional:    true,
+									Description: `When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item. Default: true`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"has_primary": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"label": schema.StringAttribute{
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"relation_affinity_mode": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
-										`Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.`,
+									Optional:    true,
+									Description: `Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity. must be one of ["weak", "strong"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"weak",
@@ -3106,7 +2545,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"relation_type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["has_many", "has_one"]`,
 									Validators: []validator.String{
@@ -3117,7 +2555,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -3125,51 +2562,41 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"reverse_attributes": schema.MapAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Map of schema slug to target relation attribute`,
 								},
 								"search_placeholder": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Optional placeholder text for the relation search input. The translated value for search_placeholder is used, if found else the string is used as is.`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"summary_fields": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"str": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"summary_field": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"display_as": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `An hint on how to display the summary field`,
 													},
 													"field": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The field from the entity attributes to display`,
 													},
@@ -3183,7 +2610,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["relation"]`,
 									Validators: []validator.String{
@@ -3193,23 +2619,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Entity Relationship`,
 						},
 						"repeatable_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -3217,7 +2639,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -3225,49 +2646,37 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"enable_relation_picker": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.`,
+									Optional:    true,
+									Description: `when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link. Default: true`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"has_primary": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -3277,41 +2686,32 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"relation_affinity_mode": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
-										`Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.`,
+									Optional:    true,
+									Description: `Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity. must be one of ["weak", "strong"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"weak",
@@ -3320,7 +2720,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -3328,26 +2727,21 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"repeatable": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["string", "phone", "email", "address", "relation", "payment", "price_component", "date"]`,
 									Validators: []validator.String{
@@ -3364,28 +2758,23 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Repeatable (add N number of fields)`,
 						},
 						"select_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"allow_any": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Allow arbitrary input values in addition to provided options`,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -3393,7 +2782,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -3401,39 +2789,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -3443,27 +2822,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"options": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"str": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"option": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"title": schema.StringAttribute{
-														Computed: true,
 														Optional: true,
 													},
 													"value": schema.StringAttribute{
@@ -3478,31 +2852,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -3510,22 +2877,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["select", "radio"]`,
 									Validators: []validator.String{
@@ -3536,23 +2899,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Dropdown select`,
 						},
 						"sequence_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -3560,7 +2919,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -3568,39 +2926,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -3610,43 +2959,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"prefix": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Prefix added before the sequence number`,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -3654,26 +2994,21 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"start_number": schema.Int64Attribute{
-									Computed: true,
 									Optional: true,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["sequence"]`,
 									Validators: []validator.String{
@@ -3683,23 +3018,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Sequence of unique identifiers`,
 						},
 						"status_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -3707,7 +3038,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -3715,39 +3045,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -3757,27 +3078,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"options": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"str": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"status_attribute_2": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"title": schema.StringAttribute{
-														Computed: true,
 														Optional: true,
 													},
 													"value": schema.StringAttribute{
@@ -3792,31 +3108,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -3824,22 +3133,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["status"]`,
 									Validators: []validator.String{
@@ -3849,23 +3154,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Status select`,
 						},
 						"tags_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -3873,7 +3174,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -3881,39 +3181,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -3923,43 +3214,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"options": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -3967,27 +3249,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"suggestions": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["tags"]`,
 									Validators: []validator.String{
@@ -3997,23 +3274,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Tags`,
 						},
 						"text_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4021,7 +3294,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -4029,39 +3301,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -4071,42 +3334,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"multiline": schema.BoolAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"name": schema.StringAttribute{
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4114,22 +3368,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["string"]`,
 									Validators: []validator.String{
@@ -4139,23 +3389,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
 							Description: `Textarea or text input`,
 						},
 						"user_relation_attribute": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"purpose": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 								},
 								"constraints": schema.SingleNestedAttribute{
-									Computed:   true,
 									Optional:   true,
 									Attributes: map[string]schema.Attribute{},
 									MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4163,7 +3409,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"default_value": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Parsed as JSON.`,
 									Validators: []validator.String{
@@ -4171,39 +3416,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"deprecated": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"entity_builder_disable_edit": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 								},
 								"feature_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the feature flag is enabled`,
 								},
 								"group": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: false` + "\n" +
-										`Do not render attribute in entity views`,
+									Optional:    true,
+									Description: `Do not render attribute in entity views. Default: false`,
 								},
 								"hide_label": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `When set to true, will hide the label of the field.`,
 								},
 								"icon": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 										`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -4213,11 +3449,9 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"layout": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"multiple": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
@@ -4225,31 +3459,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Required: true,
 								},
 								"order": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Attribute sort order (ascending) in group`,
 								},
 								"placeholder": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"preview_value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"protected": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Default: true` + "\n" +
-										`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+									Optional:    true,
+									Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 								},
 								"readonly": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"render_condition": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 									MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 										`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4257,22 +3484,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										``,
 								},
 								"required": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Default: false`,
 								},
 								"setting_flag": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `This attribute should only be active when the setting is enabled`,
 								},
 								"show_in_table": schema.BoolAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `must be one of ["relation_user"]`,
 									Validators: []validator.String{
@@ -4282,7 +3505,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"value_formatter": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -4296,36 +3518,29 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `An ordered list of attributes the entity contains`,
 			},
 			"blueprint": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Reference to blueprint`,
 			},
 			"capabilities": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"purpose": schema.ListAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 						},
 						"attributes": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"address_relation_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4333,7 +3548,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -4341,43 +3555,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"has_primary": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -4387,38 +3591,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4426,22 +3622,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["relation_address"]`,
 												Validators: []validator.String{
@@ -4451,23 +3643,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Reference to an address attribute of another entity`,
 									},
 									"automation_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4475,7 +3663,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -4483,39 +3670,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -4525,38 +3703,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4564,22 +3734,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["automation"]`,
 												Validators: []validator.String{
@@ -4589,23 +3755,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Automation entity`,
 									},
 									"boolean_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4613,7 +3775,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -4621,39 +3782,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -4663,38 +3815,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4702,22 +3846,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["boolean"]`,
 												Validators: []validator.String{
@@ -4727,23 +3867,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Yes / No Toggle`,
 									},
 									"computed_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4751,7 +3887,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -4759,39 +3894,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -4801,38 +3927,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4840,22 +3958,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["computed"]`,
 												Validators: []validator.String{
@@ -4865,23 +3979,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `An attribute that is computed from the entity data. For more details on how to use them, check the docs [here](https://e-pilot.atlassian.net/wiki/spaces/EO/pages/5642977476/How+To+Computed+Schema+Attributes)`,
 									},
 									"consent_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -4889,7 +3999,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -4897,46 +4006,36 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
 													``,
 											},
 											"identifiers": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
@@ -4944,38 +4043,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -4983,17 +4074,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
@@ -5010,23 +4098,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Consent Management`,
 									},
 									"country_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5034,7 +4118,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5042,39 +4125,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5084,38 +4158,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -5123,22 +4189,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["country"]`,
 												Validators: []validator.String{
@@ -5148,23 +4210,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Country picker`,
 									},
 									"currency_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5176,7 +4234,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"one": schema.SingleNestedAttribute{
-															Computed: true,
 															Optional: true,
 															Attributes: map[string]schema.Attribute{
 																"code": schema.StringAttribute{
@@ -5186,7 +4243,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																	Required: true,
 																},
 																"flag": schema.StringAttribute{
-																	Computed: true,
 																	Optional: true,
 																},
 																"symbol": schema.StringAttribute{
@@ -5203,12 +4259,10 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `An array of currency configurations with a country code (ISO-4217)`,
 											},
 											"currency_selector_only": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5216,39 +4270,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5258,38 +4303,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -5297,17 +4334,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
@@ -5321,23 +4355,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Currency input`,
 									},
 									"date_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5345,7 +4375,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5353,39 +4382,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5395,38 +4415,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -5434,22 +4446,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["date", "datetime"]`,
 												Validators: []validator.String{
@@ -5460,29 +4468,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Date or Datetime picker`,
 									},
 									"file_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"allowed_extensions": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `List of file extensions (without the dot suffix)`,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5490,7 +4493,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_access_control": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["public-read", "private"]`,
 												Validators: []validator.String{
@@ -5501,7 +4503,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5509,51 +4510,40 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"display_images_landscaped": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Controls how the images are presented to the user during upload on the Entity Details view.`,
 											},
 											"enable_description": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `When set to true, an i18n description will be used alongside the attribute label.` + "\n" +
 													`This description should be set through the platform locales in the form: ` + "`" + `file.{attribute_name}.description_text` + "`" + `.` + "\n" +
 													``,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5563,42 +4553,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"multiple": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -5606,17 +4587,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
@@ -5631,23 +4609,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `File or Image Attachment`,
 									},
 									"internal_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5655,7 +4629,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5663,39 +4636,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5705,38 +4669,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -5744,22 +4700,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["internal"]`,
 												Validators: []validator.String{
@@ -5769,23 +4721,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `No UI representation`,
 									},
 									"internal_user_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5793,7 +4741,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5801,39 +4748,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5843,38 +4781,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -5882,22 +4812,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["internal_user"]`,
 												Validators: []validator.String{
@@ -5907,23 +4833,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Epilot internal user info`,
 									},
 									"invitation_email_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -5931,7 +4853,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -5939,39 +4860,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -5981,38 +4893,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6020,22 +4924,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["invitation_email"]`,
 												Validators: []validator.String{
@@ -6045,23 +4945,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Email address for send invitation`,
 									},
 									"link_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6069,7 +4965,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6077,39 +4972,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -6119,38 +5005,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6158,22 +5036,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["link"]`,
 												Validators: []validator.String{
@@ -6183,33 +5057,27 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Link with title and href`,
 									},
 									"multi_select_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"allow_any": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Allow arbitrary input values in addition to provided options`,
 											},
 											"allow_extra_options": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `controls if the 360 ui will allow the user to enter a value which is not defined by the options`,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6217,7 +5085,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6225,44 +5092,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"disable_case_sensitive": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `controls if the matching of values against the options is case sensitive or not`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -6272,27 +5129,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"options": schema.ListNestedAttribute{
-												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"str": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 														},
 														"multi_select_attribute_2": schema.SingleNestedAttribute{
-															Computed: true,
 															Optional: true,
 															Attributes: map[string]schema.Attribute{
 																"title": schema.StringAttribute{
-																	Computed: true,
 																	Optional: true,
 																},
 																"value": schema.StringAttribute{
@@ -6307,31 +5159,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6339,22 +5184,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["multiselect", "checkbox"]`,
 												Validators: []validator.String{
@@ -6365,23 +5206,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Multi Choice Selection`,
 									},
 									"number_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6389,7 +5226,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6397,43 +5233,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"format": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -6443,38 +5269,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6482,22 +5300,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["number"]`,
 												Validators: []validator.String{
@@ -6507,23 +5321,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Numeric input`,
 									},
 									"ordered_list_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6531,7 +5341,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6539,39 +5348,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -6581,38 +5381,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6620,22 +5412,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["ordered_list"]`,
 												Validators: []validator.String{
@@ -6645,23 +5433,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Type of attribute to render N number of ordered fields`,
 									},
 									"partner_status_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6669,7 +5453,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6677,39 +5460,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -6719,38 +5493,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6758,22 +5524,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["partner_status"]`,
 												Validators: []validator.String{
@@ -6783,23 +5545,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Partner Status`,
 									},
 									"payment_method_relation_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6807,7 +5565,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6815,43 +5572,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"has_primary": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -6861,38 +5608,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -6900,22 +5639,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["relation_payment_method"]`,
 												Validators: []validator.String{
@@ -6925,23 +5660,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Reference to a payment method attribute of another entity`,
 									},
 									"purpose_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -6949,14 +5680,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"created_at": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												Validators: []validator.String{
 													validators.IsRFC3339(),
 												},
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -6964,89 +5693,70 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
 													``,
 											},
 											"id": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"label": schema.StringAttribute{
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"parents": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -7054,22 +5764,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["purpose"]`,
 												Validators: []validator.String{
@@ -7079,45 +5785,39 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"updated_at": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												Validators: []validator.String{
 													validators.IsRFC3339(),
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Entity Taxonomy`,
 									},
 									"relation_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"actions": schema.ListNestedAttribute{
-												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"action_type": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
-															MarkdownDescription: `must be one of ["add_existing", "create_new", "create_from_existing"]` + "\n" +
-																`The action type. Currently supported actions:` + "\n" +
+															MarkdownDescription: `The action type. Currently supported actions:` + "\n" +
 																`` + "\n" +
 																`| action | description |` + "\n" +
 																`|--------|-------------|` + "\n" +
 																`| add_existing | Enables the user to pick an existing entity to link as relation |` + "\n" +
 																`| create_new | Enables the user to create a new entity using the first/main ` + "`" + `allowed_schemas` + "`" + ` schema` + "\n" +
 																`| create_from_existing | Enables the user to pick an existing entity to clone from, while creating a blank new entity to link as relation |` + "\n" +
-																``,
+																`` + "\n" +
+																`must be one of ["add_existing", "create_new", "create_from_existing"]`,
 															Validators: []validator.String{
 																stringvalidator.OneOf(
 																	"add_existing",
@@ -7127,22 +5827,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															},
 														},
 														"default": schema.BoolAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Sets the action as the default action, visible as the main action button.`,
 														},
 														"feature_flag": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Name of the feature flag that enables this action`,
 														},
 														"label": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `The action label or action translation key (i18n)`,
 														},
 														"new_entity_item": schema.SingleNestedAttribute{
-															Computed: true,
 															Optional: true,
 															Attributes: map[string]schema.Attribute{
 																"created_at": schema.StringAttribute{
@@ -7163,7 +5859,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																	Description: `URL-friendly identifier for the entity schema`,
 																},
 																"tags": schema.ListAttribute{
-																	Computed:    true,
 																	Optional:    true,
 																	ElementType: types.StringType,
 																},
@@ -7178,7 +5873,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																	},
 																},
 																"entity": schema.StringAttribute{
-																	Computed:    true,
 																	Optional:    true,
 																	Description: `Parsed as JSON.`,
 																	Validators: []validator.String{
@@ -7188,7 +5882,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															},
 														},
 														"setting_flag": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Name of the setting flag that enables this action`,
 														},
@@ -7196,17 +5889,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"add_button_label": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Optional label for the add button. The translated value for add_button_lable is used, if found else the string is used as is.`,
 											},
 											"allowed_schemas": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -7214,7 +5904,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -7222,18 +5911,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"details_view_mode_enabled": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Enables the preview, edition, and creation of relation items on a Master-Details view mode.`,
+												Optional:    true,
+												Description: `Enables the preview, edition, and creation of relation items on a Master-Details view mode. Default: false`,
 											},
 											"drawer_size": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["small", "medium", "large"]`,
 												Validators: []validator.String{
@@ -7245,7 +5930,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"edit_mode": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["list-view"]`,
 												Validators: []validator.String{
@@ -7255,91 +5939,69 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"enable_relation_picker": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.`,
+												Optional:    true,
+												Description: `When enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link. Default: true`,
 											},
 											"enable_relation_tags": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item.`,
+												Optional:    true,
+												Description: `When enable_relation_tags is set to true the user will be able to set tags(labels) in each relation item. Default: true`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"has_primary": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"label": schema.StringAttribute{
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"relation_affinity_mode": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
-													`Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity.`,
+												Optional:    true,
+												Description: `Weak relation attributes are kept when duplicating an entity. Strong relation attributes are discarded when duplicating an entity. must be one of ["weak", "strong"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"weak",
@@ -7348,7 +6010,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"relation_type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["has_many", "has_one"]`,
 												Validators: []validator.String{
@@ -7359,7 +6020,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -7367,51 +6027,41 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"reverse_attributes": schema.MapAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `Map of schema slug to target relation attribute`,
 											},
 											"search_placeholder": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Optional placeholder text for the relation search input. The translated value for search_placeholder is used, if found else the string is used as is.`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"summary_fields": schema.ListNestedAttribute{
-												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"str": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 														},
 														"summary_field": schema.SingleNestedAttribute{
-															Computed: true,
 															Optional: true,
 															Attributes: map[string]schema.Attribute{
 																"display_as": schema.StringAttribute{
-																	Computed:    true,
 																	Optional:    true,
 																	Description: `An hint on how to display the summary field`,
 																},
 																"field": schema.StringAttribute{
-																	Computed:    true,
 																	Optional:    true,
 																	Description: `The field from the entity attributes to display`,
 																},
@@ -7425,7 +6075,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["relation"]`,
 												Validators: []validator.String{
@@ -7435,23 +6084,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Entity Relationship`,
 									},
 									"repeatable_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -7459,7 +6104,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -7467,49 +6111,37 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"enable_relation_picker": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link.`,
+												Optional:    true,
+												Description: `when enable_relation_picker is set to true the user will be able to pick existing relations as values. Otherwise, the user will need to create new relation to link. Default: true`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"has_primary": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -7519,41 +6151,32 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"relation_affinity_mode": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `must be one of ["weak", "strong"]` + "\n" +
-													`Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity.`,
+												Optional:    true,
+												Description: `Weak repeatable attributes are kept when duplicating an entity. Strong repeatable attributes are discarded when duplicating an entity. must be one of ["weak", "strong"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"weak",
@@ -7562,7 +6185,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -7570,26 +6192,21 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"repeatable": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["string", "phone", "email", "address", "relation", "payment", "price_component", "date"]`,
 												Validators: []validator.String{
@@ -7606,28 +6223,23 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Repeatable (add N number of fields)`,
 									},
 									"select_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"allow_any": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Allow arbitrary input values in addition to provided options`,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -7635,7 +6247,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -7643,39 +6254,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -7685,27 +6287,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"options": schema.ListNestedAttribute{
-												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"str": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 														},
 														"option": schema.SingleNestedAttribute{
-															Computed: true,
 															Optional: true,
 															Attributes: map[string]schema.Attribute{
 																"title": schema.StringAttribute{
-																	Computed: true,
 																	Optional: true,
 																},
 																"value": schema.StringAttribute{
@@ -7720,31 +6317,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -7752,22 +6342,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["select", "radio"]`,
 												Validators: []validator.String{
@@ -7778,23 +6364,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Dropdown select`,
 									},
 									"sequence_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -7802,7 +6384,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -7810,39 +6391,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -7852,43 +6424,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"prefix": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Prefix added before the sequence number`,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -7896,26 +6459,21 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"start_number": schema.Int64Attribute{
-												Computed: true,
 												Optional: true,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["sequence"]`,
 												Validators: []validator.String{
@@ -7925,23 +6483,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Sequence of unique identifiers`,
 									},
 									"status_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -7949,7 +6503,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -7957,39 +6510,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -7999,27 +6543,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"options": schema.ListNestedAttribute{
-												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"str": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 														},
 														"status_attribute_2": schema.SingleNestedAttribute{
-															Computed: true,
 															Optional: true,
 															Attributes: map[string]schema.Attribute{
 																"title": schema.StringAttribute{
-																	Computed: true,
 																	Optional: true,
 																},
 																"value": schema.StringAttribute{
@@ -8034,31 +6573,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -8066,22 +6598,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["status"]`,
 												Validators: []validator.String{
@@ -8091,23 +6619,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Status select`,
 									},
 									"tags_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -8115,7 +6639,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -8123,39 +6646,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -8165,43 +6679,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"options": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -8209,27 +6714,22 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"suggestions": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["tags"]`,
 												Validators: []validator.String{
@@ -8239,23 +6739,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Tags`,
 									},
 									"text_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -8263,7 +6759,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -8271,39 +6766,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -8313,42 +6799,33 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"multiline": schema.BoolAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"name": schema.StringAttribute{
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -8356,22 +6833,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["string"]`,
 												Validators: []validator.String{
@@ -8381,23 +6854,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Textarea or text input`,
 									},
 									"user_relation_attribute": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"purpose": schema.ListAttribute{
-												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"constraints": schema.SingleNestedAttribute{
-												Computed:   true,
 												Optional:   true,
 												Attributes: map[string]schema.Attribute{},
 												MarkdownDescription: `A set of constraints applicable to the attribute.` + "\n" +
@@ -8405,7 +6874,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"default_value": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Parsed as JSON.`,
 												Validators: []validator.String{
@@ -8413,39 +6881,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"deprecated": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"entity_builder_disable_edit": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` disables editing the attribute on the entity builder UI. Default: false`,
 											},
 											"feature_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the feature flag is enabled`,
 											},
 											"group": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Which group the attribute should appear in. Accepts group ID or group name`,
 											},
 											"hidden": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: false` + "\n" +
-													`Do not render attribute in entity views`,
+												Optional:    true,
+												Description: `Do not render attribute in entity views. Default: false`,
 											},
 											"hide_label": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `When set to true, will hide the label of the field.`,
 											},
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Code name of the icon to used to represent this attribute.` + "\n" +
 													`The value must be a valid @epilot/base-elements Icon name` + "\n" +
@@ -8455,11 +6914,9 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"layout": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"multiple": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
@@ -8467,31 +6924,24 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Required: true,
 											},
 											"order": schema.Int64Attribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Attribute sort order (ascending) in group`,
 											},
 											"placeholder": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"preview_value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"protected": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												MarkdownDescription: `Default: true` + "\n" +
-													`Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted`,
+												Optional:    true,
+												Description: `Setting to ` + "`" + `true` + "`" + ` prevents the attribute from being modified / deleted. Default: true`,
 											},
 											"readonly": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"render_condition": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 												MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 													`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -8499,22 +6949,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													``,
 											},
 											"required": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Default: false`,
 											},
 											"setting_flag": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `This attribute should only be active when the setting is enabled`,
 											},
 											"show_in_table": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Render as a column in table views. When defined, overrides ` + "`" + `hidden` + "`" + ``,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `must be one of ["relation_user"]`,
 												Validators: []validator.String{
@@ -8524,7 +6970,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 											"value_formatter": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
@@ -8537,12 +6982,10 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 						},
 						"feature_flag": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `This capability should only be active when the feature flag is enabled`,
 						},
 						"legacy": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Only show capability for legacy tenants (ivy)`,
 						},
@@ -8551,37 +6994,30 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Description: `Unique name for the capability`,
 						},
 						"setting_flag": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `This capability should only be active when the setting is enabled`,
 						},
 						"title": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Human readable title of the capability`,
 						},
 						"ui_hooks": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"component": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `the component to be dynamically loaded`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Whether capability should be disabled`,
 									},
 									"group_expanded": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Sets the group expand/collapse default state`,
 									},
 									"header": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Specific to Activity pilot`,
 									},
@@ -8590,45 +7026,37 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Description: `name of the hook to use`,
 									},
 									"icon": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Preview icon name(As in Base elements) for the capability`,
 									},
 									"import": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `package to be imported`,
 									},
 									"order": schema.Int64Attribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `render order (ascending)`,
 									},
 									"render_condition": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"required_permission": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"action": schema.StringAttribute{
 												Required: true,
 											},
 											"resource": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 										Description: `Require a permission to display UI hook`,
 									},
 									"route": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `route for specified capability`,
 									},
 									"title": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 								},
@@ -8637,14 +7065,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"comment": schema.StringAttribute{
-				Computed: true,
-			},
-			"created_at": schema.StringAttribute{
-				Computed: true,
+			"data": schema.StringAttribute{
+				Computed:    true,
+				Description: `Success. Parsed as JSON.`,
+				Validators: []validator.String{
+					validators.IsValidJSON(),
+				},
 			},
 			"dialog_config": schema.MapAttribute{
-				Computed:    true,
 				Optional:    true,
 				ElementType: types.StringType,
 				Validators: []validator.Map{
@@ -8652,22 +7080,18 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"draft": schema.BoolAttribute{
-				Computed: true,
 				Optional: true,
 			},
 			"enable_setting": schema.ListAttribute{
-				Computed:    true,
 				Optional:    true,
 				ElementType: types.StringType,
 				Description: `This schema should only be active when one of the organization settings is enabled`,
 			},
 			"explicit_search_mappings": schema.MapNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"fields": schema.MapAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 							Validators: []validator.Map{
@@ -8675,12 +7099,10 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 						},
 						"index": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Default: true`,
 						},
 						"type": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `must be one of ["keyword", "text", "boolean", "integer", "long", "float", "date", "flattened", "nested"]`,
 							Validators: []validator.String{
@@ -8703,26 +7125,21 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					``,
 			},
 			"feature_flag": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `This schema should only be active when the feature flag is enabled`,
 			},
 			"group_settings": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"purpose": schema.ListAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 						},
 						"expanded": schema.BoolAttribute{
-							Computed: true,
 							Optional: true,
 						},
 						"feature_flag": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `This group should only be active when the feature flag is enabled`,
 						},
@@ -8730,15 +7147,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Required: true,
 						},
 						"info_tooltip_title": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"default": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 								"key": schema.StringAttribute{
-									Computed: true,
 									Optional: true,
 								},
 							},
@@ -8747,17 +7161,13 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Required: true,
 						},
 						"order": schema.Int64Attribute{
-							Computed: true,
-							Optional: true,
-							MarkdownDescription: `Default: 0` + "\n" +
-								`Render order of the group`,
+							Optional:    true,
+							Description: `Render order of the group. Default: 0`,
 						},
 						"render_condition": schema.StringAttribute{
-							Computed: true,
 							Optional: true,
 						},
 						"setting_flag": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `This group should only be active when the setting is enabled`,
 						},
@@ -8766,19 +7176,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `A dictionary of Group Titles and associated settings if present.`,
 			},
 			"icon": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 			},
-			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Generated uuid for schema`,
-			},
 			"layout_settings": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"additional_properties": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Parsed as JSON.`,
 						Validators: []validator.String{
@@ -8786,12 +7189,10 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"grid_gap": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Defines the grid gap for the mounting node of the attribute.`,
 					},
 					"grid_template_columns": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Defines the grid column template for the mounting node of the attribute.`,
 					},
@@ -8809,62 +7210,48 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required: true,
 			},
 			"published": schema.BoolAttribute{
-				Computed: true,
 				Optional: true,
+			},
+			"results": schema.StringAttribute{
+				Computed:    true,
+				Description: `Parsed as JSON.`,
+				Validators: []validator.String{
+					validators.IsValidJSON(),
+				},
 			},
 			"slug": schema.StringAttribute{
 				Required:    true,
 				Description: `URL-friendly identifier for the entity schema`,
 			},
-			"source": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"id": schema.StringAttribute{
-						Computed: true,
-					},
-					"type": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
 			"title_template": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Template for rendering the title field. Uses handlebars`,
 			},
 			"ui_config": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"create_view": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"entity_default_create": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"search_params": schema.MapAttribute{
-										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 									},
 									"table_menu_options": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"label": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["default"]`,
 										Validators: []validator.String{
@@ -8876,11 +7263,9 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"entity_view_disabled": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["disabled"]`,
 										Validators: []validator.String{
@@ -8892,15 +7277,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"redirect_entity_view": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"route": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["redirect"]`,
 										Validators: []validator.String{
@@ -8917,34 +7299,27 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"edit_view": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"entity_default_edit": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"search_params": schema.MapAttribute{
-										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 									},
 									"table_menu_options": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"label": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["default"]`,
 										Validators: []validator.String{
@@ -8956,11 +7331,9 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"entity_view_disabled": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["disabled"]`,
 										Validators: []validator.String{
@@ -8972,15 +7345,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"redirect_entity_view": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"route": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["redirect"]`,
 										Validators: []validator.String{
@@ -8997,24 +7367,19 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"list_item": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"summary_attributes": schema.ListNestedAttribute{
-								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"str": schema.StringAttribute{
-											Computed: true,
 											Optional: true,
 										},
 										"summary_attribute": schema.SingleNestedAttribute{
-											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"feature_flag": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `Binds summary field visibility to the feature flag state.`,
 												},
@@ -9023,7 +7388,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													Description: `Label to be shown on the top of the value.`,
 												},
 												"render_condition": schema.StringAttribute{
-													Computed: true,
 													Optional: true,
 													MarkdownDescription: `Defines the conditional rendering expression for showing this field.` + "\n" +
 														`When a valid expression is parsed, their evaluation defines the visibility of this attribute.` + "\n" +
@@ -9031,17 +7395,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														``,
 												},
 												"setting_flag": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `Binds summary field visibility to the setting flag state.`,
 												},
 												"show_as_tag": schema.BoolAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `Displays the value within a tag chip.`,
 												},
 												"tag_color": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `CSS hex color or CSS color name for the tag chip.`,
 												},
@@ -9055,7 +7416,7 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												`` + "```" + `js` + "\n" +
 												`{` + "\n" +
 												`  "label": "Price components"` + "\n" +
-												`  "value": "{{` + "`{{item.prices.length}}`" + `}} price components"` + "\n" +
+												`  "value": "{{"{{"}}item.prices.length{{"}}"}} price components"` + "\n" +
 												`  "show_as_tag": true` + "\n" +
 												`  "render_condition": "is_composite_price = "true""` + "\n" +
 												`}` + "\n" +
@@ -9072,45 +7433,36 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"sharing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"show_sharing_button": schema.BoolAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Show the sharing button in entity detail view`,
 							},
 						},
 					},
 					"single_view": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"entity_default_edit": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"search_params": schema.MapAttribute{
-										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 									},
 									"table_menu_options": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"icon": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 											"label": schema.StringAttribute{
-												Computed: true,
 												Optional: true,
 											},
 										},
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["default"]`,
 										Validators: []validator.String{
@@ -9122,11 +7474,9 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"entity_view_disabled": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["disabled"]`,
 										Validators: []validator.String{
@@ -9138,15 +7488,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"redirect_entity_view": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"route": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["redirect"]`,
 										Validators: []validator.String{
@@ -9163,43 +7510,34 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"table_view": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"entity_default_table": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"classic_view": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"dropdown_items": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"entity_default_table_1": schema.SingleNestedAttribute{
-													Computed: true,
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
 														"entity": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `URL-friendly identifier for the entity schema`,
 														},
 														"feature_flag": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `This dropdown item should only be active when the feature flag is enabled`,
 														},
 														"legacy": schema.BoolAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Only show item for legacy tenants (ivy)`,
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `must be one of ["entity"]`,
 															Validators: []validator.String{
@@ -9211,25 +7549,20 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 												},
 												"two": schema.SingleNestedAttribute{
-													Computed: true,
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
 														"feature_flag": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `This dropdown item should only be active when the feature flag is enabled`,
 														},
 														"legacy": schema.BoolAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Only show item for legacy tenants (ivy)`,
 														},
 														"title": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `must be one of ["link"]`,
 															Validators: []validator.String{
@@ -9239,7 +7572,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															},
 														},
 														"uri": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 														},
 													},
@@ -9251,18 +7583,14 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"enable_thumbnails": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										MarkdownDescription: `Default: false` + "\n" +
-											`Enable the thumbnail column`,
+										Optional:    true,
+										Description: `Enable the thumbnail column. Default: false`,
 									},
 									"navbar_actions": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"options": schema.ListNestedAttribute{
-													Computed: true,
 													Optional: true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
@@ -9270,7 +7598,6 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 																Required: true,
 															},
 															"params": schema.SingleNestedAttribute{
-																Computed:   true,
 																Optional:   true,
 																Attributes: map[string]schema.Attribute{},
 															},
@@ -9284,12 +7611,10 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 									},
 									"row_actions": schema.ListAttribute{
-										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["default"]`,
 										Validators: []validator.String{
@@ -9301,11 +7626,9 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"entity_view_disabled": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["disabled"]`,
 										Validators: []validator.String{
@@ -9317,15 +7640,12 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 							"redirect_entity_view": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"route": schema.StringAttribute{
-										Computed: true,
 										Optional: true,
 									},
 									"view_type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["redirect"]`,
 										Validators: []validator.String{
@@ -9343,11 +7663,7 @@ func (r *SchemaResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"updated_at": schema.StringAttribute{
-				Computed: true,
-			},
 			"version": schema.Int64Attribute{
-				Computed: true,
 				Optional: true,
 			},
 		},
@@ -9376,14 +7692,14 @@ func (r *SchemaResource) Configure(ctx context.Context, req resource.ConfigureRe
 
 func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *SchemaResourceModel
-	var item types.Object
+	var plan types.Object
 
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &item)...)
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	resp.Diagnostics.Append(item.As(ctx, &data, basetypes.ObjectAsOptions{
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
 		UnhandledNullAsEmpty:    true,
 		UnhandledUnknownAsEmpty: true,
 	})...)
@@ -9392,7 +7708,7 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	entitySchema := data.ToCreateSDKType()
+	entitySchema := data.ToSharedEntitySchema()
 	draft := new(bool)
 	if !data.Draft.IsUnknown() && !data.Draft.IsNull() {
 		*draft = data.Draft.ValueBool()
@@ -9421,11 +7737,40 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.Object == nil || res.Object.Results == nil {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromCreateResponse(res.Object.Results)
+	data.RefreshFromOperationsPutSchemaResponseBody(res.Object)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	var id *string
+	slug1 := data.Slug.ValueString()
+	request1 := operations.GetSchemaRequest{
+		ID:   id,
+		Slug: slug1,
+	}
+	res1, err := r.client.Schemas.GetSchema(ctx, request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if res1.EntitySchemaItem == nil {
+		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res1.RawResponse))
+		return
+	}
+	data.RefreshFromInterface(res1.EntitySchemaItem)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -9449,12 +7794,7 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	id := new(string)
-	if !data.ID.IsUnknown() && !data.ID.IsNull() {
-		*id = data.ID.ValueString()
-	} else {
-		id = nil
-	}
+	var id *string
 	slug := data.Slug.ValueString()
 	request := operations.GetSchemaRequest{
 		ID:   id,
@@ -9480,7 +7820,7 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromGetResponse(res.EntitySchemaItem)
+	data.RefreshFromInterface(res.EntitySchemaItem)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -9488,12 +7828,19 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *SchemaResourceModel
+	var plan types.Object
+
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	entitySchema := data.ToUpdateSDKType()
+	entitySchema := data.ToSharedEntitySchema()
 	draft := new(bool)
 	if !data.Draft.IsUnknown() && !data.Draft.IsNull() {
 		*draft = data.Draft.ValueBool()
@@ -9522,11 +7869,40 @@ func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.Object == nil || res.Object.Results == nil {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromUpdateResponse(res.Object.Results)
+	data.RefreshFromOperationsPutSchemaResponseBody(res.Object)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	var id *string
+	slug1 := data.Slug.ValueString()
+	request1 := operations.GetSchemaRequest{
+		ID:   id,
+		Slug: slug1,
+	}
+	res1, err := r.client.Schemas.GetSchema(ctx, request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if res1.EntitySchemaItem == nil {
+		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res1.RawResponse))
+		return
+	}
+	data.RefreshFromInterface(res1.EntitySchemaItem)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

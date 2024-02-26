@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
-
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -32,14 +31,14 @@ type EntityResource struct {
 // EntityResourceModel describes the resource data model.
 type EntityResourceModel struct {
 	CreatedAt types.String   `tfsdk:"created_at"`
+	Entity    types.String   `tfsdk:"entity"`
 	ID        types.String   `tfsdk:"id"`
 	Org       types.String   `tfsdk:"org"`
 	Schema    types.String   `tfsdk:"schema"`
+	Slug      types.String   `tfsdk:"slug"`
 	Tags      []types.String `tfsdk:"tags"`
 	Title     types.String   `tfsdk:"title"`
 	UpdatedAt types.String   `tfsdk:"updated_at"`
-	Entity    types.String   `tfsdk:"entity"`
-	Slug      types.String   `tfsdk:"slug"`
 }
 
 func (r *EntityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -58,16 +57,31 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					validators.IsRFC3339(),
 				},
 			},
+			"entity": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Parsed as JSON.`,
+				Validators: []validator.String{
+					validators.IsValidJSON(),
+				},
+			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 			},
 			"org": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
 				Description: `Organization Id the entity belongs to`,
 			},
 			"schema": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
 				Description: `URL-friendly identifier for the entity schema`,
+			},
+			"slug": schema.StringAttribute{
+				Required:    true,
+				Description: `Entity Schema`,
 			},
 			"tags": schema.ListAttribute{
 				Computed:    true,
@@ -85,18 +99,6 @@ func (r *EntityResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
-			},
-			"entity": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
-			},
-			"slug": schema.StringAttribute{
-				Required:    true,
-				Description: `Entity Schema`,
 			},
 		},
 	}
@@ -124,14 +126,14 @@ func (r *EntityResource) Configure(ctx context.Context, req resource.ConfigureRe
 
 func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *EntityResourceModel
-	var item types.Object
+	var plan types.Object
 
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &item)...)
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	resp.Diagnostics.Append(item.As(ctx, &data, basetypes.ObjectAsOptions{
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
 		UnhandledNullAsEmpty:    true,
 		UnhandledUnknownAsEmpty: true,
 	})...)
@@ -140,7 +142,7 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	entity := data.ToCreateSDKType()
+	entity := data.ToSharedEntity()
 	slug := data.Slug.ValueString()
 	request := operations.CreateEntityRequest{
 		Entity: entity,
@@ -166,7 +168,36 @@ func (r *EntityResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromCreateResponse(res.EntityItem)
+	data.RefreshFromSharedEntityItem(res.EntityItem)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	id := data.ID.ValueString()
+	slug1 := data.Slug.ValueString()
+	request1 := operations.GetEntityRequest{
+		ID:   id,
+		Slug: slug1,
+	}
+	res1, err := r.client.Entities.GetEntity(ctx, request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if res1.Object == nil {
+		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res1.RawResponse))
+		return
+	}
+	data.RefreshFromSharedEntityItem(res1.Object.Entity)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -212,11 +243,11 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if res.Object == nil || res.Object.Entity == nil {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromGetResponse(res.Object.Entity)
+	data.RefreshFromSharedEntityItem(res.Object.Entity)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -224,12 +255,19 @@ func (r *EntityResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *EntityResourceModel
+	var plan types.Object
+
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	entity := data.ToUpdateSDKType()
+	entity := data.ToSharedEntity()
 	id := data.ID.ValueString()
 	slug := data.Slug.ValueString()
 	request := operations.UpdateEntityRequest{
@@ -257,7 +295,36 @@ func (r *EntityResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromUpdateResponse(res.EntityItem)
+	data.RefreshFromSharedEntityItem(res.EntityItem)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	id1 := data.ID.ValueString()
+	slug1 := data.Slug.ValueString()
+	request1 := operations.GetEntityRequest{
+		ID:   id1,
+		Slug: slug1,
+	}
+	res1, err := r.client.Entities.GetEntity(ctx, request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if res1.Object == nil {
+		resp.Diagnostics.AddError("unexpected response from API. No response body", debugResponse(res1.RawResponse))
+		return
+	}
+	data.RefreshFromSharedEntityItem(res1.Object.Entity)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

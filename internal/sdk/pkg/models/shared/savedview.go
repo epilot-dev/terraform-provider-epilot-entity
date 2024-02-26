@@ -9,18 +9,18 @@ import (
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 )
 
-type SavedViewSource string
+type Source string
 
 const (
-	SavedViewSourceSystem    SavedViewSource = "SYSTEM"
-	SavedViewSourceBlueprint SavedViewSource = "BLUEPRINT"
+	SourceSystem    Source = "SYSTEM"
+	SourceBlueprint Source = "BLUEPRINT"
 )
 
-func (e SavedViewSource) ToPointer() *SavedViewSource {
+func (e Source) ToPointer() *Source {
 	return &e
 }
 
-func (e *SavedViewSource) UnmarshalJSON(data []byte) error {
+func (e *Source) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -29,17 +29,17 @@ func (e *SavedViewSource) UnmarshalJSON(data []byte) error {
 	case "SYSTEM":
 		fallthrough
 	case "BLUEPRINT":
-		*e = SavedViewSource(v)
+		*e = Source(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SavedViewSource: %v", v)
+		return fmt.Errorf("invalid value for Source: %v", v)
 	}
 }
 
 // SavedView2 - A system-created view
 type SavedView2 struct {
-	AdditionalProperties interface{}      `additionalProperties:"true" json:"-"`
-	Source               *SavedViewSource `json:"source,omitempty"`
+	AdditionalProperties interface{} `additionalProperties:"true" json:"-"`
+	Source               *Source     `json:"source,omitempty"`
 }
 
 func (s SavedView2) MarshalJSON() ([]byte, error) {
@@ -60,7 +60,7 @@ func (o *SavedView2) GetAdditionalProperties() interface{} {
 	return o.AdditionalProperties
 }
 
-func (o *SavedView2) GetSource() *SavedViewSource {
+func (o *SavedView2) GetSource() *Source {
 	if o == nil {
 		return nil
 	}

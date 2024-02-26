@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"net/http"
 )
@@ -33,10 +32,10 @@ func (o *ListSchemasRequest) GetUnpublished() *bool {
 
 // ListSchemasResponseBody - Success
 type ListSchemasResponseBody struct {
-	Results []shared.EntitySchemaItem `json:"results,omitempty"`
+	Results []interface{} `json:"results,omitempty"`
 }
 
-func (o *ListSchemasResponseBody) GetResults() []shared.EntitySchemaItem {
+func (o *ListSchemasResponseBody) GetResults() []interface{} {
 	if o == nil {
 		return nil
 	}

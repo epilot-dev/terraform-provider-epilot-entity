@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/sdkerrors"
-	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/models/shared"
 	"github.com/epilot-dev/terraform-provider-epilot-entity/internal/sdk/pkg/utils"
 	"io"
 	"net/http"
@@ -121,12 +120,12 @@ func (s *Schemas) GetSchema(ctx context.Context, request operations.GetSchemaReq
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out shared.EntitySchemaItem
+			var out interface{}
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.EntitySchemaItem = &out
+			res.EntitySchemaItem = out
 		default:
 			return nil, sdkerrors.NewSDKError(fmt.Sprintf("unknown content-type received: %s", contentType), httpRes.StatusCode, string(rawBody), httpRes)
 		}

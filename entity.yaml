@@ -65,6 +65,7 @@ paths:
       - in: path
         name: slug
         required: true
+        x-speakeasy-match: slug
         schema:
           $ref: '#/components/schemas/EntitySlug'
       - in: query
@@ -1799,26 +1800,7 @@ components:
       - slug
       - name
       - plural
-    EntitySchemaItem:
-      allOf:
-      - type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/SchemaId'
-          created_at:
-            type: string
-          updated_at:
-            type: string
-          comment:
-            type: string
-          source:
-            type: object
-            properties:
-              id:
-                type: string
-              type:
-                type: string
-      - $ref: '#/components/schemas/EntitySchema'
+    EntitySchemaItem: {}
     Attribute:
       oneOf:
       - $ref: '#/components/schemas/TextAttribute'

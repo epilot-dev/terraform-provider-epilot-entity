@@ -8,7 +8,7 @@
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" /></a>
 </div>
 
-<!-- Start SDK Installation -->
+<!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
 To install this provider, copy and paste this code into your Terraform configuration. Then, run `terraform init`.
@@ -18,7 +18,7 @@ terraform {
   required_providers {
     epilot-entity = {
       source  = "epilot-dev/epilot-entity"
-      version = "0.2.0"
+      version = "0.3.3"
     }
   }
 }
@@ -27,9 +27,11 @@ provider "epilot-entity" {
   # Configuration options
 }
 ```
-<!-- End SDK Installation -->
+<!-- End SDK Installation [installation] -->
 
-<!-- Start SDK Example Usage -->
+<!-- Start SDK Example Usage [usage] -->
+## SDK Example Usage
+
 ### Testing the provider locally
 
 Should you want to validate a change locally, the `--debug` flag allows you to execute the provider against a terraform instance locally.
@@ -46,11 +48,13 @@ cd examples/your-example
 TF_REATTACH_PROVIDERS=... terraform init
 TF_REATTACH_PROVIDERS=... terraform apply
 ```
-<!-- End SDK Example Usage -->
+<!-- End SDK Example Usage [usage] -->
 
-<!-- Start SDK Available Operations -->
+<!-- Start Available Resources and Operations [operations] -->
+## Available Resources and Operations
 
-<!-- End SDK Available Operations -->
+
+<!-- End Available Resources and Operations [operations] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 
